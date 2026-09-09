@@ -137,8 +137,8 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="min-h-screen px-4 py-6 max-w-lg mx-auto pb-24">
-      <header className="sticky top-0 z-50 -mx-4 px-4 py-3 mb-5 bg-dv-bg/95 backdrop-blur-sm border-b border-dv-brass flex items-center justify-between">
+    <>
+      <header className="sticky top-0 z-50 px-4 py-3 bg-dv-bg/95 backdrop-blur-sm border-b border-dv-brass flex items-center justify-between">
         <div>
           <h1 className="text-xs sm:text-sm text-dv-emerald">DRAGON VALLEY</h1>
           <p className="text-[9px] text-dv-brassLight">
@@ -167,27 +167,29 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      <WyvernTracker
-        current={settings.wyvern_element as any}
-        setBy={settings.wyvern_set_by}
-        onSelect={setWyvern}
-      />
+      <main className="min-h-screen px-4 pt-5 pb-24 max-w-lg mx-auto">
+        <WyvernTracker
+          current={settings.wyvern_element as any}
+          setBy={settings.wyvern_set_by}
+          onSelect={setWyvern}
+        />
 
-      <LogAttackButton
-        anchorDate={settings.anchor_date}      // same value you passed to CountdownTimer
-        resetHour={settings.reset_hour_utc}       // same value you passed to CountdownTimer
-        dayNumber={dayNumber}       // same as CountdownTimer's dayNumber / AttackLog's currentDay
-        loggedDays={myLoggedDays}      // same as AttackLog's loggedDays
-        onLog={logAttack}           // same as AttackLog's onLog
-      />
+        <LogAttackButton
+          anchorDate={settings.anchor_date}
+          resetHour={settings.reset_hour_utc}
+          dayNumber={dayNumber}
+          loggedDays={myLoggedDays}
+          onLog={logAttack}
+        />
 
-      <GuildProgress members={members} onPingMissing={pingMissing} pinging={pinging} />
+        <GuildProgress members={members} onPingMissing={pingMissing} pinging={pinging} />
 
-      {toast && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 pixel-frame bg-dv-ember text-dv-bg text-[9px] px-4 py-3 shadow-pixel animate-rise">
-          {toast}
-        </div>
-      )}
-    </main>
+        {toast && (
+          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 pixel-frame bg-dv-ember text-dv-bg text-[9px] px-4 py-3 shadow-pixel animate-rise">
+            {toast}
+          </div>
+        )}
+      </main>
+    </>
   );
 }
