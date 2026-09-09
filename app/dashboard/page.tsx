@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { getCycleInfo } from "@/lib/cycle";
-import { CountdownTimer } from "@/components/CountdownTimer";
-import { AttackLog } from "@/components/AttackLog";
+import { LogAttackButton } from "@/components/LogAttackButton";
 import { GuildProgress, MemberRow } from "@/components/GuildProgress";
 import { WyvernTracker } from "@/components/WyvernTracker";
 
@@ -174,13 +173,13 @@ export default function DashboardPage() {
         onSelect={setWyvern}
       />
 
-      <CountdownTimer
-        anchorDate={settings.anchor_date}
-        resetHour={settings.reset_hour_utc}
-        dayNumber={dayNumber}
+      <LogAttackButton
+        anchorDate={settings.anchor_date}      // same value you passed to CountdownTimer
+        resetHour={settings.reset_hour_utc}       // same value you passed to CountdownTimer
+        dayNumber={dayNumber}       // same as CountdownTimer's dayNumber / AttackLog's currentDay
+        loggedDays={myLoggedDays}      // same as AttackLog's loggedDays
+        onLog={logAttack}           // same as AttackLog's onLog
       />
-
-      <AttackLog loggedDays={myLoggedDays} currentDay={dayNumber} onLog={logAttack} />
 
       <GuildProgress members={members} onPingMissing={pingMissing} pinging={pinging} />
 
