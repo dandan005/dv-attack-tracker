@@ -7,8 +7,14 @@ import { getCycleInfo } from "@/lib/cycle";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { AttackLog } from "@/components/AttackLog";
 import { GuildProgress, MemberRow } from "@/components/GuildProgress";
+import { WyvernTracker } from "@/components/WyvernTracker";
 
-type Settings = { anchor_date: string; reset_hour_utc: number };
+type Settings = {
+  anchor_date: string;
+  reset_hour_utc: number;
+  wyvern_element: string | null;
+  wyvern_set_by: string | null;
+};
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -18,11 +24,14 @@ export default function DashboardPage() {
   const [settings, setSettings] = useState<Settings>({
     anchor_date: "2026-01-05",
     reset_hour_utc: 0,
+    wyvern_element: null,
+    wyvern_set_by: null,
   });
   const [myLoggedDays, setMyLoggedDays] = useState<number[]>([]);
   const [members, setMembers] = useState<MemberRow[]>([]);
   const [pinging, setPinging] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [me, setMe] = useState<{ username: string; avatar_url: string | null } | null>(null);
 
   const { dayNumber, cycleStartISO } = getCycleInfo(
     settings.anchor_date,
@@ -43,9 +52,11 @@ export default function DashboardPage() {
       .select("*")
       .eq("id", 1)
       .single();
-    const currentSettings: Settings = settingsRow ?? {
-      anchor_date: "2026-01-05",
-      reset_hour_utc: 0,
+    const currentSettings: Settings = {
+      anchor_date: settingsRow?.anchor_date ?? "2026-01-05",
+      reset_hour_utc: settingsRow?.reset_hour_utc ?? 0,
+      wyvern_element: settingsRow?.wyvern_element ?? null,
+      wyvern_set_by: settingsRow?.wyvern_set_by ?? null,
     };
     setSettings(currentSettings);
     const cycle = getCycleInfo(currentSettings.anchor_date, currentSettings.reset_hour_utc);
@@ -73,9 +84,10 @@ export default function DashboardPage() {
     }));
     setMembers(rows);
 
-    const me = (allMembers ?? []).find((m: any) => m.auth_user_id === user.id);
-    if (me) {
-      setMyLoggedDays([1, 2, 3, 4, 5, 6].filter((d) => logsByMember.get(me.id)?.has(d)));
+    const myRow = (allMembers ?? []).find((m: any) => m.auth_user_id === user.id);
+    if (myRow) {
+      setMyLoggedDays([1, 2, 3, 4, 5, 6].filter((d) => logsByMember.get(myRow.id)?.has(d)));
+      setMe({ username: myRow.username, avatar_url: myRow.avatar_url });
     }
 
     setLoading(false);
@@ -107,6 +119,16 @@ export default function DashboardPage() {
     setTimeout(() => setToast(null), 3000);
   }
 
+  async function setWyvern(element: "wind" | "fire" | "earth" | "water") {
+    await supabase
+      .from("app_settings")
+      .update({ wyvern_element: element, wyvern_set_by: me?.username ?? null })
+      .eq("id", 1);
+    setSettings((s) => ({ ...s, wyvern_element: element, wyvern_set_by: me?.username ?? null }));
+    setToast(`Wyvern trace set to ${element.toUpperCase()}`);
+    setTimeout(() => setToast(null), 2500);
+  }
+
   if (loading) {
     return (
       <main className="min-h-screen flex items-center justify-center">
@@ -120,15 +142,37 @@ export default function DashboardPage() {
       <header className="flex items-center justify-between mb-5">
         <div>
           <h1 className="text-xs sm:text-sm text-dv-emerald">DRAGON VALLEY</h1>
-          <p className="text-[9px] text-dv-brassLight">ATTACK TRACKER</p>
+          <p className="text-[9px] text-dv-brassLight">
+            {me ? `SIGNED IN AS ${me.username.toUpperCase()}` : "ATTACK TRACKER"}
+          </p>
         </div>
-        <button
-          onClick={() => router.push("/settings")}
-          className="pixel-frame bg-dv-panel2 border border-dv-brass px-3 py-2 text-[10px] shadow-pixel-sm"
-        >
-          ⚙️
-        </button>
+        <div className="flex items-center gap-2">
+          {me && (
+            <div className="pixel-frame bg-dv-panel2 border border-dv-brass px-2 py-1 flex items-center gap-2">
+              <img
+                src={me.avatar_url ?? "/icons/icon-192.png"}
+                alt=""
+                className="w-6 h-6 pixel-frame border border-dv-brass"
+              />
+              <span className="text-[9px] text-dv-brassLight max-w-[80px] truncate">
+                {me.username}
+              </span>
+            </div>
+          )}
+          <button
+            onClick={() => router.push("/settings")}
+            className="pixel-frame bg-dv-panel2 border border-dv-brass px-3 py-2 text-[10px] shadow-pixel-sm"
+          >
+            ⚙️
+          </button>
+        </div>
       </header>
+
+      <WyvernTracker
+        current={settings.wyvern_element as any}
+        setBy={settings.wyvern_set_by}
+        onSelect={setWyvern}
+      />
 
       <CountdownTimer
         anchorDate={settings.anchor_date}
