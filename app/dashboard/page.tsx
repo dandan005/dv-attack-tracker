@@ -138,7 +138,7 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-screen px-4 py-6 max-w-lg mx-auto pb-24">
-      <header className="flex items-center justify-between mb-5">
+      <header className="sticky top-0 z-50 -mx-4 px-4 py-3 mb-5 bg-dv-bg/95 backdrop-blur-sm border-b border-dv-brass flex items-center justify-between">
         <div>
           <h1 className="text-xs sm:text-sm text-dv-emerald">DRAGON VALLEY</h1>
           <p className="text-[9px] text-dv-brassLight">
