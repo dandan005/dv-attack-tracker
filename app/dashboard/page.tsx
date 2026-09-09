@@ -138,7 +138,7 @@ export default function DashboardPage() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 px-4 py-6 bg-dv-bg/95 backdrop-blur-sm border-b border-dv-brass flex items-center justify-between">
+      <header className="sticky top-0 z-50 px-4 py-4 bg-dv-bg/95 backdrop-blur-sm border-b border-dv-brass flex items-center justify-between">
         <div>
           <h1 className="text-xs sm:text-sm text-dv-emerald">DRAGON VALLEY</h1>
         </div>
