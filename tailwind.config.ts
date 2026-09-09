@@ -6,22 +6,22 @@ const config: Config = {
     extend: {
       colors: {
         dv: {
-          bg: "#120a1a",
-          panel: "#1e1230",
-          panel2: "#2a1a42",
-          brass: "#f2c14e",
-          brassLight: "#ffe27a",
-          ember: "#ff4d4d",
-          emerald: "#7cf29c",
-          emeraldDark: "#1c8a4a",
+          bg: "#0d0d0d",
+          panel: "#161616",
+          panel2: "#202020",
+          brass: "#22d3ee",       // neon cyan — active elements, headers
+          brassLight: "#67e8f9",  // ice-blue highlight
+          ember: "#dc2626",       // crimson — alerts/combat stats
+          emerald: "#34d399",     // success/complete states
+          emeraldDark: "#065f46",
         },
       },
       fontFamily: {
-        pixel: ["var(--font-pixel)", "monospace"],
+        pixel: ["var(--font-pixel)", "sans-serif"],
       },
       boxShadow: {
-        pixel: "4px 4px 0px 0px rgba(0,0,0,0.6)",
-        "pixel-sm": "2px 2px 0px 0px rgba(0,0,0,0.55)",
+        pixel: "0 2px 10px rgba(0,0,0,0.65)",
+        "pixel-sm": "0 1px 5px rgba(0,0,0,0.55)",
       },
       keyframes: {
         blink: { "0%,100%": { opacity: "1" }, "50%": { opacity: "0.3" } },
