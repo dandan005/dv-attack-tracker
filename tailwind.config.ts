@@ -6,22 +6,22 @@ const config: Config = {
     extend: {
       colors: {
         dv: {
-          bg: "#0d0d0d",
-          panel: "#161616",
-          panel2: "#202020",
-          brass: "#22d3ee",       // neon cyan — active elements, headers
-          brassLight: "#67e8f9",  // ice-blue highlight
-          ember: "#dc2626",       // crimson — alerts/combat stats
-          emerald: "#34d399",     // success/complete states
-          emeraldDark: "#065f46",
+          bg: "#160f0a",         // near-black warm brown, like the cave backdrop
+          panel: "#2b1f16",      // dark stone/slot brown
+          panel2: "#3d2b1d",     // lighter warm brown (gate stone)
+          brass: "#f2b93a",      // glowing gold border color
+          brassLight: "#ffd966", // bright gold highlight/glow
+          ember: "#e8631c",      // warm orange accent (torch/fire)
+          emerald: "#4ade80",    // success/complete states
+          emeraldDark: "#166534",
         },
       },
       fontFamily: {
         pixel: ["var(--font-pixel)", "sans-serif"],
       },
       boxShadow: {
-        pixel: "0 2px 10px rgba(0,0,0,0.65)",
-        "pixel-sm": "0 1px 5px rgba(0,0,0,0.55)",
+        pixel: "0 0 12px 2px rgba(242,185,58,0.55), 0 4px 14px rgba(0,0,0,0.6)",
+        "pixel-sm": "0 0 6px 1px rgba(242,185,58,0.45), 0 2px 8px rgba(0,0,0,0.5)",
       },
       keyframes: {
         blink: { "0%,100%": { opacity: "1" }, "50%": { opacity: "0.3" } },
