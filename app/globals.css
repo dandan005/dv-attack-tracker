@@ -10,8 +10,12 @@
 
 html,
 body {
-  background-color: #14100b;
-  color: #f2e6d3;
+  background-image: url("/dragon-gate-bg.png");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-color: #1a120b;
 }
 
 * {
