@@ -141,9 +141,6 @@ export default function DashboardPage() {
       <header className="sticky top-0 z-50 px-4 py-3 bg-dv-bg/95 backdrop-blur-sm border-b border-dv-brass flex items-center justify-between">
         <div>
           <h1 className="text-xs sm:text-sm text-dv-emerald">DRAGON VALLEY</h1>
-          <p className="text-[9px] text-dv-brassLight">
-            {me ? `SIGNED IN AS ${me.username.toUpperCase()}` : "ATTACK TRACKER"}
-          </p>
         </div>
         <div className="flex items-center gap-2">
           {me && (
