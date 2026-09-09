@@ -6,22 +6,22 @@ const config: Config = {
     extend: {
       colors: {
         dv: {
-          bg: "#160f0a",         // near-black warm brown, like the cave backdrop
-          panel: "#2b1f16",      // dark stone/slot brown
-          panel2: "#3d2b1d",     // lighter warm brown (gate stone)
-          brass: "#f2b93a",      // glowing gold border color
-          brassLight: "#ffd966", // bright gold highlight/glow
-          ember: "#e8631c",      // warm orange accent (torch/fire)
-          emerald: "#4ade80",    // success/complete states
-          emeraldDark: "#166534",
+          bg: "#14100b",
+          panel: "#241d15",
+          panel2: "#322820",
+          brass: "#e8a33d",
+          brassLight: "#f5c563",
+          ember: "#e5484d",
+          emerald: "#5eead4",
+          emeraldDark: "#0f766e",
         },
       },
       fontFamily: {
         pixel: ["var(--font-pixel)", "sans-serif"],
       },
       boxShadow: {
-        pixel: "0 0 12px 2px rgba(242,185,58,0.55), 0 4px 14px rgba(0,0,0,0.6)",
-        "pixel-sm": "0 0 6px 1px rgba(242,185,58,0.45), 0 2px 8px rgba(0,0,0,0.5)",
+        pixel: "0 3px 0 0 rgba(0,0,0,0.5), 0 4px 10px rgba(0,0,0,0.4)",
+        "pixel-sm": "0 2px 0 0 rgba(0,0,0,0.5)",
       },
       keyframes: {
         blink: { "0%,100%": { opacity: "1" }, "50%": { opacity: "0.3" } },
