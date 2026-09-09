@@ -1,0 +1,61 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-pixel: "Press Start 2P", monospace;
+}
+
+html,
+body {
+  background-color: #12100e;
+  color: #f2e9dc;
+  image-rendering: pixelated;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* pixel-cut border trick: stair-stepped corners via clip-path */
+.pixel-frame {
+  clip-path: polygon(
+    0 8px, 8px 8px, 8px 0,
+    calc(100% - 8px) 0, calc(100% - 8px) 8px, 100% 8px,
+    100% calc(100% - 8px), calc(100% - 8px) calc(100% - 8px), calc(100% - 8px) 100%,
+    8px 100%, 8px calc(100% - 8px), 0 calc(100% - 8px)
+  );
+}
+
+.pixel-border {
+  border: 3px solid #6b4a26;
+  box-shadow: 0 0 0 3px #12100e, 0 0 0 6px #3a2a17;
+}
+
+.scanlines::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+  z-index: 50;
+  opacity: 0.35;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #6b4a26;
+}
+::-webkit-scrollbar-track {
+  background: #1c1712;
+}
