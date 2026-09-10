@@ -12,6 +12,16 @@ const ELEMENTS: { key: Element; label: string; hint: string }[] = [
   { key: "water", label: "WATER", hint: "deep" },
 ];
 
+type BossSlot = { name: string; image: string; alt: string };
+
+/* Editable roster slots: replace the name and image values as each boss is confirmed. */
+const BOSS_SLOTS: Record<Element, BossSlot> = {
+  wind: { name: "Bardoran", image: "/bosses/bardoran-portrait.jpg", alt: "Bardoran pixel dragon portrait" },
+  fire: { name: "BOSS SLOT — FIRE", image: "", alt: "Fire boss portrait slot" },
+  earth: { name: "BOSS SLOT — EARTH", image: "", alt: "Earth boss portrait slot" },
+  water: { name: "BOSS SLOT — WATER", image: "", alt: "Water boss portrait slot" },
+};
+
 function PixelElementArt({ element }: { element: Element }) {
   const frame = (name: string, children: ReactNode) => (
     <g className={"sprite-frame sprite-frame--" + name}>{children}</g>
@@ -67,6 +77,18 @@ function WyvernCrest() {
   );
 }
 
+function BossPortrait({ element, boss }: { element: Element; boss: BossSlot }) {
+  return (
+    <div className={"boss-slot boss-slot--" + element}>
+      <div className="boss-slot__header"><span className="eyebrow">WYVERN BOSS</span><span className="boss-slot__element">{element.toUpperCase()} SLOT</span></div>
+      <div className="boss-portrait">
+        {boss.image ? <img src={boss.image} alt={boss.alt} /> : <div className="boss-portrait__empty"><span className="boss-portrait__glyph">?</span><span>PORTRAIT SLOT</span></div>}
+      </div>
+      <p className="boss-name">{boss.name}</p>
+    </div>
+  );
+}
+
 export function WyvernTracker({
   current,
   setBy,
@@ -78,6 +100,7 @@ export function WyvernTracker({
 }) {
   const [pending, setPending] = useState<Element | null>(null);
   const [bursting, setBursting] = useState<Element | null>(null);
+  const boss = current ? BOSS_SLOTS[current] : null;
 
   return (
     <PixelPanel className="mb-5 animate-rise">
@@ -120,6 +143,8 @@ export function WyvernTracker({
           );
         })}
       </div>
+
+      {current && boss && <BossPortrait element={current} boss={boss} />}
 
       {current && <div className="pixel-frame border border-dv-violet/60 bg-dv-panel2 px-3 py-3 text-[9px] text-dv-brassLight flex items-start gap-2"><span className="text-dv-violet">◆</span><span>{current.toUpperCase()} trace locked for this raid{setBy ? " · set by " + setBy : ""}.</span></div>}
     </PixelPanel>
