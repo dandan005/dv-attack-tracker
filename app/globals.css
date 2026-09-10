@@ -81,13 +81,6 @@ input {
   font-size: 13px;
 }
 
-.pixel-check {
-  display: block;
-  width: 18px;
-  height: 18px;
-  image-rendering: pixelated;
-}
-
 .status-chip {
   display: inline-flex;
   align-items: center;
