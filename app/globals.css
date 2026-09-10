@@ -156,13 +156,7 @@ input {
 }
 
 .element-choice::after {
-  content: "";
-  position: absolute;
-  inset: -45% 18%;
-  z-index: -1;
-  background: linear-gradient(115deg, transparent 42%, color-mix(in srgb, var(--element) 38%, transparent) 50%, transparent 58%);
-  transform: translateX(-90%) rotate(12deg);
-  animation: elementSweep 4.5s steps(5, end) infinite;
+  display: none;
 }
 
 .element-choice:hover,
@@ -187,10 +181,6 @@ input {
 
 .element-choice.is-bursting::before {
   animation: traceAuraBurst 820ms steps(4, end);
-}
-
-.element-choice.is-bursting::after {
-  animation: traceSweepBurst 820ms steps(5, end);
 }
 
 .element-choice.is-pending {
@@ -219,6 +209,7 @@ input {
   width: 49px;
   height: 49px;
   color: var(--element);
+  object-fit: contain;
   image-rendering: pixelated;
   filter: drop-shadow(0 0 5px color-mix(in srgb, var(--element) 52%, transparent));
 }
@@ -233,11 +224,6 @@ input {
 
 .element-choice.is-bursting .element-pixel-art {
   animation: pixelSpritePop 820ms steps(4, end);
-}
-
-.element-choice.is-bursting .sprite-frame {
-  animation-name: spriteFrameBurst;
-  animation-duration: 820ms;
 }
 
 .element-label {
@@ -398,11 +384,6 @@ input {
   50% { opacity: 0.62; transform: translateY(18px) scale(1); }
 }
 
-@keyframes elementSweep {
-  0%, 32% { transform: translateX(-90%) rotate(12deg); }
-  60%, 100% { transform: translateX(90%) rotate(12deg); }
-}
-
 @keyframes spriteFrame {
   0%, 31% { opacity: 1; }
   32%, 100% { opacity: 0; }
@@ -426,12 +407,6 @@ input {
   0% { opacity: 0.25; transform: translateY(26px) scale(0.72); }
   42% { opacity: 0.95; transform: translateY(0) scale(1.16); }
   100% { opacity: 0.34; transform: translateY(26px) scale(0.82); }
-}
-
-@keyframes traceSweepBurst {
-  0% { transform: translateX(-100%) rotate(12deg); }
-  52% { transform: translateX(0) rotate(12deg); }
-  100% { transform: translateX(100%) rotate(12deg); }
 }
 
 @keyframes pixelSpritePop {
