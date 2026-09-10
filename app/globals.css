@@ -69,16 +69,42 @@ input {
 }
 
 .brand-mark {
+  position: relative;
   display: grid;
   place-items: center;
   width: 42px;
   height: 42px;
   color: #080a18;
-  background: linear-gradient(135deg, #ffe3a1, #c98a3e);
+  background: linear-gradient(135deg, #ffe3a1 0%, #ffe3a1 48%, #c98a3e 100%);
   border: 2px solid #fff0c5;
-  box-shadow: 3px 3px 0 #050611;
-  clip-path: polygon(50% 0, 100% 24%, 88% 82%, 50% 100%, 12% 82%, 0 24%);
+  box-shadow: 3px 3px 0 #050611, inset 0 0 0 2px rgba(255, 240, 197, 0.28);
+  clip-path: polygon(0 6px, 6px 6px, 6px 0, calc(100% - 6px) 0, calc(100% - 6px) 6px, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 6px calc(100% - 6px), 0 calc(100% - 6px));
   font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  image-rendering: pixelated;
+}
+
+.brand-mark::before,
+.brand-mark::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.brand-mark::before {
+  inset: 5px;
+  border: 1px solid rgba(8, 10, 24, 0.35);
+  clip-path: polygon(0 4px, 4px 4px, 4px 0, calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px));
+}
+
+.brand-mark::after {
+  right: 7px;
+  bottom: 7px;
+  width: 4px;
+  height: 4px;
+  background: #8c2e2e;
+  box-shadow: -6px 0 0 #8c2e2e, 0 -6px 0 rgba(140, 46, 46, 0.68);
 }
 
 .status-chip {
