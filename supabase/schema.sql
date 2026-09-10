@@ -15,9 +15,15 @@ create table if not exists attack_logs (
   member_id uuid not null references members(id) on delete cascade,
   day_number int not null check (day_number between 1 and 6),
   cycle_start date not null,
+  promotion_tier int check (promotion_tier >= 0),
+  damage_score bigint check (damage_score >= 0),
   logged_at timestamptz default now(),
   unique (member_id, day_number, cycle_start)
 );
+
+-- Safe migration for an existing installation.
+alter table attack_logs add column if not exists promotion_tier int check (promotion_tier >= 0);
+alter table attack_logs add column if not exists damage_score bigint check (damage_score >= 0);
 
 create table if not exists app_settings (
   id int primary key default 1,
