@@ -268,17 +268,12 @@ input {
   background: linear-gradient(110deg, #c98a3e, #ffe3a1 48%, #c98a3e);
   background-size: 220% 100%;
   box-shadow: 0 4px 0 #050611, 0 0 22px rgba(201, 138, 62, 0.2);
-  animation: attackShimmer 3.8s steps(6, end) infinite;
+  animation: none;
   transition: transform 160ms steps(2, end), filter 160ms ease, box-shadow 160ms ease;
 }
 
 .attack-action::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: -80%;
-  background: conic-gradient(from 110deg, transparent 0 34%, rgba(255, 255, 255, 0.7) 42%, transparent 50% 72%, rgba(139, 125, 255, 0.5) 80%, transparent 88%);
-  animation: attackOrbit 5s steps(8, end) infinite;
+  display: none;
 }
 
 .attack-action::after {
@@ -307,7 +302,7 @@ input {
   color: #fff5e4;
   background: linear-gradient(110deg, #a63855, #ff8b62 48%, #a63855);
   box-shadow: 0 4px 0 #050611, 0 0 24px rgba(255, 109, 109, 0.3);
-  animation: attackShimmer 1.8s steps(4, end) infinite, urgentGlow 1.2s steps(3, end) infinite;
+  animation: none;
 }
 
 .attack-action.is-urgent::after {
@@ -319,12 +314,11 @@ input {
   background: linear-gradient(110deg, #25234e, #51458c 48%, #25234e);
   border: 1px solid rgba(255, 227, 161, 0.46);
   box-shadow: 0 4px 0 #050611, 0 0 24px rgba(139, 125, 255, 0.3);
-  animation: sealBreath 3s steps(4, end) infinite;
+  animation: none;
 }
 
 .attack-action.is-done::before {
-  background: conic-gradient(from 90deg, transparent 0 28%, rgba(255, 227, 161, 0.72) 38%, transparent 48% 68%, rgba(120, 232, 199, 0.4) 78%, transparent 88%);
-  animation: attackOrbit 4.2s steps(8, end) infinite;
+  display: none;
 }
 
 .attack-action.is-done::after {
@@ -349,15 +343,7 @@ input {
 }
 
 .attack-sigil::after {
-  content: "";
-  position: absolute;
-  inset: -5px;
-  border: 1px solid currentColor;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  border-radius: 2px;
-  opacity: 0.55;
-  animation: sigilSpin 2.8s steps(8, end) infinite;
+  display: none;
 }
 
 .attack-pixel-art {
