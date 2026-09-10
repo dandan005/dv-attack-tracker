@@ -25,11 +25,7 @@ export function WyvernTracker({
 
   return (
     <PixelPanel className="mb-5 animate-rise">
-      <PixelHeader
-        icon="🐲"
-        title="WYVERN TRACE"
-        right={<span className="text-[8px] text-dv-bg/70 tracking-wider">RAID SIGNAL</span>}
-      />
+      <PixelHeader icon="🐲" title="WYVERN TRACE" right={<span className="text-[8px] text-dv-bg/70 tracking-wider">RAID SIGNAL</span>} />
       <div className="flex items-start justify-between gap-4 mb-4">
         <div>
           <p className="text-[10px] text-dv-brassLight">What element is the guild hunting?</p>
@@ -52,24 +48,17 @@ export function WyvernTracker({
                 await onSelect(el.key);
                 setPending(null);
               }}
-              className={["pixel-frame item-slot py-3 flex flex-col items-center gap-1 text-[9px] shadow-pixel-sm active:translate-y-[2px] transition-colors", active ? "bg-dv-brass text-dv-bg border-dv-brass" : "text-dv-brassLight hover:border-dv-violet", pending === el.key ? "opacity-50" : ""].join(" ")}
+              className={["element-choice", "element-choice--" + el.key, active ? "is-active" : "", pending === el.key ? "is-pending" : ""].join(" ")}
             >
-              <span className="text-lg">{el.icon}</span>
-              <span>{el.label}</span>
-              <span className={active ? "text-[7px] text-dv-bg/70" : "text-[7px] text-slate-300/45"}>{el.hint}</span>
+              <span className="element-orb"><span className="text-base">{el.icon}</span></span>
+              <span className="element-label">{el.label}</span>
+              <span className="element-state">{active ? "TRACE SET" : el.hint.toUpperCase()}</span>
             </button>
           );
         })}
       </div>
 
-      {current && (
-        <div className="pixel-frame border border-dv-violet/60 bg-dv-panel2 px-3 py-3 text-[9px] text-dv-brassLight flex items-start gap-2">
-          <span className="text-dv-violet">◆</span>
-          <span>
-            {current.toUpperCase()} trace locked for this raid{setBy ? " · set by " + setBy : ""}.
-          </span>
-        </div>
-      )}
+      {current && <div className="pixel-frame border border-dv-violet/60 bg-dv-panel2 px-3 py-3 text-[9px] text-dv-brassLight flex items-start gap-2"><span className="text-dv-violet">◆</span><span>{current.toUpperCase()} trace locked for this raid{setBy ? " · set by " + setBy : ""}.</span></div>}
     </PixelPanel>
   );
 }
