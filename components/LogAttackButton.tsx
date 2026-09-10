@@ -4,6 +4,18 @@ import { useEffect, useState } from "react";
 import { formatCountdown, getCycleInfo } from "@/lib/cycle";
 import { PixelPanel } from "./PixelPanel";
 
+function AttackGlyph({ done, urgent }: { done: boolean; urgent: boolean }) {
+  if (done) {
+    return <svg className="attack-pixel-art" viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true"><rect x="3" y="2" width="10" height="2" fill="currentColor" /><rect x="2" y="4" width="12" height="8" fill="currentColor" /><rect x="4" y="12" width="8" height="2" fill="currentColor" /><rect x="5" y="7" width="2" height="2" fill="#11172b" /><rect x="8" y="9" width="4" height="2" fill="#11172b" /><rect x="9" y="6" width="2" height="2" fill="#ffe3a1" /></svg>;
+  }
+
+  if (urgent) {
+    return <svg className="attack-pixel-art" viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true"><rect x="7" y="2" width="2" height="7" fill="currentColor" /><rect x="7" y="11" width="2" height="2" fill="currentColor" /><rect x="4" y="4" width="2" height="2" fill="currentColor" /><rect x="10" y="4" width="2" height="2" fill="currentColor" /><rect x="4" y="10" width="2" height="2" fill="currentColor" /><rect x="10" y="10" width="2" height="2" fill="currentColor" /></svg>;
+  }
+
+  return <svg className="attack-pixel-art" viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true"><rect x="7" y="1" width="2" height="14" fill="currentColor" /><rect x="4" y="4" width="8" height="2" fill="currentColor" /><rect x="5" y="11" width="6" height="2" fill="currentColor" /><rect x="6" y="13" width="4" height="2" fill="currentColor" /><rect x="9" y="2" width="2" height="2" fill="#fff2bd" /></svg>;
+}
+
 export function LogAttackButton({
   anchorDate,
   resetHour,
@@ -35,8 +47,11 @@ export function LogAttackButton({
   async function handleClick() {
     if (done || pending) return;
     setPending(true);
-    await onLog(dayNumber, promotionTier === "" ? null : Number(promotionTier), damageScore === "" ? null : Number(damageScore));
-    setPending(false);
+    try {
+      await onLog(dayNumber, promotionTier === "" ? null : Number(promotionTier), damageScore === "" ? null : Number(damageScore));
+    } finally {
+      setPending(false);
+    }
   }
 
   return (
@@ -52,9 +67,9 @@ export function LogAttackButton({
 
       {!done && <div className="px-4 pb-4 grid grid-cols-2 gap-2"><label className="item-slot p-2 text-[7px] text-slate-300/55">PROMOTION TIER<input type="number" min={0} step={1} inputMode="numeric" value={promotionTier} onChange={(event) => setPromotionTier(event.target.value)} placeholder="optional" className="mt-2 w-full bg-transparent text-[10px] text-dv-brassLight outline-none placeholder:text-slate-300/25" /></label><label className="item-slot p-2 text-[7px] text-slate-300/55">DAMAGE / POINTS<input type="number" min={0} step={1} inputMode="numeric" value={damageScore} onChange={(event) => setDamageScore(event.target.value)} placeholder="optional" className="mt-2 w-full bg-transparent text-[10px] text-dv-brassLight outline-none placeholder:text-slate-300/25" /></label><p className="col-span-2 text-[7px] text-slate-300/40">Higher-promotion damage is worth more raid points. Add the result when you have it.</p></div>}
 
-      <button onClick={handleClick} disabled={done || pending} className={["attack-action", done ? "is-done" : urgent ? "is-urgent" : "", pending ? "is-pending" : ""].join(" ")}>
-        <span className="attack-sigil">{done ? "✓" : urgent ? "!" : "⚔️"}</span>
-        <span className="attack-copy">{done ? "ATTACK LOGGED" : pending ? "LOGGING..." : "LOG TODAY'S ATTACK"}<small>{done ? "RAID ENTRY CONFIRMED" : urgent ? "RESET WINDOW CLOSING" : "ADD YOUR RUN TO THE GUILD LEDGER"}</small></span>
+      <button onClick={handleClick} disabled={done || pending} aria-label={done ? "Attack logged" : "Log today's attack"} className={["attack-action", done ? "is-done" : urgent ? "is-urgent" : "", pending ? "is-pending" : ""].join(" ")}>
+        <span className="attack-sigil"><AttackGlyph done={done} urgent={urgent} /></span>
+        <span className="attack-copy">{done ? "ATTACK SEALED" : pending ? "LOGGING..." : "LOG TODAY'S ATTACK"}<small>{done ? "RAID ENTRY CONFIRMED" : urgent ? "RESET WINDOW CLOSING" : "ADD YOUR RUN TO THE GUILD LEDGER"}</small></span>
       </button>
     </PixelPanel>
   );
