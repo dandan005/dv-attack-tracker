@@ -2,6 +2,14 @@
 
 import { PixelPanel, PixelHeader } from "./PixelPanel";
 
+function PixelCheck() {
+  return (
+    <svg className="pixel-check" viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true">
+      <path d="M2 7h3v3h2v2h2v-2h2V8h2V5h2V2h-3v3h-2v2H8V5H5V4H2v3Z" fill="currentColor" />
+    </svg>
+  );
+}
+
 export type MemberRow = {
   discord_id: string;
   username: string;
@@ -79,7 +87,7 @@ export function GuildProgress({
                   const dayNum = index + 1;
                   const isToday = dayNum === currentDay;
                   const isFuture = dayNum > currentDay;
-                  return <div key={index} className={["aspect-square pixel-frame flex items-center justify-center text-[10px] font-bold", index === 3 ? "border-l border-dv-line" : "", done ? "bg-dv-emerald text-dv-bg" : isFuture ? "bg-dv-panel2 text-slate-300/20" : isToday ? "bg-dv-panel2 border border-dv-brass text-dv-brassLight" : "bg-dv-ember/80 text-dv-bg"].join(" ")}>{done ? "✓" : isFuture ? "·" : isToday ? "–" : "✕"}</div>;
+                  return <div key={index} className={["aspect-square pixel-frame flex items-center justify-center text-[10px] font-bold", index === 3 ? "border-l border-dv-line" : "", done ? "bg-dv-emerald text-dv-bg" : isFuture ? "bg-dv-panel2 text-slate-300/20" : isToday ? "bg-dv-panel2 border border-dv-brass text-dv-brassLight" : "bg-dv-ember/80 text-dv-bg"].join(" ")}>{done ? <PixelCheck /> : isFuture ? "·" : isToday ? "–" : "✕"}</div>;
                 })}
               </div>
             ))}
