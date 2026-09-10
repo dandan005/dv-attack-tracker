@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import { PixelPanel, PixelHeader } from "./PixelPanel";
 
 type Element = "wind" | "fire" | "earth" | "water";
@@ -13,7 +13,7 @@ const ELEMENTS: { key: Element; label: string; hint: string }[] = [
 ];
 
 function PixelElementArt({ element }: { element: Element }) {
-  const frame = (name: string, children: React.ReactNode) => (
+  const frame = (name: string, children: ReactNode) => (
     <g className={"sprite-frame sprite-frame--" + name}>{children}</g>
   );
 
