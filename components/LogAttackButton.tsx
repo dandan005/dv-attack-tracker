@@ -6,14 +6,30 @@ import { PixelPanel } from "./PixelPanel";
 
 function AttackGlyph({ done, urgent }: { done: boolean; urgent: boolean }) {
   if (done) {
-    return <svg className="attack-pixel-art" viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true"><rect x="3" y="2" width="10" height="2" fill="currentColor" /><rect x="2" y="4" width="12" height="8" fill="currentColor" /><rect x="4" y="12" width="8" height="2" fill="currentColor" /><rect x="5" y="7" width="2" height="2" fill="#11172b" /><rect x="8" y="9" width="4" height="2" fill="#11172b" /><rect x="9" y="6" width="2" height="2" fill="#ffe3a1" /></svg>;
+    return (
+      <svg className="attack-pixel-art" viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true">
+        <path d="M8 1 13 3v4c0 4-2.2 6.4-5 8-2.8-1.6-5-4-5-8V3l5-2Z" fill="currentColor" />
+        <rect x="4" y="7" width="2" height="2" fill="#11172b" /><rect x="6" y="9" width="2" height="2" fill="#11172b" />
+        <rect x="8" y="7" width="2" height="2" fill="#11172b" /><rect x="10" y="5" width="2" height="2" fill="#11172b" />
+      </svg>
+    );
   }
 
   if (urgent) {
-    return <svg className="attack-pixel-art" viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true"><rect x="7" y="2" width="2" height="7" fill="currentColor" /><rect x="7" y="11" width="2" height="2" fill="currentColor" /><rect x="4" y="4" width="2" height="2" fill="currentColor" /><rect x="10" y="4" width="2" height="2" fill="currentColor" /><rect x="4" y="10" width="2" height="2" fill="currentColor" /><rect x="10" y="10" width="2" height="2" fill="currentColor" /></svg>;
+    return (
+      <svg className="attack-pixel-art" viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true">
+        <path d="M8 1 15 14H1L8 1Z" fill="currentColor" />
+        <rect x="7" y="5" width="2" height="5" fill="#11172b" /><rect x="7" y="11" width="2" height="2" fill="#11172b" />
+      </svg>
+    );
   }
 
-  return <svg className="attack-pixel-art" viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true"><rect x="7" y="1" width="2" height="14" fill="currentColor" /><rect x="4" y="4" width="8" height="2" fill="currentColor" /><rect x="5" y="11" width="6" height="2" fill="currentColor" /><rect x="6" y="13" width="4" height="2" fill="currentColor" /><rect x="9" y="2" width="2" height="2" fill="#fff2bd" /></svg>;
+  return (
+    <svg className="attack-pixel-art" viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true">
+      <path d="M2 2h2v2h2v2h2v2h2v2h2v2h2v2h-3v-2H9v-2H7V8H5V6H3V4H2V2Z" fill="currentColor" />
+      <path d="M14 2h-2v2h-2v2H8v2H6v2H4v2H2v2h3v-2h2v-2h2V8h2V6h2V4h1V2Z" fill="currentColor" />
+    </svg>
+  );
 }
 
 export function LogAttackButton({
