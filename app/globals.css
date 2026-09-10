@@ -120,6 +120,273 @@ input {
   transition: width 300ms ease;
 }
 
+/* Element choices read as animated abilities, not selected cards. */
+.element-choice {
+  --element: #8b7dff;
+  --element-deep: #24204c;
+  position: relative;
+  isolation: isolate;
+  min-height: 118px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: #eef2ff;
+  border: 1px solid color-mix(in srgb, var(--element) 58%, #303d67);
+  border-radius: 10px;
+  background: radial-gradient(circle at 50% 100%, var(--element-deep), #11172b 72%);
+  box-shadow: inset 0 0 20px rgba(2, 4, 14, 0.34), 0 3px 0 rgba(5, 6, 17, 0.9);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+}
+
+.element-choice::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--element) 38%, transparent), transparent 68%);
+  opacity: 0.46;
+  transform: translateY(28px) scale(0.75);
+  animation: elementPulse 2.8s ease-in-out infinite;
+}
+
+.element-choice::after {
+  content: "";
+  position: absolute;
+  inset: -45% 18%;
+  z-index: -1;
+  background: linear-gradient(115deg, transparent 42%, color-mix(in srgb, var(--element) 38%, transparent) 50%, transparent 58%);
+  transform: translateX(-90%) rotate(12deg);
+  animation: elementSweep 4.5s ease-in-out infinite;
+}
+
+.element-choice:hover,
+.element-choice:focus-visible {
+  transform: translateY(-3px);
+  border-color: var(--element);
+  filter: brightness(1.14);
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--element) 25%, transparent), 0 7px 0 rgba(5, 6, 17, 0.9), 0 0 24px color-mix(in srgb, var(--element) 26%, transparent);
+}
+
+.element-choice.is-active {
+  transform: translateY(-2px);
+  border-color: var(--element);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--element) 22%, transparent), 0 0 28px color-mix(in srgb, var(--element) 32%, transparent), inset 0 0 28px color-mix(in srgb, var(--element) 18%, transparent);
+}
+
+.element-choice.is-pending {
+  opacity: 0.58;
+  pointer-events: none;
+}
+
+.element-choice--wind { --element: #86e8ff; --element-deep: #123a50; }
+.element-choice--fire { --element: #ff8b62; --element-deep: #542334; }
+.element-choice--earth { --element: #d2c27e; --element-deep: #49432a; }
+.element-choice--water { --element: #6fa8ff; --element-deep: #1f2d63; }
+
+.element-orb {
+  display: grid;
+  place-items: center;
+  width: 47px;
+  height: 47px;
+  border: 1px solid color-mix(in srgb, var(--element) 76%, white 10%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.42), color-mix(in srgb, var(--element) 34%, #11172b) 35%, #11172b 74%);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--element) 40%, transparent), inset 0 0 12px rgba(255, 255, 255, 0.1);
+  animation: elementFloat 2.6s ease-in-out infinite;
+}
+
+.element-choice:nth-child(2) .element-orb { animation-delay: -0.65s; }
+.element-choice:nth-child(3) .element-orb { animation-delay: -1.3s; }
+.element-choice:nth-child(4) .element-orb { animation-delay: -1.95s; }
+
+.element-label {
+  color: color-mix(in srgb, var(--element) 72%, white 18%);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+}
+
+.element-state {
+  color: rgba(238, 242, 255, 0.45);
+  font-size: 7px;
+  letter-spacing: 0.08em;
+}
+
+.element-choice.is-active .element-state {
+  color: var(--element);
+}
+
+/* The attack action is a live raid control with a moving energy edge. */
+.attack-action {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: 100%;
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #080a18;
+  border: 0;
+  background: linear-gradient(110deg, #c98a3e, #ffe3a1 48%, #c98a3e);
+  background-size: 220% 100%;
+  box-shadow: 0 4px 0 #050611, 0 0 22px rgba(201, 138, 62, 0.2);
+  animation: attackShimmer 3.8s ease-in-out infinite;
+  transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+}
+
+.attack-action::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -80%;
+  background: conic-gradient(from 110deg, transparent 0 34%, rgba(255, 255, 255, 0.7) 42%, transparent 50% 72%, rgba(139, 125, 255, 0.5) 80%, transparent 88%);
+  animation: attackOrbit 5s linear infinite;
+}
+
+.attack-action::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 1px;
+  border-radius: inherit;
+  background: linear-gradient(110deg, rgba(255, 227, 161, 0.9), rgba(201, 138, 62, 0.92));
+}
+
+.attack-action:hover,
+.attack-action:focus-visible {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  outline: none;
+  box-shadow: 0 6px 0 #050611, 0 0 30px rgba(255, 227, 161, 0.3);
+}
+
+.attack-action:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #050611;
+}
+
+.attack-action.is-urgent {
+  color: #fff5e4;
+  background: linear-gradient(110deg, #a63855, #ff8b62 48%, #a63855);
+  box-shadow: 0 4px 0 #050611, 0 0 24px rgba(255, 109, 109, 0.3);
+  animation: attackShimmer 1.8s ease-in-out infinite, urgentGlow 1.2s ease-in-out infinite;
+}
+
+.attack-action.is-urgent::after {
+  background: linear-gradient(110deg, rgba(166, 56, 85, 0.96), rgba(255, 139, 98, 0.96));
+}
+
+.attack-action.is-done {
+  color: #c8fff0;
+  background: linear-gradient(110deg, #12675d, #2aa68c 48%, #12675d);
+  box-shadow: 0 4px 0 #050611, 0 0 20px rgba(120, 232, 199, 0.2);
+  animation: doneBreath 3s ease-in-out infinite;
+}
+
+.attack-action.is-done::after {
+  background: linear-gradient(110deg, rgba(18, 103, 93, 0.96), rgba(42, 166, 140, 0.96));
+}
+
+.attack-action.is-pending {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.attack-sigil {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: rgba(8, 10, 24, 0.16);
+  font-size: 17px;
+}
+
+.attack-sigil::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border: 1px solid currentColor;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-radius: 50%;
+  opacity: 0.55;
+  animation: sigilSpin 2.8s linear infinite;
+}
+
+.attack-copy {
+  position: relative;
+  z-index: 1;
+  text-align: left;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+.attack-copy small {
+  display: block;
+  margin-top: 4px;
+  font-size: 7px;
+  opacity: 0.62;
+  letter-spacing: 0.12em;
+}
+
+@keyframes elementPulse {
+  0%, 100% { opacity: 0.28; transform: translateY(28px) scale(0.72); }
+  50% { opacity: 0.72; transform: translateY(18px) scale(1); }
+}
+
+@keyframes elementSweep {
+  0%, 32% { transform: translateX(-90%) rotate(12deg); }
+  60%, 100% { transform: translateX(90%) rotate(12deg); }
+}
+
+@keyframes elementFloat {
+  0%, 100% { transform: translateY(2px) rotate(-3deg); }
+  50% { transform: translateY(-4px) rotate(3deg); }
+}
+
+@keyframes attackShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes attackOrbit {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes urgentGlow {
+  0%, 100% { filter: saturate(1); }
+  50% { filter: saturate(1.35) brightness(1.08); }
+}
+
+@keyframes doneBreath {
+  0%, 100% { filter: saturate(0.94); }
+  50% { filter: saturate(1.2) brightness(1.06); }
+}
+
+@keyframes sigilSpin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }
