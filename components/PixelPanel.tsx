@@ -27,7 +27,7 @@ export function PixelHeader({
 }) {
   return (
     <div className="pixel-frame flex items-center justify-between bg-gradient-to-r from-dv-violet to-dv-brass px-3 py-3 mb-4 shadow-pixel-sm">
-      <div className="flex items-center gap-2 text-[11px] sm:text-xs text-dv-bg">
+      <div className="flex items-center gap-2 text-[12px] sm:text-xs text-dv-bg">
         <span className="grid place-items-center w-7 h-7 pixel-frame bg-dv-bg/20 text-sm">
           {icon}
         </span>
