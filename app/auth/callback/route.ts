@@ -12,13 +12,22 @@ export async function GET(request: NextRequest) {
 
     if (!error && data.user) {
       const identity = data.user.identities?.find((i) => i.provider === "discord");
-      const discordId = identity?.identity_data?.provider_id ?? data.user.id;
-      const username =
-        identity?.identity_data?.full_name ??
-        identity?.identity_data?.name ??
+      const identityData = (identity?.identity_data ?? {}) as Record<string, any>;
+      const userMetadata = (data.user.user_metadata ?? {}) as Record<string, any>;
+      const discordId = identityData.provider_id ?? identityData.sub ?? data.user.id;
+      const displayName =
+        identityData.global_name ??
+        identityData.custom_claims?.global_name ??
+        userMetadata.global_name ??
+        userMetadata.display_name ??
+        identityData.display_name ??
+        userMetadata.full_name ??
+        identityData.full_name ??
+        userMetadata.name ??
+        identityData.name ??
         data.user.email ??
         "Slayer";
-      const avatarUrl = identity?.identity_data?.avatar_url ?? null;
+      const avatarUrl = identityData.avatar_url ?? userMetadata.avatar_url ?? null;
 
       // upsert into members table so the guild roster is populated on first login
       const admin = createAdminClient();
@@ -26,7 +35,7 @@ export async function GET(request: NextRequest) {
         {
           auth_user_id: data.user.id,
           discord_id: discordId,
-          username,
+          username: displayName,
           avatar_url: avatarUrl,
         },
         { onConflict: "auth_user_id" }
