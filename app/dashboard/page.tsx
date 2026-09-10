@@ -7,6 +7,7 @@ import { getCycleInfo } from "@/lib/cycle";
 import { LogAttackButton } from "@/components/LogAttackButton";
 import { GuildProgress, MemberRow } from "@/components/GuildProgress";
 import { WyvernTracker } from "@/components/WyvernTracker";
+import { ExplorationPhase } from "@/components/ExplorationPhase";
 
 type Settings = {
   anchor_date: string;
@@ -145,7 +146,11 @@ export default function DashboardPage() {
 
       <main className="min-h-screen px-4 pt-6 pb-24 max-w-2xl mx-auto">
         <div className="flex items-end justify-between gap-4 mb-5"><div><p className="eyebrow">CYCLE STARTED {cycleStartISO}</p><h2 className="text-xl sm:text-2xl text-dv-brassLight mt-2">KEEP THE GUILD<br className="sm:hidden" /> ON PACE.</h2></div><div className="text-right shrink-0"><p className="text-[8px] text-slate-300/50">CURRENT DAY</p><p className="text-2xl text-dv-emerald">D{dayNumber}</p></div></div>
-        <WyvernTracker current={settings.wyvern_element as any} setBy={settings.wyvern_set_by} onSelect={setWyvern} />
+        {dayNumber < 3 ? (
+          <ExplorationPhase currentDay={dayNumber} />
+        ) : settings.wyvern_element ? (
+          <WyvernTracker current={settings.wyvern_element as any} setBy={settings.wyvern_set_by} onSelect={setWyvern} />
+        ) : null}
         <LogAttackButton anchorDate={settings.anchor_date} resetHour={settings.reset_hour_utc} dayNumber={dayNumber} loggedDays={myLoggedDays} onLog={logAttack} />
         <GuildProgress members={members} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} />
         {toast && <div role="status" className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 pixel-frame bg-dv-brass text-dv-bg text-[9px] px-4 py-3 shadow-pixel animate-rise">{toast}</div>}
