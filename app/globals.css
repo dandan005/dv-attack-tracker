@@ -120,13 +120,13 @@ input {
   transition: width 300ms ease;
 }
 
-/* Element choices read as animated abilities, not selected cards. */
+/* Element choices read as retro pixel-art abilities. */
 .element-choice {
   --element: #8b7dff;
   --element-deep: #24204c;
   position: relative;
   isolation: isolate;
-  min-height: 118px;
+  min-height: 126px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -134,24 +134,25 @@ input {
   justify-content: center;
   gap: 5px;
   color: #eef2ff;
+  cursor: pointer;
   border: 1px solid color-mix(in srgb, var(--element) 58%, #303d67);
-  border-radius: 10px;
+  border-radius: 6px;
   background: radial-gradient(circle at 50% 100%, var(--element-deep), #11172b 72%);
   box-shadow: inset 0 0 20px rgba(2, 4, 14, 0.34), 0 3px 0 rgba(5, 6, 17, 0.9);
-  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+  transition: transform 180ms steps(2, end), border-color 180ms ease, box-shadow 180ms ease, filter 180ms ease;
 }
 
 .element-choice::before {
   content: "";
   position: absolute;
   z-index: -1;
-  width: 90px;
-  height: 90px;
+  width: 92px;
+  height: 92px;
   border-radius: 50%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--element) 38%, transparent), transparent 68%);
-  opacity: 0.46;
-  transform: translateY(28px) scale(0.75);
-  animation: elementPulse 2.8s ease-in-out infinite;
+  background: radial-gradient(circle, color-mix(in srgb, var(--element) 42%, transparent), transparent 68%);
+  opacity: 0.34;
+  transform: translateY(26px) scale(0.72);
+  animation: elementPulse 2.8s steps(3, end) infinite;
 }
 
 .element-choice::after {
@@ -161,7 +162,7 @@ input {
   z-index: -1;
   background: linear-gradient(115deg, transparent 42%, color-mix(in srgb, var(--element) 38%, transparent) 50%, transparent 58%);
   transform: translateX(-90%) rotate(12deg);
-  animation: elementSweep 4.5s ease-in-out infinite;
+  animation: elementSweep 4.5s steps(5, end) infinite;
 }
 
 .element-choice:hover,
@@ -179,8 +180,21 @@ input {
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--element) 22%, transparent), 0 0 28px color-mix(in srgb, var(--element) 32%, transparent), inset 0 0 28px color-mix(in srgb, var(--element) 18%, transparent);
 }
 
+.element-choice.is-bursting {
+  animation: traceAttune 820ms steps(4, end);
+  box-shadow: 0 0 0 2px var(--element), 0 0 36px color-mix(in srgb, var(--element) 58%, transparent), inset 0 0 32px color-mix(in srgb, var(--element) 26%, transparent);
+}
+
+.element-choice.is-bursting::before {
+  animation: traceAuraBurst 820ms steps(4, end);
+}
+
+.element-choice.is-bursting::after {
+  animation: traceSweepBurst 820ms steps(5, end);
+}
+
 .element-choice.is-pending {
-  opacity: 0.58;
+  opacity: 0.72;
   pointer-events: none;
 }
 
@@ -192,18 +206,39 @@ input {
 .element-orb {
   display: grid;
   place-items: center;
-  width: 47px;
-  height: 47px;
+  width: 58px;
+  height: 58px;
   border: 1px solid color-mix(in srgb, var(--element) 76%, white 10%);
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.42), color-mix(in srgb, var(--element) 34%, #11172b) 35%, #11172b 74%);
-  box-shadow: 0 0 18px color-mix(in srgb, var(--element) 40%, transparent), inset 0 0 12px rgba(255, 255, 255, 0.1);
-  animation: elementFloat 2.6s ease-in-out infinite;
+  border-radius: 4px;
+  background: #080a18;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--element) 40%, transparent), inset 0 0 12px rgba(255, 255, 255, 0.1), 3px 3px 0 rgba(5, 6, 17, 0.65);
+  image-rendering: pixelated;
 }
 
-.element-choice:nth-child(2) .element-orb { animation-delay: -0.65s; }
-.element-choice:nth-child(3) .element-orb { animation-delay: -1.3s; }
-.element-choice:nth-child(4) .element-orb { animation-delay: -1.95s; }
+.element-pixel-art {
+  width: 49px;
+  height: 49px;
+  color: var(--element);
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--element) 52%, transparent));
+}
+
+.sprite-frame {
+  opacity: 0;
+  animation: spriteFrame 1.05s steps(1, end) infinite;
+}
+
+.sprite-frame--b { animation-delay: -0.7s; }
+.sprite-frame--c { animation-delay: -0.35s; }
+
+.element-choice.is-bursting .element-pixel-art {
+  animation: pixelSpritePop 820ms steps(4, end);
+}
+
+.element-choice.is-bursting .sprite-frame {
+  animation-name: spriteFrameBurst;
+  animation-duration: 820ms;
+}
 
 .element-label {
   color: color-mix(in srgb, var(--element) 72%, white 18%);
@@ -221,7 +256,14 @@ input {
   color: var(--element);
 }
 
-/* The attack action is a live raid control with a moving energy edge. */
+.wyvern-crest {
+  width: 22px;
+  height: 22px;
+  color: #ffe3a1;
+  image-rendering: pixelated;
+}
+
+/* The attack action is a pixel RPG command, not a flat status pill. */
 .attack-action {
   position: relative;
   isolation: isolate;
@@ -237,8 +279,8 @@ input {
   background: linear-gradient(110deg, #c98a3e, #ffe3a1 48%, #c98a3e);
   background-size: 220% 100%;
   box-shadow: 0 4px 0 #050611, 0 0 22px rgba(201, 138, 62, 0.2);
-  animation: attackShimmer 3.8s ease-in-out infinite;
-  transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+  animation: attackShimmer 3.8s steps(6, end) infinite;
+  transition: transform 160ms steps(2, end), filter 160ms ease, box-shadow 160ms ease;
 }
 
 .attack-action::before {
@@ -247,7 +289,7 @@ input {
   z-index: -1;
   inset: -80%;
   background: conic-gradient(from 110deg, transparent 0 34%, rgba(255, 255, 255, 0.7) 42%, transparent 50% 72%, rgba(139, 125, 255, 0.5) 80%, transparent 88%);
-  animation: attackOrbit 5s linear infinite;
+  animation: attackOrbit 5s steps(8, end) infinite;
 }
 
 .attack-action::after {
@@ -255,7 +297,7 @@ input {
   position: absolute;
   z-index: -1;
   inset: 1px;
-  border-radius: inherit;
+  border-radius: 3px;
   background: linear-gradient(110deg, rgba(255, 227, 161, 0.9), rgba(201, 138, 62, 0.92));
 }
 
@@ -276,7 +318,7 @@ input {
   color: #fff5e4;
   background: linear-gradient(110deg, #a63855, #ff8b62 48%, #a63855);
   box-shadow: 0 4px 0 #050611, 0 0 24px rgba(255, 109, 109, 0.3);
-  animation: attackShimmer 1.8s ease-in-out infinite, urgentGlow 1.2s ease-in-out infinite;
+  animation: attackShimmer 1.8s steps(4, end) infinite, urgentGlow 1.2s steps(3, end) infinite;
 }
 
 .attack-action.is-urgent::after {
@@ -284,14 +326,20 @@ input {
 }
 
 .attack-action.is-done {
-  color: #c8fff0;
-  background: linear-gradient(110deg, #12675d, #2aa68c 48%, #12675d);
-  box-shadow: 0 4px 0 #050611, 0 0 20px rgba(120, 232, 199, 0.2);
-  animation: doneBreath 3s ease-in-out infinite;
+  color: #ffe3a1;
+  background: linear-gradient(110deg, #25234e, #51458c 48%, #25234e);
+  border: 1px solid rgba(255, 227, 161, 0.46);
+  box-shadow: 0 4px 0 #050611, 0 0 24px rgba(139, 125, 255, 0.3);
+  animation: sealBreath 3s steps(4, end) infinite;
+}
+
+.attack-action.is-done::before {
+  background: conic-gradient(from 90deg, transparent 0 28%, rgba(255, 227, 161, 0.72) 38%, transparent 48% 68%, rgba(120, 232, 199, 0.4) 78%, transparent 88%);
+  animation: attackOrbit 4.2s steps(8, end) infinite;
 }
 
 .attack-action.is-done::after {
-  background: linear-gradient(110deg, rgba(18, 103, 93, 0.96), rgba(42, 166, 140, 0.96));
+  background: linear-gradient(110deg, rgba(22, 20, 52, 0.98), rgba(76, 62, 132, 0.98));
 }
 
 .attack-action.is-pending {
@@ -306,9 +354,9 @@ input {
   width: 34px;
   height: 34px;
   border: 1px solid currentColor;
-  border-radius: 50%;
-  background: rgba(8, 10, 24, 0.16);
-  font-size: 17px;
+  border-radius: 4px;
+  background: rgba(8, 10, 24, 0.22);
+  image-rendering: pixelated;
 }
 
 .attack-sigil::after {
@@ -318,9 +366,15 @@ input {
   border: 1px solid currentColor;
   border-left-color: transparent;
   border-right-color: transparent;
-  border-radius: 50%;
+  border-radius: 2px;
   opacity: 0.55;
-  animation: sigilSpin 2.8s linear infinite;
+  animation: sigilSpin 2.8s steps(8, end) infinite;
+}
+
+.attack-pixel-art {
+  width: 23px;
+  height: 23px;
+  image-rendering: pixelated;
 }
 
 .attack-copy {
@@ -340,8 +394,8 @@ input {
 }
 
 @keyframes elementPulse {
-  0%, 100% { opacity: 0.28; transform: translateY(28px) scale(0.72); }
-  50% { opacity: 0.72; transform: translateY(18px) scale(1); }
+  0%, 100% { opacity: 0.22; transform: translateY(28px) scale(0.72); }
+  50% { opacity: 0.62; transform: translateY(18px) scale(1); }
 }
 
 @keyframes elementSweep {
@@ -349,9 +403,41 @@ input {
   60%, 100% { transform: translateX(90%) rotate(12deg); }
 }
 
-@keyframes elementFloat {
-  0%, 100% { transform: translateY(2px) rotate(-3deg); }
-  50% { transform: translateY(-4px) rotate(3deg); }
+@keyframes spriteFrame {
+  0%, 31% { opacity: 1; }
+  32%, 100% { opacity: 0; }
+}
+
+@keyframes spriteFrameBurst {
+  0%, 31% { opacity: 1; }
+  32%, 66% { opacity: 0; }
+  67%, 100% { opacity: 1; }
+}
+
+@keyframes traceAttune {
+  0% { transform: translateY(0) scale(1); }
+  28% { transform: translateY(-4px) scale(1.04); }
+  54% { transform: translateY(1px) scale(0.98); }
+  76% { transform: translateY(-2px) scale(1.02); }
+  100% { transform: translateY(-2px) scale(1); }
+}
+
+@keyframes traceAuraBurst {
+  0% { opacity: 0.25; transform: translateY(26px) scale(0.72); }
+  42% { opacity: 0.95; transform: translateY(0) scale(1.16); }
+  100% { opacity: 0.34; transform: translateY(26px) scale(0.82); }
+}
+
+@keyframes traceSweepBurst {
+  0% { transform: translateX(-100%) rotate(12deg); }
+  52% { transform: translateX(0) rotate(12deg); }
+  100% { transform: translateX(100%) rotate(12deg); }
+}
+
+@keyframes pixelSpritePop {
+  0% { transform: scale(0.78); filter: drop-shadow(0 0 2px currentColor); }
+  42% { transform: scale(1.18); filter: drop-shadow(0 0 12px currentColor); }
+  100% { transform: scale(1); filter: drop-shadow(0 0 5px currentColor); }
 }
 
 @keyframes attackShimmer {
@@ -368,9 +454,9 @@ input {
   50% { filter: saturate(1.35) brightness(1.08); }
 }
 
-@keyframes doneBreath {
-  0%, 100% { filter: saturate(0.94); }
-  50% { filter: saturate(1.2) brightness(1.06); }
+@keyframes sealBreath {
+  0%, 100% { filter: saturate(0.92); }
+  50% { filter: saturate(1.18) brightness(1.08); }
 }
 
 @keyframes sigilSpin {
