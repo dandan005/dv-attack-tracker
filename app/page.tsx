@@ -28,7 +28,7 @@ export default function SplashPage() {
 
           <p className="eyebrow mb-3">GUILD COMMAND CENTER</p>
           <h1 className="text-2xl sm:text-3xl text-dv-brassLight leading-tight">DRAGON<br />VALLEY</h1>
-          <p className="text-[10px] leading-relaxed text-slate-300/70 mt-4 max-w-xs">
+          <p className="text-[11px] leading-relaxed text-slate-300/70 mt-4 max-w-xs">
             Keep every attack on the board. Stay ahead of reset. Make the guild stronger one day at a time.
           </p>
 
@@ -41,8 +41,8 @@ export default function SplashPage() {
               ["24/7", "REMINDERS"],
             ].map(([value, label]) => (
               <div key={label} className="item-slot p-3 text-center">
-                <div className="text-[11px] text-dv-brassLight">{value}</div>
-                <div className="text-[7px] text-slate-300/60 mt-2">{label}</div>
+                <div className="text-[12px] text-dv-brassLight">{value}</div>
+                <div className="text-[9px] text-slate-300/60 mt-2">{label}</div>
               </div>
             ))}
           </div>
@@ -50,17 +50,17 @@ export default function SplashPage() {
           <button
             onClick={handleLogin}
             disabled={loading}
-            className="w-full pixel-frame bg-dv-brass disabled:opacity-60 text-dv-bg text-[10px] py-3.5 shadow-pixel-sm active:translate-y-[2px] flex items-center justify-center gap-2 hover:bg-dv-brassLight transition-colors"
+            className="w-full pixel-frame bg-dv-brass disabled:opacity-60 text-dv-bg text-[11px] py-3.5 shadow-pixel-sm active:translate-y-[2px] flex items-center justify-center gap-2 hover:bg-dv-brassLight transition-colors"
           >
             {loading ? "CONNECTING..." : <><DiscordMark /> ENTER WITH DISCORD</>}
           </button>
 
-          <p className="text-[8px] text-slate-300/45 mt-5 text-center tracking-wide">
+          <p className="text-[10px] text-slate-300/45 mt-5 text-center tracking-wide">
             PRIVATE GUILD ACCESS // DISCORD AUTHENTICATION
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 text-[8px] text-slate-300/60">
+        <div className="grid grid-cols-2 gap-3 text-[10px] text-slate-300/60">
           <div className="pixel-frame border border-dv-line bg-dv-panel/80 p-3">⚔ LOG YOUR RUNS</div>
           <div className="pixel-frame border border-dv-line bg-dv-panel/80 p-3 text-right">◈ SEE THE RAID FLOW</div>
         </div>
