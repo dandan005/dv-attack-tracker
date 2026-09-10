@@ -64,11 +64,11 @@ export function WyvernTracker({
 
   return (
     <PixelPanel className="mb-5 animate-rise pb-5">
-      <PixelHeader icon={<WyvernCrest />} title="WYVERN TRACE" right={<span className="text-[8px] text-dv-bg/70 tracking-wider">RAID SIGNAL</span>} />
+      <PixelHeader icon={<WyvernCrest />} title="WYVERN TRACE" right={<span className="text-[10px] text-dv-bg/70 tracking-wider">RAID SIGNAL</span>} />
       <div className="flex items-start justify-between gap-4 mb-4">
         <div>
-          <p className="text-[10px] text-dv-brassLight">What element is the guild hunting?</p>
-          <p className="text-[8px] text-slate-300/55 mt-1">Broadcast the current trace so everyone is synced.</p>
+          <p className="text-[11px] text-dv-brassLight">What element is the guild hunting?</p>
+          <p className="text-[10px] text-slate-300/55 mt-1">Broadcast the current trace so everyone is synced.</p>
         </div>
         {current && <span className="status-chip shrink-0">SYNCED</span>}
       </div>
@@ -106,7 +106,7 @@ export function WyvernTracker({
 
       {current && boss && <BossPortrait element={current} boss={boss} />}
 
-      {current && <div className="pixel-frame border border-dv-violet/60 bg-dv-panel2 px-3 py-3 mb-1 text-[9px] text-dv-brassLight flex items-start gap-2"><span className="text-dv-violet">◆</span><span>{current.toUpperCase()} trace locked for this raid{setBy ? " · set by " + setBy : ""}.</span></div>}
+      {current && <div className="pixel-frame border border-dv-violet/60 bg-dv-panel2 px-3 py-3 mb-1 text-[10px] text-dv-brassLight flex items-start gap-2"><span className="text-dv-violet">◆</span><span>{current.toUpperCase()} trace locked for this raid{setBy ? " · set by " + setBy : ""}.</span></div>}
     </PixelPanel>
   );
 }
