@@ -274,6 +274,8 @@ input {
 
 .attack-action::before {
   display: none;
+  content: none;
+  animation: none;
 }
 
 .attack-action::after {
@@ -344,6 +346,8 @@ input {
 
 .attack-sigil::after {
   display: none;
+  content: none;
+  animation: none;
 }
 
 .attack-pixel-art {
