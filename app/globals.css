@@ -463,6 +463,111 @@ input {
   to { transform: rotate(360deg); }
 }
 
+.boss-slot {
+  position: relative;
+  margin-top: 12px;
+  padding: 10px;
+  border: 1px solid rgba(201, 138, 62, 0.72);
+  border-radius: 5px;
+  background: linear-gradient(180deg, #5a4228, #30233a 72%);
+  box-shadow: inset 0 0 0 2px rgba(255, 227, 161, 0.08), 0 3px 0 #050611;
+  animation: bossReveal 420ms steps(3, end);
+}
+
+.boss-slot::before,
+.boss-slot::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  width: 3px;
+  background: #c98a3e;
+  opacity: 0.8;
+}
+
+.boss-slot::before { left: 4px; }
+.boss-slot::after { right: 4px; }
+
+.boss-slot__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 4px 8px;
+}
+
+.boss-slot__element {
+  color: rgba(255, 227, 161, 0.56);
+  font-size: 7px;
+  letter-spacing: 0.1em;
+}
+
+.boss-portrait {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border: 2px solid #8c2e2e;
+  border-radius: 3px;
+  background: #1a1420;
+  box-shadow: inset 0 0 0 2px rgba(255, 227, 161, 0.12), inset 0 0 28px rgba(5, 6, 17, 0.72);
+}
+
+.boss-portrait::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 4px);
+  mix-blend-mode: screen;
+  opacity: 0.32;
+}
+
+.boss-portrait img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  image-rendering: pixelated;
+  filter: saturate(0.88) contrast(1.08);
+}
+
+.boss-portrait__empty {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  height: 100%;
+  color: rgba(255, 227, 161, 0.48);
+  font-size: 7px;
+  letter-spacing: 0.12em;
+}
+
+.boss-portrait__glyph {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  color: #8b7dff;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  font-size: 18px;
+  box-shadow: 0 0 18px rgba(139, 125, 255, 0.28);
+}
+
+.boss-name {
+  margin: 9px 0 1px;
+  color: #ffe3a1;
+  text-align: center;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-shadow: 2px 2px 0 #050611;
+}
+
+@keyframes bossReveal {
+  0% { opacity: 0; transform: translateY(5px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
