@@ -15,10 +15,12 @@ export function LogAttackButton({
   resetHour: number;
   dayNumber: number;
   loggedDays: number[];
-  onLog: (day: number) => Promise<void>;
+  onLog: (day: number, promotionTier: number | null, damageScore: number | null) => Promise<void>;
 }) {
   const [ms, setMs] = useState<number>(0);
   const [pending, setPending] = useState(false);
+  const [promotionTier, setPromotionTier] = useState("");
+  const [damageScore, setDamageScore] = useState("");
 
   useEffect(() => {
     const tick = () => setMs(getCycleInfo(anchorDate, resetHour).msUntilReset);
@@ -33,7 +35,7 @@ export function LogAttackButton({
   async function handleClick() {
     if (done || pending) return;
     setPending(true);
-    await onLog(dayNumber);
+    await onLog(dayNumber, promotionTier === "" ? null : Number(promotionTier), damageScore === "" ? null : Number(damageScore));
     setPending(false);
   }
 
@@ -51,12 +53,23 @@ export function LogAttackButton({
           </div>
         </div>
         <div className="grid grid-cols-6 gap-1 mt-4">
-          {[1, 2, 3, 4, 5, 6].map((day) => (
-            <div key={day} className={["h-1.5 rounded-full", loggedDays.includes(day) ? "bg-dv-emerald" : day === dayNumber ? "bg-dv-brass" : "bg-dv-panel2"].join(" ")} />
-          ))}
+          {[1, 2, 3, 4, 5, 6].map((day) => <div key={day} className={["h-1.5 rounded-full", loggedDays.includes(day) ? "bg-dv-emerald" : day === dayNumber ? "bg-dv-brass" : "bg-dv-panel2"].join(" ")} />)}
         </div>
         <p className="text-[8px] text-slate-300/50 mt-2">{loggedDays.length}/6 attacks recorded this cycle</p>
       </div>
+
+      {!done && (
+        <div className="px-4 pb-4 grid grid-cols-2 gap-2">
+          <label className="item-slot p-2 text-[7px] text-slate-300/55">PROMOTION TIER
+            <input type="number" min={0} step={1} inputMode="numeric" value={promotionTier} onChange={(event) => setPromotionTier(event.target.value)} placeholder="optional" className="mt-2 w-full bg-transparent text-[10px] text-dv-brassLight outline-none placeholder:text-slate-300/25" />
+          </label>
+          <label className="item-slot p-2 text-[7px] text-slate-300/55">DAMAGE / POINTS
+            <input type="number" min={0} step={1} inputMode="numeric" value={damageScore} onChange={(event) => setDamageScore(event.target.value)} placeholder="optional" className="mt-2 w-full bg-transparent text-[10px] text-dv-brassLight outline-none placeholder:text-slate-300/25" />
+          </label>
+          <p className="col-span-2 text-[7px] text-slate-300/40">Higher-promotion damage is worth more raid points. Add the result when you have it.</p>
+        </div>
+      )}
+
       <button
         onClick={handleClick}
         disabled={done || pending}
