@@ -10,44 +10,125 @@
 
 html,
 body {
-  background-image: url("/dragon-gate-bg.png");
+  min-height: 100%;
+  background-color: #080a18;
+}
+
+body {
+  color: #eef2ff;
+  background-image: linear-gradient(180deg, rgba(8, 10, 24, 0.54), rgba(8, 10, 24, 0.94)), url("/dragon-gate-bg.png");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
   background-repeat: no-repeat;
-  background-color: #1a120b;
 }
 
 * {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* rounded card frame, matching in-game panels */
+button,
+input {
+  font: inherit;
+}
+
+.scanlines {
+  position: relative;
+}
+
+.scanlines::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.07;
+  background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0, rgba(255, 255, 255, 0.2) 1px, transparent 1px, transparent 4px);
+}
+
 .pixel-frame {
-  border-radius: 14px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
 .pixel-border {
-  border: 2px solid #4a3a28;
-  border-radius: 14px;
-  box-shadow: 0 3px 0 0 #0a0805;
+  border: 1px solid #3b4975;
+  border-radius: 8px;
+  box-shadow: 0 3px 0 0 #050611, 0 10px 26px rgba(2, 4, 14, 0.24);
 }
 
-/* inner item slot (attack log cells, element cards) */
+.panel-glow {
+  box-shadow: 0 0 0 1px rgba(139, 125, 255, 0.08), 0 12px 28px rgba(2, 4, 14, 0.28);
+}
+
 .item-slot {
-  background-color: #322820;
-  border: 1px solid #1a140e;
-  border-radius: 10px;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+  background-color: #1b2442;
+  border: 1px solid #303d67;
+  border-radius: 6px;
+  box-shadow: inset 0 2px 5px rgba(2, 4, 14, 0.46);
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  color: #080a18;
+  background: linear-gradient(135deg, #ffe3a1, #c98a3e);
+  border: 2px solid #fff0c5;
+  box-shadow: 3px 3px 0 #050611;
+  clip-path: polygon(50% 0, 100% 24%, 88% 82%, 50% 100%, 12% 82%, 0 24%);
+  font-size: 13px;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border: 1px solid rgba(120, 232, 199, 0.44);
+  border-radius: 999px;
+  color: #78e8c7;
+  background: rgba(18, 103, 93, 0.32);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+}
+
+.eyebrow {
+  color: #8b7dff;
+  font-size: 8px;
+  letter-spacing: 0.16em;
+}
+
+.soft-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #3b4975, transparent);
+}
+
+.progress-track {
+  height: 7px;
+  overflow: hidden;
+  border: 1px solid #303d67;
+  border-radius: 999px;
+  background: #080a18;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #8b7dff, #78e8c7);
+  transition: width 300ms ease;
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #e8a33d;
+  background: #58659a;
+  border-radius: 999px;
 }
+
 ::-webkit-scrollbar-track {
-  background: #241d15;
+  background: #11172b;
 }
