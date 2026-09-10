@@ -138,7 +138,7 @@ export default function DashboardPage() {
     <>
       <header className="sticky top-0 z-50 px-4 py-3 bg-dv-bg/90 backdrop-blur-md border-b border-dv-line">
         <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3 min-w-0"><div className="brand-mark shrink-0 text-[9px]" aria-label="Dragon Valley">DV</div><div className="min-w-0"><p className="eyebrow truncate">DRAGON VALLEY // LIVE BOARD</p><h1 className="text-[11px] sm:text-xs text-dv-brassLight mt-1">ATTACK LEDGER</h1></div></div>
+          <div className="flex items-center gap-3 min-w-0"><div className="grid place-items-center w-9 h-9 pixel-frame bg-dv-brass text-dv-bg text-[9px] shadow-pixel-sm shrink-0">DV</div><div className="min-w-0"><p className="eyebrow truncate">DRAGON VALLEY // LIVE BOARD</p><h1 className="text-[11px] sm:text-xs text-dv-brassLight mt-1">ATTACK LEDGER</h1></div></div>
           <div className="flex items-center gap-2 shrink-0"><span className="status-chip hidden sm:inline-flex">D{dayNumber} ACTIVE</span>{me && <div className="pixel-frame item-slot px-2 py-1 flex items-center gap-2"><img src={me.avatar_url ?? "/icons/icon-192.png"} alt="" className="w-6 h-6 pixel-frame border border-dv-line" /><span className="text-[8px] text-dv-brassLight max-w-[70px] truncate">{me.username}</span></div>}<button type="button" aria-label="Open settings" onClick={() => router.push("/settings")} className="pixel-frame item-slot border border-dv-line px-3 py-2 text-[10px] shadow-pixel-sm hover:border-dv-violet">⚙️</button></div>
         </div>
       </header>
