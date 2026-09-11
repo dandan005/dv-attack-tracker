@@ -1,6 +1,6 @@
 "use client";
 
-import { PixelPanel, PixelHeader } from "./PixelPanel";
+import { PixelPanel } from "./PixelPanel";
 
 export type MemberRow = {
   discord_id: string;
@@ -37,35 +37,21 @@ export function GuildProgress({
 
   return (
     <PixelPanel className="mb-5 animate-rise">
-      <PixelHeader icon="⚔️" title="GUILD PROGRESS" right={<span className="text-[10px] bg-dv-bg/25 text-dv-bg px-2 py-1 pixel-frame">{total} MEMBERS</span>} />
-
-      <div className="pixel-frame border border-dv-line bg-dv-bg/70 p-3 mb-4">
-        <div className="flex items-end justify-between gap-3 mb-2">
-          <div>
-            <p className="eyebrow">DAY {currentDay} READOUT</p>
-            <p className="text-[12px] text-dv-brassLight mt-1">{doneToday}/{total} members checked in</p>
-          </div>
-          <span className="text-lg text-dv-emerald">{percentToday}%</span>
-        </div>
-        <div className="progress-track"><div className="progress-fill" style={{ width: percentToday + "%" }} /></div>
-        <div className="grid grid-cols-2 gap-2 mt-4 text-[10px]">
-          <div><p className="text-slate-300/45">RAID POINTS</p><p className="text-dv-brassLight mt-1">{raidScore.toLocaleString()}</p></div>
-          <div className="text-right"><p className="text-slate-300/45">TOP DAMAGE</p><p className="text-dv-emerald mt-1">{topDamage && topDamage.score > 0 ? topDamage.username + " · " + topDamage.score.toLocaleString() : "NO SCORES YET"}</p></div>
-        </div>
-        <div className="grid grid-cols-3 gap-2 mt-4 text-[10px]">
-          <div className="text-dv-emerald">{completeCycle} CLEAR</div>
-          <div className="text-dv-brassLight">{perfectCount} CLEAN</div>
-          <div className="text-dv-ember text-right">{missingToday} PENDING</div>
-        </div>
-        {you && <p className={missCount(you) > 0 ? "text-[10px] text-dv-ember mt-3" : "text-[10px] text-dv-emerald mt-3"}>{missCount(you) > 0 ? "YOUR RUN HAS " + missCount(you) + " MISS" + (missCount(you) === 1 ? "" : "ES") : "YOUR RUN IS CLEAN SO FAR"}{you.score > 0 ? " · " + you.score.toLocaleString() + " POINTS" : ""}</p>}
+      <div className="flex items-end justify-between gap-3 mb-4">
+        <div><p className="eyebrow">GUILD READOUT</p><p className="text-lg text-dv-brassLight mt-1">Keep the line moving.</p></div>
+        <span className="text-[10px] border border-dv-ember/50 bg-dv-ember/10 text-dv-ember px-2 py-1 pixel-frame">{missingToday} PENDING</span>
       </div>
-
+      <div className="grid grid-cols-3 gap-2 mb-5">
+        <div className="item-slot p-3"><p className="eyebrow">TODAY</p><p className="text-xl text-dv-emerald mt-1">{doneToday}<span className="text-xs text-slate-300/50">/{total}</span></p></div>
+        <div className="item-slot p-3"><p className="eyebrow">POINTS</p><p className="text-xl text-dv-brassLight mt-1">{raidScore.toLocaleString()}</p></div>
+        <div className="item-slot p-3"><p className="eyebrow">CLEAN RUNS</p><p className="text-xl text-dv-brassLight mt-1">{completeCycle}</p></div>
+      </div>
       {total === 0 ? (
         <div className="item-slot px-3 py-5 text-center text-[10px] text-slate-300/55">NO GUILD MEMBERS HAVE JOINED YET.</div>
       ) : (
         <div className="mb-2">
           <div className="grid grid-cols-[1fr_repeat(6,minmax(0,1fr))] gap-1 text-center text-[10px] text-dv-brassLight mb-2">
-            <div className="text-left">ROSTER</div>
+            <div className="text-left">ATTACK LEDGER / MEMBERS</div>
             {[1, 2, 3, 4, 5, 6].map((day) => <div key={day} className={day === currentDay ? "text-dv-emerald" : ""}>D{day}</div>)}
           </div>
           <div className="space-y-1 max-h-72 overflow-y-auto pr-1">
