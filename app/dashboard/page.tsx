@@ -8,6 +8,7 @@ import { LogAttackButton } from "@/components/LogAttackButton";
 import { GuildProgress, MemberRow } from "@/components/GuildProgress";
 import { WyvernTracker } from "@/components/WyvernTracker";
 import { ExplorationPhase } from "@/components/ExplorationPhase";
+import { Guide, Meals, Runes } from "@/components/OperationsLibrary";
 
 type Settings = {
   anchor_date: string;
@@ -39,6 +40,7 @@ export default function DashboardPage() {
   const [pinging, setPinging] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [me, setMe] = useState<CurrentMember | null>(null);
+  const [settingsDraft, setSettingsDraft] = useState({ anchor_date: "2026-01-05", reset_hour_utc: 0 });
 
   const { dayNumber, cycleStartISO } = getCycleInfo(settings.anchor_date, settings.reset_hour_utc);
 
@@ -57,6 +59,7 @@ export default function DashboardPage() {
       wyvern_set_by: settingsRow?.wyvern_set_by ?? null,
     };
     setSettings(currentSettings);
+    setSettingsDraft({ anchor_date: currentSettings.anchor_date, reset_hour_utc: currentSettings.reset_hour_utc });
     const cycle = getCycleInfo(currentSettings.anchor_date, currentSettings.reset_hour_utc);
 
     const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, avatar_url");
@@ -133,13 +136,23 @@ export default function DashboardPage() {
     setTimeout(() => setToast(null), 2500);
   }
 
+  async function saveCycleSettings() {
+    const anchor_date = settingsDraft.anchor_date || "2026-01-05";
+    const reset_hour_utc = Math.min(23, Math.max(0, Number(settingsDraft.reset_hour_utc) || 0));
+    const { error } = await supabase.from("app_settings").update({ anchor_date, reset_hour_utc }).eq("id", 1);
+    if (error) {
+      setToast("Error: " + error.message);
+    } else {
+      await loadAll();
+      setToast("Cycle settings saved");
+    }
+    setTimeout(() => setToast(null), 2500);
+  }
+
 
   const dayIndex = Math.min(5, Math.max(0, dayNumber - 1));
   const cycleDays = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
   const phases = ["Match", "Explore", "Explore", "Raid", "Raid", "Raid"];
-  const todayLogged = members.filter((member) => member.logged[dayNumber - 1]).length;
-  const raidScore = members.reduce((sum, member) => sum + member.score, 0);
-  const fullCycles = members.filter((member) => member.logged.every(Boolean)).length;
 
   if (loading) return <main className="min-h-screen flex items-center justify-center"><p className="text-[11px] text-dv-brassLight animate-blink">LOADING GUILD DATA...</p></main>;
 
@@ -149,19 +162,21 @@ export default function DashboardPage() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <a href="/dashboard" className="flex items-center gap-3">
             <span className="grid h-10 w-10 place-items-center border border-dv-brass bg-dv-brass font-pixel text-[11px] text-dv-bg shadow-pixel-sm">DV</span>
-            <span><span className="eyebrow block">DRAGON VALLEY // LIVE BOARD</span><span className="block text-sm text-dv-brassLight">ATTACK LEDGER</span></span>
+            <span><span className="eyebrow block">DRAGON VALLEY // GUILD HUB</span><span className="block text-sm text-dv-brassLight">ATTACK LEDGER</span></span>
           </a>
           <div className="flex items-center gap-2">
             <span className="status-chip hidden sm:inline-flex">D{dayNumber} ACTIVE</span>
             {me && <div className="pixel-frame item-slot flex items-center gap-2 px-2 py-1"><img src={me.avatar_url ?? "/icons/icon-192.png"} alt="" className="h-6 w-6 pixel-frame border border-dv-line" /><span className="max-w-[90px] truncate text-[10px] text-dv-brassLight">{me.username}</span></div>}
-            <button type="button" aria-label="Open settings" onClick={() => router.push("/settings")} className="pixel-frame item-slot border border-dv-line px-3 py-2 text-[11px] shadow-pixel-sm hover:border-dv-violet">⚙️</button>
+            <a href="#settings" aria-label="Jump to settings" className="pixel-frame item-slot border border-dv-line px-3 py-2 text-[11px] shadow-pixel-sm hover:border-dv-violet">⚙️</a>
           </div>
         </div>
-        <div className="mx-auto max-w-6xl border-t border-dv-line/70 px-4 py-2 text-[9px] uppercase tracking-[.14em] text-slate-300/50"><span className="text-dv-emerald">ATTACK LEDGER</span><span className="mx-2">/</span> live Supabase log</div>
+        <nav aria-label="Guild hub sections" className="mx-auto flex max-w-6xl gap-1 overflow-x-auto border-t border-dv-line/70 px-4 py-2 text-[9px] uppercase tracking-[.12em]">
+          {[["ledger", "Ledger"], ["guide", "Guide"], ["meals", "Meals"], ["runes", "Runes"], ["settings", "Settings"]].map(([id, label]) => <a key={id} href={"#" + id} className="shrink-0 border border-transparent px-2 py-1 text-slate-300/55 hover:border-dv-line hover:text-dv-brassLight">{label}</a>)}
+        </nav>
       </header>
 
-      <main className="mx-auto max-w-6xl px-4 pb-20 pt-5 sm:px-6 md:pb-10 md:pt-7">
-        <div className="mb-5 flex items-end justify-between gap-3"><div><p className="eyebrow text-dv-emerald">GUILD OPERATIONS / ONLINE</p><h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">ATTACK LEDGER</h1></div><div className="text-right"><p className="text-[9px] uppercase tracking-[.14em] text-slate-300/50">CURRENT DAY</p><p className="text-2xl text-dv-emerald">D{dayNumber}</p></div></div>
+      <main id="ledger" className="mx-auto max-w-6xl scroll-mt-28 px-4 pb-20 pt-5 sm:px-6 md:pb-10 md:pt-7">
+        <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD OPERATIONS / ONLINE</p><h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">GUILD HUB</h1><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">One board for the live ledger, field guidance, provisions, rune priorities, and guild-wide cycle settings.</p></div>
 
         <section className="pixel-border overflow-hidden bg-dv-panel/95 shadow-pixel">
           <div className="flex items-center justify-between border-b border-dv-line px-4 py-3"><div><p className="eyebrow mb-2">CURRENT SEASON CLOCK</p><p className="text-[11px]">CYCLE START {cycleStartISO} <span className="text-slate-300/50">/ DAY {dayNumber} OF 6</span></p></div><span className="status-chip">{cycleDays[dayIndex]} / LIVE</span></div>
@@ -173,21 +188,27 @@ export default function DashboardPage() {
 
         {(dayNumber < 3 || settings.wyvern_element) && <div className="mt-4">{dayNumber < 3 ? <ExplorationPhase currentDay={dayNumber} /> : <WyvernTracker current={settings.wyvern_element as any} setBy={settings.wyvern_set_by} onSelect={setWyvern} />}</div>}
 
-        <div className="mt-4 grid gap-4 lg:grid-cols-[1.3fr_.7fr]">
-          <div>
-            <section className="pixel-border mb-4 bg-dv-panel/95 p-4 shadow-pixel"><p className="eyebrow mb-2">YOUR RAID LEDGER</p><h2 className="text-lg text-dv-brassLight">Live Supabase attack log</h2><p className="mt-1 text-xs text-slate-200/65">Your entry is shared with the guild and stays tied to the current six-day cycle.</p></section>
-            <LogAttackButton anchorDate={settings.anchor_date} resetHour={settings.reset_hour_utc} dayNumber={dayNumber} loggedDays={myLoggedDays} onLog={logAttack} />
-          </div>
-          <section className="pixel-border relative overflow-hidden bg-dv-panel/95 p-4 shadow-pixel"><p className="eyebrow">FIELD NOTE / DAY {dayNumber}</p><h2 className="mt-1 max-w-[230px] text-xl text-dv-brassLight">Trace hunt is still open.</h2><p className="mt-3 max-w-[290px] text-xs leading-relaxed text-slate-200/65">Use all three exploration entries today. The trace decides which wyvern the raid team can prepare for.</p><p className="mt-5 text-[10px] uppercase text-dv-violet">◆ {dayNumber < 3 ? "3 entries available" : "Trace intel available"}</p></section>
-        </div>
-
-        <section className="pixel-border mt-4 bg-dv-panel/95 p-4 shadow-pixel"><div className="mb-4 flex items-end justify-between"><div><p className="eyebrow mb-2">GUILD READOUT</p><h2 className="text-lg text-dv-brassLight">Keep the line moving.</h2></div><span className="status-chip">{Math.max(members.length - todayLogged, 0)} pending</span></div><div className="grid grid-cols-3 gap-2"><div className="item-slot p-3"><p className="eyebrow">TODAY</p><p className="mt-1 text-xl text-dv-emerald">{todayLogged}<span className="text-xs text-slate-300/50">/{members.length}</span></p></div><div className="item-slot p-3"><p className="eyebrow">POINTS</p><p className="mt-1 text-xl text-dv-brassLight">{raidScore ? raidScore.toLocaleString() : "—"}</p></div><div className="item-slot p-3"><p className="eyebrow">FULL CYCLES</p><p className="mt-1 text-xl text-dv-brassLight">{fullCycles}</p></div></div></section>
-
+        <section className="pixel-border bg-dv-panel/95 p-4 shadow-pixel"><p className="eyebrow mb-2">YOUR RAID LEDGER</p><h2 className="text-lg text-dv-brassLight">Live Supabase attack log</h2><p className="mt-1 text-xs text-slate-200/65">Your entry is shared with the guild and stays tied to the current six-day cycle.</p></section>
+        <div className="mt-4"><LogAttackButton anchorDate={settings.anchor_date} resetHour={settings.reset_hour_utc} dayNumber={dayNumber} loggedDays={myLoggedDays} onLog={logAttack} /></div>
         <div className="mt-4"><GuildProgress members={members} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
+
+        <section id="guide" className="scroll-mt-28 border-t border-dv-line pt-8 mt-10"><p className="eyebrow mb-4 text-dv-emerald">FIELD GUIDE</p><Guide /></section>
+        <section id="meals" className="scroll-mt-28 border-t border-dv-line pt-8 mt-10"><p className="eyebrow mb-4 text-dv-emerald">SEASON MEALS</p><Meals /></section>
+        <section id="runes" className="scroll-mt-28 border-t border-dv-line pt-8 mt-10"><p className="eyebrow mb-4 text-dv-emerald">RUNE DESK</p><Runes /></section>
+
+        <section id="settings" className="scroll-mt-28 border-t border-dv-line pt-8 mt-10">
+          <div className="mb-4"><p className="eyebrow text-dv-emerald">GUILD SETTINGS</p><h2 className="mt-1 text-xl text-dv-brassLight">Keep the shared clock accurate.</h2></div>
+          <section className="pixel-border bg-dv-panel/95 p-4 shadow-pixel">
+            <div className="grid gap-4 md:grid-cols-2">
+              <label className="text-[10px] text-dv-brassLight">CYCLE ANCHOR DATE<input type="date" value={settingsDraft.anchor_date} onChange={(event) => setSettingsDraft((current) => ({ ...current, anchor_date: event.target.value }))} className="mt-2 w-full pixel-frame item-slot border border-dv-line px-3 py-3 text-[11px] text-dv-brassLight outline-none focus:border-dv-violet" /><span className="mt-2 block text-[9px] text-slate-300/45">Day 1 of the first raid cycle.</span></label>
+              <label className="text-[10px] text-dv-brassLight">RESET HOUR (UTC)<input type="number" min={0} max={23} value={settingsDraft.reset_hour_utc} onChange={(event) => setSettingsDraft((current) => ({ ...current, reset_hour_utc: Number(event.target.value) }))} className="mt-2 w-full pixel-frame item-slot border border-dv-line px-3 py-3 text-[11px] text-dv-brassLight outline-none focus:border-dv-violet" /><span className="mt-2 block text-[9px] text-slate-300/45">Hour 0–23 UTC when the attack log rolls over.</span></label>
+            </div>
+            <button type="button" onClick={saveCycleSettings} className="mt-5 w-full pixel-frame bg-dv-brass px-4 py-3 text-[11px] text-dv-bg shadow-pixel-sm hover:bg-dv-brassLight active:translate-y-[2px]">SAVE CYCLE SETTINGS</button>
+          </section>
+        </section>
+
         {toast && <div role="status" className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 pixel-frame bg-dv-brass px-4 py-3 text-[10px] text-dv-bg shadow-pixel animate-rise">{toast}</div>}
       </main>
-
-      <nav className="fixed bottom-0 left-0 right-0 z-30 grid grid-cols-3 border-t border-dv-line bg-dv-panel/95 px-2 py-2 backdrop-blur md:hidden"><a href="/dashboard" className="py-1 text-center text-[8px] uppercase text-dv-brassLight"><span className="mb-1 block text-dv-violet">⚔</span>Board</a><a href="/command-center" className="py-1 text-center text-[8px] uppercase text-slate-300/60"><span className="mb-1 block text-dv-violet">◆</span>Command</a><button type="button" onClick={() => router.push("/settings")} className="py-1 text-center text-[8px] uppercase text-slate-300/60"><span className="mb-1 block text-dv-violet">⚙</span>Settings</button></nav>
     </div>
   );
 }
