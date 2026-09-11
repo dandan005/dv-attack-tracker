@@ -158,6 +158,25 @@ export default function DashboardPage() {
       setToast("Cycle settings saved");
     }
     setTimeout(() => setToast(null), 2500);
+  }
+
+  const dayIndex = Math.min(5, Math.max(0, dayNumber - 1));
+  const cycleDays = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+  const phases = ["Match", "Explore", "Explore", "Raid", "Raid", "Raid"];
+
+  if (loading) return <main className="min-h-screen flex items-center justify-center"><p className="text-[11px] text-dv-brassLight animate-blink">LOADING GUILD DATA...</p></main>;
+
+  return (
+    <div className="scanlines min-h-screen">
+      <header className="sticky top-0 z-40 border-b border-dv-line bg-dv-bg/95 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
+          <button onClick={() => setTab("ledger")} className="flex items-center gap-3">
+            <span className="grid h-10 w-10 place-items-center border border-dv-brass bg-dv-brass font-pixel text-[11px] text-dv-bg shadow-pixel-sm">DV</span>
+            <span className="text-left"><span className="eyebrow block">DRAGON VALLEY // GUILD HUB</span><span className="block text-sm text-dv-brassLight">ATTACK LEDGER</span></span>
+          </button>
+          <div className="flex items-center gap-2">
+            <span className="status-chip hidden sm:inline-flex">D{dayNumber} ACTIVE</span>
+            {me && <div className="pixel-frame item-slot flex items-center gap-2 px-2 py-1"><img src={me.avatar_url ?? "/icons/icon-192.png"} alt="" className="h-6 w-6 pixel-frame border border-dv-line" /><span className="max-w-[90px] truncate text-[10px] text-dv-brassLight">{me.username}</span></div>}
           </div>
         </div>
       </header>
@@ -165,10 +184,8 @@ export default function DashboardPage() {
       <main className="mx-auto max-w-6xl px-4 pb-24 pt-5 sm:px-6 md:pb-20 md:pt-7">
         {tab === "ledger" && (
           <>
-            <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD OPERATIONS / ONLINE</p><h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">GUILD HUB</h1><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">The live raid ledger for the current six-day cycle.</p>
-            {me && <div className="pixel-frame item-slot flex items-center gap-2 px-2 py-1"><img src={me.avatar_url ?? "/icons/icon-192.png"} alt="" className="h-6 w-6 pixel-frame border border-dv-line" /><span className="whitespace-nowrap text-[10px] text-dv-brassLight">{me.username}</span></div>}
-            </div>
-            
+            <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD OPERATIONS / ONLINE</p><h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">GUILD HUB</h1><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">The live raid ledger for the current six-day cycle.</p></div>
+
             <section className="pixel-border overflow-hidden bg-dv-panel/95 shadow-pixel">
               <div className="flex items-center justify-between border-b border-dv-line px-4 py-3"><div><p className="eyebrow mb-2">CURRENT SEASON CLOCK</p><p className="text-[11px]">CYCLE START {cycleStartISO} <span className="text-slate-300/50">/ DAY {dayNumber} OF 6</span></p></div><span className="status-chip">{cycleDays[dayIndex]} / LIVE</span></div>
               <div className="grid grid-cols-6 gap-px bg-dv-line">
@@ -179,6 +196,7 @@ export default function DashboardPage() {
 
             {(dayNumber < 3 || settings.wyvern_element) && <div className="mt-4">{dayNumber < 3 ? <ExplorationPhase currentDay={dayNumber} /> : <WyvernTracker current={settings.wyvern_element as any} setBy={settings.wyvern_set_by} onSelect={setWyvern} />}</div>}
 
+            <section className="pixel-border bg-dv-panel/95 p-4 shadow-pixel mt-4"><p className="eyebrow mb-2">YOUR RAID LEDGER</p><h2 className="text-lg text-dv-brassLight">Live Supabase attack log</h2><p className="mt-1 text-xs text-slate-200/65">Your entry is shared with the guild and stays tied to the current six-day cycle.</p></section>
             <div className="mt-4"><LogAttackButton anchorDate={settings.anchor_date} resetHour={settings.reset_hour_utc} dayNumber={dayNumber} loggedDays={myLoggedDays} onLog={logAttack} /></div>
             <div className="mt-4"><GuildProgress members={members} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
           </>
