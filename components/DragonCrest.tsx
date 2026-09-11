@@ -1,50 +1,31 @@
-export function DragonCrest() {
+export function DragonCrest({ size = 44 }: { size?: number }) {
   return (
-    <svg
-      width="40"
-      height="40"
-      viewBox="0 0 20 20"
-      shapeRendering="crispEdges"
+    <div
       aria-hidden="true"
-      className="shrink-0"
+      className="shrink-0 shadow-pixel-sm"
+      style={{
+        width: size,
+        height: size,
+        clipPath: "polygon(50% 0%, 100% 36%, 81% 100%, 19% 100%, 0% 36%)",
+        background: "linear-gradient(180deg, #e6c06a 0%, #c99a44 55%, #a97c33 100%)",
+        display: "grid",
+        placeItems: "center",
+      }}
     >
-      {/* horns */}
-      <rect x="4" y="1" width="2" height="3" fill="#8a6a2a" />
-      <rect x="14" y="1" width="2" height="3" fill="#8a6a2a" />
-      <rect x="3" y="3" width="2" height="2" fill="#8a6a2a" />
-      <rect x="15" y="3" width="2" height="2" fill="#8a6a2a" />
-
-      {/* head / skull */}
-      <rect x="5" y="4" width="10" height="8" fill="#e0b559" />
-      <rect x="6" y="3" width="8" height="1" fill="#e0b559" />
-      <rect x="4" y="6" width="1" height="4" fill="#e0b559" />
-      <rect x="15" y="6" width="1" height="4" fill="#e0b559" />
-
-      {/* head shading */}
-      <rect x="5" y="9" width="10" height="3" fill="#b98d3c" />
-
-      {/* eyes */}
-      <rect x="7" y="6" width="1" height="1" fill="#1a0d05" />
-      <rect x="12" y="6" width="1" height="1" fill="#1a0d05" />
-      <rect x="7" y="6" width="1" height="1" fill="#ff5c5c" opacity="0.9" />
-      <rect x="12" y="6" width="1" height="1" fill="#ff5c5c" opacity="0.9" />
-
-      {/* snout / jaw */}
-      <rect x="8" y="11" width="4" height="2" fill="#c99a44" />
-      <rect x="8" y="13" width="4" height="1" fill="#1a0d05" />
-
-      {/* teeth */}
-      <rect x="8" y="12" width="1" height="1" fill="#fff2bd" />
-      <rect x="11" y="12" width="1" height="1" fill="#fff2bd" />
-
-      {/* neck / collar */}
-      <rect x="7" y="14" width="6" height="2" fill="#8a6a2a" />
-
-      {/* wing flourishes either side */}
-      <rect x="1" y="8" width="3" height="1" fill="#8a6a2a" />
-      <rect x="1" y="9" width="2" height="1" fill="#8a6a2a" />
-      <rect x="16" y="8" width="3" height="1" fill="#8a6a2a" />
-      <rect x="17" y="9" width="2" height="1" fill="#8a6a2a" />
-    </svg>
+      <svg width={Math.round(size * 0.64)} height={Math.round(size * 0.64)} viewBox="0 0 28 28" shapeRendering="crispEdges">
+        {/* faceted dragon head silhouette */}
+        <polygon
+          points="14,1 16,5 20,3 19,7 24,6 21,10 25,11 20,13 22,16 17,15 18,20 15,17 14,22 13,17 10,20 11,15 6,16 8,13 3,11 7,10 4,6 9,7 8,3 12,5"
+          fill="#2a1a0a"
+        />
+        {/* crystal-facet highlight, upper-left plane */}
+        <polygon points="14,3 17,7 14,10 11,7" fill="#6b4a1f" />
+        {/* crystal-facet highlight, lower plane */}
+        <polygon points="11,10 14,13 17,10 14,17" fill="#4a3115" />
+        {/* eyes */}
+        <rect x="10.5" y="9" width="1.6" height="1.6" fill="#ff5c3c" />
+        <rect x="15.9" y="9" width="1.6" height="1.6" fill="#ff5c3c" />
+      </svg>
+    </div>
   );
 }
