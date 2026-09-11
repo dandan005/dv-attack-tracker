@@ -6,8 +6,18 @@ export const CYCLE_LENGTH = 6;
 
 export function getCycleInfo(anchorDateISO: string, resetHourUTC: number) {
   const now = new Date();
-  const anchor = new Date(anchorDateISO + "T00:00:00Z");
+
+  // Auto-anchor to the most recent Sunday at resetHourUTC (e.g. 14:00 UTC =
+  // 10:00 PM PHT). anchorDateISO is no longer used for the calculation —
+  // kept as a param so callers / the Settings UI don't need to change —
+  // but you can drop it later if you remove the anchor date field.
+  const anchor = new Date();
   anchor.setUTCHours(resetHourUTC, 0, 0, 0);
+  const dayOfWeek = anchor.getUTCDay(); // 0 = Sunday
+  anchor.setUTCDate(anchor.getUTCDate() - dayOfWeek);
+  if (anchor.getTime() > now.getTime()) {
+    anchor.setUTCDate(anchor.getUTCDate() - 7);
+  }
 
   const msPerDay = 24 * 60 * 60 * 1000;
   const diffDays = Math.floor((now.getTime() - anchor.getTime()) / msPerDay);
