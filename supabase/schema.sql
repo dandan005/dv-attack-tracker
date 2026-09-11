@@ -7,6 +7,7 @@ create table if not exists members (
   discord_id text not null,
   username text not null,
   avatar_url text,
+  guild_verified_at timestamptz,
   created_at timestamptz default now()
 );
 
@@ -22,6 +23,7 @@ create table if not exists attack_logs (
 );
 
 alter table attack_logs add column if not exists promotion_tier int check (promotion_tier >= 0);
+alter table members add column if not exists guild_verified_at timestamptz;
 alter table attack_logs add column if not exists damage_score bigint check (damage_score >= 0);
 
 create table if not exists app_settings (
@@ -46,7 +48,11 @@ language sql
 security definer
 set search_path = public
 as $$
-  select exists (select 1 from public.members where auth_user_id = auth.uid());
+  select exists (
+    select 1 from public.members
+    where auth_user_id = auth.uid()
+      and guild_verified_at > now() - interval '1 hour'
+  );
 $$;
 
 revoke all on function public.is_guild_member() from public;

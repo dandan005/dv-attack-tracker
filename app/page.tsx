@@ -13,6 +13,7 @@ export default function SplashPage() {
       provider: "discord",
       options: {
         redirectTo: window.location.origin + "/auth/callback",
+        scopes: "identify guilds.members.read",
       },
     });
   }

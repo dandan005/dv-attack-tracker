@@ -1,4 +1,4 @@
-import { isDiscordGuildMember } from "@/lib/discord";
+import { isGuildVerificationFresh } from "@/lib/discord";
 import { createClient } from "@/lib/supabase/server";
 
 export async function getGuildMember() {
@@ -11,7 +11,7 @@ export async function getGuildMember() {
 
   const { data: member } = await supabase
     .from("members")
-    .select("id, auth_user_id, discord_id, username, avatar_url")
+    .select("id, auth_user_id, discord_id, username, avatar_url, guild_verified_at")
     .eq("auth_user_id", user.id)
     .maybeSingle();
 
@@ -19,12 +19,8 @@ export async function getGuildMember() {
     return { supabase, user, member: null, error: "Guild membership required" };
   }
 
-  try {
-    if (!(await isDiscordGuildMember(member.discord_id))) {
-      return { supabase, user, member: null, error: "Guild membership required" };
-    }
-  } catch {
-    return { supabase, user, member: null, error: "Guild membership could not be verified" };
+  if (!isGuildVerificationFresh(member.guild_verified_at)) {
+    return { supabase, user, member: null, error: "Guild membership needs reauthentication" };
   }
 
   return { supabase, user, member, error: null };

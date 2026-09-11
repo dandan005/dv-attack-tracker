@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { isGuildVerificationFresh } from "@/lib/discord";
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
@@ -44,7 +45,7 @@ export async function middleware(request: NextRequest) {
 
     const { data: member } = await supabase
       .from("members")
-      .select("discord_id")
+      .select("guild_verified_at")
       .eq("auth_user_id", user.id)
       .maybeSingle();
 
@@ -52,13 +53,8 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/?error=guild_only", request.url));
     }
 
-    try {
-      const { isDiscordGuildMember } = await import("@/lib/discord");
-      if (!(await isDiscordGuildMember(member.discord_id))) {
-        return NextResponse.redirect(new URL("/?error=guild_only", request.url));
-      }
-    } catch {
-      return NextResponse.redirect(new URL("/?error=guild_verification_failed", request.url));
+    if (!isGuildVerificationFresh(member.guild_verified_at)) {
+      return NextResponse.redirect(new URL("/?error=reauth_required", request.url));
     }
   }
 

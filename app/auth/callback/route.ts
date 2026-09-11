@@ -31,7 +31,8 @@ export async function GET(request: NextRequest) {
       const avatarUrl = identityData.avatar_url ?? userMetadata.avatar_url ?? null;
 
       try {
-        if (!(await isDiscordGuildMember(discordId))) {
+        const providerToken = data.session?.provider_token;
+        if (!providerToken || !(await isDiscordGuildMember(providerToken))) {
           return NextResponse.redirect(origin + "/?error=guild_only");
         }
       } catch {
@@ -46,6 +47,7 @@ export async function GET(request: NextRequest) {
           discord_id: discordId,
           username: displayName,
           avatar_url: avatarUrl,
+          guild_verified_at: new Date().toISOString(),
         },
         { onConflict: "auth_user_id" }
       );
