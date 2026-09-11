@@ -24,9 +24,9 @@ export default function SplashPage() {
       <div className="w-full max-w-md space-y-4 animate-rise">
         <div className="pixel-frame pixel-border bg-dv-panel p-5 sm:p-7 shadow-pixel">
           <div className="flex items-center justify-between gap-4 mb-8">
-            <div className="brand-mark">
+            <span className="grid h-11 w-11 place-items-center">
               <DragonCrest />
-            </div>
+            </span>
             <span className="status-chip"><span className="w-1.5 h-1.5 rounded-full bg-dv-emerald" /> RAID HUB // ONLINE</span>
           </div>
 
