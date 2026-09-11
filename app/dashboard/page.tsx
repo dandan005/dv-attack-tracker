@@ -194,14 +194,6 @@ export default function DashboardPage() {
           <>
             <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD OPERATIONS / ONLINE</p><h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">GUILD HUB</h1><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">The live raid ledger for the current six-day cycle.</p></div>
 
-            <section className="pixel-border overflow-hidden bg-dv-panel/95 shadow-pixel">
-              <div className="flex items-center justify-between border-b border-dv-line px-4 py-3"><div><p className="eyebrow mb-2">CURRENT SEASON CLOCK</p><p className="text-[11px]">CYCLE START {cycleStartISO} <span className="text-slate-300/50">/ DAY {dayNumber} OF 6</span></p></div><span className="status-chip">{cycleDays[dayIndex]} / LIVE</span></div>
-              <div className="grid grid-cols-6 gap-px bg-dv-line">
-                {[1, 2, 3, 4, 5, 6].map((day) => <div key={day} className={"bg-dv-panel px-1 py-3 text-center " + (day === dayNumber ? "bg-dv-violet/15" : "")}><p className={"text-[9px] " + (day < dayNumber ? "text-dv-emerald" : day === dayNumber ? "text-dv-brassLight" : "text-slate-300/55")}>D{day}</p><div className={"mx-auto my-2 h-2 w-2 " + (day < dayNumber ? "bg-dv-emerald" : day === dayNumber ? "bg-dv-brass" : "border border-dv-line")} /><p className="text-[9px] text-slate-300/60">{phases[day - 1]}</p></div>)}
-              </div>
-              <p className="border-t border-dv-line px-4 py-2 text-[9px] text-slate-300/60">◆ {dayNumber < 4 ? "Exploration is active; use all three entries before raid prep." : "Raid window is live; keep every attack on the shared ledger."}</p>
-            </section>
-
             {(dayNumber < 3 || settings.wyvern_element) && <div className="mt-4">{dayNumber < 3 ? <ExplorationPhase currentDay={dayNumber} /> : <WyvernTracker current={settings.wyvern_element as any} setBy={settings.wyvern_set_by} onSelect={setWyvern} />}</div>}
 
             <div className="mt-4"><LogAttackButton anchorDate={settings.anchor_date} resetHour={settings.reset_hour_utc} dayNumber={dayNumber} loggedDays={myLoggedDays} onLog={logAttack} /></div>
