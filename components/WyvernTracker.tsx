@@ -64,13 +64,13 @@ export function WyvernTracker({
   current,
   setBy,
   onSelect,
-  isAdmin,
+  isAdmin = false,
 }: {
   current: Element | null;
   setBy: string | null;
   onSelect: (el: Element) => Promise<void>;
   /** Only admins/officers may set or change the trace. Everyone else gets a read-only view. */
-  isAdmin: boolean;
+  isAdmin?: boolean;
 }) {
   const [pending, setPending] = useState<Element | null>(null);
   const [bursting, setBursting] = useState<Element | null>(null);
