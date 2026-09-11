@@ -1,53 +1,60 @@
 # Dragon Valley Attack Tracker
 
-A pixel-themed PWA for your Slayer Legend guild to coordinate Dragon Valley's six-day raid cycle, record attacks, and keep promotion-aware damage context in one place.
+I made this for my Slayer Legend guild because we kept losing track of who actually hit Dragon Valley each cycle and what promotion/damage they ran. Google Sheets got messy fast, so I built a little pixel-themed PWA instead. It handles the six-day raid cycle, logs attacks, and keeps score context in one place so I'm not chasing people on Discord every reset.
 
-## Mechanics-aware iteration
+## Why the promotion/damage stuff
 
-Public community references describe Dragon Valley as a promotion-based guild raid: damage dealt at a higher promotion contributes more points. The tracker now records those two useful inputs alongside each D1–D6 attack:
+From what people say in the community, DV is a promotion-based raid — hitting at a higher promotion is worth more points. So on top of just "did you attack today," I added two optional fields to each D1–D6 log:
 
-- **Promotion tier** — the promotion level used for the run.
-- **Damage / raid points** — the result worth comparing across the guild.
-- **Guild readout** — total recorded raid points, top damage, best check-in rate, and pending members for the current day.
+- **Promotion tier** — what promotion the run was at
+- **Damage / raid points** — whatever number the game spit out for that attack
 
-The promotion and damage fields are optional, so the tracker still works as a simple attack checklist when a member only wants to mark participation. The API also falls back to the original attack-log shape until the Supabase migration has been run.
+Then there's a readout on the dashboard: total points for the cycle, who's doing the most damage, who's got the best check-in streak, and who still hasn't logged today.
 
-## What's included
+Both fields are optional on purpose — if someone just wants to tap "attacked" without typing in numbers, that still works. The API also still accepts the old bare attack-log shape, so I didn't break anything for people who haven't run the DB migration yet.
 
-- **Splash** — Discord login
-- **Main dashboard** — live D1–D6 cycle, countdown, wyvern trace, promotion-aware attack logging, and guild progress grid
-- **Raid score context** — total recorded points, top damage member, per-member point totals, and best promotion tier
-- **Settings** — configure the Discord webhook and cycle anchor
-- **Auto-reminders** — a Vercel Cron job pings members missing the current day's attack
-- **PWA** — installable on phone home screens, works offline for the shell
+## What's actually in here
 
-## Supabase migration
+- Discord login splash screen
+- Main dashboard — D1–D6 cycle tracker, countdown, wyvern trace (so we're not all hunting different elements), attack logging with the score fields, and a progress grid for the whole guild
+- Raid score readout — totals, top damage, per-member points, best promotion used
+- Settings tab for the Discord webhook + cycle anchor date
+- A Vercel cron job that pings whoever hasn't logged an attack yet
+- Installable as a PWA (works offline for the shell, at least)
 
-For a new database, run supabase/schema.sql as normal. For an existing database, run the same file or apply these two statements in the Supabase SQL editor:
+## If you're updating an existing DB
 
-    alter table attack_logs add column if not exists promotion_tier int check (promotion_tier >= 0);
-    alter table attack_logs add column if not exists damage_score bigint check (damage_score >= 0);
+New install → just run `supabase/schema.sql`, done.
 
-Until those columns exist, attack logging continues to work without saving the optional score fields.
+Already have data in there? Run these two in the Supabase SQL editor instead of nuking anything:
+
+```sql
+alter table attack_logs add column if not exists promotion_tier int check (promotion_tier >= 0);
+alter table attack_logs add column if not exists damage_score bigint check (damage_score >= 0);
+```
+
+Until you run that, attack logging still works fine — it just won't save the promotion/damage numbers.
 
 ## Setup
 
-1. Create a Discord OAuth app in the Discord Developer Portal and add your Supabase auth callback URL.
-2. Create a Supabase project, enable Discord authentication, and run supabase/schema.sql.
-3. Add the values from .env.example to your local environment and Vercel deployment.
-4. Create a Discord webhook and save it from the app's Settings page.
-5. Set the D1 anchor date and UTC reset hour so every member shares the same clock.
+1. Make a Discord OAuth app in the dev portal, point the redirect at your Supabase auth callback.
+2. Spin up a Supabase project, turn on Discord auth, run `supabase/schema.sql`.
+3. Copy `.env.example` → `.env.local` (and set the same vars on Vercel).
+4. Make a Discord webhook, paste it into the app's Settings tab.
+5. Set your D1 anchor date + reset hour (UTC) so everyone's on the same clock.
 
-Local development:
+Then just:
 
-    npm install
-    cp .env.example .env.local
-    npm run dev
+```bash
+npm install
+cp .env.example .env.local
+npm run dev
+```
 
-The Vercel cron in vercel.json runs daily at 20:00 UTC. Change that schedule if your guild's reset window is different.
+The cron in `vercel.json` fires at 20:00 UTC by default — change it if your guild resets at a different time.
 
-## Notes
+## Random notes to self
 
-- The countdown assumes a six-day cycle that repeats indefinitely from the anchor date.
-- The app intentionally does not hardcode undocumented boss formulas or copy Slayer Legend assets. Score values are entered from the in-game result so the tracker stays useful across balance changes.
-- app_settings is a single shared row, representing one guild per deployment.
+- Cycle math assumes a six-day loop that just keeps repeating from the anchor date forever.
+- I'm not hardcoding any of Slayer Legend's actual boss formulas or ripping their assets — damage numbers are typed in from what the game shows, so this doesn't break every time they rebalance something.
+- `app_settings` is one shared row per deployment — this is built for a single guild, not multi-tenant.
