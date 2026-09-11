@@ -30,10 +30,21 @@ type AttackLog = {
   damage_score?: number | string | null;
 };
 
+type Tab = "ledger" | "guide" | "meals" | "runes" | "settings";
+
+const TABS: { id: Tab; label: string }[] = [
+  { id: "ledger", label: "Ledger" },
+  { id: "guide", label: "Guide" },
+  { id: "meals", label: "Meals" },
+  { id: "runes", label: "Runes" },
+  { id: "settings", label: "Settings" },
+];
+
 export default function DashboardPage() {
   const router = useRouter();
   const supabase = createClient();
   const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState<Tab>("ledger");
   const [settings, setSettings] = useState<Settings>({ anchor_date: "2026-01-05", reset_hour_utc: 0, wyvern_element: null, wyvern_set_by: null });
   const [myLoggedDays, setMyLoggedDays] = useState<number[]>([]);
   const [members, setMembers] = useState<MemberRow[]>([]);
@@ -159,49 +170,72 @@ export default function DashboardPage() {
     <div className="scanlines min-h-screen">
       <header className="sticky top-0 z-40 border-b border-dv-line bg-dv-bg/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
-          <a href="/dashboard" className="flex items-center gap-3">
+          <button onClick={() => setTab("ledger")} className="flex items-center gap-3">
             <span className="grid h-10 w-10 place-items-center border border-dv-brass bg-dv-brass font-pixel text-[11px] text-dv-bg shadow-pixel-sm">DV</span>
-            <span><span className="eyebrow block">DRAGON VALLEY // GUILD HUB</span><span className="block text-sm text-dv-brassLight">ATTACK LEDGER</span></span>
-          </a>
+            <span className="text-left"><span className="eyebrow block">DRAGON VALLEY // GUILD HUB</span><span className="block text-sm text-dv-brassLight">ATTACK LEDGER</span></span>
+          </button>
           <div className="flex items-center gap-2">
             <span className="status-chip hidden sm:inline-flex">D{dayNumber} ACTIVE</span>
             {me && <div className="pixel-frame item-slot flex items-center gap-2 px-2 py-1"><img src={me.avatar_url ?? "/icons/icon-192.png"} alt="" className="h-6 w-6 pixel-frame border border-dv-line" /><span className="max-w-[90px] truncate text-[10px] text-dv-brassLight">{me.username}</span></div>}
-            <a href="#settings" aria-label="Jump to settings" className="pixel-frame item-slot border border-dv-line px-3 py-2 text-[11px] shadow-pixel-sm hover:border-dv-violet">⚙️</a>
+            <button type="button" aria-label="Open settings" onClick={() => setTab("settings")} className="pixel-frame item-slot border border-dv-line px-3 py-2 text-[11px] shadow-pixel-sm hover:border-dv-violet">⚙️</button>
           </div>
         </div>
       </header>
 
-      <main id="ledger" className="mx-auto max-w-6xl scroll-mt-28 px-4 pb-24 pt-5 sm:px-6 md:pb-20 md:pt-7">
-        <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD OPERATIONS / ONLINE</p><h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">GUILD HUB</h1><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">One board for the live ledger, field guidance, provisions, rune priorities, and guild-wide cycle settings.</p></div>
+      <main className="mx-auto max-w-6xl px-4 pb-24 pt-5 sm:px-6 md:pb-20 md:pt-7">
+        {tab === "ledger" && (
+          <>
+            <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD OPERATIONS / ONLINE</p><h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">GUILD HUB</h1><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">The live raid ledger for the current six-day cycle.</p></div>
 
-        <section className="pixel-border overflow-hidden bg-dv-panel/95 shadow-pixel">
-          <div className="flex items-center justify-between border-b border-dv-line px-4 py-3"><div><p className="eyebrow mb-2">CURRENT SEASON CLOCK</p><p className="text-[11px]">CYCLE START {cycleStartISO} <span className="text-slate-300/50">/ DAY {dayNumber} OF 6</span></p></div><span className="status-chip">{cycleDays[dayIndex]} / LIVE</span></div>
-          <div className="grid grid-cols-6 gap-px bg-dv-line">
-            {[1, 2, 3, 4, 5, 6].map((day) => <div key={day} className={"bg-dv-panel px-1 py-3 text-center " + (day === dayNumber ? "bg-dv-violet/15" : "")}><p className={"text-[9px] " + (day < dayNumber ? "text-dv-emerald" : day === dayNumber ? "text-dv-brassLight" : "text-slate-300/55")}>D{day}</p><div className={"mx-auto my-2 h-2 w-2 " + (day < dayNumber ? "bg-dv-emerald" : day === dayNumber ? "bg-dv-brass" : "border border-dv-line")} /><p className="text-[9px] text-slate-300/60">{phases[day - 1]}</p></div>)}
-          </div>
-          <p className="border-t border-dv-line px-4 py-2 text-[9px] text-slate-300/60">◆ {dayNumber < 4 ? "Exploration is active; use all three entries before raid prep." : "Raid window is live; keep every attack on the shared ledger."}</p>
-        </section>
+            <section className="pixel-border overflow-hidden bg-dv-panel/95 shadow-pixel">
+              <div className="flex items-center justify-between border-b border-dv-line px-4 py-3"><div><p className="eyebrow mb-2">CURRENT SEASON CLOCK</p><p className="text-[11px]">CYCLE START {cycleStartISO} <span className="text-slate-300/50">/ DAY {dayNumber} OF 6</span></p></div><span className="status-chip">{cycleDays[dayIndex]} / LIVE</span></div>
+              <div className="grid grid-cols-6 gap-px bg-dv-line">
+                {[1, 2, 3, 4, 5, 6].map((day) => <div key={day} className={"bg-dv-panel px-1 py-3 text-center " + (day === dayNumber ? "bg-dv-violet/15" : "")}><p className={"text-[9px] " + (day < dayNumber ? "text-dv-emerald" : day === dayNumber ? "text-dv-brassLight" : "text-slate-300/55")}>D{day}</p><div className={"mx-auto my-2 h-2 w-2 " + (day < dayNumber ? "bg-dv-emerald" : day === dayNumber ? "bg-dv-brass" : "border border-dv-line")} /><p className="text-[9px] text-slate-300/60">{phases[day - 1]}</p></div>)}
+              </div>
+              <p className="border-t border-dv-line px-4 py-2 text-[9px] text-slate-300/60">◆ {dayNumber < 4 ? "Exploration is active; use all three entries before raid prep." : "Raid window is live; keep every attack on the shared ledger."}</p>
+            </section>
 
-        {(dayNumber < 3 || settings.wyvern_element) && <div className="mt-4">{dayNumber < 3 ? <ExplorationPhase currentDay={dayNumber} /> : <WyvernTracker current={settings.wyvern_element as any} setBy={settings.wyvern_set_by} onSelect={setWyvern} />}</div>}
+            {(dayNumber < 3 || settings.wyvern_element) && <div className="mt-4">{dayNumber < 3 ? <ExplorationPhase currentDay={dayNumber} /> : <WyvernTracker current={settings.wyvern_element as any} setBy={settings.wyvern_set_by} onSelect={setWyvern} />}</div>}
 
-        <section className="pixel-border bg-dv-panel/95 p-4 shadow-pixel"><p className="eyebrow mb-2">YOUR RAID LEDGER</p><h2 className="text-lg text-dv-brassLight">Live Supabase attack log</h2><p className="mt-1 text-xs text-slate-200/65">Your entry is shared with the guild and stays tied to the current six-day cycle.</p></section>
-        <div className="mt-4"><LogAttackButton anchorDate={settings.anchor_date} resetHour={settings.reset_hour_utc} dayNumber={dayNumber} loggedDays={myLoggedDays} onLog={logAttack} /></div>
-        <div className="mt-4"><GuildProgress members={members} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
+            <section className="pixel-border bg-dv-panel/95 p-4 shadow-pixel mt-4"><p className="eyebrow mb-2">YOUR RAID LEDGER</p><h2 className="text-lg text-dv-brassLight">Live Supabase attack log</h2><p className="mt-1 text-xs text-slate-200/65">Your entry is shared with the guild and stays tied to the current six-day cycle.</p></section>
+            <div className="mt-4"><LogAttackButton anchorDate={settings.anchor_date} resetHour={settings.reset_hour_utc} dayNumber={dayNumber} loggedDays={myLoggedDays} onLog={logAttack} /></div>
+            <div className="mt-4"><GuildProgress members={members} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
+          </>
+        )}
 
-        <section id="guide" className="scroll-mt-28 border-t border-dv-line pt-8 mt-10"><p className="eyebrow mb-4 text-dv-emerald">FIELD GUIDE</p><Guide /></section>
-        <section id="meals" className="scroll-mt-28 border-t border-dv-line pt-8 mt-10"><p className="eyebrow mb-4 text-dv-emerald">SEASON MEALS</p><Meals /></section>
-        <section id="runes" className="scroll-mt-28 border-t border-dv-line pt-8 mt-10"><p className="eyebrow mb-4 text-dv-emerald">RUNE DESK</p><Runes /></section>
-
-        <section id="settings" className="scroll-mt-28 border-t border-dv-line pt-8 mt-10">
-          <div className="mb-4"><p className="eyebrow text-dv-emerald">GUILD SETTINGS</p><h2 className="mt-1 text-xl text-dv-brassLight">Keep the shared clock accurate.</h2></div>
-          <section className="pixel-border bg-dv-panel/95 p-4 shadow-pixel">
-            <div className="grid gap-4 md:grid-cols-2">
-              <label className="text-[10px] text-dv-brassLight">CYCLE ANCHOR DATE<input type="date" value={settingsDraft.anchor_date} onChange={(event) => setSettingsDraft((current) => ({ ...current, anchor_date: event.target.value }))} className="mt-2 w-full pixel-frame item-slot border border-dv-line px-3 py-3 text-[11px] text-dv-brassLight outline-none focus:border-dv-violet" /><span className="mt-2 block text-[9px] text-slate-300/45">Day 1 of the first raid cycle.</span></label>
-              <label className="text-[10px] text-dv-brassLight">RESET HOUR (UTC)<input type="number" min={0} max={23} value={settingsDraft.reset_hour_utc} onChange={(event) => setSettingsDraft((current) => ({ ...current, reset_hour_utc: Number(event.target.value) }))} className="mt-2 w-full pixel-frame item-slot border border-dv-line px-3 py-3 text-[11px] text-dv-brassLight outline-none focus:border-dv-violet" /><span className="mt-2 block text-[9px] text-slate-300/45">Hour 0–23 UTC when the attack log rolls over.</span></label>
-            </div>
-            <button type="button" onClick={saveCycleSettings} className="mt-5 w-full pixel-frame bg-dv-brass px-4 py-3 text-[11px] text-dv-bg shadow-pixel-sm hover:bg-dv-brassLight active:translate-y-[2px]">SAVE CYCLE SETTINGS</button>
+        {tab === "guide" && (
+          <section>
+            <p className="eyebrow mb-4 text-dv-emerald">FIELD GUIDE</p>
+            <Guide />
           </section>
-        </section>
+        )}
+
+        {tab === "meals" && (
+          <section>
+            <p className="eyebrow mb-4 text-dv-emerald">SEASON MEALS</p>
+            <Meals />
+          </section>
+        )}
+
+        {tab === "runes" && (
+          <section>
+            <p className="eyebrow mb-4 text-dv-emerald">RUNE DESK</p>
+            <Runes />
+          </section>
+        )}
+
+        {tab === "settings" && (
+          <section>
+            <div className="mb-4"><p className="eyebrow text-dv-emerald">GUILD SETTINGS</p><h2 className="mt-1 text-xl text-dv-brassLight">Keep the shared clock accurate.</h2></div>
+            <section className="pixel-border bg-dv-panel/95 p-4 shadow-pixel">
+              <div className="grid gap-4 md:grid-cols-2">
+                <label className="text-[10px] text-dv-brassLight">CYCLE ANCHOR DATE<input type="date" value={settingsDraft.anchor_date} onChange={(event) => setSettingsDraft((current) => ({ ...current, anchor_date: event.target.value }))} className="mt-2 w-full pixel-frame item-slot border border-dv-line px-3 py-3 text-[11px] text-dv-brassLight outline-none focus:border-dv-violet" /><span className="mt-2 block text-[9px] text-slate-300/45">Day 1 of the first raid cycle.</span></label>
+                <label className="text-[10px] text-dv-brassLight">RESET HOUR (UTC)<input type="number" min={0} max={23} value={settingsDraft.reset_hour_utc} onChange={(event) => setSettingsDraft((current) => ({ ...current, reset_hour_utc: Number(event.target.value) }))} className="mt-2 w-full pixel-frame item-slot border border-dv-line px-3 py-3 text-[11px] text-dv-brassLight outline-none focus:border-dv-violet" /><span className="mt-2 block text-[9px] text-slate-300/45">Hour 0–23 UTC when the attack log rolls over.</span></label>
+              </div>
+              <button type="button" onClick={saveCycleSettings} className="mt-5 w-full pixel-frame bg-dv-brass px-4 py-3 text-[11px] text-dv-bg shadow-pixel-sm hover:bg-dv-brassLight active:translate-y-[2px]">SAVE CYCLE SETTINGS</button>
+            </section>
+          </section>
+        )}
 
         {toast && <div role="status" className="fixed bottom-20 left-1/2 z-50 -translate-x-1/2 pixel-frame bg-dv-brass px-4 py-3 text-[10px] text-dv-bg shadow-pixel animate-rise">{toast}</div>}
       </main>
@@ -211,20 +245,21 @@ export default function DashboardPage() {
         className="fixed bottom-0 inset-x-0 z-40 border-t border-dv-line bg-dv-bg/95 backdrop-blur"
       >
         <div className="mx-auto flex max-w-6xl justify-around px-2 py-2">
-          {[
-            ["ledger", "Ledger"],
-            ["guide", "Guide"],
-            ["meals", "Meals"],
-            ["runes", "Runes"],
-            ["settings", "Settings"],
-          ].map(([id, label]) => (
-            <a
+          {TABS.map(({ id, label }) => (
+            <button
               key={id}
-              href={"#" + id}
-              className="flex flex-1 flex-col items-center gap-1 border border-transparent px-1 py-1.5 text-[9px] uppercase tracking-[.1em] text-slate-300/55 hover:border-dv-line hover:text-dv-brassLight"
+              type="button"
+              onClick={() => setTab(id)}
+              aria-current={tab === id ? "page" : undefined}
+              className={
+                "flex flex-1 flex-col items-center gap-1 border px-1 py-1.5 text-[9px] uppercase tracking-[.1em] " +
+                (tab === id
+                  ? "border-dv-brass text-dv-brassLight"
+                  : "border-transparent text-slate-300/55 hover:border-dv-line hover:text-dv-brassLight")
+              }
             >
               {label}
-            </a>
+            </button>
           ))}
         </div>
       </nav>
