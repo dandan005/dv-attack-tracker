@@ -165,8 +165,10 @@ export default function DashboardPage() {
       <main className="mx-auto max-w-6xl px-4 pb-24 pt-5 sm:px-6 md:pb-20 md:pt-7">
         {tab === "ledger" && (
           <>
-            <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD OPERATIONS / ONLINE</p><h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">GUILD HUB</h1><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">The live raid ledger for the current six-day cycle.</p></div>
+            <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD OPERATIONS / ONLINE</p><h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">GUILD HUB</h1><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">The live raid ledger for the current six-day cycle.</p>
             {me && <div className="pixel-frame item-slot flex items-center gap-2 px-2 py-1"><img src={me.avatar_url ?? "/icons/icon-192.png"} alt="" className="h-6 w-6 pixel-frame border border-dv-line" /><span className="whitespace-nowrap text-[10px] text-dv-brassLight">{me.username}</span></div>}
+            </div>
+            
             <section className="pixel-border overflow-hidden bg-dv-panel/95 shadow-pixel">
               <div className="flex items-center justify-between border-b border-dv-line px-4 py-3"><div><p className="eyebrow mb-2">CURRENT SEASON CLOCK</p><p className="text-[11px]">CYCLE START {cycleStartISO} <span className="text-slate-300/50">/ DAY {dayNumber} OF 6</span></p></div><span className="status-chip">{cycleDays[dayIndex]} / LIVE</span></div>
               <div className="grid grid-cols-6 gap-px bg-dv-line">
