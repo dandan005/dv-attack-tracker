@@ -9,6 +9,7 @@ import { GuildProgress, MemberRow } from "@/components/GuildProgress";
 import { WyvernTracker } from "@/components/WyvernTracker";
 import { ExplorationPhase } from "@/components/ExplorationPhase";
 import { Guide, Meals, Runes } from "@/components/OperationsLibrary";
+import { DragonCrest } from "@/components/DragonCrest";
 
 type Settings = {
   anchor_date: string;
@@ -180,7 +181,9 @@ export default function DashboardPage() {
       <header className="sticky top-0 z-40 border-b border-dv-line bg-dv-bg/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <button onClick={() => setTab("ledger")} className="flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center border border-dv-brass bg-dv-brass font-pixel text-[11px] text-dv-bg shadow-pixel-sm">DV</span>
+            <span className="grid h-10 w-10 place-items-center border border-dv-brass bg-dv-brass shadow-pixel-sm">
+              <DragonCrest />
+            </span>
             <span className="text-left"><span className="eyebrow block">DRAGON VALLEY</span><span className="block text-sm text-dv-brassLight">ATTACK LEDGER</span></span>
           </button>
           <div className="flex items-center gap-2">
