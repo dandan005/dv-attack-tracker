@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Dragon Valley // Attack Ledger",
-  description: "A guild command center for tracking Dragon Valley attacks",
+  description: "A unified guild hub for tracking Dragon Valley attacks",
   manifest: "/manifest.json",
   icons: {
     icon: "/icons/icon-192.png",
