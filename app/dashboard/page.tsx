@@ -177,7 +177,11 @@ export default function DashboardPage() {
           <div className="flex items-center gap-2">
             {me && (
               <div className="pixel-frame item-slot flex items-center gap-2 px-2 py-1">
-                <img src={me.avatar_url ?? "/icons/icon-192.png"} alt="" className="h-6 w-6 pixel-frame border border-dv-line object-cover" />
+                <img src={me.avatar_url ?? "/icons/icon-192.png"}
+                  alt=""
+                  className="h-6 w-6 pixel-frame border border-dv-line object-cover"
+                  style={{ objectFit: "cover" }}
+                  />
                 <span className="whitespace-nowrap text-[10px] text-dv-brassLight">{me.username}</span>
               </div>
             )}
