@@ -47,8 +47,6 @@ export function LogAttackButton({
 }) {
   const [ms, setMs] = useState<number>(0);
   const [pending, setPending] = useState(false);
-  const [promotionTier, setPromotionTier] = useState("");
-  const [damageScore, setDamageScore] = useState("");
 
   useEffect(() => {
     const tick = () => setMs(getCycleInfo(anchorDate, resetHour).msUntilReset);
@@ -64,7 +62,7 @@ export function LogAttackButton({
     if (done || pending) return;
     setPending(true);
     try {
-      await onLog(dayNumber, promotionTier === "" ? null : Number(promotionTier), damageScore === "" ? null : Number(damageScore));
+      await onLog(dayNumber, null, null);
     } finally {
       setPending(false);
     }
@@ -80,8 +78,6 @@ export function LogAttackButton({
         <div className="grid grid-cols-6 gap-1 mt-4">{[1, 2, 3, 4, 5, 6].map((day) => <div key={day} className={["h-1.5 rounded-full", loggedDays.includes(day) ? "bg-dv-emerald" : day === dayNumber ? "bg-dv-brass" : "bg-dv-panel2"].join(" ")} />)}</div>
         <p className="text-[10px] text-slate-300/50 mt-2">{loggedDays.length}/6 attacks recorded this cycle</p>
       </div>
-
-      {!done && <div className="px-4 pb-4 grid grid-cols-2 gap-2"><label className="item-slot p-2 text-[9px] text-slate-300/55">PROMOTION TIER<input type="number" min={0} step={1} inputMode="numeric" value={promotionTier} onChange={(event) => setPromotionTier(event.target.value)} placeholder="optional" className="mt-2 w-full bg-transparent text-[11px] text-dv-brassLight outline-none placeholder:text-slate-300/25" /></label><label className="item-slot p-2 text-[9px] text-slate-300/55">DAMAGE / POINTS<input type="number" min={0} step={1} inputMode="numeric" value={damageScore} onChange={(event) => setDamageScore(event.target.value)} placeholder="optional" className="mt-2 w-full bg-transparent text-[11px] text-dv-brassLight outline-none placeholder:text-slate-300/25" /></label><p className="col-span-2 text-[9px] text-slate-300/40">Higher-promotion damage is worth more raid points. Add the result when you have it.</p></div>}
 
       <button onClick={handleClick} disabled={done || pending} aria-label={done ? "Attack logged" : "Log today's attack"} className={["attack-action", done ? "is-done" : urgent ? "is-urgent" : "", pending ? "is-pending" : ""].join(" ")}>
         <span className="attack-sigil"><AttackGlyph done={done} urgent={urgent} /></span>
