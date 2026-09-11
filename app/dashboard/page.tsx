@@ -162,8 +162,9 @@ export default function DashboardPage() {
         {toast && <div role="status" className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 pixel-frame bg-dv-brass text-dv-bg text-[10px] px-4 py-3 shadow-pixel animate-rise">{toast}</div>}
       </main>
 
-      <nav className="fixed bottom-0 left-0 right-0 z-40 grid grid-cols-2 border-t border-dv-line bg-dv-panel/95 px-2 py-2 backdrop-blur md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-40 grid grid-cols-3 border-t border-dv-line bg-dv-panel/95 px-2 py-2 backdrop-blur md:hidden">
         <a href="/dashboard" className="py-1 text-center text-[8px] uppercase text-dv-brassLight"><span className="mb-1 block text-dv-violet">⚔</span>Board</a>
+        <a href="/command-center" className="py-1 text-center text-[8px] uppercase text-slate-300/60"><span className="mb-1 block text-dv-violet">◆</span>Command</a>
         <button type="button" onClick={() => router.push("/settings")} className="py-1 text-center text-[8px] uppercase text-slate-300/60"><span className="mb-1 block text-dv-violet">⚙</span>Settings</button>
       </nav>
     </>
