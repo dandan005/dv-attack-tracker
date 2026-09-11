@@ -162,4 +162,5 @@ export default function DashboardPage() {
         <button type="button" onClick={() => router.push("/settings")} className="py-1 text-center text-[8px] uppercase text-slate-300/60"><span className="mb-1 block text-dv-violet">⚙</span>Settings</button>
       </nav>
     </>
+  );
 }
