@@ -41,13 +41,13 @@ export function GuildProgress({
         <div className="item-slot px-3 py-5 text-center text-[10px] text-slate-300/55">NO GUILD MEMBERS HAVE JOINED YET.</div>
       ) : (
         <div className="mb-2">
-          <div className="grid grid-cols-[2fr_repeat(6,minmax(0,2fr))] gap-1 text-center text-[10px] text-dv-brassLight mb-2">
+          <div className="grid grid-cols-[2fr_repeat(6,minmax(0,1fr))] gap-1 text-center text-[10px] text-dv-brassLight mb-2">
             <div className="text-left">ATTACK LEDGER / MEMBERS</div>
             {[1, 2, 3, 4, 5, 6].map((day) => <div key={day} className={day === currentDay ? "text-dv-emerald" : ""}>D{day}</div>)}
           </div>
           <div className="space-y-1 max-h-72 overflow-y-auto pr-1">
             {members.map((member) => (
-              <div key={member.discord_id} className="grid grid-cols-[2fr_repeat(6,minmax(0,2fr))] gap-1 items-center" title={member.username}>
+              <div key={member.discord_id} className="grid grid-cols-[2fr_repeat(6,minmax(0,1fr))] gap-1 items-center" title={member.username}>
                 <div className="flex items-center gap-1 min-w-0 pr-1">
                   <img src={member.avatar_url ?? "/icons/icon-192.png"} alt="" className="w-5 h-5 pixel-frame border border-dv-line shrink-0" />
                   <span className="block text-[10px] truncate text-slate-200/80">{member.username}</span>
