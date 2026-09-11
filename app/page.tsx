@@ -26,7 +26,7 @@ export default function SplashPage() {
             <span className="status-chip"><span className="w-1.5 h-1.5 rounded-full bg-dv-emerald" /> RAID HUB // ONLINE</span>
           </div>
 
-          <p className="eyebrow mb-3">GUILD COMMAND CENTER</p>
+          <p className="eyebrow mb-3">GUILD HUB</p>
           <h1 className="text-2xl sm:text-3xl text-dv-brassLight leading-tight">DRAGON<br />VALLEY</h1>
           <p className="text-[11px] leading-relaxed text-slate-300/70 mt-4 max-w-xs">
             Keep every attack on the board. Stay ahead of reset. Make the guild stronger one day at a time.
