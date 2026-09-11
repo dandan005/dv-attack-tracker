@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/server";
+import { isDiscordGuildMember } from "@/lib/discord";
 
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
@@ -29,7 +30,15 @@ export async function GET(request: NextRequest) {
         "Slayer";
       const avatarUrl = identityData.avatar_url ?? userMetadata.avatar_url ?? null;
 
-      // upsert into members table so the guild roster is populated on first login
+      try {
+        if (!(await isDiscordGuildMember(discordId))) {
+          return NextResponse.redirect(origin + "/?error=guild_only");
+        }
+      } catch {
+        return NextResponse.redirect(origin + "/?error=guild_verification_failed");
+      }
+
+      // Only verified members of the configured Discord guild enter the roster
       const admin = createAdminClient();
       await admin.from("members").upsert(
         {

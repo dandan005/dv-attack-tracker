@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/server";
+import { getGuildMember } from "@/lib/auth";
 import { getCycleInfo } from "@/lib/cycle";
 
 async function findMissingAndPing() {
@@ -52,14 +53,10 @@ async function findMissingAndPing() {
 }
 
 export async function POST(req: NextRequest) {
-  // manual ping, triggered by a logged-in member from the dashboard
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  // Manual ping is available only to a currently verified guild member.
+  const auth = await getGuildMember();
+  if (auth.error || !auth.user || !auth.member) {
+    return NextResponse.json({ error: auth.error }, { status: auth.error === "Not authenticated" ? 401 : 403 });
   }
 
   const result = await findMissingAndPing();

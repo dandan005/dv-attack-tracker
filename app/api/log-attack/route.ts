@@ -1,14 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/server";
+import { getGuildMember } from "@/lib/auth";
 import { getCycleInfo } from "@/lib/cycle";
 
 export async function POST(req: NextRequest) {
-  const supabase = createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const auth = await getGuildMember();
 
-  if (!user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  if (auth.error || !auth.user || !auth.member) {
+    return NextResponse.json({ error: auth.error }, { status: auth.error === "Not authenticated" ? 401 : 403 });
   }
+
+  const supabase = auth.supabase;
+  const user = auth.user;
 
   const body = await req.json();
   const dayNumber = Number(body.dayNumber);
@@ -17,13 +20,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Day number must be between 1 and 6" }, { status: 400 });
   }
 
-  const { data: settings } = await supabase.from("app_settings").select("*").eq("id", 1).single();
+  const admin = createAdminClient();
+  const { data: settings } = await admin.from("app_settings").select("anchor_date, reset_hour_utc").eq("id", 1).single();
   const { cycleStartISO } = getCycleInfo(settings?.anchor_date ?? "2026-01-05", settings?.reset_hour_utc ?? 0);
-  const { data: member } = await supabase.from("members").select("id").eq("auth_user_id", user.id).single();
-
-  if (!member) {
-    return NextResponse.json({ error: "Member not found" }, { status: 404 });
-  }
+  const member = auth.member;
 
   const log = {
     member_id: member.id,

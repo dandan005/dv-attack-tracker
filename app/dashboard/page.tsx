@@ -63,7 +63,8 @@ export default function DashboardPage() {
       return;
     }
 
-    const { data: settingsRow } = await supabase.from("app_settings").select("*").eq("id", 1).single();
+    const settingsResponse = await fetch("/api/settings", { cache: "no-store" });
+    const settingsRow = settingsResponse.ok ? await settingsResponse.json() : null;
     const currentSettings: Settings = {
       anchor_date: settingsRow?.anchor_date ?? "2026-01-05",
       reset_hour_utc: settingsRow?.reset_hour_utc ?? 0,
@@ -135,7 +136,16 @@ export default function DashboardPage() {
   }
 
   async function setWyvern(element: "wind" | "fire" | "earth" | "water") {
-    await supabase.from("app_settings").update({ wyvern_element: element, wyvern_set_by: me?.username ?? null }).eq("id", 1);
+    const response = await fetch("/api/settings", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ wyvern_element: element }),
+    });
+    if (!response.ok) {
+      setToast("Could not update guild settings");
+      setTimeout(() => setToast(null), 2500);
+      return;
+    }
     setSettings((current) => ({ ...current, wyvern_element: element, wyvern_set_by: me?.username ?? null }));
     setToast("Wyvern trace set to " + element.toUpperCase());
     setTimeout(() => setToast(null), 2500);
@@ -144,9 +154,14 @@ export default function DashboardPage() {
   async function saveCycleSettings() {
     const anchor_date = settingsDraft.anchor_date || "2026-01-05";
     const reset_hour_utc = Math.min(23, Math.max(0, Number(settingsDraft.reset_hour_utc) || 0));
-    const { error } = await supabase.from("app_settings").update({ anchor_date, reset_hour_utc }).eq("id", 1);
-    if (error) {
-      setToast("Error: " + error.message);
+    const response = await fetch("/api/settings", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ anchor_date, reset_hour_utc }),
+    });
+    if (!response.ok) {
+      const json = await response.json().catch(() => ({}));
+      setToast("Error: " + (json.error ?? "Could not save settings"));
     } else {
       await loadAll();
       setToast("Cycle settings saved");

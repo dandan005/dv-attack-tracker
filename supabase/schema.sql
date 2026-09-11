@@ -1,5 +1,5 @@
 -- Dragon Valley Attack Tracker — Supabase schema
--- Run this in the Supabase SQL editor after creating your project.
+-- Run this in the Supabase SQL editor after creating the project.
 
 create table if not exists members (
   id uuid primary key default gen_random_uuid(),
@@ -21,7 +21,6 @@ create table if not exists attack_logs (
   unique (member_id, day_number, cycle_start)
 );
 
--- Safe migration for an existing installation.
 alter table attack_logs add column if not exists promotion_tier int check (promotion_tier >= 0);
 alter table attack_logs add column if not exists damage_score bigint check (damage_score >= 0);
 
@@ -39,41 +38,57 @@ alter table members enable row level security;
 alter table attack_logs enable row level security;
 alter table app_settings enable row level security;
 
--- Any signed-in guild member can see the whole roster and every attack log —
--- that's the point of a shared tracker. Only service-role (server) writes to
--- members; a member can only insert/update their own attack log.
+-- This function is the database-side membership gate. It is SECURITY DEFINER
+-- so RLS can use it without recursively querying the members policy.
+create or replace function public.is_guild_member()
+returns boolean
+language sql
+security definer
+set search_path = public
+as $$
+  select exists (select 1 from public.members where auth_user_id = auth.uid());
+$$;
 
-create policy "members are viewable by authenticated users"
+revoke all on function public.is_guild_member() from public;
+grant execute on function public.is_guild_member() to authenticated;
+
+drop policy if exists "members are viewable by authenticated users" on members;
+drop policy if exists "attack logs are viewable by authenticated users" on attack_logs;
+drop policy if exists "members can log their own attacks" on attack_logs;
+drop policy if exists "members can update their own attacks" on attack_logs;
+drop policy if exists "settings are viewable by authenticated users" on app_settings;
+drop policy if exists "authenticated users can update settings" on app_settings;
+
+create policy "verified guild members can view members"
   on members for select
   to authenticated
-  using (true);
+  using (public.is_guild_member());
 
-create policy "attack logs are viewable by authenticated users"
+create policy "verified guild members can view attack logs"
   on attack_logs for select
   to authenticated
-  using (true);
+  using (public.is_guild_member());
 
 create policy "members can log their own attacks"
   on attack_logs for insert
   to authenticated
   with check (
-    member_id in (select id from members where auth_user_id = auth.uid())
+    public.is_guild_member()
+    and member_id in (select id from members where auth_user_id = auth.uid())
   );
 
 create policy "members can update their own attacks"
   on attack_logs for update
   to authenticated
   using (
-    member_id in (select id from members where auth_user_id = auth.uid())
+    public.is_guild_member()
+    and member_id in (select id from members where auth_user_id = auth.uid())
+  )
+  with check (
+    public.is_guild_member()
+    and member_id in (select id from members where auth_user_id = auth.uid())
   );
 
-create policy "settings are viewable by authenticated users"
-  on app_settings for select
-  to authenticated
-  using (true);
-
-create policy "authenticated users can update settings"
-  on app_settings for all
-  to authenticated
-  using (true)
-  with check (true);
+-- app_settings has intentionally no authenticated-user policies. Its webhook
+-- URL stays server-only; /api/settings exposes only safe fields after the
+-- server verifies current Discord guild membership.

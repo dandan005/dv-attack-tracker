@@ -33,7 +33,34 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
+  const pathname = request.nextUrl.pathname;
+  const isProtectedPage = pathname === "/dashboard" || pathname.startsWith("/dashboard/");
+
+  if (isProtectedPage) {
+    if (!user) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+
+    const { data: member } = await supabase
+      .from("members")
+      .select("discord_id")
+      .eq("auth_user_id", user.id)
+      .maybeSingle();
+
+    if (!member) {
+      return NextResponse.redirect(new URL("/?error=guild_only", request.url));
+    }
+
+    try {
+      const { isDiscordGuildMember } = await import("@/lib/discord");
+      if (!(await isDiscordGuildMember(member.discord_id))) {
+        return NextResponse.redirect(new URL("/?error=guild_only", request.url));
+      }
+    } catch {
+      return NextResponse.redirect(new URL("/?error=guild_verification_failed", request.url));
+    }
+  }
 
   return response;
 }
