@@ -170,9 +170,28 @@ export default function DashboardPage() {
             <a href="#settings" aria-label="Jump to settings" className="pixel-frame item-slot border border-dv-line px-3 py-2 text-[11px] shadow-pixel-sm hover:border-dv-violet">⚙️</a>
           </div>
         </div>
-        <nav aria-label="Guild hub sections" className="mx-auto flex max-w-6xl gap-1 overflow-x-auto border-t border-dv-line/70 px-4 py-2 text-[9px] uppercase tracking-[.12em]">
-          {[["ledger", "Ledger"], ["guide", "Guide"], ["meals", "Meals"], ["runes", "Runes"], ["settings", "Settings"]].map(([id, label]) => <a key={id} href={"#" + id} className="shrink-0 border border-transparent px-2 py-1 text-slate-300/55 hover:border-dv-line hover:text-dv-brassLight">{label}</a>)}
-        </nav>
+        <nav
+        aria-label="Guild hub sections"
+        className="fixed bottom-0 inset-x-0 z-40 border-t border-dv-line bg-dv-bg/95 backdrop-blur"
+      >
+        <div className="mx-auto flex max-w-6xl justify-around px-2 py-2">
+          {[
+            ["ledger", "Ledger"],
+            ["guide", "Guide"],
+            ["meals", "Meals"],
+            ["runes", "Runes"],
+            ["settings", "Settings"],
+          ].map(([id, label]) => (
+            <a
+              key={id}
+              href={"#" + id}
+              className="flex flex-1 flex-col items-center gap-1 border border-transparent px-1 py-1.5 text-[9px] uppercase tracking-[.1em] text-slate-300/55 hover:border-dv-line hover:text-dv-brassLight"
+            >
+              {label}
+            </a>
+          ))}
+        </div>
+      </nav>
       </header>
 
       <main id="ledger" className="mx-auto max-w-6xl scroll-mt-28 px-4 pb-20 pt-5 sm:px-6 md:pb-10 md:pt-7">
