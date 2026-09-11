@@ -41,23 +41,28 @@ export function GuildProgress({
         <div className="item-slot px-3 py-5 text-center text-[10px] text-slate-300/55">NO GUILD MEMBERS HAVE JOINED YET.</div>
       ) : (
         <div className="mb-2">
-          <div className="grid grid-cols-[2fr_repeat(6,minmax(0,1fr))] gap-1 text-center text-[10px] text-dv-brassLight mb-2">
-            <div className="text-left">ATTACK LEDGER / MEMBERS</div>
-            {[1, 2, 3, 4, 5, 6].map((day) => <div key={day} className={day === currentDay ? "text-dv-emerald" : ""}>D{day}</div>)}
-          </div>
-          <div className="space-y-1 max-h-72 overflow-y-auto pr-1">
+          <p className="eyebrow mb-2">ATTACK LEDGER / MEMBERS</p>
+          <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
             {members.map((member) => (
-              <div key={member.discord_id} className="grid grid-cols-[2fr_repeat(6,minmax(0,1fr))] gap-1 items-center" title={member.username}>
-                <div className="flex items-center gap-1 min-w-0 pr-1">
+              <div key={member.discord_id} className="item-slot p-2">
+                <div className="flex items-center gap-1.5 min-w-0 mb-1.5">
                   <img src={member.avatar_url ?? "/icons/icon-192.png"} alt="" className="w-5 h-5 pixel-frame border border-dv-line shrink-0" />
-                  <span className="block text-[10px] truncate text-slate-200/80">{member.username}</span>
+                  <span className="block text-[10px] text-slate-200/80 break-words leading-tight">{member.username}</span>
+                  {member.discord_id === currentUserId && <span className="text-[8px] text-dv-emerald shrink-0">(YOU)</span>}
                 </div>
-                {member.logged.map((done, index) => {
-                  const dayNum = index + 1;
-                  const isToday = dayNum === currentDay;
-                  const isFuture = dayNum > currentDay;
-                  return <div key={index} className={["aspect-square pixel-frame flex items-center justify-center text-[11px] font-bold", index === 3 ? "border-l border-dv-line" : "", done ? "bg-dv-emerald text-dv-bg" : isFuture ? "bg-dv-panel2 text-slate-300/20" : isToday ? "bg-dv-panel2 border border-dv-brass text-dv-brassLight" : "bg-dv-ember/80 text-dv-bg"].join(" ")}>{done ? "✓" : isFuture ? "·" : isToday ? "–" : "✕"}</div>;
-                })}
+                <div className="grid grid-cols-6 gap-1">
+                  {member.logged.map((done, index) => {
+                    const dayNum = index + 1;
+                    const isToday = dayNum === currentDay;
+                    const isFuture = dayNum > currentDay;
+                    return (
+                      <div key={index} className="flex flex-col items-center gap-0.5">
+                        <span className={["text-[8px]", isToday ? "text-dv-emerald" : "text-dv-brassLight/60"].join(" ")}>D{dayNum}</span>
+                        <div className={["aspect-square w-full pixel-frame flex items-center justify-center text-[11px] font-bold", done ? "bg-dv-emerald text-dv-bg" : isFuture ? "bg-dv-panel2 text-slate-300/20" : isToday ? "bg-dv-panel2 border border-dv-brass text-dv-brassLight" : "bg-dv-ember/80 text-dv-bg"].join(" ")}>{done ? "✓" : isFuture ? "·" : isToday ? "–" : "✕"}</div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             ))}
           </div>
