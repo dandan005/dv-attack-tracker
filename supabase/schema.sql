@@ -64,6 +64,10 @@ drop policy if exists "members can log their own attacks" on attack_logs;
 drop policy if exists "members can update their own attacks" on attack_logs;
 drop policy if exists "settings are viewable by authenticated users" on app_settings;
 drop policy if exists "authenticated users can update settings" on app_settings;
+drop policy if exists "verified guild members can view members" on members;
+drop policy if exists "verified guild members can view attack logs" on attack_logs;
+drop policy if exists "members can log their own attacks" on attack_logs;
+drop policy if exists "members can update their own attacks" on attack_logs;
 
 create policy "verified guild members can view members"
   on members for select
