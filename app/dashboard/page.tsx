@@ -26,8 +26,6 @@ type CurrentMember = {
 type AttackLog = {
   member_id: string;
   day_number: number;
-  promotion_tier?: number | null;
-  damage_score?: number | string | null;
 };
 
 type Tab = "ledger" | "guide" | "meals" | "runes" | "settings";
@@ -74,12 +72,8 @@ export default function DashboardPage() {
     const cycle = getCycleInfo(currentSettings.anchor_date, currentSettings.reset_hour_utc);
 
     const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, avatar_url");
-    const advancedLogs = await supabase.from("attack_logs").select("member_id, day_number, promotion_tier, damage_score").eq("cycle_start", cycle.cycleStartISO);
-    let logs: AttackLog[] = advancedLogs.data as AttackLog[] | null ?? [];
-    if (advancedLogs.error) {
-      const legacyLogs = await supabase.from("attack_logs").select("member_id, day_number").eq("cycle_start", cycle.cycleStartISO);
-      logs = (legacyLogs.data ?? []) as AttackLog[];
-    }
+    const { data: logsData } = await supabase.from("attack_logs").select("member_id, day_number").eq("cycle_start", cycle.cycleStartISO);
+    const logs: AttackLog[] = logsData ?? [];
 
     const logsByMember = new Map<string, Map<number, AttackLog>>();
     logs.forEach((log) => {
@@ -89,14 +83,11 @@ export default function DashboardPage() {
 
     const rows: MemberRow[] = (allMembers ?? []).map((member: any) => {
       const memberLogs = logsByMember.get(member.id) ?? new Map<number, AttackLog>();
-      const entries = Array.from(memberLogs.values());
       return {
         discord_id: member.discord_id,
         username: member.username,
         avatar_url: member.avatar_url,
         logged: [1, 2, 3, 4, 5, 6].map((day) => memberLogs.has(day)),
-        score: entries.reduce((sum, log) => sum + (Number(log.damage_score) || 0), 0),
-        bestPromotion: entries.reduce<number | null>((best, log) => log.promotion_tier === null || log.promotion_tier === undefined ? best : best === null ? Number(log.promotion_tier) : Math.max(best, Number(log.promotion_tier)), null),
       };
     });
     setMembers(rows);
@@ -114,11 +105,11 @@ export default function DashboardPage() {
     loadAll();
   }, []);
 
-  async function logAttack(day: number, promotionTier: number | null, damageScore: number | null) {
+  async function logAttack(day: number) {
     const res = await fetch("/api/log-attack", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ dayNumber: day, promotionTier, damageScore }),
+      body: JSON.stringify({ dayNumber: day }),
     });
     if (res.ok) {
       setToast("D" + day + " attack logged ⚔️");
