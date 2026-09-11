@@ -177,7 +177,6 @@ export default function DashboardPage() {
           <div className="flex items-center gap-2">
             <span className="status-chip hidden sm:inline-flex">D{dayNumber} ACTIVE</span>
             {me && <div className="pixel-frame item-slot flex items-center gap-2 px-2 py-1"><img src={me.avatar_url ?? "/icons/icon-192.png"} alt="" className="h-6 w-6 pixel-frame border border-dv-line" /><span className="max-w-[90px] truncate text-[10px] text-dv-brassLight">{me.username}</span></div>}
-            <button type="button" aria-label="Open settings" onClick={() => setTab("settings")} className="pixel-frame item-slot border border-dv-line px-3 py-2 text-[11px] shadow-pixel-sm hover:border-dv-violet">⚙️</button>
           </div>
         </div>
       </header>
