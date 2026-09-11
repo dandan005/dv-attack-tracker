@@ -17,7 +17,7 @@ type BossSlot = { name: string; image: string; alt: string };
 const BOSS_SLOTS: Record<Element, BossSlot> = {
   wind: { name: "BOSS SLOT - WIND", image: "", alt: "Wind boss portrait slot" },
   fire: { name: "BOSS SLOT — FIRE", image: "", alt: "Fire boss portrait slot" },
-  earth: { name: "Bardoran", — image: "/bosses/bardoran-portrait.jpg", alt: "Bardoran pixel dragon portrait" },
+  earth: { name: "Bardoran",  image: "/bosses/bardoran-portrait.jpg", alt: "Bardoran pixel dragon portrait" },
   water: { name: "BOSS SLOT — WATER", image: "", alt: "Water boss portrait slot" },
 };
 
