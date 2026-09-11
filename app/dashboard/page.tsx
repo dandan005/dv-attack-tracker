@@ -163,37 +163,7 @@ export default function DashboardPage() {
           <a href="/dashboard" className="flex items-center gap-3">
             <span className="grid h-10 w-10 place-items-center border border-dv-brass bg-dv-brass font-pixel text-[11px] text-dv-bg shadow-pixel-sm">DV</span>
             <span><span className="eyebrow block">DRAGON VALLEY // GUILD HUB</span><span className="block text-sm text-dv-brassLight">ATTACK LEDGER</span></span>
-          </a>
-          <div className="flex items-center gap-2">
-            <span className="status-chip hidden sm:inline-flex">D{dayNumber} ACTIVE</span>
-            {me && <div className="pixel-frame item-slot flex items-center gap-2 px-2 py-1"><img src={me.avatar_url ?? "/icons/icon-192.png"} alt="" className="h-6 w-6 pixel-frame border border-dv-line" /><span className="max-w-[90px] truncate text-[10px] text-dv-brassLight">{me.username}</span></div>}
-            <a href="#settings" aria-label="Jump to settings" className="pixel-frame item-slot border border-dv-line px-3 py-2 text-[11px] shadow-pixel-sm hover:border-dv-violet">⚙️</a>
-          </div>
-        </div>
-        <nav
-        aria-label="Guild hub sections"
-        className="fixed bottom-0 inset-x-0 z-40 border-t border-dv-line bg-dv-bg/95 backdrop-blur"
-      >
-        <div className="mx-auto flex max-w-6xl justify-around px-2 py-2">
-          {[
-            ["ledger", "Ledger"],
-            ["guide", "Guide"],
-            ["meals", "Meals"],
-            ["runes", "Runes"],
-            ["settings", "Settings"],
-          ].map(([id, label]) => (
-            <a
-              key={id}
-              href={"#" + id}
-              className="flex flex-1 flex-col items-center gap-1 border border-transparent px-1 py-1.5 text-[9px] uppercase tracking-[.1em] text-slate-300/55 hover:border-dv-line hover:text-dv-brassLight"
-            >
-              {label}
-            </a>
-          ))}
-        </div>
-      </nav>
       </header>
-
       <main id="ledger" className="mx-auto max-w-6xl scroll-mt-28 px-4 pb-20 pt-5 sm:px-6 md:pb-10 md:pt-7">
         <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD OPERATIONS / ONLINE</p><h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">GUILD HUB</h1><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">One board for the live ledger, field guidance, provisions, rune priorities, and guild-wide cycle settings.</p></div>
 
@@ -225,7 +195,28 @@ export default function DashboardPage() {
             <button type="button" onClick={saveCycleSettings} className="mt-5 w-full pixel-frame bg-dv-brass px-4 py-3 text-[11px] text-dv-bg shadow-pixel-sm hover:bg-dv-brassLight active:translate-y-[2px]">SAVE CYCLE SETTINGS</button>
           </section>
         </section>
-
+        <nav
+        aria-label="Guild hub sections"
+        className="fixed bottom-0 inset-x-0 z-40 border-t border-dv-line bg-dv-bg/95 backdrop-blur"
+      >
+        <div className="mx-auto flex max-w-6xl justify-around px-2 py-2">
+          {[
+            ["ledger", "Ledger"],
+            ["guide", "Guide"],
+            ["meals", "Meals"],
+            ["runes", "Runes"],
+            ["settings", "Settings"],
+          ].map(([id, label]) => (
+            <a
+              key={id}
+              href={"#" + id}
+              className="flex flex-1 flex-col items-center gap-1 border border-transparent px-1 py-1.5 text-[9px] uppercase tracking-[.1em] text-slate-300/55 hover:border-dv-line hover:text-dv-brassLight"
+            >
+              {label}
+            </a>
+          ))}
+        </div>
+      </nav>
         {toast && <div role="status" className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 pixel-frame bg-dv-brass px-4 py-3 text-[10px] text-dv-bg shadow-pixel animate-rise">{toast}</div>}
       </main>
     </div>
