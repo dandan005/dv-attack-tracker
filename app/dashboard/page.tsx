@@ -21,6 +21,7 @@ type CurrentMember = {
   username: string;
   avatar_url: string | null;
   discord_id: string;
+  is_admin: boolean;
 };
 
 type AttackLog = {
@@ -53,6 +54,8 @@ export default function DashboardPage() {
 
   const { dayNumber, cycleStartISO } = getCycleInfo(settings.anchor_date, settings.reset_hour_utc);
 
+  const visibleTabs = TABS.filter((t) => t.id !== "settings" || me?.is_admin);
+
   async function loadAll() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
@@ -71,7 +74,7 @@ export default function DashboardPage() {
     setSettingsDraft({ anchor_date: currentSettings.anchor_date, reset_hour_utc: currentSettings.reset_hour_utc });
     const cycle = getCycleInfo(currentSettings.anchor_date, currentSettings.reset_hour_utc);
 
-    const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, avatar_url");
+    const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, avatar_url, is_admin");
     const { data: logsData } = await supabase.from("attack_logs").select("member_id, day_number").eq("cycle_start", cycle.cycleStartISO);
     const logs: AttackLog[] = logsData ?? [];
 
@@ -96,7 +99,7 @@ export default function DashboardPage() {
     if (myRow) {
       const myLogs = logsByMember.get(myRow.id) ?? new Map<number, AttackLog>();
       setMyLoggedDays([1, 2, 3, 4, 5, 6].filter((day) => myLogs.has(day)));
-      setMe({ username: myRow.username, avatar_url: myRow.avatar_url, discord_id: myRow.discord_id });
+      setMe({ username: myRow.username, avatar_url: myRow.avatar_url, discord_id: myRow.discord_id, is_admin: myRow.is_admin });
     }
     setLoading(false);
   }
@@ -213,7 +216,7 @@ export default function DashboardPage() {
           </section>
         )}
 
-        {tab === "settings" && (
+        {tab === "settings" && me?.is_admin && (
           <section>
             <div className="mb-4"><p className="eyebrow text-dv-emerald">GUILD SETTINGS</p><h2 className="mt-1 text-xl text-dv-brassLight">Keep the shared clock accurate.</h2></div>
             <section className="pixel-border bg-dv-panel/95 p-4 shadow-pixel">
@@ -234,7 +237,7 @@ export default function DashboardPage() {
         className="fixed bottom-0 inset-x-0 z-40 border-t border-dv-line bg-dv-bg/95 backdrop-blur"
       >
         <div className="mx-auto flex max-w-6xl justify-around px-2 py-2">
-          {TABS.map(({ id, label }) => (
+          {visibleTabs.map(({ id, label }) => (
             <button
               key={id}
               type="button"
