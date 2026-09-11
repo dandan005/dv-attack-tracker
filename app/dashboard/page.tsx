@@ -140,7 +140,7 @@ export default function DashboardPage() {
       <header className="sticky top-0 z-50 px-4 py-3 bg-dv-bg/90 backdrop-blur-md border-b border-dv-line">
         <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0"><div className="grid place-items-center w-9 h-9 pixel-frame bg-dv-brass text-dv-bg text-[10px] shadow-pixel-sm shrink-0">DV</div><div className="min-w-0"><p className="eyebrow truncate">DRAGON VALLEY // LIVE BOARD</p><h1 className="text-[12px] sm:text-xs text-dv-brassLight mt-1">ATTACK LEDGER</h1></div></div>
-          <div className="flex items-center gap-2 shrink-0"><a href="/command-center" className="hidden sm:inline-flex status-chip hover:border-dv-brassLight hover:text-dv-brassLight">S5 COMMAND CENTER</a><span className="status-chip hidden sm:inline-flex">D{dayNumber} ACTIVE</span>{me && <div className="pixel-frame item-slot px-2 py-1 flex items-center gap-2"><img src={me.avatar_url ?? "/icons/icon-192.png"} alt="" className="w-6 h-6 pixel-frame border border-dv-line" /><span className="text-[10px] text-dv-brassLight max-w-[70px] truncate">{me.username}</span></div>}<button type="button" aria-label="Open settings" onClick={() => router.push("/settings")} className="pixel-frame item-slot border border-dv-line px-3 py-2 text-[11px] shadow-pixel-sm hover:border-dv-violet">⚙️</button></div>
+          <div className="flex items-center gap-2 shrink-0"><span className="status-chip hidden sm:inline-flex">D{dayNumber} ACTIVE</span>{me && <div className="pixel-frame item-slot px-2 py-1 flex items-center gap-2"><img src={me.avatar_url ?? "/icons/icon-192.png"} alt="" className="w-6 h-6 pixel-frame border border-dv-line" /><span className="text-[10px] text-dv-brassLight max-w-[70px] truncate">{me.username}</span></div>}<button type="button" aria-label="Open settings" onClick={() => router.push("/settings")} className="pixel-frame item-slot border border-dv-line px-3 py-2 text-[11px] shadow-pixel-sm hover:border-dv-violet">⚙️</button></div>
         </div>
       </header>
 
@@ -155,6 +155,11 @@ export default function DashboardPage() {
         <GuildProgress members={members} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} />
         {toast && <div role="status" className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 pixel-frame bg-dv-brass text-dv-bg text-[10px] px-4 py-3 shadow-pixel animate-rise">{toast}</div>}
       </main>
+
+      <nav className="fixed bottom-0 left-0 right-0 z-40 grid grid-cols-3 border-t border-dv-line bg-dv-panel/95 px-2 py-2 backdrop-blur md:hidden">
+        <a href="/dashboard" className="py-1 text-center text-[8px] uppercase text-dv-brassLight"><span className="mb-1 block text-dv-violet">⚔</span>Board</a>
+        <a href="/command-center" className="py-1 text-center text-[8px] uppercase text-slate-300/60"><span className="mb-1 block text-dv-violet">◆</span>Command</a>
+        <button type="button" onClick={() => router.push("/settings")} className="py-1 text-center text-[8px] uppercase text-slate-300/60"><span className="mb-1 block text-dv-violet">⚙</span>Settings</button>
+      </nav>
     </>
-  );
 }
