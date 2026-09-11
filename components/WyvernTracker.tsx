@@ -64,19 +64,24 @@ export function WyvernTracker({
   current,
   setBy,
   onSelect,
+  isAdmin,
 }: {
   current: Element | null;
   setBy: string | null;
   onSelect: (el: Element) => Promise<void>;
+  /** Only admins/officers may set or change the trace. Everyone else gets a read-only view. */
+  isAdmin: boolean;
 }) {
   const [pending, setPending] = useState<Element | null>(null);
   const [bursting, setBursting] = useState<Element | null>(null);
   const [changing, setChanging] = useState(false);
 
   const boss = current ? BOSS_SLOTS[current] : null;
+  // Everyone sees the picker; only admins can actually interact with it.
   const showPicker = !current || changing;
 
   async function handleSelect(el: Element) {
+    if (!isAdmin) return;
     setBursting(el);
     setPending(el);
     try {
@@ -109,9 +114,10 @@ export function WyvernTracker({
                   type="button"
                   aria-pressed={active}
                   aria-label={"Set wyvern trace to " + el.label.toLowerCase()}
-                  disabled={pending !== null}
+                  aria-disabled={!isAdmin}
+                  disabled={pending !== null || !isAdmin}
                   onClick={() => handleSelect(el.key)}
-                  className={["element-choice", "element-choice--" + el.key, active ? "is-active" : "", isBursting ? "is-bursting" : "", pending === el.key ? "is-pending" : ""].join(" ")}
+                  className={["element-choice", "element-choice--" + el.key, active ? "is-active" : "", isBursting ? "is-bursting" : "", pending === el.key ? "is-pending" : "", !isAdmin ? "is-readonly" : ""].join(" ")}
                 >
                   <span className="element-orb"><PixelElementArt element={el.key} /></span>
                   <span className="element-label">{el.label}</span>
@@ -144,7 +150,13 @@ export function WyvernTracker({
             <span className="text-dv-violet">◆</span>
             <span>{current.toUpperCase()} trace locked for this raid{setBy ? " · set by " + setBy : ""}.</span>
           </span>
-          <button type="button" onClick={() => setChanging(true)} className="text-dv-violet underline underline-offset-2 shrink-0">
+          <button
+            type="button"
+            onClick={() => isAdmin && setChanging(true)}
+            disabled={!isAdmin}
+            aria-disabled={!isAdmin}
+            className={"underline underline-offset-2 shrink-0 " + (isAdmin ? "text-dv-violet" : "text-slate-300/40 cursor-not-allowed")}
+          >
             Change
           </button>
         </div>
