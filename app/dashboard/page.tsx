@@ -172,7 +172,7 @@ export default function DashboardPage() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <button onClick={() => setTab("ledger")} className="flex items-center gap-3">
             <span className="grid h-10 w-10 place-items-center border border-dv-brass bg-dv-brass font-pixel text-[11px] text-dv-bg shadow-pixel-sm">DV</span>
-            <span className="text-left"><span className="eyebrow block">DRAGON VALLEY // GUILD HUB</span><span className="block text-sm text-dv-brassLight">ATTACK LEDGER</span></span>
+            <span className="text-left"><span className="eyebrow block">DRAGON VALLEY</span><span className="block text-sm text-dv-brassLight">ATTACK LEDGER</span></span>
           </button>
           <div className="flex items-center gap-2">
             {me && (
