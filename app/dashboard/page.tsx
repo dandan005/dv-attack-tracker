@@ -175,7 +175,6 @@ export default function DashboardPage() {
             <span className="text-left"><span className="eyebrow block">DRAGON VALLEY // GUILD HUB</span><span className="block text-sm text-dv-brassLight">ATTACK LEDGER</span></span>
           </button>
           <div className="flex items-center gap-2">
-            <span className="status-chip hidden sm:inline-flex">D{dayNumber} ACTIVE</span>
             {me && (
               <div className="pixel-frame item-slot flex items-center gap-2 px-2 py-1">
                 <img src={me.avatar_url ?? "/icons/icon-192.png"} alt="" className="h-6 w-6 pixel-frame border border-dv-line" />
