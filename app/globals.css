@@ -539,6 +539,50 @@ input {
   100% { opacity: 1; transform: translateY(0); }
 }
 
+/* Shrunk element badge shown beside the boss name once a trace is locked. */
+.boss-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 9px 0 1px;
+}
+
+.boss-name-row .boss-name {
+  margin: 0;
+}
+
+.element-badge {
+  --element: #8b7dff;
+  display: grid;
+  place-items: center;
+  animation: badgeSettle 420ms steps(4, end);
+}
+
+.element-badge--wind { --element: #86e8ff; }
+.element-badge--fire { --element: #ff8b62; }
+.element-badge--earth { --element: #d2c27e; }
+.element-badge--water { --element: #6fa8ff; }
+
+.element-orb--sm {
+  width: 28px;
+  height: 28px;
+  border-color: color-mix(in srgb, var(--element) 76%, white 10%);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--element) 40%, transparent),
+    inset 0 0 8px rgba(255, 255, 255, 0.1), 2px 2px 0 rgba(5, 6, 17, 0.65);
+}
+
+.element-orb--sm .element-pixel-art {
+  width: 20px;
+  height: 20px;
+}
+
+@keyframes badgeSettle {
+  0% { transform: scale(2.2); opacity: 0; }
+  60% { transform: scale(0.85); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
