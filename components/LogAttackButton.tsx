@@ -43,7 +43,7 @@ export function LogAttackButton({
   resetHour: number;
   dayNumber: number;
   loggedDays: number[];
-  onLog: (day: number, promotionTier: number | null, damageScore: number | null) => Promise<void>;
+  onLog: (day: number) => Promise<void>;
 }) {
   const [ms, setMs] = useState<number>(0);
   const [pending, setPending] = useState(false);
@@ -62,7 +62,7 @@ export function LogAttackButton({
     if (done || pending) return;
     setPending(true);
     try {
-      await onLog(dayNumber, null, null);
+      await onLog(dayNumber);
     } finally {
       setPending(false);
     }
