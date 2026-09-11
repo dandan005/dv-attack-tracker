@@ -1,23 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
-import { getCycleInfo } from "@/lib/cycle";
-import { LogAttackButton } from "@/components/LogAttackButton";
+import { useMemo, useState } from "react";
 
 type Tab = "guide" | "meals" | "runes";
 
-type BoardSettings = {
-  anchor_date: string;
-  reset_hour_utc: number;
-};
-
-type AttackLog = {
-  member_id: string;
-  day_number: number;
-  damage_score?: number | string | null;
-};
 type Meal = {
   name: string;
   rarity: string;
@@ -106,113 +92,6 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return <section className={`pixel-border bg-dv-panel/95 shadow-pixel ${className}`}>{children}</section>;
-}
-
-function Board() {
-  const router = useRouter();
-  const supabase = createClient();
-  const [loading, setLoading] = useState(true);
-  const [settings, setSettings] = useState<BoardSettings>({ anchor_date: "2026-01-05", reset_hour_utc: 0 });
-  const [loggedDays, setLoggedDays] = useState<number[]>([]);
-  const [memberCount, setMemberCount] = useState(0);
-  const [todayLogged, setTodayLogged] = useState(0);
-  const [totalDamage, setTotalDamage] = useState(0);
-  const [fullCycles, setFullCycles] = useState(0);
-  const [toast, setToast] = useState<string | null>(null);
-
-  const { dayNumber, cycleStartISO } = getCycleInfo(settings.anchor_date, settings.reset_hour_utc);
-  const dayIndex = Math.min(5, Math.max(0, dayNumber - 1));
-  const cycleDays = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
-  const phases = ["Match", "Explore", "Explore", "Raid", "Raid", "Raid"];
-
-  function notify(message: string, duration = 2500) {
-    setToast(message);
-    window.setTimeout(() => setToast(null), duration);
-  }
-
-  async function loadBoard() {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      router.replace("/");
-      return;
-    }
-
-    const { data: settingsRow } = await supabase.from("app_settings").select("anchor_date, reset_hour_utc").eq("id", 1).single();
-    const currentSettings: BoardSettings = {
-      anchor_date: settingsRow?.anchor_date ?? "2026-01-05",
-      reset_hour_utc: settingsRow?.reset_hour_utc ?? 0,
-    };
-    setSettings(currentSettings);
-    const cycle = getCycleInfo(currentSettings.anchor_date, currentSettings.reset_hour_utc);
-
-    const { data: members } = await supabase.from("members").select("id, auth_user_id");
-    const advancedLogs = await supabase.from("attack_logs").select("member_id, day_number, damage_score").eq("cycle_start", cycle.cycleStartISO);
-    let logs: AttackLog[] = advancedLogs.data as AttackLog[] | null ?? [];
-    if (advancedLogs.error) {
-      const legacyLogs = await supabase.from("attack_logs").select("member_id, day_number").eq("cycle_start", cycle.cycleStartISO);
-      logs = (legacyLogs.data ?? []) as AttackLog[];
-    }
-
-    const myMember = (members ?? []).find((member: any) => member.auth_user_id === user.id);
-    if (!myMember) {
-      setLoading(false);
-      notify("Member profile not found", 3000);
-      return;
-    }
-
-    setMemberCount(members?.length ?? 0);
-    setLoggedDays(logs.filter((log) => log.member_id === myMember.id).map((log) => log.day_number));
-    setTodayLogged(logs.filter((log) => log.day_number === cycle.dayNumber).length);
-    setTotalDamage(logs.reduce((sum, log) => sum + (Number(log.damage_score) || 0), 0));
-
-    const logsByMember = new Map<string, number>();
-    logs.forEach((log) => logsByMember.set(log.member_id, (logsByMember.get(log.member_id) ?? 0) + 1));
-    setFullCycles(Array.from(logsByMember.values()).filter((count) => count >= 6).length);
-    setLoading(false);
-  }
-
-  useEffect(() => {
-    void loadBoard();
-  }, []);
-
-  async function logAttack(day: number, promotionTier: number | null, damageScore: number | null) {
-    try {
-      const res = await fetch("/api/log-attack", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ dayNumber: day, promotionTier, damageScore }),
-      });
-      const json = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(json.error ?? "Could not log attack");
-      notify("D" + day + " attack logged ⚔️");
-      await loadBoard();
-    } catch (error) {
-      notify(error instanceof Error ? error.message : "Could not log attack", 3000);
-    }
-  }
-
-  if (loading) return <main className="min-h-screen flex items-center justify-center"><p className="text-[11px] text-dv-brassLight animate-blink">LOADING GUILD DATA...</p></main>;
-
-  return <div className="space-y-4">
-    <Card className="overflow-hidden">
-      <div className="flex items-center justify-between border-b border-dv-line px-4 py-3"><div><SectionLabel>CURRENT SEASON CLOCK</SectionLabel><p className="text-[11px]">CYCLE START {cycleStartISO} <span className="text-slate-300/50">/ DAY {dayNumber} OF 6</span></p></div><span className="status-chip">{cycleDays[dayIndex]} / LIVE</span></div>
-      <div className="grid grid-cols-6 gap-px bg-dv-line">
-        {[1, 2, 3, 4, 5, 6].map((day) => <div key={day} className={"bg-dv-panel px-1 py-3 text-center " + (day === dayNumber ? "bg-dv-violet/15" : "")}><p className={"text-[9px] " + (day < dayNumber ? "text-dv-emerald" : day === dayNumber ? "text-dv-brassLight" : "text-slate-300/55")}>D{day}</p><div className={"mx-auto my-2 h-2 w-2 " + (day < dayNumber ? "bg-dv-emerald" : day === dayNumber ? "bg-dv-brass" : "border border-dv-line")} /><p className="text-[9px] text-slate-300/60">{phases[day - 1]}</p></div>)}
-      </div>
-      <p className="border-t border-dv-line px-4 py-2 text-[9px] text-slate-300/60">◆ {dayNumber < 4 ? "Exploration is active; use all three entries before raid prep." : "Raid window is live; keep every attack on the shared ledger."}</p>
-    </Card>
-
-    <div className="grid gap-4 lg:grid-cols-[1.3fr_.7fr]">
-      <div>
-        <Card className="mb-4 p-4"><SectionLabel>YOUR RAID LEDGER</SectionLabel><h2 className="text-lg text-dv-brassLight">Live Supabase attack log</h2><p className="mt-1 text-xs text-slate-200/65">Your entry is shared with the guild and stays tied to the current six-day cycle.</p></Card>
-        <LogAttackButton anchorDate={settings.anchor_date} resetHour={settings.reset_hour_utc} dayNumber={dayNumber} loggedDays={loggedDays} onLog={logAttack} />
-      </div>
-      <Card className="relative overflow-hidden p-4"><p className="eyebrow">FIELD NOTE / DAY {dayNumber}</p><h2 className="mt-1 max-w-[230px] text-xl text-dv-brassLight">Trace hunt is still open.</h2><p className="mt-3 max-w-[290px] text-xs leading-relaxed text-slate-200/65">Use all three exploration entries today. The trace decides which wyvern the raid team can prepare for.</p><p className="mt-5 text-[10px] uppercase text-dv-violet">◆ {dayNumber < 3 ? "3 entries available" : "Trace intel available"}</p></Card>
-    </div>
-
-    <Card className="p-4"><div className="mb-4 flex items-end justify-between"><div><SectionLabel>GUILD READOUT</SectionLabel><h2 className="text-lg text-dv-brassLight">Keep the line moving.</h2></div><span className="status-chip">{Math.max(memberCount - todayLogged, 0)} pending</span></div><div className="grid grid-cols-3 gap-2"><div className="item-slot p-3"><p className="eyebrow">TODAY</p><p className="mt-1 text-xl text-dv-emerald">{todayLogged}<span className="text-xs text-slate-300/50">/{memberCount}</span></p></div><div className="item-slot p-3"><p className="eyebrow">POINTS</p><p className="mt-1 text-xl text-dv-brassLight">{totalDamage ? totalDamage.toLocaleString() : "—"}</p></div><div className="item-slot p-3"><p className="eyebrow">FULL CYCLES</p><p className="mt-1 text-xl text-dv-brassLight">{fullCycles}</p></div></div></Card>
-    {toast && <div role="status" className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 pixel-frame bg-dv-brass px-4 py-3 text-[10px] text-dv-bg shadow-pixel animate-rise">{toast}</div>}
-  </div>;
 }
 
 function Guide() {
