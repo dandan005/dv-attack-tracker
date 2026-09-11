@@ -181,7 +181,7 @@ export default function DashboardPage() {
       <header className="sticky top-0 z-40 border-b border-dv-line bg-dv-bg/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <button onClick={() => setTab("ledger")} className="flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center border border-dv-brass bg-dv-brass shadow-pixel-sm">
+            <span className="grid h-11 w-11 place-items-center">
               <DragonCrest />
             </span>
             <span className="text-left"><span className="eyebrow block">DRAGON VALLEY</span><span className="block text-sm text-dv-brassLight">ATTACK LEDGER</span></span>
