@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { DragonCrest } from "@/components/DragonCrest";
 
 export default function SplashPage() {
   const [loading, setLoading] = useState(false);
@@ -23,7 +24,9 @@ export default function SplashPage() {
       <div className="w-full max-w-md space-y-4 animate-rise">
         <div className="pixel-frame pixel-border bg-dv-panel p-5 sm:p-7 shadow-pixel">
           <div className="flex items-center justify-between gap-4 mb-8">
-            <div className="brand-mark">DV</div>
+            <div className="brand-mark">
+              <DragonCrest />
+            </div>
             <span className="status-chip"><span className="w-1.5 h-1.5 rounded-full bg-dv-emerald" /> RAID HUB // ONLINE</span>
           </div>
 
