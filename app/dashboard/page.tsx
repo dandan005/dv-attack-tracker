@@ -176,8 +176,12 @@ export default function DashboardPage() {
           </button>
           <div className="flex items-center gap-2">
             <span className="status-chip hidden sm:inline-flex">D{dayNumber} ACTIVE</span>
-             {me && <div className="pixel-frame item-slot flex items-center gap-2 px-2 py-1"><img src={me.avatar_url ?? "/icons/icon-192.png"} alt="" className="h-6 w-6 pixel-frame border border-dv-line" /><span className="whitespace-nowrap text-[10px] text-dv-brassLight">{me.username}</span></div>}
-            <span className="max-w-[90px] truncate text-[10px] text-dv-brassLight">{me.username}</span></div>}
+            {me && (
+              <div className="pixel-frame item-slot flex items-center gap-2 px-2 py-1">
+                <img src={me.avatar_url ?? "/icons/icon-192.png"} alt="" className="h-6 w-6 pixel-frame border border-dv-line" />
+                <span className="max-w-[90px] truncate whitespace-nowrap text-[10px] text-dv-brassLight">{me.username}</span>
+              </div>
+            )}
           </div>
         </div>
       </header>
