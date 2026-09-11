@@ -195,7 +195,6 @@ export default function DashboardPage() {
 
             {(dayNumber < 3 || settings.wyvern_element) && <div className="mt-4">{dayNumber < 3 ? <ExplorationPhase currentDay={dayNumber} /> : <WyvernTracker current={settings.wyvern_element as any} setBy={settings.wyvern_set_by} onSelect={setWyvern} />}</div>}
 
-            <section className="pixel-border bg-dv-panel/95 p-4 shadow-pixel mt-4"><p className="eyebrow mb-2">YOUR RAID LEDGER</p><h2 className="text-lg text-dv-brassLight">Live Supabase attack log</h2><p className="mt-1 text-xs text-slate-200/65">Your entry is shared with the guild and stays tied to the current six-day cycle.</p></section>
             <div className="mt-4"><LogAttackButton anchorDate={settings.anchor_date} resetHour={settings.reset_hour_utc} dayNumber={dayNumber} loggedDays={myLoggedDays} onLog={logAttack} /></div>
             <div className="mt-4"><GuildProgress members={members} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
           </>
