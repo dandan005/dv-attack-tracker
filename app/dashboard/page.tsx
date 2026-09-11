@@ -152,6 +152,12 @@ export default function DashboardPage() {
           <WyvernTracker current={settings.wyvern_element as any} setBy={settings.wyvern_set_by} onSelect={setWyvern} />
         ) : null}
         <LogAttackButton anchorDate={settings.anchor_date} resetHour={settings.reset_hour_utc} dayNumber={dayNumber} loggedDays={myLoggedDays} onLog={logAttack} />
+        <section className="pixel-frame border border-dv-line bg-dv-panel p-4 mb-5 relative overflow-hidden">
+          <p className="eyebrow">FIELD NOTE / DAY {dayNumber}</p>
+          <h2 className="text-lg text-dv-brassLight mt-2">Trace hunt is still open.</h2>
+          <p className="text-[11px] leading-relaxed text-slate-200/65 mt-3 max-w-[34rem]">Use all three exploration entries today. The trace decides which wyvern the raid team can prepare for.</p>
+          <p className="text-[10px] uppercase tracking-[.12em] text-dv-brassLight mt-5">◉ {dayNumber < 3 ? "3 entries available" : "Trace intel available"}</p>
+        </section>
         <GuildProgress members={members} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} />
         {toast && <div role="status" className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 pixel-frame bg-dv-brass text-dv-bg text-[10px] px-4 py-3 shadow-pixel animate-rise">{toast}</div>}
       </main>
