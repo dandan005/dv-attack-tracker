@@ -7,31 +7,49 @@ export function DragonCrest({ size = 44 }: { size?: number }) {
       <svg
         width={size}
         height={size}
-        viewBox="0 0 64 64"
+        viewBox="0 0 32 32"
         role="img"
         aria-label="Dragon crest"
         shapeRendering="crispEdges"
+        style={{ imageRendering: "pixelated" }}
       >
+        {/* Dark pixel outline: horns, ears, wings, and jaw */}
         <path
-          d="M12 18 6 9l4 18 7 5-5 8 8-3 4 10 7-7 7 7 4-10 8 3-5-8 7-5 4-18-6 9-7-6-5 8-7-4-7 4-5-8-7 6Z"
-          fill="#8f211d"
-          stroke="#3b1715"
-          strokeWidth="2"
-          strokeLinejoin="miter"
+          d="M3 16H1V9h3V5h3v3l2 3 4-3h8l4 3 2-3V5h3v4h3v7h-2v9h-4v3h-5v2h-4v2h-4v-2H9v-2H5v-3H3Z"
+          fill="#351619"
         />
+        {/* Red dragon silhouette */}
         <path
-          d="M16 27 23 18h18l7 9-5 20-9 8-9-8-5-20Z"
-          fill="#d83a24"
-          stroke="#3b1715"
-          strokeWidth="2"
-          strokeLinejoin="miter"
+          d="M5 16H3v-5h3V8h1v5l4-3 5 2 5-2 4 3V8h1v3h3v5h-2v8h-4v3h-5v2h-4v-2h-5v-3H5Z"
+          fill="#b52c24"
         />
-        <path d="m23 19 9 5 9-5-3 10H26l-3-10Z" fill="#ff6b32" />
-        <path d="m17 28 8 3-3 8-7-5 2-6Zm30 0-8 3 3 8 7-5-2-6Z" fill="#ff6b32" />
-        <path d="M25 39h14l-3 11-4 4-4-4-3-11Z" fill="#a9231f" />
-        <path d="m22 29 5 3-2 5-5-2 2-6Zm20 0-5 3 2 5 5-2-2-6Z" fill="#ffd36b" />
-        <path d="M27 43h10l-5 6-5-6Z" fill="#ff9a3c" />
-        <path d="M25 52 21 60l8-5m10-3 4 8-8-5" fill="#ff6b32" stroke="#3b1715" strokeWidth="2" />
+        {/* Bright forehead and cheek pixels */}
+        <path d="M11 13h3v-2h4v2h3v5h-2v4h-2v2h-4v-2h-2v-4h-2v-3h2Z" fill="#e94a2e" />
+        <rect x="7" y="15" width="4" height="4" fill="#e94a2e" />
+        <rect x="21" y="15" width="4" height="4" fill="#e94a2e" />
+        {/* Horn and wing highlights */}
+        <rect x="4" y="10" width="2" height="3" fill="#ff7135" />
+        <rect x="26" y="10" width="2" height="3" fill="#ff7135" />
+        <rect x="6" y="15" width="2" height="2" fill="#ff7135" />
+        <rect x="24" y="15" width="2" height="2" fill="#ff7135" />
+        {/* Square eyes and brows */}
+        <rect x="10" y="15" width="4" height="2" fill="#42151a" />
+        <rect x="18" y="15" width="4" height="2" fill="#42151a" />
+        <rect x="11" y="15" width="2" height="1" fill="#ffd45c" />
+        <rect x="19" y="15" width="2" height="1" fill="#ffd45c" />
+        {/* Snout, nostrils, and fangs */}
+        <rect x="12" y="19" width="8" height="4" fill="#8d201f" />
+        <rect x="13" y="19" width="2" height="1" fill="#351619" />
+        <rect x="17" y="19" width="2" height="1" fill="#351619" />
+        <rect x="12" y="23" width="2" height="2" fill="#fff0c2" />
+        <rect x="18" y="23" width="2" height="2" fill="#fff0c2" />
+        {/* Pixel fire below the jaw */}
+        <rect x="13" y="26" width="6" height="2" fill="#ff7135" />
+        <rect x="14" y="28" width="4" height="2" fill="#ffb33e" />
+        <rect x="15" y="30" width="2" height="1" fill="#ffd45c" />
+        {/* Small scale pixels */}
+        <rect x="9" y="21" width="1" height="1" fill="#ff7135" />
+        <rect x="22" y="21" width="1" height="1" fill="#ff7135" />
       </svg>
     </div>
   );
