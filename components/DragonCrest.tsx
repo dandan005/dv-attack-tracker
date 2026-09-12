@@ -9,26 +9,36 @@ export function DragonCrest({ size = 44 }: { size?: number }) {
         height={size}
         viewBox="0 0 32 32"
         role="img"
-        aria-label="Dragon Valley Attack Ledger logo"
+        aria-label="Dragon Valley Attack Ledger guild mark"
         shapeRendering="crispEdges"
         style={{ imageRendering: "pixelated" }}
       >
-        {/* Block-built DV guild monogram */}
+        {/* Inner guild seal: a simple pixel shield inside the app's brass badge */}
         <path
-          d="M5 6h8v2h3v3h2v10h-2v3h-3v2H5V6Zm3 4v12h4v-2h2v-8h-2v-2H8Z"
+          d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z"
           fill="#080a18"
         />
         <path
-          d="M18 6h3v7h2v5h2V6h3v13h-2v4h-2v3h-4v-3h-2v-4h-2V6h2Z"
+          d="M8 7h16v10l-2 4-6 4-6-4-2-4V7Z"
+          fill="#8b7dff"
+        />
+        <path
+          d="M10 9h12v8l-2 3-4 3-4-3-2-3V9Z"
           fill="#080a18"
         />
-        {/* Ledger rule and completed attack marker */}
-        <rect x="8" y="25" width="13" height="2" fill="#8b7dff" />
-        <rect x="22" y="25" width="2" height="2" fill="#080a18" />
-        <path d="m24 22 2 2 4-5v4l-4 5-2-2Z" fill="#8b7dff" />
-        {/* Small brass pixel glints */}
-        <rect x="5" y="4" width="2" height="2" fill="#fff0c5" />
-        <rect x="27" y="4" width="2" height="2" fill="#fff0c5" />
+        {/* Interlocking pixel DV monogram */}
+        <path
+          d="M11 11h4l2 2v6l-2 2h-4V11Zm2 2v6h1l1-1v-4l-1-1h-1Z"
+          fill="#ffe3a1"
+        />
+        <path
+          d="M17 11h2v5l1 2 1-2v-5h2v6l-2 4h-2l-2-4v-6Z"
+          fill="#ffe3a1"
+        />
+        {/* Ledger ticks: three recorded attack entries */}
+        <rect x="10" y="25" width="3" height="1" fill="#080a18" />
+        <rect x="15" y="25" width="3" height="1" fill="#080a18" />
+        <rect x="20" y="25" width="2" height="1" fill="#080a18" />
       </svg>
     </div>
   );
