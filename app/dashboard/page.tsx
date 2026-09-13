@@ -182,7 +182,7 @@ export default function DashboardPage() {
   if (loading) return <main className="min-h-screen flex items-center justify-center"><p className="text-[11px] text-dv-brassLight animate-blink">LOADING GUILD DATA...</p></main>;
 
   return (
-    <div className="scanlines flex h-dvh flex-col overflow-hidden">
+    <div className="scanlines flex h-[100dvh] flex-col overflow-hidden">
       <header className="z-40 shrink-0 border-b border-dv-line bg-dv-bg/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <button onClick={() => setTab("ledger")} className="flex items-center gap-3">
