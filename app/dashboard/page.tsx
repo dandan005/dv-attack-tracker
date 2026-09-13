@@ -182,7 +182,7 @@ export default function DashboardPage() {
   if (loading) return <main className="min-h-screen flex items-center justify-center"><p className="text-[11px] text-dv-brassLight animate-blink">LOADING GUILD DATA...</p></main>;
 
   return (
-    <div className="scanlines flex h-[100dvh] flex-col overflow-hidden">
+    <div className="scanlines fixed inset-0 flex flex-col overflow-hidden">
       <header className="z-40 shrink-0 border-b border-dv-line bg-dv-bg/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <button onClick={() => setTab("ledger")} className="flex items-center gap-3">
@@ -208,11 +208,11 @@ export default function DashboardPage() {
 
       <main className="mx-auto flex w-full max-w-6xl min-h-0 flex-1 flex-col overflow-y-auto px-4 pb-6 pt-5 sm:px-6 md:pt-7">
         {tab === "ledger" && (
-          <div className="flex flex-1 flex-col">
+          <div className="flex min-h-0 flex-1 flex-col">
             <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD OPERATIONS / ONLINE</p><h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">GUILD HUB</h1><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">The live raid ledger for the current seven-day cycle.</p></div>
 
             {isStandbyDay ? (
-              <div className="mt-4 flex flex-1 flex-col items-center justify-center pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
+              <div className="mt-4 flex min-h-0 flex-1 flex-col items-center justify-center pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
                 <p className="text-sm text-dv-brassLight">🐉 STANDBY — CYCLE COMPLETE</p>
                 <p className="mt-2 max-w-md text-xs leading-relaxed text-slate-200/60">
                   No attacks to log today. The ledger resets and Day 1 begins at the next reset hour.
