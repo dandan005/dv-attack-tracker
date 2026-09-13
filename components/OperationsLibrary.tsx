@@ -71,6 +71,8 @@ const guideSections = [
   ["Trace discovery", "EXPLORATION", "A trace reveals which elemental wyvern the guild will face. Exploration progress and careful use of all three daily entries improve the odds. Cooking does not change exploration battles; it turns earned materials into raid-phase buffs."],
   ["Four elemental wyverns", "RAID INTEL", "The raid can reveal wind, fire, earth, or water. Match your elemental damage options to the trace so the team gets more from every attempt."],
   ["Guild-pet ultimate timing", "TEAM PLAY", "Hold the guild-pet ultimate for the team damage buff window. Call it before the highest-damage member commits their attack, not on the first available cooldown."],
+  ["Build", "RAID LOADOUT", "The guild pet carries most of the damage in this fight, so build its skill loadout in three stages — early, mid, and lategame — swapping in stronger skills as they unlock. For spirits, a few specific high-tier fire spirits are the preferred pick, but any spirit with a high awaken level works well."],
+  ["Tips", "RAID LOADOUT", "For Rave: either break the first shield with skills and record Rave during the second shield to capture familiar plus guild-pet damage, or record Rave while breaking the first shield to bank guild-pet damage and save it to release during the final shield phase. You can quit this fight the same way as FoC, so it's safe to go in and test combinations — just be careful, since some combos can get you killed quickly."],
 ];
 
 const runeRows = [
@@ -104,6 +106,42 @@ const mainDishes: MainDish[] = [
   { name: "Water Slash Soup", priority: "E", image: "water-slash-soup.png", effect: "Increases Water Attribute DMG to Wyvern by 0%" },
   { name: "Thunderbolt Burger", priority: "E", image: "thunderbolt-burger.png", effect: "Increases Wind Attribute DMG to Wyvern by 20%" },
   { name: "Demon Pizza", priority: "E", image: "demon-pizza.png", effect: "Increases Earth Attribute DMG to Wyvern by 5%" },
+];
+
+type Stage = "Early" | "Mid" | "Late";
+
+const skillsByStage: Record<Stage, string[]> = {
+  Early: ["Hell Fire Slash", "Giga Strike", "Red Lightning", "Burning Sword", "Curved Blade", "Meditation", "Speed Sword", "Earth's Will"],
+  Mid: ["Rave", "Fire Slash", "Hell Fire Slash", "Burning Sword", "Curved Blade", "Meditation", "Strong Current", "Wrath of Gods", "Speed Sword", "Earth's Will"],
+  Late: ["Rave", "Demon Hunt", "Giga Strike", "Burning Sword", "Curved Blade", "Wrath of Gods", "Meditation", "Warrior Burn", "Speed Sword", "Earth's Will"],
+};
+
+// Skills with no image (Rave, Strong Current) render a placeholder "?" slot, same as unrevealed meals.
+const skillImages: Record<string, string | undefined> = {
+  "Red Lightning": "red-lightning.png",
+  "Meditation": "meditation.png",
+  "Giga Strike": "giga-strike.png",
+  "Burning Sword": "burning-sword.png",
+  "Speed Sword": "speed-sword.png",
+  "Wrath of Gods": "wrath-of-gods.png",
+  "Demon Hunt": "demon-hunt.png",
+  "Fire Slash": "fire-slash.png",
+  "Warrior Burn": "warrior-burn.png",
+  "Earth's Will": "earths-will.png",
+  "Hell Fire Slash": "hell-fire-slash.png",
+  "Curved Blade": "curved-blade.png",
+  "Rave": undefined,
+  "Strong Current": undefined,
+};
+
+type Spirit = { name: string; image: string };
+
+const spirits: Spirit[] = [
+  { name: "Sala", image: "sala.png" },
+  { name: "Herh", image: "herh.png" },
+  { name: "Noah", image: "noah.png" },
+  { name: "Loar", image: "loar.png" },
+  { name: "Ark", image: "ark.png" },
 ];
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -241,6 +279,91 @@ export function MainCooking() {
                 <p className="mt-1.5 text-xs text-dv-emerald">{dish.effect}</p>
               </div>
             </article>
+          ))}
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+function SkillThumb({ image, name }: { image?: string; name: string }) {
+  return (
+    <div className="pixel-frame item-slot h-14 w-14 shrink-0 overflow-hidden">
+      {image ? (
+        <img src={"/skills/" + image} alt={name} className="h-full w-full object-cover" style={{ imageRendering: "pixelated" }} />
+      ) : (
+        <div className="grid h-full w-full place-items-center text-[10px] text-slate-300/40">?</div>
+      )}
+    </div>
+  );
+}
+
+export function SkillBuild() {
+  const [stage, setStage] = useState<Stage>("Early");
+  const stages: Stage[] = ["Early", "Mid", "Late"];
+
+  return (
+    <div className="space-y-4">
+      <Card className="p-4">
+        <SectionLabel>SKILL BUILD / RAID LOADOUT</SectionLabel>
+        <h2 className="text-xl text-dv-brassLight">Slot skills by stage.</h2>
+        <p className="mt-2 max-w-xl text-sm text-slate-200/65">
+          Swap skills as you progress. Rave and Strong Current unlock later and aren't shown with icons yet.
+        </p>
+      </Card>
+
+      <Card>
+        <div className="flex gap-2 border-b border-dv-line p-4">
+          {stages.map((item) => (
+            <button
+              type="button"
+              key={item}
+              onClick={() => setStage(item)}
+              className={`flex-1 border px-3 py-2 text-center text-[10px] uppercase ${
+                stage === item ? "border-dv-violet bg-dv-violet/15 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/60"
+              }`}
+            >
+              {item} Game
+            </button>
+          ))}
+        </div>
+        <div className="grid grid-cols-2 gap-3 p-4 sm:grid-cols-3">
+          {skillsByStage[stage].map((name, index) => (
+            <div key={`${name}-${index}`} className="flex items-center gap-3">
+              <SkillThumb image={skillImages[name]} name={name} />
+              <span className="text-xs text-dv-brassLight">{name}</span>
+            </div>
+          ))}
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+export function Spirits() {
+  return (
+    <div className="space-y-4">
+      <Card className="p-4">
+        <SectionLabel>SPIRITS</SectionLabel>
+        <h2 className="text-xl text-dv-brassLight">Any high-awaken spirit works.</h2>
+        <p className="mt-2 max-w-xl text-sm text-slate-200/65">
+          Higher awaken level matters more than which spirit you pick.
+        </p>
+      </Card>
+      <Card>
+        <div className="grid grid-cols-2 gap-4 p-4 sm:grid-cols-3">
+          {spirits.map((spirit) => (
+            <div key={spirit.name} className="flex flex-col items-center gap-2 text-center">
+              <div className="pixel-frame item-slot h-16 w-16 overflow-hidden">
+                <img
+                  src={"/spirits/" + spirit.image}
+                  alt={spirit.name}
+                  className="h-full w-full object-cover"
+                  style={{ imageRendering: "pixelated" }}
+                />
+              </div>
+              <span className="text-xs text-dv-brassLight">{spirit.name}</span>
+            </div>
           ))}
         </div>
       </Card>
