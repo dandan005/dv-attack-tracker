@@ -8,7 +8,7 @@ import { LogAttackButton } from "@/components/LogAttackButton";
 import { GuildProgress, MemberRow } from "@/components/GuildProgress";
 import { WyvernTracker } from "@/components/WyvernTracker";
 import { ExplorationPhase } from "@/components/ExplorationPhase";
-import { Guide, Meals, Runes } from "@/components/OperationsLibrary";
+import { Guide, MainCooking, Meals, Runes } from "@/components/OperationsLibrary";
 import { DragonCrest } from "@/components/DragonCrest";
 
 type Settings = {
@@ -31,6 +31,7 @@ type AttackLog = {
 };
 
 type Tab = "ledger" | "guide" | "meals" | "runes" | "settings";
+type MealsSubTab = "main" | "special";
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "ledger", label: "Ledger" },
@@ -47,6 +48,7 @@ export default function DashboardPage() {
   const supabase = createClient();
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<Tab>("ledger");
+  const [mealsSubTab, setMealsSubTab] = useState<MealsSubTab>("main");
   const [settings, setSettings] = useState<Settings>({ anchor_date: "2026-01-05", reset_hour_utc: 0, wyvern_element: null, wyvern_set_by: null });
   const [myLoggedDays, setMyLoggedDays] = useState<number[]>([]);
   const [members, setMembers] = useState<MemberRow[]>([]);
@@ -237,7 +239,35 @@ export default function DashboardPage() {
         {tab === "meals" && (
           <section>
             <p className="eyebrow mb-4 text-dv-emerald">SEASON MEALS</p>
-            <Meals />
+
+            <div className="mb-4 grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setMealsSubTab("main")}
+                className={
+                  "border px-3 py-2.5 text-center text-[10px] uppercase tracking-[.06em] " +
+                  (mealsSubTab === "main"
+                    ? "border-dv-violet bg-dv-violet/15 text-dv-brassLight"
+                    : "border-dv-line bg-dv-panel2 text-slate-300/60")
+                }
+              >
+                Main Cooking
+              </button>
+              <button
+                type="button"
+                onClick={() => setMealsSubTab("special")}
+                className={
+                  "border px-3 py-2.5 text-center text-[10px] uppercase tracking-[.06em] " +
+                  (mealsSubTab === "special"
+                    ? "border-dv-violet bg-dv-violet/15 text-dv-brassLight"
+                    : "border-dv-line bg-dv-panel2 text-slate-300/60")
+                }
+              >
+                Special Dish
+              </button>
+            </div>
+
+            {mealsSubTab === "main" ? <MainCooking /> : <Meals />}
           </section>
         )}
 
