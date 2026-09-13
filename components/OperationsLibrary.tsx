@@ -117,7 +117,47 @@ function IngredientIcon({ image, name }: { image: string; name: string }) {
 
 export function Guide() {
   const [open, setOpen] = useState<string[]>([guideSections[0][0], guideSections[1][0]]);
-  return <div className="space-y-4"><div className="border-l-2 border-dv-violet bg-dv-violet/10 px-4 py-4"><SectionLabel>FIELD MANUAL / SEASON 5</SectionLabel><h2 className="font-pixel text-xl leading-snug text-dv-brassLight">Read the room.<br />Then hit the dragon.</h2><p className="mt-3 max-w-xl text-sm text-slate-200/65">The short version of Dragon Valley operations for the player who has two minutes before the next session.</p></div><Card><div className="border-b border-dv-line px-4 py-4"><SectionLabel>OPERATIONS INDEX</SectionLabel><p className="text-sm">Open a briefing to get the useful part.</p></div><div className="divide-y divide-dv-line">{guideSections.map(([title, kicker, body], index) => { const isOpen = open.includes(title); return <div key={title}><button type="button" onClick={() => setOpen((current) => isOpen ? current.filter((item) => item !== title) : [...current, title])} className="flex w-full items-center gap-3 px-4 py-4 text-left hover:bg-dv-panel2"><span className={`font-pixel text-[10px] ${isOpen ? "text-dv-brassLight" : "text-slate-300/50"}`}>0{index + 1}</span><span className="flex-1"><span className="eyebrow block">{kicker}</span><span className="mt-1 block text-sm text-dv-brassLight">{title}</span></span><span className="text-dv-violet">{isOpen ? "−" : "+"}</span></button>{isOpen && <p className="animate-rise px-4 pb-5 pl-14 text-xs leading-relaxed text-slate-200/65">{body}</p>}</div>; })}</div></Card></div>;
+  return (
+    <div className="space-y-4">
+      <Card className="p-4">
+        <SectionLabel>FIELD MANUAL / SEASON 5</SectionLabel>
+        <h2 className="font-pixel text-xl leading-snug text-dv-brassLight">
+          Read the room.<br />Then hit the dragon.
+        </h2>
+        <p className="mt-3 max-w-xl text-sm text-slate-200/65">
+          The short version of Dragon Valley operations for the player who has two minutes before the next session.
+        </p>
+      </Card>
+      <Card>
+        <div className="border-b border-dv-line px-4 py-4">
+          <SectionLabel>OPERATIONS INDEX</SectionLabel>
+          <p className="text-sm">Open a briefing to get the useful part.</p>
+        </div>
+        <div className="divide-y divide-dv-line">
+          {guideSections.map(([title, kicker, body], index) => {
+            const isOpen = open.includes(title);
+            return (
+              <div key={title}>
+                <button
+                  type="button"
+                  onClick={() => setOpen((current) => isOpen ? current.filter((item) => item !== title) : [...current, title])}
+                  className="flex w-full items-center gap-3 px-4 py-4 text-left hover:bg-dv-panel2"
+                >
+                  <span className={`font-pixel text-[10px] ${isOpen ? "text-dv-brassLight" : "text-slate-300/50"}`}>0{index + 1}</span>
+                  <span className="flex-1">
+                    <span className="eyebrow block">{kicker}</span>
+                    <span className="mt-1 block text-sm text-dv-brassLight">{title}</span>
+                  </span>
+                  <span className="text-dv-violet">{isOpen ? "−" : "+"}</span>
+                </button>
+                {isOpen && <p className="animate-rise px-4 pb-5 pl-14 text-xs leading-relaxed text-slate-200/65">{body}</p>}
+              </div>
+            );
+          })}
+        </div>
+      </Card>
+    </div>
+  );
 }
 
 export function Meals() {
