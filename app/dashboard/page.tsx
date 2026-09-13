@@ -43,6 +43,30 @@ const TABS: { id: Tab; label: string }[] = [
 
 const CYCLE_DAY_NUMBERS = [1, 2, 3, 4, 5, 6, 7];
 
+// Every Sunday 22:00 UTC through Monday 07:00 UTC (9 hours), show the
+// "ranking is being calculated" card instead of the normal ledger content.
+function getCalculationWindow(now: Date) {
+  const day = now.getUTCDay(); // 0 = Sunday, 1 = Monday
+  const hour = now.getUTCHours();
+
+  const start = new Date(now);
+  start.setUTCHours(22, 0, 0, 0);
+
+  if (day === 0 && hour >= 22) {
+    // Window started today (Sunday) at 22:00 UTC — start is already correct.
+  } else if (day === 1 && hour < 7) {
+    // Window started yesterday (Sunday) at 22:00 UTC.
+    start.setUTCDate(start.getUTCDate() - 1);
+  } else {
+    return { active: false, hoursLeft: 0 };
+  }
+
+  const end = new Date(start.getTime() + 9 * 60 * 60 * 1000);
+  const active = now >= start && now < end;
+  const hoursLeft = Math.max(0, Math.ceil((end.getTime() - now.getTime()) / (60 * 60 * 1000)));
+  return { active, hoursLeft };
+}
+
 export default function DashboardPage() {
   const router = useRouter();
   const supabase = createClient();
@@ -56,9 +80,16 @@ export default function DashboardPage() {
   const [toast, setToast] = useState<string | null>(null);
   const [me, setMe] = useState<CurrentMember | null>(null);
   const [settingsDraft, setSettingsDraft] = useState({ anchor_date: "2026-01-05", reset_hour_utc: 0 });
+  const [now, setNow] = useState<Date>(() => new Date());
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 60000);
+    return () => clearInterval(id);
+  }, []);
 
   const { dayNumber, cycleStartISO } = getCycleInfo(settings.anchor_date, settings.reset_hour_utc);
   const isStandbyDay = dayNumber === 7;
+  const calc = getCalculationWindow(now);
 
   const visibleTabs = TABS.filter((t) => t.id !== "settings" || me?.is_admin);
 
@@ -211,7 +242,15 @@ export default function DashboardPage() {
           <div className="flex min-h-0 flex-1 flex-col">
             <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD OPERATIONS / ONLINE</p><h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">GUILD HUB</h1><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">The live raid ledger for the current seven-day cycle.</p></div>
 
-            {isStandbyDay ? (
+            {calc.active ? (
+              <div className="mt-4 flex min-h-0 flex-1 flex-col items-center justify-center pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
+                <p className="text-sm text-dv-brassLight">⚙️ RANKING CALCULATION IN PROGRESS</p>
+                <p className="mt-2 max-w-md text-xs leading-relaxed text-slate-200/60">
+                  Dragon Valley ranking is being calculated now. You will receive rewards based on the results after calculating is finished.
+                </p>
+                <p className="mt-2 text-xs text-dv-emerald">Until calculation complete: {calc.hoursLeft}h left</p>
+              </div>
+            ) : isStandbyDay ? (
               <div className="mt-4 flex min-h-0 flex-1 flex-col items-center justify-center pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
                 <p className="text-sm text-dv-brassLight">🐉 STANDBY — CYCLE COMPLETE</p>
                 <p className="mt-2 max-w-md text-xs leading-relaxed text-slate-200/60">
