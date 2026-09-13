@@ -169,12 +169,178 @@ export function Meals() {
   });
   useEffect(() => { localStorage.setItem("dv-command-ingredients", JSON.stringify(owned)); }, [owned]);
   const ingredients = ingredientDefaults.map(([name, source, defaultOwned, image]) => ({ name, source, image, owned: owned[name] ?? defaultOwned }));
-  const visible = useMemo(() => meals.map((meal, index) => ({ meal, index })).filter(({ meal }) => `${meal.name} ${meal.effect} ${meal.ingredients.join(" ")}`.toLowerCase().includes(query.toLowerCase()) && (filter === "all" || meal.tags.includes(filter))), [filter, query]);
-  return <div className="space-y-4"><div className="border border-dv-emerald/35 bg-dv-emerald/10 p-4"><SectionLabel>PROVISIONS / SEASON 5</SectionLabel><h2 className="text-xl text-dv-brassLight">Cook for the window.</h2><p className="mt-2 max-w-xl text-sm text-slate-200/65">Recipes and effects are taken from the Season 5 meal sheet. Toggle your stores to find what you can make now.</p></div><div className="grid gap-4 lg:grid-cols-[1fr_280px]"><Card><div className="border-b border-dv-line p-4"><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search meals, effects, ingredients" className="w-full border border-dv-line bg-dv-panel2 px-3 py-3 text-xs text-dv-brassLight outline-none placeholder:text-slate-300/50 focus:border-dv-violet" /><div className="mt-3 flex flex-wrap gap-2">{(["all", "raid", "exploration"] as const).map((item) => <button type="button" key={item} onClick={() => setFilter(item)} className={`border px-3 py-2 text-[9px] uppercase ${filter === item ? "border-dv-violet bg-dv-violet/15 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/60"}`}>{item === "all" ? "All meals" : item}</button>)}</div></div><div className="divide-y divide-dv-line">{visible.map(({ meal, index }) => { const ready = meal.ingredients.length > 0 && meal.ingredients.every((item) => ingredients.find((ingredient) => ingredient.name === item)?.owned); return <article key={`${meal.name}-${index}`} className="p-4"><div className="flex items-start justify-between gap-3"><div className="flex items-start gap-3"><MealThumb image={meal.image} name={meal.name} /><div><div className="flex flex-wrap items-center gap-2"><h3 className="text-sm text-dv-brassLight">{meal.name}</h3><span className="status-chip">{meal.rarity}</span></div><p className="mt-2 text-xs text-dv-emerald">{meal.effect}</p></div></div><span className={`text-[9px] uppercase ${ready ? "text-dv-emerald" : "text-slate-300/50"}`}>{ready ? "Ready" : "Missing"}</span></div><div className="mt-4 flex flex-wrap gap-1.5">{meal.ingredients.map((item, index) => <span key={`${item}-${index}`} className="border border-dv-line bg-dv-panel2 px-2 py-1 text-[9px] text-slate-300/65">{item}</span>)}</div></article>; })}</div></Card><Card className="h-fit p-4"><div className="mb-4 flex items-center justify-between"><div><SectionLabel>YOUR STORES</SectionLabel><p className="text-sm text-dv-brassLight">Ingredient ownership</p></div><span className="text-[10px] text-dv-emerald">{ingredients.filter((item) => item.owned).length}/{ingredients.length}</span></div><div>{ingredients.map((ingredient) => <button type="button" key={ingredient.name} onClick={() => setOwned((current) => ({ ...current, [ingredient.name]: !ingredient.owned }))} className="flex w-full items-center gap-3 border-b border-dv-line/60 py-2.5 text-left last:border-0"><IngredientIcon image={ingredient.image} name={ingredient.name} /><span><span className="block text-xs">{ingredient.name}</span><span className="block text-[8px] text-slate-300/50">{ingredient.source}</span></span><span className={`ml-auto grid h-5 w-5 place-items-center border text-[11px] ${ingredient.owned ? "border-dv-emerald bg-dv-emerald text-dv-bg" : "border-dv-line text-transparent"}`}>◆</span></button>)}</div></Card></div></div>;
+  const visible = useMemo(
+    () =>
+      meals
+        .map((meal, index) => ({ meal, index }))
+        .filter(
+          ({ meal }) =>
+            `${meal.name} ${meal.effect} ${meal.ingredients.join(" ")}`.toLowerCase().includes(query.toLowerCase()) &&
+            (filter === "all" || meal.tags.includes(filter))
+        ),
+    [filter, query]
+  );
+
+  return (
+    <div className="space-y-4">
+      <div className="border border-dv-emerald/35 bg-dv-emerald/10 p-4">
+        <SectionLabel>PROVISIONS / SEASON 5</SectionLabel>
+        <h2 className="text-xl text-dv-brassLight">Cook for the window.</h2>
+        <p className="mt-2 max-w-xl text-sm text-slate-200/65">
+          Recipes and effects are taken from the Season 5 meal sheet. Toggle your stores to find what you can make now.
+        </p>
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-[1fr_280px]">
+        <Card>
+          <div className="border-b border-dv-line p-4">
+            <input
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search meals, effects, ingredients"
+              className="w-full border border-dv-line bg-dv-panel2 px-3 py-3 text-xs text-dv-brassLight outline-none placeholder:text-slate-300/50 focus:border-dv-violet"
+            />
+            <div className="mt-3 flex flex-wrap gap-2">
+              {(["all", "raid", "exploration"] as const).map((item) => (
+                <button
+                  type="button"
+                  key={item}
+                  onClick={() => setFilter(item)}
+                  className={`border px-3 py-2 text-[9px] uppercase ${
+                    filter === item ? "border-dv-violet bg-dv-violet/15 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/60"
+                  }`}
+                >
+                  {item === "all" ? "All meals" : item}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="divide-y divide-dv-line">
+            {visible.map(({ meal, index }) => {
+              const ready = meal.ingredients.length > 0 && meal.ingredients.every((item) => ingredients.find((ingredient) => ingredient.name === item)?.owned);
+              return (
+                <article key={`${meal.name}-${index}`} className="p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-3">
+                      <MealThumb image={meal.image} name={meal.name} />
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="text-sm text-dv-brassLight">{meal.name}</h3>
+                          <span className="status-chip">{meal.rarity}</span>
+                        </div>
+                        <p className="mt-2 text-xs text-dv-emerald">{meal.effect}</p>
+                      </div>
+                    </div>
+                    <span className={`text-[9px] uppercase ${ready ? "text-dv-emerald" : "text-slate-300/50"}`}>{ready ? "Ready" : "Missing"}</span>
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap gap-1.5">
+                    {meal.ingredients.map((item, index) => {
+                      const isOwned = ingredients.find((ingredient) => ingredient.name === item)?.owned;
+                      return (
+                        <span
+                          key={`${item}-${index}`}
+                          className={
+                            isOwned
+                              ? "border border-dv-emerald bg-dv-emerald/15 px-2 py-1 text-[9px] text-dv-emerald"
+                              : "border border-dv-line bg-dv-panel2 px-2 py-1 text-[9px] text-slate-300/65"
+                          }
+                        >
+                          {item}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </Card>
+
+        <Card className="h-fit p-4">
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <SectionLabel>YOUR STORES</SectionLabel>
+              <p className="text-sm text-dv-brassLight">Ingredient ownership</p>
+            </div>
+            <span className="text-[10px] text-dv-emerald">
+              {ingredients.filter((item) => item.owned).length}/{ingredients.length}
+            </span>
+          </div>
+          <div>
+            {ingredients.map((ingredient) => (
+              <button
+                type="button"
+                key={ingredient.name}
+                onClick={() => setOwned((current) => ({ ...current, [ingredient.name]: !ingredient.owned }))}
+                className="flex w-full items-center gap-3 border-b border-dv-line/60 py-2.5 text-left last:border-0"
+              >
+                <IngredientIcon image={ingredient.image} name={ingredient.name} />
+                <span>
+                  <span className="block text-xs">{ingredient.name}</span>
+                  <span className="block text-[8px] text-slate-300/50">{ingredient.source}</span>
+                </span>
+                <span
+                  className={`ml-auto grid h-5 w-5 place-items-center border text-[11px] ${
+                    ingredient.owned ? "border-dv-emerald bg-dv-emerald text-dv-bg" : "border-dv-line text-transparent"
+                  }`}
+                >
+                  ◆
+                </span>
+              </button>
+            ))}
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
 }
 
 export function Runes() {
   const [filter, setFilter] = useState("all");
   const visible = runeRows.filter((row) => filter === "all" || row[2] === filter);
-  return <div className="space-y-4"><Card className="p-4"><SectionLabel>RUNE DESK / PRIORITY ORDER</SectionLabel><h2 className="text-xl text-dv-brassLight">Spend fragments with a plan.</h2><p className="mt-2 max-w-xl text-sm text-slate-200/65">Priorities below follow the attached guild rune notes: season value first, then team needs and situational utility.</p></Card><Card><div className="flex flex-wrap items-center justify-between gap-3 border-b border-dv-line p-4"><div><SectionLabel>TIER LIST</SectionLabel><p className="text-sm text-dv-brassLight">Recommended by guild officers</p></div><div className="flex flex-wrap gap-1">{["all", "emblems", "exploration", "resources", "team", "combat"].map((item) => <button type="button" key={item} onClick={() => setFilter(item)} className={`px-2 py-1 text-[8px] uppercase ${filter === item ? "bg-dv-violet text-dv-bg" : "bg-dv-panel2 text-slate-300/60"}`}>{item}</button>)}</div></div><div className="divide-y divide-dv-line">{visible.map(([rank, name, type, note]) => <div key={name} className="grid grid-cols-[68px_1fr] gap-3 p-4 sm:grid-cols-[90px_1fr_auto]"><div className="grid h-9 place-items-center border border-dv-brass/50 bg-dv-brass/10 font-pixel text-[10px] text-dv-brassLight">{rank}</div><div><p className="text-sm text-dv-brassLight">{name}</p><p className="mt-1 text-xs leading-relaxed text-slate-200/65">{note}</p></div><span className="hidden self-center text-[9px] uppercase text-slate-300/50 sm:block">{type}</span></div>)}</div></Card></div>;
+  return (
+    <div className="space-y-4">
+      <Card className="p-4">
+        <SectionLabel>RUNE DESK / PRIORITY ORDER</SectionLabel>
+        <h2 className="text-xl text-dv-brassLight">Spend fragments with a plan.</h2>
+        <p className="mt-2 max-w-xl text-sm text-slate-200/65">
+          Priorities below follow the attached guild rune notes: season value first, then team needs and situational utility.
+        </p>
+      </Card>
+      <Card>
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-dv-line p-4">
+          <div>
+            <SectionLabel>TIER LIST</SectionLabel>
+            <p className="text-sm text-dv-brassLight">Recommended by guild officers</p>
+          </div>
+          <div className="flex flex-wrap gap-1">
+            {["all", "emblems", "exploration", "resources", "team", "combat"].map((item) => (
+              <button
+                type="button"
+                key={item}
+                onClick={() => setFilter(item)}
+                className={`px-2 py-1 text-[8px] uppercase ${filter === item ? "bg-dv-violet text-dv-bg" : "bg-dv-panel2 text-slate-300/60"}`}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="divide-y divide-dv-line">
+          {visible.map(([rank, name, type, note]) => (
+            <div key={name} className="grid grid-cols-[68px_1fr] gap-3 p-4 sm:grid-cols-[90px_1fr_auto]">
+              <div className="grid h-9 place-items-center border border-dv-brass/50 bg-dv-brass/10 font-pixel text-[10px] text-dv-brassLight">{rank}</div>
+              <div>
+                <p className="text-sm text-dv-brassLight">{name}</p>
+                <p className="mt-1 text-xs leading-relaxed text-slate-200/65">{note}</p>
+              </div>
+              <span className="hidden self-center text-[9px] uppercase text-slate-300/50 sm:block">{type}</span>
+            </div>
+          ))}
+        </div>
+      </Card>
+    </div>
+  );
 }
