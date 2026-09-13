@@ -40,6 +40,8 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "settings", label: "Settings" },
 ];
 
+const CYCLE_DAY_NUMBERS = [1, 2, 3, 4, 5, 6, 7];
+
 export default function DashboardPage() {
   const router = useRouter();
   const supabase = createClient();
@@ -54,6 +56,7 @@ export default function DashboardPage() {
   const [settingsDraft, setSettingsDraft] = useState({ anchor_date: "2026-01-05", reset_hour_utc: 0 });
 
   const { dayNumber, cycleStartISO } = getCycleInfo(settings.anchor_date, settings.reset_hour_utc);
+  const isStandbyDay = dayNumber === 7;
 
   const visibleTabs = TABS.filter((t) => t.id !== "settings" || me?.is_admin);
 
@@ -92,7 +95,7 @@ export default function DashboardPage() {
         discord_id: member.discord_id,
         username: member.username,
         avatar_url: member.avatar_url,
-        logged: [1, 2, 3, 4, 5, 6].map((day) => memberLogs.has(day)),
+        logged: CYCLE_DAY_NUMBERS.map((day) => memberLogs.has(day)),
       };
     });
     setMembers(rows);
@@ -100,7 +103,7 @@ export default function DashboardPage() {
     const myRow = (allMembers ?? []).find((member: any) => member.auth_user_id === user.id);
     if (myRow) {
       const myLogs = logsByMember.get(myRow.id) ?? new Map<number, AttackLog>();
-      setMyLoggedDays([1, 2, 3, 4, 5, 6].filter((day) => myLogs.has(day)));
+      setMyLoggedDays(CYCLE_DAY_NUMBERS.filter((day) => myLogs.has(day)));
       setMe({ username: myRow.username, avatar_url: myRow.avatar_url, discord_id: myRow.discord_id, is_admin: myRow.is_admin });
     }
     setLoading(false);
@@ -170,9 +173,9 @@ export default function DashboardPage() {
     setTimeout(() => setToast(null), 2500);
   }
 
-  const dayIndex = Math.min(5, Math.max(0, dayNumber - 1));
+  const dayIndex = Math.min(6, Math.max(0, dayNumber - 1));
   const cycleDays = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
-  const phases = ["Match", "Explore", "Explore", "Raid", "Raid", "Raid"];
+  const phases = ["Match", "Explore", "Explore", "Raid", "Raid", "Raid", "Standby"];
 
   if (loading) return <main className="min-h-screen flex items-center justify-center"><p className="text-[11px] text-dv-brassLight animate-blink">LOADING GUILD DATA...</p></main>;
 
@@ -204,12 +207,23 @@ export default function DashboardPage() {
       <main className="mx-auto max-w-6xl px-4 pb-24 pt-5 sm:px-6 md:pb-20 md:pt-7">
         {tab === "ledger" && (
           <>
-            <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD OPERATIONS / ONLINE</p><h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">GUILD HUB</h1><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">The live raid ledger for the current six-day cycle.</p></div>
+            <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD OPERATIONS / ONLINE</p><h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">GUILD HUB</h1><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">The live raid ledger for the current seven-day cycle.</p></div>
 
-            {(dayNumber < 3 || settings.wyvern_element) && <div className="mt-4">{dayNumber < 3 ? <ExplorationPhase currentDay={dayNumber} /> : <WyvernTracker current={settings.wyvern_element as any} setBy={settings.wyvern_set_by} onSelect={setWyvern} isAdmin={me?.is_admin ?? false} />}</div>}
+            {isStandbyDay ? (
+              <div className="mt-4 pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
+                <p className="text-sm text-dv-brassLight">🐉 STANDBY — CYCLE COMPLETE</p>
+                <p className="mt-2 text-xs leading-relaxed text-slate-200/60">
+                  No attacks to log today. The ledger resets and Day 1 begins at the next reset hour.
+                </p>
+              </div>
+            ) : (
+              <>
+                {(dayNumber < 3 || settings.wyvern_element) && <div className="mt-4">{dayNumber < 3 ? <ExplorationPhase currentDay={dayNumber} /> : <WyvernTracker current={settings.wyvern_element as any} setBy={settings.wyvern_set_by} onSelect={setWyvern} isAdmin={me?.is_admin ?? false} />}</div>}
 
-            <div className="mt-4"><LogAttackButton anchorDate={settings.anchor_date} resetHour={settings.reset_hour_utc} dayNumber={dayNumber} loggedDays={myLoggedDays} onLog={logAttack} /></div>
-            <div className="mt-4"><GuildProgress members={members} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
+                <div className="mt-4"><LogAttackButton anchorDate={settings.anchor_date} resetHour={settings.reset_hour_utc} dayNumber={dayNumber} loggedDays={myLoggedDays} onLog={logAttack} /></div>
+                <div className="mt-4"><GuildProgress members={members} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
+              </>
+            )}
           </>
         )}
 
