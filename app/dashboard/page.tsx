@@ -1,451 +1,322 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { getCycleInfo } from "@/lib/cycle";
+import { LogAttackButton } from "@/components/LogAttackButton";
+import { GuildProgress, MemberRow } from "@/components/GuildProgress";
+import { WyvernTracker } from "@/components/WyvernTracker";
+import { ExplorationPhase } from "@/components/ExplorationPhase";
+import { Guide, MainCooking, Meals, Runes } from "@/components/OperationsLibrary";
+import { DragonCrest } from "@/components/DragonCrest";
 
-type Meal = {
-  name: string;
-  rarity: string;
-  category: "Appetizer" | "Main dish" | "Dessert";
-  effect: string;
-  ingredients: string[];
-  tags: ("raid" | "exploration")[];
-  image?: string;
+type Settings = {
+  anchor_date: string;
+  reset_hour_utc: number;
+  wyvern_element: string | null;
+  wyvern_set_by: string | null;
 };
 
-const meals: Meal[] = [
-  { name: "Egg Sandwich", rarity: "Common appetizer", category: "Appetizer", effect: "Exploration progress +1%", ingredients: ["Egg", "Wheat"], tags: ["exploration"], image: "egg-sandwich.jpg" },
-  { name: "Potato Salad", rarity: "Great appetizer", category: "Appetizer", effect: "Exploration progress +1%", ingredients: ["Potato", "Egg", "Meat", "Lettuce"], tags: ["exploration"], image: "potato-salad.jpg" },
-  { name: "Shrimp Dim Sum", rarity: "Great appetizer", category: "Appetizer", effect: "Exploration progress +1%", ingredients: ["Shrimp", "Meat", "Wheat"], tags: ["exploration"], image: "shrimp-dim-sum.jpg" },
-  { name: "Cheese Omelet", rarity: "Rare appetizer", category: "Appetizer", effect: "Exploration progress +2%", ingredients: ["Cheese", "Egg", "Egg", "Milk"], tags: ["exploration"], image: "cheese-omelet.jpg" },
-  { name: "Basil Pesto Baguette", rarity: "Legendary appetizer", category: "Appetizer", effect: "Exploration progress +3%", ingredients: ["Basil", "Cheese", "Wheat"], tags: ["exploration"], image: "basil-pesto-baguette.jpg" },
-  { name: "Pork Loin Katsu", rarity: "Common main dish", category: "Main dish", effect: "Guild member ATK/HP +5%", ingredients: ["Egg", "Meat", "Wheat"], tags: ["raid"], image: "pork-loin-katsu.png" },
-  { name: "Shrimp Burger", rarity: "Great main dish", category: "Main dish", effect: "Guild member ATK/HP +10%", ingredients: ["Shrimp", "Wheat", "Lettuce"], tags: ["raid"], image: "shrimp-burger.jpg" },
-  { name: "Eggs in Hell", rarity: "Epic main dish", category: "Main dish", effect: "Guild member ATK/HP +20%", ingredients: ["Chili", "Cheese", "Tomato", "Egg", "Meat"], tags: ["raid"], image: "eggs-in-hell.jpg" },
-  { name: "Basil Pasta", rarity: "Legendary main dish", category: "Main dish", effect: "Guild member ATK/HP +20%", ingredients: ["Basil", "Cheese", "Egg", "Wheat"], tags: ["raid"], image: "basil-pasta.jpg" },
-  { name: "Fish & Chips", rarity: "Legendary main dish", category: "Main dish", effect: "Guild member ATK/HP +20%", ingredients: ["Tuna", "Tuna", "Potato", "Potato", "Wheat"], tags: ["raid"], image: "fish-and-chips.png" },
-  { name: "Truffle Gnocchi", rarity: "Immortal main dish", category: "Main dish", effect: "Guild member ATK/HP +30%", ingredients: ["Truffle", "Potato", "Wheat", "Milk"], tags: ["raid"], image: "truffle-gnocchi.jpg" },
-  { name: "Strawberry Cake", rarity: "Great dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: ["Strawberry", "Egg", "Wheat", "Wheat", "Milk"], tags: ["raid"], image: "strawberry-cake.jpg" },
-  { name: "Brownie", rarity: "Epic dessert", category: "Dessert", effect: "Wyvern damage +30%", ingredients: ["Cacao", "Egg", "Wheat", "Wheat", "Milk"], tags: ["raid"], image: "brownie.jpg" },
-  { name: "Cheesecake", rarity: "Rare dessert", category: "Dessert", effect: "Wyvern damage +20%", ingredients: ["Cheese", "Egg", "Wheat", "Wheat", "Milk"], tags: ["raid"], image: "cheesecake.jpg" },
-  { name: "Honey Frozen Yogurt", rarity: "Immortal dessert", category: "Dessert", effect: "Wyvern damage +50%", ingredients: ["Honeycomb", "Milk", "Milk", "Milk"], tags: ["raid"], image: "honey-frozen-yogurt.jpg" },
-  { name: "Cereal", rarity: "Great appetizer", category: "Appetizer", effect: "Exploration progress +1%", ingredients: ["Corn", "Milk"], tags: ["exploration"], image: "cereal.jpg" },
-  { name: "Beef Porridge", rarity: "Great appetizer", category: "Appetizer", effect: "Exploration progress +1%", ingredients: ["Rice", "Rice", "Meat"], tags: ["exploration"], image: "beef-porridge.jpg" },
-  { name: "Ham & Cheese Sandwich", rarity: "Epic appetizer", category: "Appetizer", effect: "Exploration progress +3%", ingredients: ["Cheese", "Strawberry", "Meat", "Wheat", "Lettuce"], tags: ["exploration"], image: "ham-cheese-sandwich.jpg" },
-  { name: "Kimchi", rarity: "Epic appetizer", category: "Appetizer", effect: "Exploration progress +3%", ingredients: ["Chili", "Lettuce", "Lettuce"], tags: ["exploration"], image: "kimchi.jpg" },
-  { name: "Bacon Cheese Nachos", rarity: "Epic appetizer", category: "Appetizer", effect: "Exploration progress +3%", ingredients: ["Cheese", "Corn", "Meat"], tags: ["exploration"], image: "bacon-cheese-nachos.jpg" },
-  { name: "English Breakfast", rarity: "Common appetizer", category: "Appetizer", effect: "Exploration progress +1%", ingredients: ["Egg", "Meat", "Wheat", "Milk", "Lettuce"], tags: ["exploration"], image: "english-breakfast.jpg" },
-  { name: "Ellie's Salad", rarity: "Common appetizer", category: "Appetizer", effect: "Exploration progress +1%", ingredients: ["Lettuce", "Lettuce", "Lettuce", "Lettuce", "Lettuce"], tags: ["exploration"], image: "ellies-salad.jpg" },
-  { name: "French Fries", rarity: "Great appetizer", category: "Appetizer", effect: "Exploration progress +1%", ingredients: ["Potato", "Potato", "Wheat"], tags: ["exploration"], image: "french-fries.jpg" },
-  { name: "Cheese Sticks", rarity: "Rare appetizer", category: "Appetizer", effect: "Exploration progress +2%", ingredients: ["Cheese", "Wheat"], tags: ["exploration"], image: "cheese-sticks.jpg" },
-  { name: "Caviar Cream Soup", rarity: "Immortal appetizer", category: "Appetizer", effect: "Exploration progress +5%", ingredients: ["Caviar", "Wheat", "Milk"], tags: ["exploration"], image: "caviar-cream-soup.jpg" },
-  { name: "Sukiyaki", rarity: "Common main dish", category: "Main dish", effect: "Guild member ATK/HP +5%", ingredients: ["Egg", "Meat", "Lettuce"], tags: ["raid"], image: "sukiyaki.png" },
-  { name: "Omurice", rarity: "Great main dish", category: "Main dish", effect: "Guild member ATK/HP +10%", ingredients: ["Rice", "Egg", "Meat"], tags: ["raid"], image: "omurice.jpg" },
-  { name: "Margherita", rarity: "Legendary main dish", category: "Main dish", effect: "Guild member ATK/HP +20%", ingredients: ["Basil", "Cheese", "Tomato", "Wheat"], tags: ["raid"], image: "margherita.jpg" },
-  { name: "Tuna Sushi", rarity: "Legendary main dish", category: "Main dish", effect: "Guild member ATK/HP +20%", ingredients: ["Tuna", "Rice", "Rice"], tags: ["raid"], image: "tuna-sushi.jpg" },
-  { name: "Zeke's BBQ", rarity: "Common main dish", category: "Main dish", effect: "Guild member ATK/HP +5%", ingredients: ["Meat", "Meat", "Meat", "Meat", "Meat"], tags: ["raid"], image: "zekes-bbq.jpg" },
-  { name: "Cheeseburger", rarity: "Rare main dish", category: "Main dish", effect: "Guild member ATK/HP +10%", ingredients: ["Cheese", "Meat", "Wheat"], tags: ["raid"], image: "cheeseburger.png" },
-  { name: "Miho's Spicy Ramen", rarity: "Epic main dish", category: "Main dish", effect: "Guild member ATK/HP +20%", ingredients: ["Chili", "Chili", "Egg", "Meat", "Wheat"], tags: ["raid"], image: "mihos-spicy-ramen.png" },
-  { name: "Yangnyeom Chicken", rarity: "Legendary main dish", category: "Main dish", effect: "Guild member ATK/HP +20%", ingredients: ["Chili", "Sugarcane", "Meat", "Wheat"], tags: ["raid"], image: "id-39.jpg" },
-  { name: "Tomato Basil Ade", rarity: "Legendary dessert", category: "Dessert", effect: "Wyvern damage +30%", ingredients: ["Basil", "Tomato"], tags: ["raid"], image: "tomato-basil-ade.png" },
-  { name: "???", rarity: "Legendary appetizer", category: "Appetizer", effect: "Exploration progress +3%", ingredients: [], tags: ["exploration"], image: "question-19.png" },
-  { name: "???", rarity: "Immortal appetizer", category: "Appetizer", effect: "Exploration progress +5%", ingredients: [], tags: ["exploration"], image: "question-21.png" },
-  { name: "???", rarity: "Immortal main dish", category: "Main dish", effect: "Guild member ATK/HP +30%", ingredients: [], tags: ["raid"], image: "question-40.png" },
-  { name: "???", rarity: "Immortal main dish", category: "Main dish", effect: "Guild member ATK/HP +30%", ingredients: [], tags: ["raid"], image: "question-41.png" },
-  { name: "???", rarity: "Great dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: [], tags: ["raid"], image: "question-55.png" },
-  { name: "???", rarity: "Great dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: [], tags: ["raid"], image: "question-56.png" },
-  { name: "???", rarity: "Mythic dessert", category: "Dessert", effect: "Wyvern damage", ingredients: [], tags: ["raid"], image: "question-62.png" },
-];
-
-const ingredientDefaults = [
-  ["Wheat", "Exploration material", true, "wheat.jpg"], ["Meat", "Exploration material", true, "meat.jpeg"], ["Lettuce", "Exploration material", true, "lettuce.jpg"],
-  ["Milk", "Exploration material", true, "milk.jpg"], ["Egg", "Exploration material", true, "egg.jpg"], ["Potato", "Exploration material", false, "potato.jpg"],
-  ["Tomato", "Exploration material", false, "tomato.jpg"], ["Shrimp", "Exploration material", false, "shrimp.jpg"], ["Rice", "Exploration material", false, "rice.jpg"],
-  ["Peanut", "Exploration material", false, "peanut.jpg"], ["Corn", "Exploration material", false, "corn.jpg"], ["Strawberry", "Exploration material", false, "strawberry.jpg"],
-  ["Sugarcane", "Exploration material", false, "sugarcane.jpg"], ["Cheese", "Exploration material", false, "cheese.jpg"], ["Chili", "Lava Mountains", false, "chili.jpg"],
-  ["Tuna", "Ice Vale", false, "tuna.jpg"], ["Basil", "Wind Cliff", false, "basil.jpg"], ["Cacao", "Wasteland Plateau", false, "cacao.jpg"],
-  ["Caviar", "All regions", false, "caviar.jpg"], ["Truffle", "All regions", false, "truffle.jpg"], ["Honeycomb", "All regions", false, "honeycomb.jpg"],
-] as const;
-
-const guideSections = [
-  ["The six-day cycle", "OPERATING RHYTHM", "Monday is matchmaking. Tuesday through Thursday are exploration days: spend all three entries each day, search for traces, and stock materials. Friday through Sunday is the raid window."],
-  ["Trace discovery", "EXPLORATION", "A trace reveals which elemental wyvern the guild will face. Exploration progress and careful use of all three daily entries improve the odds. Cooking does not change exploration battles; it turns earned materials into raid-phase buffs."],
-  ["Four elemental wyverns", "RAID INTEL", "The raid can reveal wind, fire, earth, or water. Match your elemental damage options to the trace so the team gets more from every attempt."],
-  ["Guild-pet ultimate timing", "TEAM PLAY", "Hold the guild-pet ultimate for the team damage buff window. Call it before the highest-damage member commits their attack, not on the first available cooldown."],
-];
-
-const runeRows = [
-  ["Immortal", "Game Changer", "emblems", "50% bonus Emblem on the last day. The strongest late-season pickup."],
-  ["Mythic", "Ancient Book", "emblems", "+10% raid Emblem. Roughly 8–12k Emblem across a run."],
-  ["S", "Random Immortal Rune", "emblems", "Early tier-up option, estimated around 3.5k Emblem from known Immortal runes."],
-  ["A", "Golden Compass", "exploration", "+10% Exploration Emblem per day; stronger when it helps win exploration regions."],
-  ["A", "Bubbling Hot Pot Kit", "resources", "+30% resources. More useful early and with exploration-region wins."],
-  ["A", "Opal", "emblems", "2,000 Emblem. A clean pickup when higher tiers are unavailable."],
-  ["B", "Let's Go Together, Buddy!", "team", "Gain 1 Onigiri for raid phase when you have the lowest exploration points."],
-  ["B", "Persistent Search", "exploration", "+50% chance of finding a Wyvern trace."],
-  ["B", "Chocolate Energy Bar", "exploration", "1x bonus exploration. More valuable on earlier days."],
-  ["C", "Harvest Complete!", "resources", "300–800 Wheat. Better on earlier days when cooking materials compound."],
-  ["D", "Awaken Time Freeze", "combat", "Increases Ark skill folds by 3x; situational and difficult to justify."],
-];
-
-type MainDish = {
-  name: string;
-  priority: number | "E";
-  image: string;
-  effect: string;
+type CurrentMember = {
+  username: string;
+  avatar_url: string | null;
+  discord_id: string;
+  is_admin: boolean;
 };
 
-const mainDishes: MainDish[] = [
-  { name: "Bubble Hotpot", priority: 1, image: "bubble-hotpot.png", effect: "Increase the amount of Ingredients obtained from Exploration by 100%" },
-  { name: "Sandwich", priority: 2, image: "sandwich.png", effect: "ATK SPD +90% while the Wyvern is preparing its powerful attack" },
-  { name: "Immortal Steak", priority: 3, image: "immortal-steak.png", effect: "Increases DMG to Wyvern by 60%" },
-  { name: "BBQ Ribs", priority: 4, image: "bbq-ribs.png", effect: "Dmg +60% every 20 sec after entering the Raid" },
-  { name: "Savory Hotdog", priority: 5, image: "savory-hotdog.png", effect: "Additional DMG +35% after Wyvern fails a powerful attack" },
-  { name: "Hellfire Curry", priority: "E", image: "hellfire-curry.png", effect: "Increases Fire Attribute DMG to Wyvern by 30%" },
-  { name: "Water Slash Soup", priority: "E", image: "water-slash-soup.png", effect: "Increases Water Attribute DMG to Wyvern by 0%" },
-  { name: "Thunderbolt Burger", priority: "E", image: "thunderbolt-burger.png", effect: "Increases Wind Attribute DMG to Wyvern by 20%" },
-  { name: "Demon Pizza", priority: "E", image: "demon-pizza.png", effect: "Increases Earth Attribute DMG to Wyvern by 5%" },
+type AttackLog = {
+  member_id: string;
+  day_number: number;
+};
+
+type Tab = "ledger" | "guide" | "meals" | "runes" | "settings";
+type MealsSubTab = "main" | "special";
+
+const TABS: { id: Tab; label: string }[] = [
+  { id: "ledger", label: "Ledger" },
+  { id: "guide", label: "Guide" },
+  { id: "meals", label: "Meals" },
+  { id: "runes", label: "Runes" },
+  { id: "settings", label: "Settings" },
 ];
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
-  return <p className="eyebrow mb-2">{children}</p>;
-}
+const CYCLE_DAY_NUMBERS = [1, 2, 3, 4, 5, 6, 7];
 
-function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <section className={`pixel-border bg-dv-panel/95 shadow-pixel ${className}`}>{children}</section>;
-}
+export default function DashboardPage() {
+  const router = useRouter();
+  const supabase = createClient();
+  const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState<Tab>("ledger");
+  const [mealsSubTab, setMealsSubTab] = useState<MealsSubTab>("main");
+  const [settings, setSettings] = useState<Settings>({ anchor_date: "2026-01-05", reset_hour_utc: 0, wyvern_element: null, wyvern_set_by: null });
+  const [myLoggedDays, setMyLoggedDays] = useState<number[]>([]);
+  const [members, setMembers] = useState<MemberRow[]>([]);
+  const [pinging, setPinging] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+  const [me, setMe] = useState<CurrentMember | null>(null);
+  const [settingsDraft, setSettingsDraft] = useState({ anchor_date: "2026-01-05", reset_hour_utc: 0 });
 
-function MealThumb({ image, name }: { image?: string; name: string }) {
-  return (
-    <div className="pixel-frame item-slot h-14 w-14 shrink-0 overflow-hidden">
-      {image ? (
-        <img src={"/meals/" + image} alt={name} className="h-full w-full object-cover" style={{ imageRendering: "pixelated" }} />
-      ) : (
-        <div className="grid h-full w-full place-items-center text-[10px] text-slate-300/40">?</div>
-      )}
-    </div>
-  );
-}
+  const { dayNumber, cycleStartISO } = getCycleInfo(settings.anchor_date, settings.reset_hour_utc);
+  const isStandbyDay = dayNumber === 7;
 
-function IngredientIcon({ image, name }: { image: string; name: string }) {
-  return (
-    <div className="pixel-frame item-slot h-8 w-8 shrink-0 overflow-hidden">
-      <img src={"/ingredients/" + image} alt={name} className="h-full w-full object-cover" style={{ imageRendering: "pixelated" }} />
-    </div>
-  );
-}
+  const visibleTabs = TABS.filter((t) => t.id !== "settings" || me?.is_admin);
 
-function PriorityBadge({ priority }: { priority: number | "E" }) {
-  const isElemental = priority === "E";
-  return (
-    <span
-      className={
-        "absolute -right-1.5 -top-1.5 grid h-5 w-5 place-items-center rounded-full border text-[10px] font-bold " +
-        (isElemental
-          ? "border-dv-violet bg-dv-violet text-white"
-          : "border-dv-brass bg-dv-brass text-dv-bg")
-      }
-      title={isElemental ? "Elemental — cooked last, matched to the wyvern trace" : `Cook priority ${priority}`}
-    >
-      {priority}
-    </span>
-  );
-}
+  async function loadAll() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      router.replace("/");
+      return;
+    }
 
-function MainDishThumb({ image, name, priority }: { image: string; name: string; priority: number | "E" }) {
-  return (
-    <div className="relative h-14 w-14 shrink-0">
-      <div className="pixel-frame item-slot h-14 w-14 overflow-hidden">
-        <img src={"/cooking/" + image} alt={name} className="h-full w-full object-cover" style={{ imageRendering: "pixelated" }} />
-      </div>
-      <PriorityBadge priority={priority} />
-    </div>
-  );
-}
+    const settingsResponse = await fetch("/api/settings", { cache: "no-store" });
+    const settingsRow = settingsResponse.ok ? await settingsResponse.json() : null;
+    const currentSettings: Settings = {
+      anchor_date: settingsRow?.anchor_date ?? "2026-01-05",
+      reset_hour_utc: settingsRow?.reset_hour_utc ?? 0,
+      wyvern_element: settingsRow?.wyvern_element ?? null,
+      wyvern_set_by: settingsRow?.wyvern_set_by ?? null,
+    };
+    setSettings(currentSettings);
+    setSettingsDraft({ anchor_date: currentSettings.anchor_date, reset_hour_utc: currentSettings.reset_hour_utc });
+    const cycle = getCycleInfo(currentSettings.anchor_date, currentSettings.reset_hour_utc);
 
-export function Guide() {
-  const [open, setOpen] = useState<string[]>([guideSections[0][0], guideSections[1][0]]);
-  return (
-    <div className="space-y-4">
-      <Card className="p-4">
-        <SectionLabel>FIELD MANUAL / SEASON 5</SectionLabel>
-        <h2 className="font-pixel text-xl leading-snug text-dv-brassLight">
-          Read the room.<br />Then hit the dragon.
-        </h2>
-        <p className="mt-3 max-w-xl text-sm text-slate-200/65">
-          The short version of Dragon Valley operations for the player who has two minutes before the next session.
-        </p>
-      </Card>
-      <Card>
-        <div className="border-b border-dv-line px-4 py-4">
-          <SectionLabel>OPERATIONS INDEX</SectionLabel>
-          <p className="text-sm">Open a briefing to get the useful part.</p>
-        </div>
-        <div className="divide-y divide-dv-line">
-          {guideSections.map(([title, kicker, body], index) => {
-            const isOpen = open.includes(title);
-            return (
-              <div key={title}>
-                <button
-                  type="button"
-                  onClick={() => setOpen((current) => isOpen ? current.filter((item) => item !== title) : [...current, title])}
-                  className="flex w-full items-center gap-3 px-4 py-4 text-left hover:bg-dv-panel2"
-                >
-                  <span className={`font-pixel text-[10px] ${isOpen ? "text-dv-brassLight" : "text-slate-300/50"}`}>0{index + 1}</span>
-                  <span className="flex-1">
-                    <span className="eyebrow block">{kicker}</span>
-                    <span className="mt-1 block text-sm text-dv-brassLight">{title}</span>
-                  </span>
-                  <span className="text-dv-violet">{isOpen ? "−" : "+"}</span>
-                </button>
-                {isOpen && <p className="animate-rise px-4 pb-5 pl-14 text-xs leading-relaxed text-slate-200/65">{body}</p>}
-              </div>
-            );
-          })}
-        </div>
-      </Card>
-    </div>
-  );
-}
+    const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, avatar_url, is_admin");
+    const { data: logsData } = await supabase.from("attack_logs").select("member_id, day_number").eq("cycle_start", cycle.cycleStartISO);
+    const logs: AttackLog[] = logsData ?? [];
 
-export function MainCooking() {
-  const sorted = useMemo(
-    () =>
-      [...mainDishes].sort((a, b) => {
-        const rank = (value: number | "E") => (value === "E" ? 99 : value);
-        return rank(a.priority) - rank(b.priority);
-      }),
-    []
-  );
+    const logsByMember = new Map<string, Map<number, AttackLog>>();
+    logs.forEach((log) => {
+      if (!logsByMember.has(log.member_id)) logsByMember.set(log.member_id, new Map());
+      logsByMember.get(log.member_id)!.set(log.day_number, log);
+    });
 
-  return (
-    <div className="space-y-4">
-      <Card className="p-4">
-        <SectionLabel>MAIN COOKING / CAMPFIRE QUEUE</SectionLabel>
-        <h2 className="text-xl text-dv-brassLight">Cook in order.</h2>
-        <p className="mt-2 max-w-xl text-sm text-slate-200/65">
-          Gold numbers are the fixed priority: 1 through 5, cooked first. Violet <span className="text-dv-violet">E</span> tags
-          are elemental dishes — hold those until the trace confirms which wyvern shows up, then cook to match it.
-        </p>
-      </Card>
+    const rows: MemberRow[] = (allMembers ?? []).map((member: any) => {
+      const memberLogs = logsByMember.get(member.id) ?? new Map<number, AttackLog>();
+      return {
+        discord_id: member.discord_id,
+        username: member.username,
+        avatar_url: member.avatar_url,
+        logged: CYCLE_DAY_NUMBERS.map((day) => memberLogs.has(day)),
+      };
+    });
+    setMembers(rows);
 
-      <Card>
-        <div className="divide-y divide-dv-line">
-          {sorted.map((dish) => (
-            <article key={dish.name} className="flex items-center gap-3 p-4">
-              <MainDishThumb image={dish.image} name={dish.name} priority={dish.priority} />
-              <div>
-                <h3 className="text-sm text-dv-brassLight">{dish.name}</h3>
-                <p className="mt-1 text-[10px] uppercase text-slate-300/50">
-                  {dish.priority === "E" ? "Elemental — cook last" : `Priority ${dish.priority}`}
-                </p>
-                <p className="mt-1.5 text-xs text-dv-emerald">{dish.effect}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </Card>
-    </div>
-  );
-}
+    const myRow = (allMembers ?? []).find((member: any) => member.auth_user_id === user.id);
+    if (myRow) {
+      const myLogs = logsByMember.get(myRow.id) ?? new Map<number, AttackLog>();
+      setMyLoggedDays(CYCLE_DAY_NUMBERS.filter((day) => myLogs.has(day)));
+      setMe({ username: myRow.username, avatar_url: myRow.avatar_url, discord_id: myRow.discord_id, is_admin: myRow.is_admin });
+    }
+    setLoading(false);
+  }
 
-export function Meals() {
-  const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<"all" | "Appetizer" | "Main dish" | "Dessert">("all");
-  const [owned, setOwned] = useState<Record<string, boolean>>(() => {
-    if (typeof window === "undefined") return {};
-    try { return JSON.parse(localStorage.getItem("dv-command-ingredients") ?? "{}"); } catch { return {}; }
-  });
-  useEffect(() => { localStorage.setItem("dv-command-ingredients", JSON.stringify(owned)); }, [owned]);
-  const ingredients = ingredientDefaults.map(([name, source, defaultOwned, image]) => ({ name, source, image, owned: owned[name] ?? defaultOwned }));
-  const visible = useMemo(
-    () =>
-      meals
-        .map((meal, index) => ({ meal, index }))
-        .filter(
-          ({ meal }) =>
-            `${meal.name} ${meal.effect} ${meal.ingredients.join(" ")}`.toLowerCase().includes(query.toLowerCase()) &&
-            (filter === "all" || meal.category === filter)
-        ),
-    [filter, query]
-  );
+  useEffect(() => {
+    loadAll();
+  }, []);
 
-  const filterTabs: { value: "all" | "Appetizer" | "Main dish" | "Dessert"; label: string }[] = [
-    { value: "all", label: "All meals" },
-    { value: "Appetizer", label: "Appetizer" },
-    { value: "Main dish", label: "Main" },
-    { value: "Dessert", label: "Dessert" },
-  ];
+  async function logAttack(day: number) {
+    const res = await fetch("/api/log-attack", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ dayNumber: day }),
+    });
+    if (res.ok) {
+      setToast("D" + day + " attack logged ⚔️");
+      await loadAll();
+      setTimeout(() => setToast(null), 2500);
+    } else {
+      const json = await res.json().catch(() => ({}));
+      setToast(json.error ?? "Could not log attack");
+      setTimeout(() => setToast(null), 3000);
+    }
+  }
+
+  async function pingMissing() {
+    setPinging(true);
+    const res = await fetch("/api/ping-missing", { method: "POST" });
+    const json = await res.json();
+    setPinging(false);
+    setToast(res.ok ? "Pinged " + json.missing + " member(s) on Discord" : json.error);
+    setTimeout(() => setToast(null), 3000);
+  }
+
+  async function setWyvern(element: "wind" | "fire" | "earth" | "water") {
+    const response = await fetch("/api/settings", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ wyvern_element: element }),
+    });
+    if (!response.ok) {
+      setToast("Could not update guild settings");
+      setTimeout(() => setToast(null), 2500);
+      return;
+    }
+    setSettings((current) => ({ ...current, wyvern_element: element, wyvern_set_by: me?.username ?? null }));
+    setToast("Wyvern trace set to " + element.toUpperCase());
+    setTimeout(() => setToast(null), 2500);
+  }
+
+  async function saveCycleSettings() {
+    const anchor_date = settingsDraft.anchor_date || "2026-01-05";
+    const reset_hour_utc = Math.min(23, Math.max(0, Number(settingsDraft.reset_hour_utc) || 0));
+    const response = await fetch("/api/settings", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ anchor_date, reset_hour_utc }),
+    });
+    if (!response.ok) {
+      const json = await response.json().catch(() => ({}));
+      setToast("Error: " + (json.error ?? "Could not save settings"));
+    } else {
+      await loadAll();
+      setToast("Cycle settings saved");
+    }
+    setTimeout(() => setToast(null), 2500);
+  }
+
+  const dayIndex = Math.min(6, Math.max(0, dayNumber - 1));
+  const cycleDays = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+  const phases = ["Match", "Explore", "Explore", "Raid", "Raid", "Raid", "Standby"];
+
+  if (loading) return <main className="min-h-screen flex items-center justify-center"><p className="text-[11px] text-dv-brassLight animate-blink">LOADING GUILD DATA...</p></main>;
 
   return (
-    <div className="space-y-4">
-      <Card className="p-4">
-        <SectionLabel>PROVISIONS / SEASON 5</SectionLabel>
-        <h2 className="text-xl text-dv-brassLight">Cook for the window.</h2>
-        <p className="mt-2 max-w-xl text-sm text-slate-200/65">
-          Recipes and effects are taken from the Season 5 meal sheet. Toggle your stores to find what you can make now.
-        </p>
-      </Card>
-
-      <div className="grid gap-4 lg:grid-cols-[1fr_280px]">
-        <Card>
-          <div className="border-b border-dv-line p-4">
-            <input
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search meals, effects, ingredients"
-              className="w-full border border-dv-line bg-dv-panel2 px-3 py-3 text-xs text-dv-brassLight outline-none placeholder:text-slate-300/50 focus:border-dv-violet"
-            />
-            <div className="mt-3 grid grid-cols-4 gap-2">
-              {filterTabs.map(({ value, label }) => (
-                <button
-                  type="button"
-                  key={value}
-                  onClick={() => setFilter(value)}
-                  className={`border px-2 py-2 text-center text-[9px] uppercase ${
-                    filter === value ? "border-dv-violet bg-dv-violet/15 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/60"
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="divide-y divide-dv-line">
-            {visible.map(({ meal, index }) => {
-              const ready = meal.ingredients.length > 0 && meal.ingredients.every((item) => ingredients.find((ingredient) => ingredient.name === item)?.owned);
-              return (
-                <article key={`${meal.name}-${index}`} className="p-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-start gap-3">
-                      <MealThumb image={meal.image} name={meal.name} />
-                      <div>
-                        <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="text-sm text-dv-brassLight">{meal.name}</h3>
-                          <span className="status-chip">{meal.rarity}</span>
-                        </div>
-                        <p className="mt-2 text-xs text-dv-emerald">{meal.effect}</p>
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      disabled={!ready}
-                      className={
-                        ready
-                          ? "border border-dv-violet bg-dv-violet/15 px-3 py-2 text-[9px] uppercase text-dv-violet hover:bg-dv-violet/25"
-                          : "cursor-not-allowed border border-dv-line bg-dv-panel2 px-3 py-2 text-[9px] uppercase text-slate-300/40"
-                      }
-                    >
-                      Cook
-                    </button>
-                  </div>
-
-                  <div className="mt-4 flex flex-wrap gap-1.5">
-                    {meal.ingredients.map((item, index) => {
-                      const isOwned = ingredients.find((ingredient) => ingredient.name === item)?.owned;
-                      return (
-                        <span
-                          key={`${item}-${index}`}
-                          className={
-                            isOwned
-                              ? "border border-dv-brass bg-dv-brass/15 px-2 py-1 text-[9px] text-dv-brassLight"
-                              : "border border-dv-line bg-dv-panel2 px-2 py-1 text-[9px] text-slate-300/65"
-                          }
-                        >
-                          {item}
-                        </span>
-                      );
-                    })}
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </Card>
-
-        <Card className="h-fit p-4">
-          <div className="mb-4 flex items-center justify-between">
-            <div>
-              <SectionLabel>YOUR STORES</SectionLabel>
-              <p className="text-sm text-dv-brassLight">Ingredient ownership</p>
-            </div>
-            <span className="text-[10px] text-dv-emerald">
-              {ingredients.filter((item) => item.owned).length}/{ingredients.length}
+    <div className="scanlines flex h-dvh flex-col overflow-hidden">
+      <header className="z-40 shrink-0 border-b border-dv-line bg-dv-bg/95 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
+          <button onClick={() => setTab("ledger")} className="flex items-center gap-3">
+            <span className="grid h-11 w-11 place-items-center">
+              <DragonCrest />
             </span>
-          </div>
-          <div>
-            {ingredients.map((ingredient) => (
-              <button
-                type="button"
-                key={ingredient.name}
-                onClick={() => setOwned((current) => ({ ...current, [ingredient.name]: !ingredient.owned }))}
-                className="flex w-full items-center gap-3 border-b border-dv-line/60 py-2.5 text-left last:border-0"
-              >
-                <IngredientIcon image={ingredient.image} name={ingredient.name} />
-                <span>
-                  <span className="block text-xs">{ingredient.name}</span>
-                  <span className="block text-[8px] text-slate-300/50">{ingredient.source}</span>
-                </span>
-                <span
-                  className={`ml-auto grid h-5 w-5 place-items-center border text-[11px] ${
-                    ingredient.owned ? "border-dv-emerald bg-dv-emerald text-dv-bg" : "border-dv-line text-transparent"
-                  }`}
-                >
-                  ◆
-                </span>
-              </button>
-            ))}
-          </div>
-        </Card>
-      </div>
-    </div>
-  );
-}
-
-export function Runes() {
-  const [filter, setFilter] = useState("all");
-  const visible = runeRows.filter((row) => filter === "all" || row[2] === filter);
-  return (
-    <div className="space-y-4">
-      <Card className="p-4">
-        <SectionLabel>RUNE DESK / PRIORITY ORDER</SectionLabel>
-        <h2 className="text-xl text-dv-brassLight">Spend fragments with a plan.</h2>
-        <p className="mt-2 max-w-xl text-sm text-slate-200/65">
-          Priorities below follow the attached guild rune notes: season value first, then team needs and situational utility.
-        </p>
-      </Card>
-      <Card>
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-dv-line p-4">
-          <div>
-            <SectionLabel>TIER LIST</SectionLabel>
-            <p className="text-sm text-dv-brassLight">Recommended by guild officers</p>
-          </div>
-          <div className="flex flex-wrap gap-1">
-            {["all", "emblems", "exploration", "resources", "team", "combat"].map((item) => (
-              <button
-                type="button"
-                key={item}
-                onClick={() => setFilter(item)}
-                className={`px-2 py-1 text-[8px] uppercase ${filter === item ? "bg-dv-violet text-dv-bg" : "bg-dv-panel2 text-slate-300/60"}`}
-              >
-                {item}
-              </button>
-            ))}
+            <span className="text-left"><span className="eyebrow block">DRAGON VALLEY</span><span className="block text-sm text-dv-brassLight">ATTACK LEDGER</span></span>
+          </button>
+          <div className="flex items-center gap-2">
+            {me && (
+              <div className="pixel-frame item-slot flex items-center gap-2 px-2 py-1">
+                <img src={me.avatar_url ?? "/icons/icon-192.png"}
+                  alt=""
+                  className="h-6 w-6 pixel-frame border border-dv-line object-cover"
+                  style={{ objectFit: "cover" }}
+                  />
+                <span className="whitespace-nowrap text-[10px] text-dv-brassLight">{me.username}</span>
+              </div>
+            )}
           </div>
         </div>
-        <div className="divide-y divide-dv-line">
-          {visible.map(([rank, name, type, note]) => (
-            <div key={name} className="grid grid-cols-[68px_1fr] gap-3 p-4 sm:grid-cols-[90px_1fr_auto]">
-              <div className="grid h-9 place-items-center border border-dv-brass/50 bg-dv-brass/10 font-pixel text-[10px] text-dv-brassLight">{rank}</div>
-              <div>
-                <p className="text-sm text-dv-brassLight">{name}</p>
-                <p className="mt-1 text-xs leading-relaxed text-slate-200/65">{note}</p>
+      </header>
+
+      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col overflow-y-auto px-4 pb-6 pt-5 sm:px-6 md:pt-7">
+        {tab === "ledger" && (
+          <div className="flex flex-1 flex-col">
+            <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD OPERATIONS / ONLINE</p><h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">GUILD HUB</h1><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">The live raid ledger for the current seven-day cycle.</p></div>
+
+            {isStandbyDay ? (
+              <div className="mt-4 flex flex-1 flex-col items-center justify-center pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
+                <p className="text-sm text-dv-brassLight">🐉 STANDBY — CYCLE COMPLETE</p>
+                <p className="mt-2 max-w-md text-xs leading-relaxed text-slate-200/60">
+                  No attacks to log today. The ledger resets and Day 1 begins at the next reset hour.
+                </p>
               </div>
-              <span className="hidden self-center text-[9px] uppercase text-slate-300/50 sm:block">{type}</span>
+            ) : (
+              <>
+                {(dayNumber < 3 || settings.wyvern_element) && <div className="mt-4">{dayNumber < 3 ? <ExplorationPhase currentDay={dayNumber} /> : <WyvernTracker current={settings.wyvern_element as any} setBy={settings.wyvern_set_by} onSelect={setWyvern} isAdmin={me?.is_admin ?? false} />}</div>}
+
+                <div className="mt-4"><LogAttackButton anchorDate={settings.anchor_date} resetHour={settings.reset_hour_utc} dayNumber={dayNumber} loggedDays={myLoggedDays} onLog={logAttack} /></div>
+                <div className="mt-4"><GuildProgress members={members} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
+              </>
+            )}
+          </div>
+        )}
+
+        {tab === "guide" && (
+          <section>
+            <p className="eyebrow mb-4 text-dv-emerald">FIELD GUIDE</p>
+            <Guide />
+          </section>
+        )}
+
+        {tab === "meals" && (
+          <section>
+            <p className="eyebrow mb-4 text-dv-emerald">SEASON MEALS</p>
+
+            <div className="mb-4 grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setMealsSubTab("main")}
+                className={
+                  "border px-3 py-2.5 text-center text-[10px] uppercase tracking-[.06em] " +
+                  (mealsSubTab === "main"
+                    ? "border-dv-violet bg-dv-violet/15 text-dv-brassLight"
+                    : "border-dv-line bg-dv-panel2 text-slate-300/60")
+                }
+              >
+                Main Cooking
+              </button>
+              <button
+                type="button"
+                onClick={() => setMealsSubTab("special")}
+                className={
+                  "border px-3 py-2.5 text-center text-[10px] uppercase tracking-[.06em] " +
+                  (mealsSubTab === "special"
+                    ? "border-dv-violet bg-dv-violet/15 text-dv-brassLight"
+                    : "border-dv-line bg-dv-panel2 text-slate-300/60")
+                }
+              >
+                Special Dish
+              </button>
             </div>
+
+            {mealsSubTab === "main" ? <MainCooking /> : <Meals />}
+          </section>
+        )}
+
+        {tab === "runes" && (
+          <section>
+            <p className="eyebrow mb-4 text-dv-emerald">RUNE DESK</p>
+            <Runes />
+          </section>
+        )}
+
+        {tab === "settings" && me?.is_admin && (
+          <section>
+            <div className="mb-4"><p className="eyebrow text-dv-emerald">GUILD SETTINGS</p><h2 className="mt-1 text-xl text-dv-brassLight">Keep the shared clock accurate.</h2></div>
+            <section className="pixel-border bg-dv-panel/95 p-4 shadow-pixel">
+              <div className="grid gap-4 md:grid-cols-2">
+                <label className="text-[10px] text-dv-brassLight">CYCLE ANCHOR DATE<input type="date" value={settingsDraft.anchor_date} onChange={(event) => setSettingsDraft((current) => ({ ...current, anchor_date: event.target.value }))} className="mt-2 w-full pixel-frame item-slot border border-dv-line px-3 py-3 text-[11px] text-dv-brassLight outline-none focus:border-dv-violet" /><span className="mt-2 block text-[9px] text-slate-300/45">Day 1 of the first raid cycle.</span></label>
+                <label className="text-[10px] text-dv-brassLight">RESET HOUR (UTC)<input type="number" min={0} max={23} value={settingsDraft.reset_hour_utc} onChange={(event) => setSettingsDraft((current) => ({ ...current, reset_hour_utc: Number(event.target.value) }))} className="mt-2 w-full pixel-frame item-slot border border-dv-line px-3 py-3 text-[11px] text-dv-brassLight outline-none focus:border-dv-violet" /><span className="mt-2 block text-[9px] text-slate-300/45">Hour 0–23 UTC when the attack log rolls over.</span></label>
+              </div>
+              <button type="button" onClick={saveCycleSettings} className="mt-5 w-full pixel-frame bg-dv-brass px-4 py-3 text-[11px] text-dv-bg shadow-pixel-sm hover:bg-dv-brassLight active:translate-y-[2px]">SAVE CYCLE SETTINGS</button>
+            </section>
+          </section>
+        )}
+
+        {toast && <div role="status" className="fixed bottom-20 left-1/2 z-50 -translate-x-1/2 pixel-frame bg-dv-brass px-4 py-3 text-[10px] text-dv-bg shadow-pixel animate-rise">{toast}</div>}
+      </main>
+
+      <nav
+        aria-label="Guild hub sections"
+        className="z-40 shrink-0 border-t border-dv-line bg-dv-bg/95 backdrop-blur"
+      >
+        <div className="mx-auto flex max-w-6xl justify-around px-2 py-2">
+          {visibleTabs.map(({ id, label }) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setTab(id)}
+              aria-current={tab === id ? "page" : undefined}
+              className={
+                "flex flex-1 flex-col items-center gap-1 border px-1 py-1.5 text-[9px] uppercase tracking-[.1em] " +
+                (tab === id
+                  ? "border-dv-brass text-dv-brassLight"
+                  : "border-transparent text-slate-300/55 hover:border-dv-line hover:text-dv-brassLight")
+              }
+            >
+              {label}
+            </button>
           ))}
         </div>
-      </Card>
+      </nav>
     </div>
   );
 }
