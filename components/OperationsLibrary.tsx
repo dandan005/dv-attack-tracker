@@ -228,7 +228,7 @@ export function Meals() {
               const ready = meal.ingredients.length > 0 && meal.ingredients.every((item) => ingredients.find((ingredient) => ingredient.name === item)?.owned);
               return (
                 <article key={`${meal.name}-${index}`} className="p-4">
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center justify-between gap-3">
                     <div className="flex items-start gap-3">
                       <MealThumb image={meal.image} name={meal.name} />
                       <div>
@@ -244,8 +244,8 @@ export function Meals() {
                       disabled={!ready}
                       className={
                         ready
-                          ? "border border-dv-emerald bg-dv-emerald/15 px-3 py-2 text-[9px] uppercase text-dv-emerald hover:bg-dv-emerald/25"
-                          : "cursor-not-allowed border border-dv-line bg-dv-panel2 px-3 py-2 text-[9px] uppercase text-slate-300/40"
+                          ? "shadow-pixel shrink-0 border-2 border-dv-emerald bg-dv-emerald px-4 py-3 text-[10px] font-bold uppercase tracking-wide text-dv-bg transition hover:brightness-110"
+                          : "shrink-0 cursor-not-allowed border border-dv-line bg-dv-panel2 px-3 py-2 text-[9px] uppercase text-slate-300/40"
                       }
                     >
                       Cook
