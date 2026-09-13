@@ -603,3 +603,12 @@ input {
 ::-webkit-scrollbar-track {
   background: #11172b;
 }
+
+main::-webkit-scrollbar {
+  display: none;
+}
+
+main {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
