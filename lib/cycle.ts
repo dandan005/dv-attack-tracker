@@ -1,8 +1,9 @@
-// Dragon Valley runs a 6-day attack cycle (D1-D6). We anchor the cycle to a
-// configurable start date + reset hour (UTC) so the whole guild agrees on
-// "today's" day number no matter what timezone each member is in.
+// Dragon Valley runs a 7-day attack cycle (D1-D6 active, D7 standby). We
+// anchor the cycle to a configurable start date + reset hour (UTC) so the
+// whole guild agrees on "today's" day number no matter what timezone each
+// member is in.
 
-export const CYCLE_LENGTH = 6;
+export const CYCLE_LENGTH = 7;
 
 export function getCycleInfo(anchorDateISO: string, resetHourUTC: number) {
   const now = new Date();
@@ -22,14 +23,14 @@ export function getCycleInfo(anchorDateISO: string, resetHourUTC: number) {
   const msPerDay = 24 * 60 * 60 * 1000;
   const diffDays = Math.floor((now.getTime() - anchor.getTime()) / msPerDay);
   const cycleIndex = Math.floor(diffDays / CYCLE_LENGTH);
-  const dayNumber = ((diffDays % CYCLE_LENGTH) + CYCLE_LENGTH) % CYCLE_LENGTH; // 0-5
+  const dayNumber = ((diffDays % CYCLE_LENGTH) + CYCLE_LENGTH) % CYCLE_LENGTH; // 0-6
 
   const cycleStart = new Date(anchor.getTime() + cycleIndex * CYCLE_LENGTH * msPerDay);
   const dayStart = new Date(anchor.getTime() + diffDays * msPerDay);
   const dayEnd = new Date(dayStart.getTime() + msPerDay);
 
   return {
-    dayNumber: dayNumber + 1, // 1-6 for display
+    dayNumber: dayNumber + 1, // 1-7 for display
     cycleStartISO: cycleStart.toISOString().slice(0, 10),
     dayEnd,
     msUntilReset: dayEnd.getTime() - now.getTime(),
