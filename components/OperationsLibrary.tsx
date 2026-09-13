@@ -87,6 +87,25 @@ const runeRows = [
   ["D", "Awaken Time Freeze", "combat", "Increases Ark skill folds by 3x; situational and difficult to justify."],
 ];
 
+type MainDish = {
+  name: string;
+  priority: number | "E";
+  level: number;
+  image: string;
+};
+
+const mainDishes: MainDish[] = [
+  { name: "Bubble Hotpot", priority: 1, level: 20, image: "bubble-hotpot.jpg" },
+  { name: "Sandwich", priority: 2, level: 18, image: "sandwich.jpg" },
+  { name: "Immortal Steak", priority: 3, level: 20, image: "immortal-steak.jpg" },
+  { name: "BBQ Ribs", priority: 4, level: 12, image: "bbq-ribs.jpg" },
+  { name: "Savory Hotdog", priority: 5, level: 7, image: "savory-hotdog.jpg" },
+  { name: "Hellfire Curry", priority: "E", level: 6, image: "hellfire-curry.jpg" },
+  { name: "Water Slash Soup", priority: "E", level: 20, image: "water-slash-soup.png" },
+  { name: "Thunderbolt Burger", priority: "E", level: 4, image: "thunderbolt-burger.jpg" },
+  { name: "Demon Pizza", priority: "E", level: 1, image: "demon-pizza.jpg" },
+];
+
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return <p className="eyebrow mb-2">{children}</p>;
 }
@@ -111,6 +130,34 @@ function IngredientIcon({ image, name }: { image: string; name: string }) {
   return (
     <div className="pixel-frame item-slot h-8 w-8 shrink-0 overflow-hidden">
       <img src={"/ingredients/" + image} alt={name} className="h-full w-full object-cover" style={{ imageRendering: "pixelated" }} />
+    </div>
+  );
+}
+
+function PriorityBadge({ priority }: { priority: number | "E" }) {
+  const isElemental = priority === "E";
+  return (
+    <span
+      className={
+        "absolute -right-1.5 -top-1.5 grid h-5 w-5 place-items-center rounded-full border text-[10px] font-bold " +
+        (isElemental
+          ? "border-dv-violet bg-dv-violet text-white"
+          : "border-dv-brass bg-dv-brass text-dv-bg")
+      }
+      title={isElemental ? "Elemental — cooked last, matched to the wyvern trace" : `Cook priority ${priority}`}
+    >
+      {priority}
+    </span>
+  );
+}
+
+function MainDishThumb({ image, name, priority }: { image: string; name: string; priority: number | "E" }) {
+  return (
+    <div className="relative h-14 w-14 shrink-0">
+      <div className="pixel-frame item-slot h-14 w-14 overflow-hidden">
+        <img src={"/cooking/" + image} alt={name} className="h-full w-full object-cover" style={{ imageRendering: "pixelated" }} />
+      </div>
+      <PriorityBadge priority={priority} />
     </div>
   );
 }
@@ -154,6 +201,46 @@ export function Guide() {
               </div>
             );
           })}
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+export function MainCooking() {
+  const sorted = useMemo(
+    () =>
+      [...mainDishes].sort((a, b) => {
+        const rank = (value: number | "E") => (value === "E" ? 99 : value);
+        return rank(a.priority) - rank(b.priority);
+      }),
+    []
+  );
+
+  return (
+    <div className="space-y-4">
+      <Card className="p-4">
+        <SectionLabel>MAIN COOKING / CAMPFIRE QUEUE</SectionLabel>
+        <h2 className="text-xl text-dv-brassLight">Cook in order.</h2>
+        <p className="mt-2 max-w-xl text-sm text-slate-200/65">
+          Gold numbers are the fixed priority: 1 through 5, cooked first. Violet <span className="text-dv-violet">E</span> tags
+          are elemental dishes — hold those until the trace confirms which wyvern shows up, then cook to match it.
+        </p>
+      </Card>
+
+      <Card>
+        <div className="divide-y divide-dv-line">
+          {sorted.map((dish) => (
+            <article key={dish.name} className="flex items-center gap-3 p-4">
+              <MainDishThumb image={dish.image} name={dish.name} priority={dish.priority} />
+              <div>
+                <h3 className="text-sm text-dv-brassLight">{dish.name}</h3>
+                <p className="mt-1 text-[10px] uppercase text-slate-300/50">
+                  {dish.priority === "E" ? "Elemental — cook last" : `Priority ${dish.priority}`} · Lv.{dish.level}
+                </p>
+              </div>
+            </article>
+          ))}
         </div>
       </Card>
     </div>
