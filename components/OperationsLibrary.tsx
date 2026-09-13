@@ -90,20 +90,20 @@ const runeRows = [
 type MainDish = {
   name: string;
   priority: number | "E";
-  level: number;
   image: string;
+  effect: string;
 };
 
 const mainDishes: MainDish[] = [
-  { name: "Bubble Hotpot", priority: 1, level: 20, image: "bubble-hotpot.png" },
-  { name: "Sandwich", priority: 2, level: 18, image: "sandwich.png" },
-  { name: "Immortal Steak", priority: 3, level: 20, image: "immortal-steak.png" },
-  { name: "BBQ Ribs", priority: 4, level: 12, image: "bbq-ribs.png" },
-  { name: "Savory Hotdog", priority: 5, level: 7, image: "savory-hotdog.png" },
-  { name: "Hellfire Curry", priority: "E", level: 6, image: "hellfire-curry.png" },
-  { name: "Water Slash Soup", priority: "E", level: 20, image: "water-slash-soup.png" },
-  { name: "Thunderbolt Burger", priority: "E", level: 4, image: "thunderbolt-burger.png" },
-  { name: "Demon Pizza", priority: "E", level: 1, image: "demon-pizza.png" },
+  { name: "Bubble Hotpot", priority: 1, image: "bubble-hotpot.png", effect: "Increase the amount of Ingredients obtained from Exploration." },
+  { name: "Sandwich", priority: 2, image: "sandwich.png", effect: "ATK SPD increased while the Wyvern is preparing its powerful attack." },
+  { name: "Immortal Steak", priority: 3, image: "immortal-steak.png", effect: "Increases DMG to Wyvern." },
+  { name: "BBQ Ribs", priority: 4, image: "bbq-ribs.png", effect: "Dmg increase every 20 sec after entering the Raid." },
+  { name: "Savory Hotdog", priority: 5, image: "savory-hotdog.png", effect: "Additional DMG after Wyvern fails a powerful attack." },
+  { name: "Hellfire Curry", priority: "E", image: "hellfire-curry.png", effect: "Increases Fire Attribute DMG to Wyvern." },
+  { name: "Water Slash Soup", priority: "E", image: "water-slash-soup.png", effect: "Increases Water Attribute DMG to Wyvern." },
+  { name: "Thunderbolt Burger", priority: "E", image: "thunderbolt-burger.png", effect: "Increases Wind Attribute DMG to Wyvern." },
+  { name: "Demon Pizza", priority: "E", image: "demon-pizza.png", effect: "Increases Earth Attribute DMG to Wyvern." },
 ];
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -236,8 +236,9 @@ export function MainCooking() {
               <div>
                 <h3 className="text-sm text-dv-brassLight">{dish.name}</h3>
                 <p className="mt-1 text-[10px] uppercase text-slate-300/50">
-                  {dish.priority === "E" ? "Elemental — cook last" : `Priority ${dish.priority}`} · Lv.{dish.level}
+                  {dish.priority === "E" ? "Elemental — cook last" : `Priority ${dish.priority}`}
                 </p>
+                <p className="mt-1.5 text-xs text-dv-emerald">{dish.effect}</p>
               </div>
             </article>
           ))}
