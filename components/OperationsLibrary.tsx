@@ -95,15 +95,15 @@ type MainDish = {
 };
 
 const mainDishes: MainDish[] = [
-  { name: "Bubble Hotpot", priority: 1, level: 20, image: "bubble-hotpot.jpg" },
-  { name: "Sandwich", priority: 2, level: 18, image: "sandwich.jpg" },
-  { name: "Immortal Steak", priority: 3, level: 20, image: "immortal-steak.jpg" },
-  { name: "BBQ Ribs", priority: 4, level: 12, image: "bbq-ribs.jpg" },
-  { name: "Savory Hotdog", priority: 5, level: 7, image: "savory-hotdog.jpg" },
-  { name: "Hellfire Curry", priority: "E", level: 6, image: "hellfire-curry.jpg" },
+  { name: "Bubble Hotpot", priority: 1, level: 20, image: "bubble-hotpot.png" },
+  { name: "Sandwich", priority: 2, level: 18, image: "sandwich.png" },
+  { name: "Immortal Steak", priority: 3, level: 20, image: "immortal-steak.png" },
+  { name: "BBQ Ribs", priority: 4, level: 12, image: "bbq-ribs.png" },
+  { name: "Savory Hotdog", priority: 5, level: 7, image: "savory-hotdog.png" },
+  { name: "Hellfire Curry", priority: "E", level: 6, image: "hellfire-curry.png" },
   { name: "Water Slash Soup", priority: "E", level: 20, image: "water-slash-soup.png" },
-  { name: "Thunderbolt Burger", priority: "E", level: 4, image: "thunderbolt-burger.jpg" },
-  { name: "Demon Pizza", priority: "E", level: 1, image: "demon-pizza.jpg" },
+  { name: "Thunderbolt Burger", priority: "E", level: 4, image: "thunderbolt-burger.png" },
+  { name: "Demon Pizza", priority: "E", level: 1, image: "demon-pizza.png" },
 ];
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
