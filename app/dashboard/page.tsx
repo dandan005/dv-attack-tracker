@@ -43,28 +43,21 @@ const TABS: { id: Tab; label: string }[] = [
 
 const CYCLE_DAY_NUMBERS = [1, 2, 3, 4, 5, 6, 7];
 
-// Every Sunday 22:00 UTC through Monday 07:00 UTC (9 hours), show the
-// "ranking is being calculated" card instead of the normal ledger content.
-// This is a fixed real-world weekly window (matches the game's own global
-// reset schedule) and is intentionally independent of anchor_date/reset_hour_utc,
-// which only govern which day of the cycle a guild is currently on.
+// Every Sunday 14:00-23:00 UTC (displayed in-game as 10:00 PM - 7:00 AM
+// PHT, since the guild runs on Manila time, UTC+8), show the "ranking is
+// being calculated" card instead of the normal ledger content. This window
+// falls entirely within a single UTC calendar day (Sunday), so no
+// cross-midnight handling is needed. It's a fixed real-world weekly window
+// (matches the game's own global reset schedule) and must stay in sync
+// with the CYCLE_START_UTC_HOUR anchor in cycle.ts — both represent the
+// same "Day 1 begins" instant.
 function getCalculationWindow(now: Date) {
-  const day = now.getUTCDay(); // 0 = Sunday, 1 = Monday
-  const hour = now.getUTCHours();
+  if (now.getUTCDay() !== 0) return { active: false, hoursLeft: 0 }; // only ever active on Sunday (UTC)
 
   const start = new Date(now);
-  start.setUTCHours(22, 0, 0, 0);
+  start.setUTCHours(14, 0, 0, 0);
 
-  if (day === 0 && hour >= 22) {
-    // Window started today (Sunday) at 22:00 UTC — start is already correct.
-  } else if (day === 1 && hour < 7) {
-    // Window started yesterday (Sunday) at 22:00 UTC.
-    start.setUTCDate(start.getUTCDate() - 1);
-  } else {
-    return { active: false, hoursLeft: 0 };
-  }
-
-  const end = new Date(start.getTime() + 9 * 60 * 60 * 1000);
+  const end = new Date(start.getTime() + 9 * 60 * 60 * 1000); // 23:00 UTC same day
   const active = now >= start && now < end;
   const hoursLeft = Math.max(0, Math.ceil((end.getTime() - now.getTime()) / (60 * 60 * 1000)));
   return { active, hoursLeft };
