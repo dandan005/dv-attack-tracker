@@ -95,15 +95,15 @@ type MainDish = {
 };
 
 const mainDishes: MainDish[] = [
-  { name: "Bubble Hotpot", priority: 1, image: "bubble-hotpot.png", effect: "Increase the amount of Ingredients obtained from Exploration." },
-  { name: "Sandwich", priority: 2, image: "sandwich.png", effect: "ATK SPD increased while the Wyvern is preparing its powerful attack." },
-  { name: "Immortal Steak", priority: 3, image: "immortal-steak.png", effect: "Increases DMG to Wyvern." },
-  { name: "BBQ Ribs", priority: 4, image: "bbq-ribs.png", effect: "Dmg increase every 20 sec after entering the Raid." },
-  { name: "Savory Hotdog", priority: 5, image: "savory-hotdog.png", effect: "Additional DMG after Wyvern fails a powerful attack." },
-  { name: "Hellfire Curry", priority: "E", image: "hellfire-curry.png", effect: "Increases Fire Attribute DMG to Wyvern." },
-  { name: "Water Slash Soup", priority: "E", image: "water-slash-soup.png", effect: "Increases Water Attribute DMG to Wyvern." },
-  { name: "Thunderbolt Burger", priority: "E", image: "thunderbolt-burger.png", effect: "Increases Wind Attribute DMG to Wyvern." },
-  { name: "Demon Pizza", priority: "E", image: "demon-pizza.png", effect: "Increases Earth Attribute DMG to Wyvern." },
+  { name: "Bubble Hotpot", priority: 1, image: "bubble-hotpot.png", effect: "Increase the amount of Ingredients obtained from Exploration by 100%" },
+  { name: "Sandwich", priority: 2, image: "sandwich.png", effect: "ATK SPD +90% while the Wyvern is preparing its powerful attack" },
+  { name: "Immortal Steak", priority: 3, image: "immortal-steak.png", effect: "Increases DMG to Wyvern by 60%" },
+  { name: "BBQ Ribs", priority: 4, image: "bbq-ribs.png", effect: "Dmg +60% every 20 sec after entering the Raid" },
+  { name: "Savory Hotdog", priority: 5, image: "savory-hotdog.png", effect: "Additional DMG +35% after Wyvern fails a powerful attack" },
+  { name: "Hellfire Curry", priority: "E", image: "hellfire-curry.png", effect: "Increases Fire Attribute DMG to Wyvern by 30%" },
+  { name: "Water Slash Soup", priority: "E", image: "water-slash-soup.png", effect: "Increases Water Attribute DMG to Wyvern by 0%" },
+  { name: "Thunderbolt Burger", priority: "E", image: "thunderbolt-burger.png", effect: "Increases Wind Attribute DMG to Wyvern by 20%" },
+  { name: "Demon Pizza", priority: "E", image: "demon-pizza.png", effect: "Increases Earth Attribute DMG to Wyvern by 5%" },
 ];
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
