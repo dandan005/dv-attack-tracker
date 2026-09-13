@@ -183,13 +183,13 @@ export function Meals() {
 
   return (
     <div className="space-y-4">
-      <div className="border border-dv-emerald/35 bg-dv-emerald/10 p-4">
+      <Card className="p-4">
         <SectionLabel>PROVISIONS / SEASON 5</SectionLabel>
         <h2 className="text-xl text-dv-brassLight">Cook for the window.</h2>
         <p className="mt-2 max-w-xl text-sm text-slate-200/65">
           Recipes and effects are taken from the Season 5 meal sheet. Toggle your stores to find what you can make now.
         </p>
-      </div>
+      </Card>
 
       <div className="grid gap-4 lg:grid-cols-[1fr_280px]">
         <Card>
