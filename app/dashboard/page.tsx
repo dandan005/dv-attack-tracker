@@ -41,7 +41,10 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "settings", label: "Settings" },
 ];
 
-const CYCLE_DAY_NUMBERS = [1, 2, 3, 4, 5, 6, 7];
+// Day 7 is standby — no attacks are ever logged that day (the log button
+// is hidden via isStandbyDay), so it's excluded here to keep the guild
+// readout limited to the 6 days attacks can actually happen.
+const CYCLE_DAY_NUMBERS = [1, 2, 3, 4, 5, 6];
 
 // Every Sunday 14:00-23:00 UTC (displayed in-game as 10:00 PM - 7:00 AM
 // PHT, since the guild runs on Manila time, UTC+8), show the "ranking is
