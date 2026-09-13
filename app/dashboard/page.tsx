@@ -42,28 +42,29 @@ const TABS: { id: Tab; label: string }[] = [
 ];
 
 const CYCLE_DAY_NUMBERS = [1, 2, 3, 4, 5, 6, 7];
+const CYCLE_MS = 7 * 24 * 60 * 60 * 1000;
+const CALC_WINDOW_MS = 9 * 60 * 60 * 1000;
 
-// Every Sunday 22:00 UTC through Monday 07:00 UTC (9 hours), show the
-// "ranking is being calculated" card instead of the normal ledger content.
-function getCalculationWindow(now: Date) {
-  const day = now.getUTCDay(); // 0 = Sunday, 1 = Monday
-  const hour = now.getUTCHours();
+// The calculation window is the last 9 hours of every 7-day cycle, derived
+// from the same anchor_date/reset_hour_utc that drives getCycleInfo (and
+// therefore dayNumber/isStandbyDay). This keeps both "end of cycle" signals
+// in sync — previously this was hardcoded to a fixed Sunday 22:00-Monday
+// 07:00 UTC window, which could fire on an active raid day (or miss the
+// real cycle end) for any guild using a non-default anchor/reset hour.
+function getCalculationWindow(anchorDate: string, resetHourUtc: number, now: Date) {
+  const anchor = new Date(anchorDate + "T00:00:00Z");
+  anchor.setUTCHours(resetHourUtc, 0, 0, 0);
 
-  const start = new Date(now);
-  start.setUTCHours(22, 0, 0, 0);
+  const elapsed = now.getTime() - anchor.getTime();
+  if (elapsed < 0) return { active: false, hoursLeft: 0 };
 
-  if (day === 0 && hour >= 22) {
-    // Window started today (Sunday) at 22:00 UTC — start is already correct.
-  } else if (day === 1 && hour < 7) {
-    // Window started yesterday (Sunday) at 22:00 UTC.
-    start.setUTCDate(start.getUTCDate() - 1);
-  } else {
-    return { active: false, hoursLeft: 0 };
-  }
+  const cyclesElapsed = Math.floor(elapsed / CYCLE_MS);
+  const currentCycleStart = anchor.getTime() + cyclesElapsed * CYCLE_MS;
+  const nextCycleStart = currentCycleStart + CYCLE_MS;
+  const windowStart = nextCycleStart - CALC_WINDOW_MS;
 
-  const end = new Date(start.getTime() + 9 * 60 * 60 * 1000);
-  const active = now >= start && now < end;
-  const hoursLeft = Math.max(0, Math.ceil((end.getTime() - now.getTime()) / (60 * 60 * 1000)));
+  const active = now.getTime() >= windowStart && now.getTime() < nextCycleStart;
+  const hoursLeft = Math.max(0, Math.ceil((nextCycleStart - now.getTime()) / (60 * 60 * 1000)));
   return { active, hoursLeft };
 }
 
@@ -89,7 +90,7 @@ export default function DashboardPage() {
 
   const { dayNumber, cycleStartISO } = getCycleInfo(settings.anchor_date, settings.reset_hour_utc);
   const isStandbyDay = dayNumber === 7;
-  const calc = getCalculationWindow(now);
+  const calc = getCalculationWindow(settings.anchor_date, settings.reset_hour_utc, now);
 
   const visibleTabs = TABS.filter((t) => t.id !== "settings" || me?.is_admin);
 
@@ -165,11 +166,16 @@ export default function DashboardPage() {
 
   async function pingMissing() {
     setPinging(true);
-    const res = await fetch("/api/ping-missing", { method: "POST" });
-    const json = await res.json();
-    setPinging(false);
-    setToast(res.ok ? "Pinged " + json.missing + " member(s) on Discord" : json.error);
-    setTimeout(() => setToast(null), 3000);
+    try {
+      const res = await fetch("/api/ping-missing", { method: "POST" });
+      const json = await res.json().catch(() => ({}));
+      setToast(res.ok ? "Pinged " + json.missing + " member(s) on Discord" : (json.error ?? "Could not ping missing members"));
+    } catch {
+      setToast("Could not ping missing members");
+    } finally {
+      setPinging(false);
+      setTimeout(() => setToast(null), 3000);
+    }
   }
 
   async function setWyvern(element: "wind" | "fire" | "earth" | "water") {
@@ -207,7 +213,7 @@ export default function DashboardPage() {
   }
 
   const dayIndex = Math.min(6, Math.max(0, dayNumber - 1));
-  const cycleDays = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+  const cycleDays = ["DAY 1", "DAY 2", "DAY 3", "DAY 4", "DAY 5", "DAY 6", "DAY 7"];
   const phases = ["Match", "Explore", "Explore", "Raid", "Raid", "Raid", "Standby"];
 
   if (loading) return <main className="min-h-screen flex items-center justify-center"><p className="text-[11px] text-dv-brassLight animate-blink">LOADING GUILD DATA...</p></main>;
@@ -241,6 +247,21 @@ export default function DashboardPage() {
         {tab === "ledger" && (
           <div className="flex min-h-0 flex-1 flex-col">
             <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD OPERATIONS / ONLINE</p><h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">GUILD HUB</h1><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">The live raid ledger for the current seven-day cycle.</p></div>
+
+            <div className="mb-4 flex gap-1">
+              {cycleDays.map((label, i) => (
+                <div
+                  key={label}
+                  className={
+                    "flex-1 border px-1 py-2 text-center text-[9px] uppercase tracking-[.05em] " +
+                    (i === dayIndex ? "border-dv-brass bg-dv-brass/10 text-dv-brassLight" : "border-dv-line text-slate-300/50")
+                  }
+                >
+                  <div>{label}</div>
+                  <div className="mt-1 text-[8px] opacity-70">{phases[i]}</div>
+                </div>
+              ))}
+            </div>
 
             {calc.active ? (
               <div className="mt-4 flex min-h-0 flex-1 flex-col items-center justify-center pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
