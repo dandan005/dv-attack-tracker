@@ -130,8 +130,8 @@ const skillImages: Record<string, string | undefined> = {
   "Earth's Will": "earths-will.png",
   "Hell Fire Slash": "hell-fire-slash.png",
   "Curved Blade": "curved-blade.png",
-  "Rave": undefined,
-  "Strong Current": undefined,
+  "Rave": "rave.png",
+  "Strong Current": "strong-current",
 };
 
 type Spirit = { name: string; image: string };
