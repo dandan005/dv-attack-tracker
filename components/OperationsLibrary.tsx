@@ -138,10 +138,8 @@ type Spirit = { name: string; image: string };
 
 const spirits: Spirit[] = [
   { name: "Sala", image: "sala.png" },
-  { name: "Herh", image: "herh.png" },
   { name: "Noah", image: "noah.png" },
   { name: "Loar", image: "loar.png" },
-  { name: "Ark", image: "ark.png" },
 ];
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
