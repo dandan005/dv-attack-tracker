@@ -25,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="font-pixel scanlines min-h-screen bg-dv-bg">{children}</body>
+      <body className="font-pixel scanlines h-full overflow-hidden bg-dv-bg">{children}</body>
     </html>
   );
 }
