@@ -162,7 +162,7 @@ export function Guide() {
 
 export function Meals() {
   const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<"all" | "raid" | "exploration">("all");
+  const [filter, setFilter] = useState<"all" | "Appetizer" | "Main dish" | "Dessert">("all");
   const [owned, setOwned] = useState<Record<string, boolean>>(() => {
     if (typeof window === "undefined") return {};
     try { return JSON.parse(localStorage.getItem("dv-command-ingredients") ?? "{}"); } catch { return {}; }
@@ -176,10 +176,17 @@ export function Meals() {
         .filter(
           ({ meal }) =>
             `${meal.name} ${meal.effect} ${meal.ingredients.join(" ")}`.toLowerCase().includes(query.toLowerCase()) &&
-            (filter === "all" || meal.tags.includes(filter))
+            (filter === "all" || meal.category === filter)
         ),
     [filter, query]
   );
+
+  const filterTabs: { value: "all" | "Appetizer" | "Main dish" | "Dessert"; label: string }[] = [
+    { value: "all", label: "All meals" },
+    { value: "Appetizer", label: "Appetizer" },
+    { value: "Main dish", label: "Main" },
+    { value: "Dessert", label: "Dessert" },
+  ];
 
   return (
     <div className="space-y-4">
@@ -200,17 +207,17 @@ export function Meals() {
               placeholder="Search meals, effects, ingredients"
               className="w-full border border-dv-line bg-dv-panel2 px-3 py-3 text-xs text-dv-brassLight outline-none placeholder:text-slate-300/50 focus:border-dv-violet"
             />
-            <div className="mt-3 flex flex-wrap gap-2">
-              {(["all", "raid", "exploration"] as const).map((item) => (
+            <div className="mt-3 grid grid-cols-4 gap-2">
+              {filterTabs.map(({ value, label }) => (
                 <button
                   type="button"
-                  key={item}
-                  onClick={() => setFilter(item)}
-                  className={`border px-3 py-2 text-[9px] uppercase ${
-                    filter === item ? "border-dv-violet bg-dv-violet/15 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/60"
+                  key={value}
+                  onClick={() => setFilter(value)}
+                  className={`border px-2 py-2 text-center text-[9px] uppercase ${
+                    filter === value ? "border-dv-violet bg-dv-violet/15 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/60"
                   }`}
                 >
-                  {item === "all" ? "All meals" : item}
+                  {label}
                 </button>
               ))}
             </div>
@@ -243,7 +250,7 @@ export function Meals() {
                           key={`${item}-${index}`}
                           className={
                             isOwned
-                              ? "border border-dv-emerald bg-dv-emerald/15 px-2 py-1 text-[9px] text-dv-emerald"
+                              ? "border border-dv-brass bg-dv-brass/15 px-2 py-1 text-[9px] text-dv-brassLight"
                               : "border border-dv-line bg-dv-panel2 px-2 py-1 text-[9px] text-slate-300/65"
                           }
                         >
