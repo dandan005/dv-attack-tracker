@@ -244,7 +244,7 @@ export function Meals() {
                       disabled={!ready}
                       className={
                         ready
-                          ? "border border-dv-violet bg-dv-violet px-3 py-2 text-[9px] uppercase text-white hover:bg-dv-violet/90"
+                          ? "border border-dv-violet bg-dv-violet/15 px-3 py-2 text-[9px] uppercase text-dv-violet hover:bg-dv-violet/25"
                           : "cursor-not-allowed border border-dv-line bg-dv-panel2 px-3 py-2 text-[9px] uppercase text-slate-300/40"
                       }
                     >
