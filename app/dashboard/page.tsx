@@ -35,12 +35,12 @@ type AttackLog = {
 type Tab = "ledger" | "guide" | "meals" | "runes" | "settings";
 type MealsSubTab = "main" | "special";
 
-const TABS: { id: Tab; label: string }[] = [
-  { id: "ledger", label: "Ledger" },
-  { id: "guide", label: "Guide" },
-  { id: "meals", label: "Meals" },
-  { id: "runes", label: "Runes" },
-  { id: "settings", label: "Settings" },
+const TABS: { id: Tab; label: string; icon: string }[] = [
+  { id: "ledger", label: "Ledger", icon: "⚔️" },
+  { id: "guide", label: "Guide", icon: "📖" },
+  { id: "meals", label: "Meals", icon: "🍖" },
+  { id: "runes", label: "Runes", icon: "🔮" },
+  { id: "settings", label: "Settings", icon: "⚙️" },
 ];
 
 // Day 7 is standby — no attacks are ever logged that day (the log button
@@ -245,9 +245,24 @@ export default function DashboardPage() {
               type="button"
               onClick={() => setShowWalkthrough(true)}
               aria-label="Replay walkthrough"
-              className="pixel-frame item-slot grid h-8 w-8 place-items-center text-[11px] text-dv-brassLight"
+              className="pixel-frame item-slot grid h-8 w-8 place-items-center text-dv-brassLight"
             >
-              ?
+              <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4">
+                <path
+                  d="M20 12a8 8 0 1 1-2.34-5.66"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M20 4v5h-5"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path d="M10 9.3v5.4l4.5-2.7-4.5-2.7z" fill="currentColor" />
+              </svg>
             </button>
             {me && (
               <div className="pixel-frame item-slot flex items-center gap-2 px-2 py-1">
@@ -374,7 +389,7 @@ export default function DashboardPage() {
         className="z-40 shrink-0 border-t border-dv-line bg-dv-bg/95 backdrop-blur"
       >
         <div className="mx-auto flex max-w-6xl justify-around px-2 py-2">
-          {visibleTabs.map(({ id, label }) => (
+          {visibleTabs.map(({ id, label, icon }) => (
             <button
               key={id}
               type="button"
@@ -387,6 +402,7 @@ export default function DashboardPage() {
                   : "border-transparent text-slate-300/55 hover:border-dv-line hover:text-dv-brassLight")
               }
             >
+              <span className="text-base leading-none">{icon}</span>
               {label}
             </button>
           ))}
