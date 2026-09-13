@@ -239,7 +239,17 @@ export function Meals() {
                         <p className="mt-2 text-xs text-dv-emerald">{meal.effect}</p>
                       </div>
                     </div>
-                    <span className={`text-[9px] uppercase ${ready ? "text-dv-emerald" : "text-slate-300/50"}`}>{ready ? "Ready" : "Missing"}</span>
+                    <button
+                      type="button"
+                      disabled={!ready}
+                      className={
+                        ready
+                          ? "border border-dv-emerald bg-dv-emerald/15 px-3 py-2 text-[9px] uppercase text-dv-emerald hover:bg-dv-emerald/25"
+                          : "cursor-not-allowed border border-dv-line bg-dv-panel2 px-3 py-2 text-[9px] uppercase text-slate-300/40"
+                      }
+                    >
+                      Cook
+                    </button>
                   </div>
 
                   <div className="mt-4 flex flex-wrap gap-1.5">
