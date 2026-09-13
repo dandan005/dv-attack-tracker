@@ -35,10 +35,6 @@ input {
   font: inherit;
 }
 
-.scanlines {
-  position: relative;
-}
-
 .scanlines::before {
   content: "";
   position: fixed;
