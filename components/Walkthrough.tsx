@@ -66,7 +66,7 @@ export function Walkthrough({
   }
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 px-4">
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/70 px-4 pb-20">
       <div className="pixel-border w-full max-w-sm bg-dv-panel/95 p-5 shadow-pixel">
         <div className="flex items-center justify-between">
           <span className="eyebrow text-dv-emerald">
