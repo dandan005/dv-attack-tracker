@@ -349,7 +349,7 @@ export function Spirits() {
         </p>
       </Card>
       <Card>
-        <div className="grid grid-cols-2 gap-4 p-4 sm:grid-cols-3">
+        <div className="grid grid-cols-3 gap-4 p-4 sm:grid-cols-3">
           {spirits.map((spirit) => (
             <div key={spirit.name} className="flex flex-col items-center gap-2 text-center">
               <div className="pixel-frame item-slot h-16 w-16 overflow-hidden">
