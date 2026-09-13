@@ -8,7 +8,7 @@ import { LogAttackButton } from "@/components/LogAttackButton";
 import { GuildProgress, MemberRow } from "@/components/GuildProgress";
 import { WyvernTracker } from "@/components/WyvernTracker";
 import { ExplorationPhase } from "@/components/ExplorationPhase";
-import { Guide, MainCooking, Meals, Runes } from "@/components/OperationsLibrary";
+import { Guide, MainCooking, Meals, Runes, SkillBuild, Spirits } from "@/components/OperationsLibrary";
 import { DragonCrest } from "@/components/DragonCrest";
 
 type Settings = {
@@ -230,9 +230,19 @@ export default function DashboardPage() {
         )}
 
         {tab === "guide" && (
-          <section>
-            <p className="eyebrow mb-4 text-dv-emerald">FIELD GUIDE</p>
-            <Guide />
+          <section className="space-y-6">
+            <div>
+              <p className="eyebrow mb-4 text-dv-emerald">FIELD GUIDE</p>
+              <Guide />
+            </div>
+            <div>
+              <p className="eyebrow mb-4 text-dv-emerald">SKILL BUILD</p>
+              <SkillBuild />
+            </div>
+            <div>
+              <p className="eyebrow mb-4 text-dv-emerald">SPIRITS</p>
+              <Spirits />
+            </div>
           </section>
         )}
 
