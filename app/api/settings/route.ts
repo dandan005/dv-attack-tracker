@@ -66,3 +66,17 @@ export async function PATCH(req: NextRequest) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);
 }
+
+export async function POST() {
+  const auth = await getGuildMember();
+  if (auth.error || !auth.member) return denied(auth.error);
+
+  const admin = createAdminClient();
+  const { error } = await admin
+    .from("members")
+    .update({ has_seen_walkthrough: true })
+    .eq("id", auth.member.id);
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ ok: true });
+}
