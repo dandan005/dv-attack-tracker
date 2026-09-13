@@ -15,10 +15,10 @@ const ELEMENTS: { key: Element; label: string; hint: string }[] = [
 type BossSlot = { name: string; image: string; alt: string };
 
 const BOSS_SLOTS: Record<Element, BossSlot> = {
-  wind: { name: "Voltaris", image: "/bosses/bardoran-portrait.jpg", alt: "Voltaris pixel dragon portrait" },
-  fire: { name: "Pyros", image: "/bosses/bardoran-portrait.jpg", alt: "Pyros pixel dragon portrait" },
-  earth: { name: "Bardoran", image: "/bosses/bardoran-portrait.jpg", alt: "Bardoran pixel dragon portrait" },
-  water: { name: "Glacion", image: "/bosses/bardoran-portrait.jpg", alt: "Glacion pixel dragon portrait" },
+  wind: { name: "Voltaris", image: "/bosses/boss.png", alt: "Voltaris pixel dragon portrait" },
+  fire: { name: "Pyros", image: "/bosses/boss.png", alt: "Pyros pixel dragon portrait" },
+  earth: { name: "Bardoran", image: "/bosses/boss.png", alt: "Bardoran pixel dragon portrait" },
+  water: { name: "Glacion", image: "/bosses/boss.png", alt: "Glacion pixel dragon portrait" },
 };
 
 function PixelElementArt({ element }: { element: Element }) {
