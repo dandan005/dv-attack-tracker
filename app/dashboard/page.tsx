@@ -10,6 +10,7 @@ import { WyvernTracker } from "@/components/WyvernTracker";
 import { ExplorationPhase } from "@/components/ExplorationPhase";
 import { Guide, MainCooking, Meals, Runes, SkillBuild, Spirits } from "@/components/OperationsLibrary";
 import { DragonCrest } from "@/components/DragonCrest";
+import { Walkthrough } from "@/components/Walkthrough";
 
 type Settings = {
   anchor_date: string;
@@ -23,6 +24,7 @@ type CurrentMember = {
   avatar_url: string | null;
   discord_id: string;
   is_admin: boolean;
+  has_seen_walkthrough: boolean;
 };
 
 type AttackLog = {
@@ -80,6 +82,7 @@ export default function DashboardPage() {
   const [me, setMe] = useState<CurrentMember | null>(null);
   const [settingsDraft, setSettingsDraft] = useState({ anchor_date: "2026-01-05", reset_hour_utc: 0 });
   const [now, setNow] = useState<Date>(() => new Date());
+  const [showWalkthrough, setShowWalkthrough] = useState(false);
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 60000);
@@ -111,7 +114,7 @@ export default function DashboardPage() {
     setSettingsDraft({ anchor_date: currentSettings.anchor_date, reset_hour_utc: currentSettings.reset_hour_utc });
     const cycle = getCycleInfo(currentSettings.anchor_date, currentSettings.reset_hour_utc);
 
-    const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, avatar_url, is_admin");
+    const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, avatar_url, is_admin, has_seen_walkthrough");
     const { data: logsData } = await supabase.from("attack_logs").select("member_id, day_number").eq("cycle_start", cycle.cycleStartISO);
     const logs: AttackLog[] = logsData ?? [];
 
@@ -136,7 +139,14 @@ export default function DashboardPage() {
     if (myRow) {
       const myLogs = logsByMember.get(myRow.id) ?? new Map<number, AttackLog>();
       setMyLoggedDays(CYCLE_DAY_NUMBERS.filter((day) => myLogs.has(day)));
-      setMe({ username: myRow.username, avatar_url: myRow.avatar_url, discord_id: myRow.discord_id, is_admin: myRow.is_admin });
+      setMe({
+        username: myRow.username,
+        avatar_url: myRow.avatar_url,
+        discord_id: myRow.discord_id,
+        is_admin: myRow.is_admin,
+        has_seen_walkthrough: myRow.has_seen_walkthrough,
+      });
+      if (!myRow.has_seen_walkthrough) setShowWalkthrough(true);
     }
     setLoading(false);
   }
@@ -210,6 +220,14 @@ export default function DashboardPage() {
     setTimeout(() => setToast(null), 2500);
   }
 
+  async function closeWalkthrough() {
+    setShowWalkthrough(false);
+    if (me && !me.has_seen_walkthrough) {
+      setMe({ ...me, has_seen_walkthrough: true });
+      await fetch("/api/settings", { method: "POST" }).catch(() => {});
+    }
+  }
+
   if (loading) return <main className="min-h-screen flex items-center justify-center"><p className="text-[11px] text-dv-brassLight animate-blink">LOADING GUILD DATA...</p></main>;
 
   return (
@@ -223,6 +241,14 @@ export default function DashboardPage() {
             <span className="text-left"><span className="eyebrow block">DRAGON VALLEY</span><span className="block text-sm text-dv-brassLight">ATTACK LEDGER</span></span>
           </button>
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setShowWalkthrough(true)}
+              aria-label="Replay walkthrough"
+              className="pixel-frame item-slot grid h-8 w-8 place-items-center text-[11px] text-dv-brassLight"
+            >
+              ?
+            </button>
             {me && (
               <div className="pixel-frame item-slot flex items-center gap-2 px-2 py-1">
                 <img src={me.avatar_url ?? "/icons/icon-192.png"}
@@ -366,6 +392,8 @@ export default function DashboardPage() {
           ))}
         </div>
       </nav>
+
+      <Walkthrough open={showWalkthrough} onClose={closeWalkthrough} />
     </div>
   );
 }
