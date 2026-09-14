@@ -43,9 +43,10 @@ const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: "settings", label: "Settings", icon: "⚙️" },
 ];
 
-// Day 7 is standby — no attacks are ever logged that day (the log button
-// is hidden via isStandbyDay), so it's excluded here to keep the guild
-// readout limited to the 6 days attacks can actually happen.
+// Day 7 is standby — no attacks are ever logged that day, and it's fully
+// covered by the three getDay7Phase phases (calculation, ranking-results,
+// onboarding), so it's excluded here to keep the guild readout limited to
+// the 6 days attacks can actually happen.
 const CYCLE_DAY_NUMBERS = [1, 2, 3, 4, 5, 6];
 
 export default function DashboardPage() {
@@ -70,7 +71,6 @@ export default function DashboardPage() {
   }, []);
 
   const { dayNumber, cycleStartISO } = getCycleInfo(settings.anchor_date, settings.reset_hour_utc);
-  const isStandbyDay = dayNumber === 7;
   const day7 = getDay7Phase(now);
 
   const visibleTabs = TABS.filter((t) => t.id !== "settings" || me?.is_admin);
@@ -279,11 +279,11 @@ export default function DashboardPage() {
                 </p>
                 <p className="mt-2 text-xs text-dv-emerald">Distribution ends in: {day7.minutesLeft}m</p>
               </div>
-            ) : day7.phase === "onboarding" || isStandbyDay ? (
+            ) : day7.phase === "onboarding" ? (
               <div className="mt-4 flex min-h-0 flex-1 flex-col items-center justify-center pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
-                <p className="text-sm text-dv-brassLight">🐉 STANDBY — CYCLE COMPLETE</p>
+                <p className="text-sm text-dv-brassLight">🐉 ONBOARDING — PREPARING NEXT CYCLE</p>
                 <p className="mt-2 max-w-md text-xs leading-relaxed text-slate-200/60">
-                  No attacks to log today. The ledger resets and Day 1 begins at the next reset hour.
+                  Rewards have been distributed. Rest up and regear — Day 1 attacks open at the next reset hour.
                 </p>
               </div>
             ) : (
