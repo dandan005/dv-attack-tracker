@@ -301,16 +301,16 @@ export default function DashboardPage() {
         {tab === "guide" && (
           <section className="space-y-6">
             <div>
-              <p className="eyebrow mb-4 text-dv-emerald">FIELD GUIDE</p>
-              <Guide />
-            </div>
-            <div>
               <p className="eyebrow mb-4 text-dv-emerald">SKILL BUILD</p>
               <SkillBuild />
             </div>
             <div>
               <p className="eyebrow mb-4 text-dv-emerald">SPIRITS</p>
               <Spirits />
+            </div>
+            <div>
+              <p className="eyebrow mb-4 text-dv-emerald">FIELD GUIDE</p>
+              <Guide />
             </div>
           </section>
         )}
