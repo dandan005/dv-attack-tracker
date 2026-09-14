@@ -75,19 +75,179 @@ const guideSections = [
   ["Tips", "RAID LOADOUT", "For Rave: either break the first shield with skills and record Rave during the second shield to capture familiar plus guild-pet damage, or record Rave while breaking the first shield to bank guild-pet damage and save it to release during the final shield phase. You can quit this fight the same way as FoC, so it's safe to go in and test combinations — just be careful, since some combos can get you killed quickly."],
 ];
 
-const runeRows = [
-  ["Immortal", "Game Changer", "emblems", "50% bonus Emblem on the last day. The strongest late-season pickup."],
-  ["Mythic", "Ancient Book", "emblems", "+10% raid Emblem. Roughly 8–12k Emblem across a run."],
-  ["S", "Random Immortal Rune", "emblems", "Early tier-up option, estimated around 3.5k Emblem from known Immortal runes."],
-  ["A", "Golden Compass", "exploration", "+10% Exploration Emblem per day; stronger when it helps win exploration regions."],
-  ["A", "Bubbling Hot Pot Kit", "resources", "+30% resources. More useful early and with exploration-region wins."],
-  ["A", "Opal", "emblems", "2,000 Emblem. A clean pickup when higher tiers are unavailable."],
-  ["B", "Let's Go Together, Buddy!", "team", "Gain 1 Onigiri for raid phase when you have the lowest exploration points."],
-  ["B", "Persistent Search", "exploration", "+50% chance of finding a Wyvern trace."],
-  ["B", "Chocolate Energy Bar", "exploration", "1x bonus exploration. More valuable on earlier days."],
-  ["C", "Harvest Complete!", "resources", "300–800 Wheat. Better on earlier days when cooking materials compound."],
-  ["D", "Awaken Time Freeze", "combat", "Increases Ark skill folds by 3x; situational and difficult to justify."],
+type Rune = { name: string; effect: string };
+type RuneGroup = { label: string | null; runes: Rune[] };
+type RuneTier = { name: string; icon: string; accent: "brass" | "violet" | "emerald"; groups: RuneGroup[] };
+
+const runeTiers: RuneTier[] = [
+  {
+    name: "Immortal",
+    icon: "🟡",
+    accent: "brass",
+    groups: [
+      {
+        label: null,
+        runes: [
+          { name: "Game Changer", effect: "50% bonus Emblem last day (~15-20k Emblem in mid-game+)" },
+          { name: "Special Onigiri", effect: "1x bonus raid (~10-15k Emblems in mid-game+)" },
+        ],
+      },
+      {
+        label: "S",
+        runes: [
+          { name: "Scrutiny", effect: "50% bonus Emblem when exploring completed terrain (~3-9k depending on optimization and trace finding)" },
+          { name: "Survival Expert", effect: "20 Emblem per 1 min campfire (~6k Emblems, more with stick bonuses)" },
+          { name: "Medal of Honor", effect: "5k Emblem" },
+        ],
+      },
+      {
+        label: "A",
+        runes: [
+          { name: "My dream is to be a chef!", effect: "+500 Emblem per dish cooked (~1-7k Emblem. Better on earlier days)" },
+          { name: "Chocolate Energy Bar", effect: "1x bonus exploration (~3-6k Emblem)" },
+          { name: "Noble Sacrifice", effect: "Sacrifice 3x exploration to give all teammates in same terrain 1x bonus exploration (~3-6k Emblem, trade 3x for 4x, basically same as 1 choco bar with more steps)" },
+          { name: "Genius Girl Cheer", effect: "3k Emblem + 100% ATK per active attack skill used (3k Emblem + medium dmg?)" },
+          { name: "We Came. We Saw. We Won", effect: "2k Emblem + 500% Raid DMG per Trace (2k Emblem + big dmg?)" },
+          { name: "Foodie's Cheer", effect: "3k Emblem + 2x DMG on strike skill (3k Emblem + some dmg?)" },
+          { name: "Scammer's Cheer", effect: "3k Emblem + 100% ATK SPD in Raid (3k Emblem + some dmg?)" },
+          { name: "Cheapskate's Cheer", effect: "3k Emblem + 100% Cooldown Charge Speed (3k Emblem + some dmg?)" },
+        ],
+      },
+      {
+        label: "B",
+        runes: [
+          { name: "Wyvern's Fury", effect: "500 Emblem per egg gained, +100% DMG (~0-5k Emblem, very RNG, better to get on earlier days)" },
+          { name: "Wyvern Expert", effect: "Gain bonus 3k Emblem per trace (hard to control, very RNG but can be useful on early days)" },
+          { name: "Bountiful Harvest", effect: "Bunch of cooking materials (requires keeping track of what you need for cooking from previous day? hard to use on last day)" },
+          { name: "Meat Is Best!", effect: "Cannot gain Lettuce, double Emblems for dishes containing Meat (2-3k Emblem, possibly hard to use)" },
+          { name: "Black Gold", effect: "Obtain 1 Caviar (1-3k Emblem Special Dish bonus)" },
+          { name: "Black Diamond", effect: "Obtain 1 Truffle (1-3k Emblem Special Dish bonus)" },
+          { name: "Golden Honeycomb", effect: "Obtain 1 Honeycomb (1-3k Emblem Special Dish bonus)" },
+          { name: "Eureka!", effect: "Obtain 1 chocolate bar when you complete an undiscovered recipe for the first time (good but unlikely to have impact when it's actually useful)" },
+        ],
+      },
+      {
+        label: "C",
+        runes: [
+          { name: "Pandora's Box", effect: "All cooking ingredients you own are changed into random ingredients (unpredictable? hard to use usefully)" },
+          { name: "Breath of the Sword", effect: "Autos do 1% HP dmg (big dmg?)" },
+          { name: "Praise Works Wonders", effect: "Each 1000 Emblem = 10% Wyvern DMG (big dmg?)" },
+          { name: "Solitary Gourmet", effect: "500% Raid DMG per lvl 20 dish (big dmg?)" },
+        ],
+      },
+    ],
+  },
+  {
+    name: "Mythic",
+    icon: "🔵",
+    accent: "violet",
+    groups: [
+      {
+        label: null,
+        runes: [{ name: "Ancient Book", effect: "+10% Raid Emblem (~8-12k Emblem)" }],
+      },
+      {
+        label: "S",
+        runes: [{ name: "Random Immortal Rune", effect: "Early tier up (~3k Emblem, estimated based on average of known Immortal runes)" }],
+      },
+      {
+        label: "A",
+        runes: [
+          { name: "Golden Compass", effect: "+10% Exploration Emblem (~1-4k Emblem per day, more if it helps you win exploration regions)" },
+          { name: "Bubbling Hot Pot Kit", effect: "+30% resources (~1-4k Emblem, more useful on earlier days, more Emblems if it helps you win exploration regions)" },
+          { name: "Opal", effect: "2,000 Emblem" },
+          { name: "Perfume of the Kitchen", effect: "Obtain 1 basil (~1-2k Emblem probably?)" },
+          { name: "Gene's Gift", effect: "Obtain 10 shrimp and 10 rice (~1-2k Emblem probably?)" },
+          { name: "Stress Reliever", effect: "Obtain 1 chili pepper (~1-2k Emblem probably?)" },
+        ],
+      },
+      {
+        label: "B",
+        runes: [
+          { name: "Help Me, Ether Robot!", effect: "Summons Ether Robot-RBG during Subjugation battles (assuming Flamethrower does a lot of dmg still?)" },
+          { name: "Let's Go Together, Buddy!", effect: "Gain 1 Onigiri for Raid phase if you have the least points on your team in Exploration phase (Onigiri good, throwing in Exploration bad — high risk, high reward)" },
+          { name: "Persistent Search", effect: "+50% chance of Wyvern Trace (more useful in weaker guilds where finding traces is harder)" },
+          { name: "Preemptive Strike", effect: "+300% Raid DMG per trace (medium dmg?)" },
+          { name: "Super Strength", effect: "+300% Total ATK" },
+          { name: "Lightning Rod", effect: "Focus RL all on one target (prevent out of range misses? some dmg?)" },
+        ],
+      },
+      {
+        label: "C",
+        runes: [
+          { name: "Egg Nest Frost", effect: "2-5 eggs (depend on cooking, more useful on earlier days)" },
+          { name: "Bean!!", effect: "50-100 bean (depend on cooking, more useful on earlier days)" },
+          { name: "Who Ordered Milk", effect: "200-350 milk (depend on cooking, more useful on earlier days)" },
+          { name: "Sweetness Alert!", effect: "70-150 sugar cane (depend on cooking, more useful on earlier days)" },
+          { name: "Harvest Complete!", effect: "300-800 Wheat (depend on cooking, more useful on earlier days)" },
+          { name: "Pile of Stones", effect: "30x Stone Strike DMG (some DMG, depends on wyvern)" },
+          { name: "Legendary Lumberjack", effect: "+50% sticks" },
+        ],
+      },
+      {
+        label: "D",
+        runes: [
+          { name: "Chef Has Gone Mad!", effect: "Ingredient exchange with Chef costs 50% less (unlikely to do much for cooking)" },
+          { name: "[Region] Specialist", effect: "20% more progress while exploring [Region] (should be able to find all traces with coordination)" },
+          { name: "Have You Ever Been Dumped at the Speed of Light?", effect: "Increase Fulg + SS DMG by 1000%" },
+          { name: "Body of Steel", effect: "Total HP +300%" },
+          { name: "Strong Heart", effect: "HP Rec +300%" },
+        ],
+      },
+    ],
+  },
+  {
+    name: "Legendary",
+    icon: "⚪",
+    accent: "emerald",
+    groups: [
+      {
+        label: "A",
+        runes: [
+          { name: "Random Mythic Rune", effect: "Early tier up (highest expected Emblem value)" },
+          { name: "Ruby", effect: "1000 Emblem" },
+        ],
+      },
+      {
+        label: "B",
+        runes: [
+          { name: "Cyclos! I've Come to Bargain!", effect: "Very confused by this one, but seems like if your Special Dish doesn't get you anything, you get a resource refund? Possibly helps get an extra Special Dish cooked for Emblems." },
+          { name: "[Region] Explorer", effect: "+500% DMG when exploring [Region] (extra Emblems if it helps you beat next difficulty)" },
+          { name: "Back to Basics", effect: "+2000% DMG for common attack skills (some dmg?)" },
+          { name: "Dangerous Contract", effect: "Cannot recover HP, +500% DMG (some dmg?)" },
+          { name: "Ancient Asparagus", effect: "Double DMG effect of Immortal Steak (some dmg?)" },
+          { name: "Seasoned Hunter", effect: "+500% DMG against Frozen/Stunned Wyvern (some dmg?)" },
+        ],
+      },
+      {
+        label: "C",
+        runes: [
+          { name: "Pile of Sticks", effect: "+50 sticks (completely useless aside from the off chance you get Survival Expert immortal rune, in which case it's 3k Emblem)" },
+          { name: "[Wyvern] Specialist", effect: "+500% DMG against specific [Wyvern] (RNG if that's the correct one)" },
+          { name: "Reliable Friends", effect: "3x earth spirit = 500% Earth Skill DMG (some dmg, most realistic element to use spirit-wise)" },
+          { name: "Warm Friends", effect: "3x fire spirit = 500% Fire Skill DMG (some dmg, but some benefit lost because you can't use strongest spirits)" },
+          { name: "Crimson Beast", effect: "Increase DMG by 2% based on HP lost during Raid (wording unclear — is it mini-rage or taking dmg and recovering still counts?)" },
+          { name: "Overclock", effect: "2x MP Usage, 300% Total ATK (need Life Mana to sustain)" },
+        ],
+      },
+      {
+        label: "D",
+        runes: [
+          { name: "Awaken Time Freeze", effect: "Increase Ark's skill folds (duration) by 3x (??? Ark maybe useful if it causes another flamethrower proc?)" },
+          { name: "Awaken Wind Force", effect: "Increase Herh's skill effect by 3x (reduced cooldown?)" },
+          { name: "Nimble Friends", effect: "3x wind spirit = 500% Wind Skill DMG (hard to use)" },
+          { name: "Water Friends", effect: "3x water spirit = 500% Water Skill DMG (hard to use)" },
+        ],
+      },
+    ],
+  },
 ];
+
+const tierStyles: Record<RuneTier["accent"], { border: string; text: string; chipBorder: string; chipBg: string }> = {
+  brass: { border: "border-dv-brass/50", text: "text-dv-brassLight", chipBorder: "border-dv-brass/50", chipBg: "bg-dv-brass/15" },
+  violet: { border: "border-dv-violet/50", text: "text-dv-violet", chipBorder: "border-dv-violet/50", chipBg: "bg-dv-violet/15" },
+  emerald: { border: "border-dv-emerald/50", text: "text-dv-emerald", chipBorder: "border-dv-emerald/50", chipBg: "bg-dv-emerald/15" },
+};
 
 type MainDish = {
   name: string;
@@ -524,49 +684,100 @@ export function Meals() {
 }
 
 export function Runes() {
-  const [filter, setFilter] = useState("all");
-  const visible = runeRows.filter((row) => filter === "all" || row[2] === filter);
+  const [query, setQuery] = useState("");
+  const [openTiers, setOpenTiers] = useState<string[]>(["Immortal"]);
+
+  const filteredTiers = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return runeTiers;
+    return runeTiers
+      .map((tier) => ({
+        ...tier,
+        groups: tier.groups
+          .map((group) => ({
+            ...group,
+            runes: group.runes.filter((rune) => `${rune.name} ${rune.effect}`.toLowerCase().includes(q)),
+          }))
+          .filter((group) => group.runes.length > 0),
+      }))
+      .filter((tier) => tier.groups.length > 0);
+  }, [query]);
+
+  // While searching, force every matching tier open so results aren't hidden behind a collapsed accordion.
+  const isSearching = query.trim().length > 0;
+
   return (
     <div className="space-y-4">
       <Card className="p-4">
-        <SectionLabel>RUNE DESK / PRIORITY ORDER</SectionLabel>
+        <SectionLabel>RUNE DESK / TIER NOTES</SectionLabel>
         <h2 className="text-xl text-dv-brassLight">Spend fragments with a plan.</h2>
         <p className="mt-2 max-w-xl text-sm text-slate-200/65">
-          Priorities below follow the attached guild rune notes: season value first, then team needs and situational utility.
+          Full guild rune notes by tier — Immortal, Mythic, and Legendary — with sub-tier priority and rough Emblem value where it's known.
         </p>
       </Card>
-      <Card>
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-dv-line p-4">
-          <div>
-            <SectionLabel>TIER LIST</SectionLabel>
-            <p className="text-sm text-dv-brassLight">Recommended by guild officers</p>
-          </div>
-          <div className="flex flex-wrap gap-1">
-            {["all", "emblems", "exploration", "resources", "team", "combat"].map((item) => (
-              <button
-                type="button"
-                key={item}
-                onClick={() => setFilter(item)}
-                className={`px-2 py-1 text-[8px] uppercase ${filter === item ? "bg-dv-violet text-dv-bg" : "bg-dv-panel2 text-slate-300/60"}`}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="divide-y divide-dv-line">
-          {visible.map(([rank, name, type, note]) => (
-            <div key={name} className="grid grid-cols-[68px_1fr] gap-3 p-4 sm:grid-cols-[90px_1fr_auto]">
-              <div className="grid h-9 place-items-center border border-dv-brass/50 bg-dv-brass/10 font-pixel text-[10px] text-dv-brassLight">{rank}</div>
-              <div>
-                <p className="text-sm text-dv-brassLight">{name}</p>
-                <p className="mt-1 text-xs leading-relaxed text-slate-200/65">{note}</p>
-              </div>
-              <span className="hidden self-center text-[9px] uppercase text-slate-300/50 sm:block">{type}</span>
-            </div>
-          ))}
-        </div>
+
+      <Card className="p-4">
+        <input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Search runes or effects"
+          className="w-full border border-dv-line bg-dv-panel2 px-3 py-3 text-xs text-dv-brassLight outline-none placeholder:text-slate-300/50 focus:border-dv-violet"
+        />
       </Card>
+
+      {filteredTiers.length === 0 && (
+        <Card className="p-4">
+          <p className="text-xs text-slate-300/60">No runes match that search.</p>
+        </Card>
+      )}
+
+      {filteredTiers.map((tier) => {
+        const style = tierStyles[tier.accent];
+        const isOpen = isSearching || openTiers.includes(tier.name);
+        return (
+          <Card key={tier.name}>
+            <button
+              type="button"
+              onClick={() => setOpenTiers((current) => (current.includes(tier.name) ? current.filter((item) => item !== tier.name) : [...current, tier.name]))}
+              className={`flex w-full items-center gap-3 border-b border-dv-line px-4 py-4 text-left ${isOpen ? "" : "border-b-0"}`}
+            >
+              <span className="text-lg leading-none">{tier.icon}</span>
+              <span className="flex-1">
+                <span className="eyebrow block">RUNE TIER</span>
+                <span className={`mt-1 block text-sm ${style.text}`}>{tier.name}</span>
+              </span>
+              <span className="text-dv-violet">{isOpen ? "−" : "+"}</span>
+            </button>
+
+            {isOpen && (
+              <div className="divide-y divide-dv-line">
+                {tier.groups.map((group, groupIndex) => (
+                  <div key={`${tier.name}-${group.label ?? "top"}-${groupIndex}`} className="p-4">
+                    {group.label && (
+                      <div className="mb-3 flex items-center gap-2">
+                        <span
+                          className={`grid h-6 w-6 place-items-center border font-pixel text-[10px] ${style.chipBorder} ${style.chipBg} ${style.text}`}
+                        >
+                          {group.label}
+                        </span>
+                        <span className="text-[9px] uppercase tracking-[.1em] text-slate-300/50">Sub-tier {group.label}</span>
+                      </div>
+                    )}
+                    <div className="space-y-3">
+                      {group.runes.map((rune) => (
+                        <div key={rune.name} className="item-slot border border-dv-line/70 p-3">
+                          <p className={`text-sm ${style.text}`}>{rune.name}</p>
+                          <p className="mt-1.5 text-xs leading-relaxed text-slate-200/65">{rune.effect}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </Card>
+        );
+      })}
     </div>
   );
 }
