@@ -33,19 +33,24 @@ function AttackGlyph({ done, urgent }: { done: boolean; urgent: boolean }) {
 }
 
 export function LogAttackButton({
-  dayNumber,
   loggedDays,
   onLog,
 }: {
-  dayNumber: number;
   loggedDays: number[];
-  onLog: (day: number) => Promise<void>;
+  onLog: (day: number, cycleStartISO: string) => Promise<void>;
 }) {
   const [ms, setMs] = useState<number>(0);
+  const [dayNumber, setDayNumber] = useState<number>(() => getCycleInfo().dayNumber);
+  const [cycleStartISO, setCycleStartISO] = useState<string>(() => getCycleInfo().cycleStartISO);
   const [pending, setPending] = useState(false);
 
   useEffect(() => {
-    const tick = () => setMs(getCycleInfo().msUntilReset);
+    const tick = () => {
+      const info = getCycleInfo();
+      setMs(info.msUntilReset);
+      setDayNumber(info.dayNumber);
+      setCycleStartISO(info.cycleStartISO);
+    };
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
@@ -58,7 +63,12 @@ export function LogAttackButton({
     if (done || pending) return;
     setPending(true);
     try {
-      await onLog(dayNumber);
+      // Re-derive at click time rather than trusting state from the last
+      // tick, in case a cycle boundary was crossed between ticks.
+      const info = getCycleInfo();
+      setDayNumber(info.dayNumber);
+      setCycleStartISO(info.cycleStartISO);
+      await onLog(info.dayNumber, info.cycleStartISO);
     } finally {
       setPending(false);
     }
