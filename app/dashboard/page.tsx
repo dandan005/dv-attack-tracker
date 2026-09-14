@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { getCycleInfo, getDay7Phase } from "@/lib/cycle";
+import { getCycleInfo, getDay7Phase, formatCountdown } from "@/lib/cycle";
 import { LogAttackButton } from "@/components/LogAttackButton";
 import { GuildProgress, MemberRow } from "@/components/GuildProgress";
 import { WyvernTracker } from "@/components/WyvernTracker";
@@ -63,7 +63,7 @@ export default function DashboardPage() {
   const [showWalkthrough, setShowWalkthrough] = useState(false);
 
   useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 60000);
+    const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
   }, []);
 
@@ -262,7 +262,7 @@ export default function DashboardPage() {
                 <p className="mt-2 max-w-md text-xs leading-relaxed text-slate-200/60">
                   Rewards have been distributed. Rest up and regear.
                 </p>
-                <p className="mt-2 text-xs text-dv-emerald">Day 1 opens in: {day7.hoursLeft}h left</p>
+                <p className="mt-2 text-xs text-dv-emerald">Day 1 opens in: {formatCountdown(day7.msLeft)}</p>
               </div>
             ) : (
               <>
