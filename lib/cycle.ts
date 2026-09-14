@@ -59,7 +59,7 @@ export function formatCountdown(ms: number) {
 
 export type Day7Phase = "calculation" | "ranking-results" | "onboarding" | null;
 
-export function getDay7Phase(now: Date): { phase: Day7Phase; hoursLeft: number; minutesLeft: number } {
+export function getDay7Phase(now: Date): { phase: Day7Phase; hoursLeft: number; minutesLeft: number; msLeft: number } {
   const day = now.getUTCDay(); // 0 = Sunday, 1 = Monday
   const hour = now.getUTCHours();
 
@@ -67,6 +67,7 @@ export function getDay7Phase(now: Date): { phase: Day7Phase; hoursLeft: number; 
   const toLefts = (ms: number) => ({
     hoursLeft: Math.ceil(ms / (60 * 60 * 1000)),
     minutesLeft: Math.ceil(ms / (60 * 1000)),
+    msLeft: ms,
   });
 
   if (day === 0 && hour >= CYCLE_START_UTC_HOUR && hour < RANKING_RESULTS_START_HOUR) {
@@ -88,5 +89,5 @@ export function getDay7Phase(now: Date): { phase: Day7Phase; hoursLeft: number; 
     return { phase: "onboarding", ...toLefts(msLeftUntil(end)) };
   }
 
-  return { phase: null, hoursLeft: 0, minutesLeft: 0 };
+  return { phase: null, hoursLeft: 0, minutesLeft: 0, msLeft: 0 };
 }
