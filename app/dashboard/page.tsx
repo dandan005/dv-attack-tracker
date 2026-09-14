@@ -13,8 +13,6 @@ import { DragonCrest } from "@/components/DragonCrest";
 import { Walkthrough } from "@/components/Walkthrough";
 
 type Settings = {
-  anchor_date: string;
-  reset_hour_utc: number;
   wyvern_element: string | null;
   wyvern_set_by: string | null;
 };
@@ -55,13 +53,12 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<Tab>("ledger");
   const [mealsSubTab, setMealsSubTab] = useState<MealsSubTab>("main");
-  const [settings, setSettings] = useState<Settings>({ anchor_date: "2026-01-05", reset_hour_utc: 0, wyvern_element: null, wyvern_set_by: null });
+  const [settings, setSettings] = useState<Settings>({ wyvern_element: null, wyvern_set_by: null });
   const [myLoggedDays, setMyLoggedDays] = useState<number[]>([]);
   const [members, setMembers] = useState<MemberRow[]>([]);
   const [pinging, setPinging] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [me, setMe] = useState<CurrentMember | null>(null);
-  const [settingsDraft, setSettingsDraft] = useState({ anchor_date: "2026-01-05", reset_hour_utc: 0 });
   const [now, setNow] = useState<Date>(() => new Date());
   const [showWalkthrough, setShowWalkthrough] = useState(false);
 
@@ -70,7 +67,7 @@ export default function DashboardPage() {
     return () => clearInterval(id);
   }, []);
 
-  const { dayNumber, cycleStartISO } = getCycleInfo(settings.anchor_date, settings.reset_hour_utc);
+  const { dayNumber, cycleStartISO } = getCycleInfo();
   const day7 = getDay7Phase(now);
 
   const visibleTabs = TABS.filter((t) => t.id !== "settings" || me?.is_admin);
@@ -85,14 +82,11 @@ export default function DashboardPage() {
     const settingsResponse = await fetch("/api/settings", { cache: "no-store" });
     const settingsRow = settingsResponse.ok ? await settingsResponse.json() : null;
     const currentSettings: Settings = {
-      anchor_date: settingsRow?.anchor_date ?? "2026-01-05",
-      reset_hour_utc: settingsRow?.reset_hour_utc ?? 0,
       wyvern_element: settingsRow?.wyvern_element ?? null,
       wyvern_set_by: settingsRow?.wyvern_set_by ?? null,
     };
     setSettings(currentSettings);
-    setSettingsDraft({ anchor_date: currentSettings.anchor_date, reset_hour_utc: currentSettings.reset_hour_utc });
-    const cycle = getCycleInfo(currentSettings.anchor_date, currentSettings.reset_hour_utc);
+    const cycle = getCycleInfo();
 
     const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, avatar_url, is_admin, has_seen_walkthrough");
     const { data: logsData } = await supabase.from("attack_logs").select("member_id, day_number").eq("cycle_start", cycle.cycleStartISO);
@@ -182,23 +176,6 @@ export default function DashboardPage() {
     setTimeout(() => setToast(null), 2500);
   }
 
-  async function saveCycleSettings() {
-    const anchor_date = settingsDraft.anchor_date || "2026-01-05";
-    const reset_hour_utc = Math.min(23, Math.max(0, Number(settingsDraft.reset_hour_utc) || 0));
-    const response = await fetch("/api/settings", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ anchor_date, reset_hour_utc }),
-    });
-    if (!response.ok) {
-      const json = await response.json().catch(() => ({}));
-      setToast("Error: " + (json.error ?? "Could not save settings"));
-    } else {
-      await loadAll();
-      setToast("Cycle settings saved");
-    }
-    setTimeout(() => setToast(null), 2500);
-  }
 
   async function closeWalkthrough() {
     setShowWalkthrough(false);
@@ -359,13 +336,35 @@ export default function DashboardPage() {
 
         {tab === "settings" && me?.is_admin && (
           <section>
-            <div className="mb-4"><p className="eyebrow text-dv-emerald">GUILD SETTINGS</p><h2 className="mt-1 text-xl text-dv-brassLight">Keep the shared clock accurate.</h2></div>
+            <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD SETTINGS</p><h2 className="mt-1 text-xl text-dv-brassLight">Configure the parts the guild actually uses.</h2><p className="mt-2 max-w-2xl text-xs leading-relaxed text-slate-200/60">The raid clock is fixed to the in-game schedule, so there is no anchor date to maintain. Use this panel for the shared raid signal, reminders, and field briefing.</p></div>
+
+            <WyvernTracker current={settings.wyvern_element as any} setBy={settings.wyvern_set_by} onSelect={setWyvern} isAdmin={me?.is_admin ?? false} />
+
             <section className="pixel-border bg-dv-panel/95 p-4 shadow-pixel">
-              <div className="grid gap-4 md:grid-cols-2">
-                <label className="text-[10px] text-dv-brassLight">CYCLE ANCHOR DATE<input type="date" value={settingsDraft.anchor_date} onChange={(event) => setSettingsDraft((current) => ({ ...current, anchor_date: event.target.value }))} className="mt-2 w-full pixel-frame item-slot border border-dv-line px-3 py-3 text-[11px] text-dv-brassLight outline-none focus:border-dv-violet" /><span className="mt-2 block text-[9px] text-slate-300/45">Day 1 of the first raid cycle.</span></label>
-                <label className="text-[10px] text-dv-brassLight">RESET HOUR (UTC)<input type="number" min={0} max={23} value={settingsDraft.reset_hour_utc} onChange={(event) => setSettingsDraft((current) => ({ ...current, reset_hour_utc: Number(event.target.value) }))} className="mt-2 w-full pixel-frame item-slot border border-dv-line px-3 py-3 text-[11px] text-dv-brassLight outline-none focus:border-dv-violet" /><span className="mt-2 block text-[9px] text-slate-300/45">Hour 0–23 UTC when the attack log rolls over.</span></label>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <p className="eyebrow text-dv-violet">DISCORD REMINDERS</p>
+                  <h3 className="mt-1 text-base text-dv-brassLight">Ping members missing today&apos;s attack</h3>
+                  <p className="mt-2 max-w-xl text-[10px] leading-relaxed text-slate-200/55">Send a reminder to the guild members who have not logged their attack for the current day. This uses the configured Discord webhook.</p>
+                </div>
+                <button type="button" onClick={pingMissing} disabled={pinging} className="pixel-frame shrink-0 bg-dv-brass px-4 py-3 text-[10px] text-dv-bg shadow-pixel-sm hover:bg-dv-brassLight active:translate-y-[2px] disabled:cursor-wait disabled:opacity-60">{pinging ? "PINGING..." : "PING MISSING MEMBERS"}</button>
               </div>
-              <button type="button" onClick={saveCycleSettings} className="mt-5 w-full pixel-frame bg-dv-brass px-4 py-3 text-[11px] text-dv-bg shadow-pixel-sm hover:bg-dv-brassLight active:translate-y-[2px]">SAVE CYCLE SETTINGS</button>
+            </section>
+
+            <section className="mt-4 pixel-border bg-dv-panel/95 p-4 shadow-pixel">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <p className="eyebrow text-dv-emerald">RAID CLOCK</p>
+                  <h3 className="mt-1 text-base text-dv-brassLight">Fixed to the Dragon Valley schedule</h3>
+                </div>
+                <button type="button" onClick={() => setShowWalkthrough(true)} className="pixel-frame border border-dv-violet px-3 py-2 text-[9px] text-dv-violet hover:bg-dv-violet/10">REPLAY FIELD BRIEFING</button>
+              </div>
+              <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                <div className="item-slot border border-dv-line px-3 py-3"><p className="text-[9px] text-slate-300/45">DAY 1 START</p><p className="mt-1 text-[10px] text-dv-brassLight">MON 14:00 UTC · MON 10:00 PM PHT</p></div>
+                <div className="item-slot border border-dv-line px-3 py-3"><p className="text-[9px] text-slate-300/45">ATTACK WINDOW</p><p className="mt-1 text-[10px] text-dv-brassLight">D1–D6 · 6 ATTACK DAYS</p></div>
+                <div className="item-slot border border-dv-line px-3 py-3"><p className="text-[9px] text-slate-300/45">DAY 7</p><p className="mt-1 text-[10px] text-dv-brassLight">STANDBY · RESULTS · ONBOARDING</p></div>
+                <div className="item-slot border border-dv-line px-3 py-3"><p className="text-[9px] text-slate-300/45">REMINDER MODE</p><p className="mt-1 text-[10px] text-dv-brassLight">MANUAL + VERCEL CRON</p></div>
+              </div>
             </section>
           </section>
         )}
