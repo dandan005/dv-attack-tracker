@@ -13,16 +13,14 @@ export async function POST(req: NextRequest) {
   const supabase = auth.supabase;
   const member = auth.member;
 
-  // Day number and cycle start are derived server-side from the fixed
-  // cycle anchor — never trust a client-supplied day number, since a
-  // stale tab, cached state, or bad client logic could send the wrong
-  // day (this is what caused the original data-integrity bug).
-  const { dayNumber, cycleStartISO } = getCycleInfo();
+  const body = await req.json();
+  const dayNumber = Number(body.dayNumber);
 
-  if (dayNumber < 1 || dayNumber > 6) {
-    // Day 7 is standby — attacks can't be logged on it.
-    return NextResponse.json({ error: "Attacks cannot be logged on standby day" }, { status: 400 });
+  if (!Number.isInteger(dayNumber) || dayNumber < 1 || dayNumber > 6) {
+    return NextResponse.json({ error: "Day number must be between 1 and 6" }, { status: 400 });
   }
+
+  const { cycleStartISO } = getCycleInfo();
 
   const log = {
     member_id: member.id,
@@ -38,4 +36,4 @@ export async function POST(req: NextRequest) {
   }
 
   return NextResponse.json({ ok: true });
-}
+}w
