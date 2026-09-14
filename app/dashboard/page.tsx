@@ -285,6 +285,7 @@ export default function DashboardPage() {
                 <p className="mt-2 max-w-md text-xs leading-relaxed text-slate-200/60">
                   Rewards have been distributed. Rest up and regear — Day 1 attacks open at the next reset hour.
                 </p>
+                <p className="mt-2 text-xs text-dv-emerald">Day 1 opens in: {day7.hoursLeft}h left</p>
               </div>
             ) : (
               <>
