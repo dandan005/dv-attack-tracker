@@ -1,31 +1,32 @@
-// Dragon Valley runs a 7-day attack cycle (D1-D6 active, D7 standby). The
-// cycle is pinned to the same fixed real-world schedule as the calculation
-// window: Day 1 always begins at 14:00 UTC on Sunday (displayed in-game as
-// 10:00 PM PHT, since the guild operates on Manila time, UTC+8) — the same
-// instant the calculation window begins — and Day 7 (standby) always ends
-// at that same moment. The calculation window is NOT a boundary between
-// Day 7 and Day 1; it's the first 9 hours of Day 1 itself, during which
-// the UI shows the calculation card instead of Day 1's normal content.
-// This is intentionally NOT configurable per guild — the calc window
-// itself isn't configurable either, so the day-cycle anchor has to match
-// it exactly or the two fall out of sync.
+// Dragon Valley runs a 7-day attack cycle (D1-D6 active, D7 standby).
+// Day 1 always begins at 14:00 UTC on Monday (displayed in-game as
+// 10:00 PM PHT, since the guild operates on Manila time, UTC+8).
+// Day 7 therefore spans Sunday 14:00 UTC -> Monday 14:00 UTC, and breaks
+// into three fixed real-world phases within that span:
+//   - Calculation:     Sun 14:00 - 23:00 UTC (9h)  -> Sun 10pm - Mon 7am PHT
+//   - Ranking Results: Sun 23:00 - Mon 00:00 UTC (1h) -> Mon 7:01am - 8:00am PHT
+//   - Onboarding:      Mon 00:00 - 14:00 UTC (14h) -> Mon 8:01am - 9:59pm PHT
+// None of this is configurable per guild — the day-cycle anchor and the
+// phase windows have to stay pinned to each other or they fall out of sync.
 
 export const CYCLE_LENGTH = 7;
-const CYCLE_START_UTC_HOUR = 14; // 14:00 UTC = 10:00 PM PHT, Sunday
+const CYCLE_START_UTC_HOUR = 14; // 14:00 UTC = 10:00 PM PHT
+const CYCLE_START_UTC_WEEKDAY = 1; // 0=Sun, 1=Mon
+const RANKING_RESULTS_START_HOUR = 23; // Sun 23:00 UTC = Mon 7:01am PHT boundary
 
 export function getCycleInfo(anchorDateISO?: string, resetHourUTC?: number) {
   // anchorDateISO / resetHourUTC are accepted for backwards compatibility
   // with existing callers and the Settings UI, but are no longer used —
-  // the cycle start is fixed to 14:00 UTC (10pm PHT) Sunday to stay in
-  // sync with the calculation window. Safe to remove both params (and the
-  // Settings fields for anchor date / reset hour) once nothing else
-  // depends on them.
+  // the cycle start is fixed to 14:00 UTC Monday to stay in sync with the
+  // day-7 phase windows. Safe to remove both params (and the Settings
+  // fields for anchor date / reset hour) once nothing else depends on them.
   const now = new Date();
 
   const anchor = new Date();
   anchor.setUTCHours(CYCLE_START_UTC_HOUR, 0, 0, 0);
-  const dayOfWeek = anchor.getUTCDay(); // 0 = Sunday
-  anchor.setUTCDate(anchor.getUTCDate() - dayOfWeek);
+  const dayOfWeek = anchor.getUTCDay();
+  const daysSinceAnchorWeekday = (dayOfWeek - CYCLE_START_UTC_WEEKDAY + 7) % 7;
+  anchor.setUTCDate(anchor.getUTCDate() - daysSinceAnchorWeekday);
   if (anchor.getTime() > now.getTime()) {
     anchor.setUTCDate(anchor.getUTCDate() - 7);
   }
@@ -54,4 +55,38 @@ export function formatCountdown(ms: number) {
   const m = Math.floor((totalSeconds % 3600) / 60);
   const s = totalSeconds % 60;
   return [h, m, s].map((n) => String(n).padStart(2, "0")).join(":");
+}
+
+export type Day7Phase = "calculation" | "ranking-results" | "onboarding" | null;
+
+export function getDay7Phase(now: Date): { phase: Day7Phase; hoursLeft: number; minutesLeft: number } {
+  const day = now.getUTCDay(); // 0 = Sunday, 1 = Monday
+  const hour = now.getUTCHours();
+
+  const msLeftUntil = (end: Date) => Math.max(0, end.getTime() - now.getTime());
+  const toLefts = (ms: number) => ({
+    hoursLeft: Math.ceil(ms / (60 * 60 * 1000)),
+    minutesLeft: Math.ceil(ms / (60 * 1000)),
+  });
+
+  if (day === 0 && hour >= CYCLE_START_UTC_HOUR && hour < RANKING_RESULTS_START_HOUR) {
+    const end = new Date(now);
+    end.setUTCHours(RANKING_RESULTS_START_HOUR, 0, 0, 0);
+    return { phase: "calculation", ...toLefts(msLeftUntil(end)) };
+  }
+
+  if (day === 0 && hour >= RANKING_RESULTS_START_HOUR) {
+    const end = new Date(now);
+    end.setUTCDate(end.getUTCDate() + 1);
+    end.setUTCHours(0, 0, 0, 0);
+    return { phase: "ranking-results", ...toLefts(msLeftUntil(end)) };
+  }
+
+  if (day === 1 && hour < CYCLE_START_UTC_HOUR) {
+    const end = new Date(now);
+    end.setUTCHours(CYCLE_START_UTC_HOUR, 0, 0, 0);
+    return { phase: "onboarding", ...toLefts(msLeftUntil(end)) };
+  }
+
+  return { phase: null, hoursLeft: 0, minutesLeft: 0 };
 }
