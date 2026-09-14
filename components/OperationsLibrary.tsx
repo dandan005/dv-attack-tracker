@@ -306,7 +306,7 @@ export function SkillBuild() {
         <SectionLabel>SKILL BUILD / RAID LOADOUT</SectionLabel>
         <h2 className="text-xl text-dv-brassLight">Slot skills by stage.</h2>
         <p className="mt-2 max-w-xl text-sm text-slate-200/65">
-          Swap skills as you progress. Rave and Strong Current unlock later and aren't shown with icons yet.
+          Swap skills as you progress.
         </p>
       </Card>
 
