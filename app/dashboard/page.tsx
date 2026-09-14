@@ -268,7 +268,7 @@ export default function DashboardPage() {
               <>
                 {(dayNumber < 3 || settings.wyvern_element) && <div className="mt-4">{dayNumber < 3 ? <ExplorationPhase currentDay={dayNumber} /> : <WyvernTracker current={settings.wyvern_element as any} setBy={settings.wyvern_set_by} onSelect={setWyvern} isAdmin={me?.is_admin ?? false} />}</div>}
 
-                <div className="mt-4"><LogAttackButton anchorDate={settings.anchor_date} resetHour={settings.reset_hour_utc} dayNumber={dayNumber} loggedDays={myLoggedDays} onLog={logAttack} /></div>
+                <div className="mt-4"><LogAttackButton dayNumber={dayNumber} loggedDays={myLoggedDays} onLog={logAttack} /></div>
                 <div className="mt-4"><GuildProgress members={members} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
               </>
             )}
