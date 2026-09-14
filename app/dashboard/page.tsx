@@ -281,7 +281,7 @@ export default function DashboardPage() {
               </div>
             ) : day7.phase === "onboarding" ? (
               <div className="mt-4 flex min-h-0 flex-1 flex-col items-center justify-center pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
-                <p className="text-sm text-dv-brassLight">🐉 ONBOARDING — PREPARING NEXT CYCLE</p>
+                <p className="text-sm text-dv-brassLight">🛸 ONBOARDING — PREPARING NEXT CYCLE</p>
                 <p className="mt-2 max-w-md text-xs leading-relaxed text-slate-200/60">
                   Rewards have been distributed. Rest up and regear — Day 1 attacks open at the next reset hour.
                 </p>
