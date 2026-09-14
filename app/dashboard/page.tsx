@@ -266,7 +266,7 @@ export default function DashboardPage() {
               </div>
             ) : (
               <>
-                {(dayNumber < 3 || settings.wyvern_element) && (
+                {(dayNumber < 3 || (dayNumber >= 3 && dayNumber <= 6 && settings.wyvern_element)) && (
                   <div className="mt-4">
                     {dayNumber < 3 ? (
                       <ExplorationPhase currentDay={dayNumber} />
@@ -351,7 +351,7 @@ export default function DashboardPage() {
           <section>
             <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD SETTINGS</p><h2 className="mt-1 text-xl text-dv-brassLight">Configure the parts the guild actually uses.</h2><p className="mt-2 max-w-2xl text-xs leading-relaxed text-slate-200/60">The raid clock is fixed to the in-game schedule, so there is no anchor date to maintain. Use this panel for the shared raid signal, reminders, and field briefing.</p></div>
 
-            {dayNumber >= 3 && (
+            {dayNumber >= 3 && dayNumber <= 6 && (
               <WyvernTracker
                 current={settings.wyvern_element as any}
                 setBy={settings.wyvern_set_by}
