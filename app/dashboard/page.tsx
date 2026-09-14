@@ -266,7 +266,20 @@ export default function DashboardPage() {
               </div>
             ) : (
               <>
-                {(dayNumber < 3 || settings.wyvern_element) && <div className="mt-4">{dayNumber < 3 ? <ExplorationPhase currentDay={dayNumber} /> : {dayNumber >= 3 && <WyvernTracker current={settings.wyvern_element as any} setBy={settings.wyvern_set_by} onSelect={setWyvern} isAdmin={me?.is_admin ?? false} />}}</div>}
+                {(dayNumber < 3 || settings.wyvern_element) && (
+                  <div className="mt-4">
+                    {dayNumber < 3 ? (
+                      <ExplorationPhase currentDay={dayNumber} />
+                    ) : (
+                      <WyvernTracker
+                        current={settings.wyvern_element as any}
+                        setBy={settings.wyvern_set_by}
+                        onSelect={setWyvern}
+                        isAdmin={me?.is_admin ?? false}
+                      />
+                    )}
+                  </div>
+                )}
 
                 <div className="mt-4"><LogAttackButton dayNumber={dayNumber} loggedDays={myLoggedDays} onLog={logAttack} /></div>
                 <div className="mt-4"><GuildProgress members={members} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
@@ -338,7 +351,14 @@ export default function DashboardPage() {
           <section>
             <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD SETTINGS</p><h2 className="mt-1 text-xl text-dv-brassLight">Configure the parts the guild actually uses.</h2><p className="mt-2 max-w-2xl text-xs leading-relaxed text-slate-200/60">The raid clock is fixed to the in-game schedule, so there is no anchor date to maintain. Use this panel for the shared raid signal, reminders, and field briefing.</p></div>
 
-            <WyvernTracker current={settings.wyvern_element as any} setBy={settings.wyvern_set_by} onSelect={setWyvern} isAdmin={me?.is_admin ?? false} />
+            {dayNumber >= 3 && (
+              <WyvernTracker
+                current={settings.wyvern_element as any}
+                setBy={settings.wyvern_set_by}
+                onSelect={setWyvern}
+                isAdmin={me?.is_admin ?? false}
+              />
+            )}
 
             <section className="pixel-border bg-dv-panel/95 p-4 shadow-pixel">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
