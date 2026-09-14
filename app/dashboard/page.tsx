@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { getCycleInfo } from "@/lib/cycle";
+import { getCycleInfo, getDay7Phase } from "@/lib/cycle";
 import { LogAttackButton } from "@/components/LogAttackButton";
 import { GuildProgress, MemberRow } from "@/components/GuildProgress";
 import { WyvernTracker } from "@/components/WyvernTracker";
@@ -48,26 +48,6 @@ const TABS: { id: Tab; label: string; icon: string }[] = [
 // readout limited to the 6 days attacks can actually happen.
 const CYCLE_DAY_NUMBERS = [1, 2, 3, 4, 5, 6];
 
-// Every Sunday 14:00-23:00 UTC (displayed in-game as 10:00 PM - 7:00 AM
-// PHT, since the guild runs on Manila time, UTC+8), show the "ranking is
-// being calculated" card instead of the normal ledger content. This window
-// falls entirely within a single UTC calendar day (Sunday), so no
-// cross-midnight handling is needed. It's a fixed real-world weekly window
-// (matches the game's own global reset schedule) and must stay in sync
-// with the CYCLE_START_UTC_HOUR anchor in cycle.ts — both represent the
-// same "Day 1 begins" instant.
-function getCalculationWindow(now: Date) {
-  if (now.getUTCDay() !== 0) return { active: false, hoursLeft: 0 }; // only ever active on Sunday (UTC)
-
-  const start = new Date(now);
-  start.setUTCHours(14, 0, 0, 0);
-
-  const end = new Date(start.getTime() + 9 * 60 * 60 * 1000); // 23:00 UTC same day
-  const active = now >= start && now < end;
-  const hoursLeft = Math.max(0, Math.ceil((end.getTime() - now.getTime()) / (60 * 60 * 1000)));
-  return { active, hoursLeft };
-}
-
 export default function DashboardPage() {
   const router = useRouter();
   const supabase = createClient();
@@ -91,7 +71,7 @@ export default function DashboardPage() {
 
   const { dayNumber, cycleStartISO } = getCycleInfo(settings.anchor_date, settings.reset_hour_utc);
   const isStandbyDay = dayNumber === 7;
-  const calc = getCalculationWindow(now);
+  const day7 = getDay7Phase(now);
 
   const visibleTabs = TABS.filter((t) => t.id !== "settings" || me?.is_admin);
 
@@ -283,15 +263,23 @@ export default function DashboardPage() {
           <div className="flex min-h-0 flex-1 flex-col">
             <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD OPERATIONS / ONLINE</p><h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">GUILD HUB</h1><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">The live raid ledger for the current seven-day cycle.</p></div>
 
-            {calc.active ? (
+            {day7.phase === "calculation" ? (
               <div className="mt-4 flex min-h-0 flex-1 flex-col items-center justify-center pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
                 <p className="text-sm text-dv-brassLight">⚙️ RANKING CALCULATION IN PROGRESS</p>
                 <p className="mt-2 max-w-md text-xs leading-relaxed text-slate-200/60">
                   Dragon Valley ranking is being calculated now. You will receive rewards based on the results after calculating is finished.
                 </p>
-                <p className="mt-2 text-xs text-dv-emerald">Until calculation complete: {calc.hoursLeft}h left</p>
+                <p className="mt-2 text-xs text-dv-emerald">Until calculation complete: {day7.hoursLeft}h left</p>
               </div>
-            ) : isStandbyDay ? (
+            ) : day7.phase === "ranking-results" ? (
+              <div className="mt-4 flex min-h-0 flex-1 flex-col items-center justify-center pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
+                <p className="text-sm text-dv-brassLight">🏆 RANKING RESULTS</p>
+                <p className="mt-2 max-w-md text-xs leading-relaxed text-slate-200/60">
+                  Ranking has been finalized. Rewards are being distributed now — check your in-game mailbox shortly.
+                </p>
+                <p className="mt-2 text-xs text-dv-emerald">Distribution ends in: {day7.minutesLeft}m</p>
+              </div>
+            ) : day7.phase === "onboarding" || isStandbyDay ? (
               <div className="mt-4 flex min-h-0 flex-1 flex-col items-center justify-center pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
                 <p className="text-sm text-dv-brassLight">🐉 STANDBY — CYCLE COMPLETE</p>
                 <p className="mt-2 max-w-md text-xs leading-relaxed text-slate-200/60">
