@@ -18,10 +18,7 @@ async function findMissingAndPing() {
     return { error: "No Discord webhook configured.", status: 400 as const };
   }
 
-  const { dayNumber, cycleStartISO } = getCycleInfo(
-    settings?.anchor_date ?? "2026-01-05",
-    settings?.reset_hour_utc ?? 0
-  );
+  const { dayNumber, cycleStartISO } = getCycleInfo();
 
   const { data: members } = await admin.from("members").select("id, discord_id, username");
   const { data: logs } = await admin
