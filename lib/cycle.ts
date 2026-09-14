@@ -8,18 +8,17 @@
 //   - Onboarding:      Mon 00:00 - 14:00 UTC (14h) -> Mon 8:01am - 9:59pm PHT
 // None of this is configurable per guild — the day-cycle anchor and the
 // phase windows have to stay pinned to each other or they fall out of sync.
+// (Previously the anchor was manually configurable per guild via Settings;
+// that caused stored day_number/cycle_start values to drift out of sync
+// with this fixed schedule. The anchor is now hardcoded — do not
+// reintroduce a configurable anchor without also migrating stored rows.)
 
 export const CYCLE_LENGTH = 7;
 const CYCLE_START_UTC_HOUR = 14; // 14:00 UTC = 10:00 PM PHT
 const CYCLE_START_UTC_WEEKDAY = 1; // 0=Sun, 1=Mon
 const RANKING_RESULTS_START_HOUR = 23; // Sun 23:00 UTC = Mon 7:01am PHT boundary
 
-export function getCycleInfo(anchorDateISO?: string, resetHourUTC?: number) {
-  // anchorDateISO / resetHourUTC are accepted for backwards compatibility
-  // with existing callers and the Settings UI, but are no longer used —
-  // the cycle start is fixed to 14:00 UTC Monday to stay in sync with the
-  // day-7 phase windows. Safe to remove both params (and the Settings
-  // fields for anchor date / reset hour) once nothing else depends on them.
+export function getCycleInfo() {
   const now = new Date();
 
   const anchor = new Date();
