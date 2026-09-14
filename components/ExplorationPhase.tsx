@@ -37,11 +37,37 @@ export function ExplorationPhase({ currentDay }: { currentDay: number }) {
         ))}
       </div>
 
-      <div className="pixel-frame border border-dv-violet/60 bg-dv-panel2 px-3 py-3 flex items-start gap-2">
+      <div className="pixel-frame border border-dv-line bg-dv-panel2 px-3 py-3 mb-3">
+        <p className="text-[10px] text-dv-emerald tracking-wide mb-2">EACH ENTRY REWARDS</p>
+        <div className="grid grid-cols-3 gap-2 text-center">
+          <div>
+            <span className="block text-[11px] text-dv-brassLight">Materials</span>
+            <span className="block text-[9px] text-slate-200/60 mt-0.5">varies by zone</span>
+          </div>
+          <div>
+            <span className="block text-[11px] text-dv-brassLight">Points</span>
+            <span className="block text-[9px] text-slate-200/60 mt-0.5">leaderboard rank</span>
+          </div>
+          <div>
+            <span className="block text-[11px] text-dv-brassLight">Bar Fill</span>
+            <span className="block text-[9px] text-slate-200/60 mt-0.5">raises trace odds</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="pixel-frame border border-dv-violet/60 bg-dv-panel2 px-3 py-3 flex items-start gap-2 mb-3">
         <span className="text-dv-violet">◆</span>
         <div>
           <p className="text-[11px] text-dv-brassLight">WYVERN INTEL HIDDEN</p>
           <p className="text-[11px] leading-relaxed text-slate-200/75 mt-1">Fill the exploration progress bar and watch for traces. Wyvern tracking unlocks on Day 3 when a Wyvern is recorded.</p>
+        </div>
+      </div>
+
+      <div className="pixel-frame border border-dv-brass/60 bg-dv-panel2 px-3 py-3 flex items-start gap-2">
+        <span className="text-dv-brass">◆</span>
+        <div>
+          <p className="text-[11px] text-dv-brassLight">TRACE BOUNTY</p>
+          <p className="text-[11px] leading-relaxed text-slate-200/75 mt-1">The Wyvern's region and its trace spots are shared across the whole league — every guild is searching the same map. That region holds 3 traces to find; every other region holds 1. Whoever finds one earns a flat +10,000 points.</p>
         </div>
       </div>
 
