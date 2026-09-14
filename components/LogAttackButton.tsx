@@ -33,14 +33,10 @@ function AttackGlyph({ done, urgent }: { done: boolean; urgent: boolean }) {
 }
 
 export function LogAttackButton({
-  anchorDate,
-  resetHour,
   dayNumber,
   loggedDays,
   onLog,
 }: {
-  anchorDate: string;
-  resetHour: number;
   dayNumber: number;
   loggedDays: number[];
   onLog: (day: number) => Promise<void>;
@@ -49,11 +45,11 @@ export function LogAttackButton({
   const [pending, setPending] = useState(false);
 
   useEffect(() => {
-    const tick = () => setMs(getCycleInfo(anchorDate, resetHour).msUntilReset);
+    const tick = () => setMs(getCycleInfo().msUntilReset);
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
-  }, [anchorDate, resetHour]);
+  }, []);
 
   const done = loggedDays.includes(dayNumber);
   const urgent = !done && ms > 0 && ms < 60 * 60 * 1000;
