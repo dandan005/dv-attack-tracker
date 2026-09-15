@@ -591,6 +591,28 @@ input {
   }
 }
 
+@keyframes runeActivate {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.3;
+    filter: drop-shadow(0 0 0px currentColor);
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 1;
+    filter: drop-shadow(0 0 6px currentColor);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    filter: drop-shadow(0 0 2px currentColor);
+  }
+}
+
+.animate-rune-activate {
+  animation: runeActivate 0.35s ease-out;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }
