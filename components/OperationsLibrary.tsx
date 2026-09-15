@@ -82,7 +82,7 @@ type RuneTier = { name: string; icon: string; accent: "brass" | "violet" | "emer
 const runeTiers: RuneTier[] = [
   {
     name: "Immortal",
-    icon: "🟡",
+    icon: "ᛟ",
     accent: "brass",
     groups: [
       {
@@ -139,7 +139,7 @@ const runeTiers: RuneTier[] = [
   },
   {
     name: "Mythic",
-    icon: "🔵",
+    icon: "ᛞ",
     accent: "violet",
     groups: [
       {
@@ -198,7 +198,7 @@ const runeTiers: RuneTier[] = [
   },
   {
     name: "Legendary",
-    icon: "⚪",
+    icon: "ᛗ",
     accent: "emerald",
     groups: [
       {
@@ -741,7 +741,7 @@ export function Runes() {
               onClick={() => setOpenTiers((current) => (current.includes(tier.name) ? current.filter((item) => item !== tier.name) : [...current, tier.name]))}
               className={`flex w-full items-center gap-3 border-b border-dv-line px-4 py-4 text-left ${isOpen ? "" : "border-b-0"}`}
             >
-              <span className="text-lg leading-none">{tier.icon}</span>
+              <span className={`text-lg leading-none ${style.text}`}>{tier.icon}</span>
               <span className="flex-1">
                 <span className="eyebrow block">RUNE TIER</span>
                 <span className={`mt-1 block text-sm ${style.text}`}>{tier.name}</span>
