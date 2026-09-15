@@ -448,12 +448,18 @@ export default function DashboardPage() {
             >
               {tab === id && (
                 <>
-                  <span className="rune-sparkle" style={{ top: "2px", left: "6px", animationDelay: "0s" }} />
-                  <span className="rune-sparkle" style={{ top: "4px", right: "8px", animationDelay: "0.6s" }} />
-                  <span className="rune-sparkle" style={{ bottom: "3px", left: "10px", animationDelay: "1.1s" }} />
-                  <span className="rune-sparkle" style={{ bottom: "5px", right: "6px", animationDelay: "0.3s" }} />
-                </>
-              )}
+                   <span className="rune-sparkle" style={{ top: "10%", left: "15%", animationDelay: "0s" }} />
+                   <span className="rune-sparkle--sm rune-sparkle" style={{ top: "20%", left: "70%", animationDelay: "0.4s" }} />
+                   <span className="rune-sparkle" style={{ top: "55%", left: "8%", animationDelay: "0.9s" }} />
+                   <span className="rune-sparkle--sm rune-sparkle" style={{ top: "65%", left: "85%", animationDelay: "1.3s" }} />
+                   <span className="rune-sparkle" style={{ top: "80%", left: "40%", animationDelay: "0.2s" }} />
+                   <span className="rune-sparkle--sm rune-sparkle" style={{ top: "15%", left: "45%", animationDelay: "1.6s" }} />
+                   <span className="rune-sparkle" style={{ top: "40%", left: "90%", animationDelay: "0.7s" }} />
+                   <span className="rune-sparkle--sm rune-sparkle" style={{ top: "75%", left: "20%", animationDelay: "1.0s" }} />
+                   <span className="rune-sparkle" style={{ top: "30%", left: "25%", animationDelay: "1.8s" }} />
+                   <span className="rune-sparkle--sm rune-sparkle" style={{ top: "5%", left: "60%", animationDelay: "0.55s" }} />
+                 </>
+               )}
               <span
                 key={`${id}-${tab === id}`}
                 className={"text-base leading-none" + (tab === id ? " animate-rune-active" : "")}
