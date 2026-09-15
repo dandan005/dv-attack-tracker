@@ -6,32 +6,32 @@ type Step = { title: string; body: string; emoji: string };
 
 const STEPS: Step[] = [
   {
-    emoji: "🐉",
+    emoji: "ᚦ",
     title: "Welcome to Dragon Valley",
     body: "This hub tracks your guild's raid cycle — 6 attack days followed by a standby day, all in sync with the game's global reset.",
   },
   {
-    emoji: "⚔️",
+    emoji: "ᛏ",
     title: "Log your attacks",
     body: "On the Ledger tab, tap the attack button each day you raid. Your logged days light up so the guild can see everyone's progress.",
   },
   {
-    emoji: "📊",
+    emoji: "ᛖ",
     title: "Guild Progress",
     body: "Below the log button, see every member's attack history for the current cycle. Admins can ping anyone who's falling behind.",
   },
   {
-    emoji: "🌪️",
+    emoji: "ᚺ",
     title: "Wyvern Tracker",
     body: "From Day 3 onward, mark the wyvern's elemental trace so the whole guild knows what to target.",
   },
   {
-    emoji: "📖",
+    emoji: "ᚨ",
     title: "Guide, Meals & Runes",
     body: "Check the other tabs anytime for field guides, skill builds, spirit info, cooking recipes, and rune setups.",
   },
   {
-    emoji: "❓",
+    emoji: "ᛞ",
     title: "Need this again?",
     body: "Tap the ? icon in the header anytime to replay this walkthrough.",
   },
