@@ -129,6 +129,28 @@ export default function DashboardPage() {
     loadAll();
   }, []);
 
+  // Realtime auto-sync: refetch whenever attack logs or settings change,
+  // so all members see updates live without manually refreshing.
+  useEffect(() => {
+    const channel = supabase
+      .channel("guild-changes")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "attack_logs" },
+        () => loadAll()
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "settings" },
+        () => loadAll()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
   async function logAttack(day: number) {
     const res = await fetch("/api/log-attack", {
       method: "POST",
