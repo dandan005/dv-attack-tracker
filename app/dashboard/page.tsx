@@ -440,12 +440,20 @@ export default function DashboardPage() {
               onClick={() => setTab(id)}
               aria-current={tab === id ? "page" : undefined}
               className={
-                "flex flex-1 flex-col items-center gap-1 border px-1 py-1.5 text-[9px] uppercase tracking-[.1em] " +
+                "relative flex flex-1 flex-col items-center gap-1 border px-1 py-1.5 text-[9px] uppercase tracking-[.1em] " +
                 (tab === id
                   ? "border-dv-brass text-dv-brassLight"
                   : "border-transparent text-slate-300/55 hover:border-dv-line hover:text-dv-brassLight")
               }
             >
+              {tab === id && (
+                <>
+                  <span className="rune-sparkle" style={{ top: "2px", left: "6px", animationDelay: "0s" }} />
+                  <span className="rune-sparkle" style={{ top: "4px", right: "8px", animationDelay: "0.6s" }} />
+                  <span className="rune-sparkle" style={{ bottom: "3px", left: "10px", animationDelay: "1.1s" }} />
+                  <span className="rune-sparkle" style={{ bottom: "5px", right: "6px", animationDelay: "0.3s" }} />
+                </>
+              )}
               <span
                 key={`${id}-${tab === id}`}
                 className={"text-base leading-none" + (tab === id ? " animate-rune-active" : "")}
