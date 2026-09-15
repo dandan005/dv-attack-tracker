@@ -34,8 +34,8 @@ type Tab = "ledger" | "guide" | "meals" | "runes" | "settings";
 type MealsSubTab = "main" | "special";
 
 const TABS: { id: Tab; label: string; icon: string }[] = [
-  { id: "ledger", label: "Ledger", icon: "ᛊ" },
-  { id: "guide", label: "Guide", icon: "ᛃ" },
+  { id: "ledger", label: "Ledger", icon: "ᛏ" },
+  { id: "guide", label: "Guide", icon: "ᚨ" },
   { id: "meals", label: "Meals", icon: "ᛒ" },
   { id: "runes", label: "Runes", icon: "ᚱ" },
   { id: "settings", label: "Settings", icon: "ᛉ" },
@@ -446,7 +446,12 @@ export default function DashboardPage() {
                   : "border-transparent text-slate-300/55 hover:border-dv-line hover:text-dv-brassLight")
               }
             >
-              <span className="text-base leading-none">{icon}</span>
+              <span
+                key={`${id}-${tab === id}`}
+                className={"text-base leading-none" + (tab === id ? " animate-rune-activate" : "")}
+              >
+                {icon}
+              </span>
               {label}
             </button>
           ))}
