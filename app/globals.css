@@ -658,6 +658,19 @@ input {
   box-shadow: 0 0 1.5px currentColor;
 }
 
+@keyframes crestGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 1px #ffe3a1) drop-shadow(0 0 0px #8b7dff);
+  }
+  50% {
+    filter: drop-shadow(0 0 4px #ffe3a1) drop-shadow(0 0 2px #8b7dff);
+  }
+}
+
+.crest-glow {
+  animation: crestGlow 2.4s ease-in-out infinite;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }
