@@ -620,6 +620,28 @@ input {
   }
 }
 
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.rune-sparkle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 9999px;
+  background: currentColor;
+  box-shadow: 0 0 3px currentColor;
+  animation: twinkle 1.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
 .animate-rune-active {
   animation:
     runeActivate 0.35s ease-out,
