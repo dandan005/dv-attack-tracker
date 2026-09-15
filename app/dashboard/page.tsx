@@ -448,7 +448,7 @@ export default function DashboardPage() {
             >
               <span
                 key={`${id}-${tab === id}`}
-                className={"text-base leading-none" + (tab === id ? " animate-rune-activate" : "")}
+                className={"text-base leading-none" + (tab === id ? " animate-rune-active" : "")}
               >
                 {icon}
               </span>
