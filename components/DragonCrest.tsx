@@ -1,10 +1,18 @@
 export function DragonCrest({ size = 44 }: { size?: number }) {
   return (
     <div
-      className="shrink-0 flex items-center justify-center brand-mark"
-      style={{ width: size, height: size }}
+      className="relative shrink-0 flex items-center justify-center brand-mark"
+      style={{ width: size, height: size, color: "#ffe3a1" }}
     >
+      <span className="rune-sparkle" style={{ top: "5%", left: "10%", animationDelay: "0s" }} />
+      <span className="rune-sparkle--sm rune-sparkle" style={{ top: "15%", left: "75%", animationDelay: "0.5s" }} />
+      <span className="rune-sparkle" style={{ top: "60%", left: "5%", animationDelay: "1.0s" }} />
+      <span className="rune-sparkle--sm rune-sparkle" style={{ top: "70%", left: "85%", animationDelay: "1.4s" }} />
+      <span className="rune-sparkle" style={{ top: "85%", left: "45%", animationDelay: "0.3s" }} />
+      <span className="rune-sparkle--sm rune-sparkle" style={{ top: "40%", left: "90%", animationDelay: "0.8s" }} />
+
       <svg
+        className="crest-glow"
         width={size}
         height={size}
         viewBox="0 0 32 32"
