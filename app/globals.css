@@ -609,6 +609,23 @@ input {
   }
 }
 
+@keyframes runeGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 1px currentColor);
+    opacity: 1;
+  }
+  50% {
+    filter: drop-shadow(0 0 4px currentColor);
+    opacity: 0.85;
+  }
+}
+
+.animate-rune-active {
+  animation:
+    runeActivate 0.35s ease-out,
+    runeGlow 1.6s ease-in-out 0.35s infinite;
+}
+
 .animate-rune-activate {
   animation: runeActivate 0.35s ease-out;
 }
