@@ -440,10 +440,10 @@ export default function DashboardPage() {
               onClick={() => setTab(id)}
               aria-current={tab === id ? "page" : undefined}
               className={
-                "relative flex flex-1 flex-col items-center gap-1 border px-1 py-1.5 text-[9px] uppercase tracking-[.1em] " +
+                "relative flex flex-1 flex-col items-center gap-1 px-1 py-1.5 text-[9px] uppercase tracking-[.1em] " +
                 (tab === id
-                  ? "border-dv-brass text-dv-brassLight"
-                  : "border-transparent text-slate-300/55 hover:border-dv-line hover:text-dv-brassLight")
+                  ? "text-dv-brassLight"
+                  : "text-slate-300/55 hover:text-dv-brassLight")
               }
             >
               {tab === id && (
