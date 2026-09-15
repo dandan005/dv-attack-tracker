@@ -37,7 +37,7 @@ const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: "ledger", label: "Ledger", icon: "⚔️" },
   { id: "guide", label: "Guide", icon: "📖" },
   { id: "meals", label: "Meals", icon: "🍖" },
-  { id: "runes", label: "Runes", icon: "🔮" },
+  { id: "runes", label: "Runes", icon: "ᚱ" },
   { id: "settings", label: "Settings", icon: "⚙️" },
 ];
 
