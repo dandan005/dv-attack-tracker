@@ -61,6 +61,7 @@ export default function DashboardPage() {
   const [me, setMe] = useState<CurrentMember | null>(null);
   const [now, setNow] = useState<Date>(() => new Date());
   const [showWalkthrough, setShowWalkthrough] = useState(false);
+  const [syncing, setSyncing] = useState(false);
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);
@@ -131,18 +132,25 @@ export default function DashboardPage() {
 
   // Realtime auto-sync: refetch whenever attack logs or settings change,
   // so all members see updates live without manually refreshing.
+  // `syncing` drives a brief visual indicator in the header.
   useEffect(() => {
     const channel = supabase
       .channel("guild-changes")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "attack_logs" },
-        () => loadAll()
+        () => {
+          setSyncing(true);
+          loadAll().finally(() => setTimeout(() => setSyncing(false), 800));
+        }
       )
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "settings" },
-        () => loadAll()
+        () => {
+          setSyncing(true);
+          loadAll().finally(() => setTimeout(() => setSyncing(false), 800));
+        }
       )
       .subscribe();
 
@@ -220,6 +228,12 @@ export default function DashboardPage() {
             <span className="text-left"><span className="eyebrow block">DRAGON VALLEY</span><span className="block text-sm text-dv-brassLight">ATTACK LEDGER</span></span>
           </button>
           <div className="flex items-center gap-2">
+            {syncing && (
+              <div className="pixel-frame item-slot flex items-center gap-1.5 px-2 py-1">
+                <span className="h-1.5 w-1.5 rounded-full bg-dv-emerald animate-pulse" />
+                <span className="text-[9px] text-dv-emerald">SYNCING</span>
+              </div>
+            )}
             <button
               type="button"
               onClick={() => setShowWalkthrough(true)}
