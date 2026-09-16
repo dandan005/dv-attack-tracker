@@ -226,8 +226,8 @@ export default function DashboardPage() {
               <svg
                 className="absolute pointer-events-none"
                 style={{
-                  width: 50,
-                  height: 50,
+                  width: 70,
+                  height: 70,
                   top: "50%",
                   left: "50%",
                   transform: "translate(-50%, -50%)",
