@@ -1,9 +1,81 @@
 export function DragonCrest({ size = 44 }: { size?: number }) {
+  const circleSize = size * 1.8;
+
   return (
     <div
       className="relative shrink-0 flex items-center justify-center brand-mark"
       style={{ width: size, height: size, color: "#ffe3a1" }}
     >
+      {/* Magic circle overlay — decorative only, sits behind the crest */}
+      <svg
+        className="absolute pointer-events-none"
+        style={{
+          width: circleSize,
+          height: circleSize,
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          opacity: 0.5,
+        }}
+        viewBox="0 0 100 100"
+        aria-hidden="true"
+      >
+        <circle
+          className="magic-circle-outer"
+          cx="50"
+          cy="50"
+          r="46"
+          fill="none"
+          stroke="#8b7dff"
+          strokeWidth="0.6"
+          strokeDasharray="2 3"
+          style={{ transformOrigin: "50px 50px" }}
+        />
+        <circle
+          className="magic-circle-inner"
+          cx="50"
+          cy="50"
+          r="38"
+          fill="none"
+          stroke="#ffe3a1"
+          strokeWidth="0.5"
+          strokeDasharray="1 2"
+          style={{ transformOrigin: "50px 50px" }}
+        />
+        <g className="magic-circle-outer" style={{ transformOrigin: "50px 50px" }}>
+          <polygon
+            points="50,12 85,70 15,70"
+            fill="none"
+            stroke="#8b7dff"
+            strokeWidth="0.5"
+            opacity="0.7"
+          />
+          <polygon
+            points="50,88 15,30 85,30"
+            fill="none"
+            stroke="#8b7dff"
+            strokeWidth="0.5"
+            opacity="0.4"
+          />
+        </g>
+        {Array.from({ length: 8 }).map((_, i) => {
+          const angle = (i * 360) / 8;
+          const x = 50 + 42 * Math.cos((angle * Math.PI) / 180);
+          const y = 50 + 42 * Math.sin((angle * Math.PI) / 180);
+          return (
+            <circle
+              key={i}
+              className="magic-circle-inner"
+              cx={x}
+              cy={y}
+              r="1"
+              fill="#ffe3a1"
+              style={{ transformOrigin: "50px 50px" }}
+            />
+          );
+        })}
+      </svg>
+
       <span className="rune-sparkle" style={{ top: "5%", left: "10%", animationDelay: "0s" }} />
       <span className="rune-sparkle--sm rune-sparkle" style={{ top: "15%", left: "75%", animationDelay: "0.5s" }} />
       <span className="rune-sparkle" style={{ top: "60%", left: "5%", animationDelay: "1.0s" }} />
@@ -12,7 +84,7 @@ export function DragonCrest({ size = 44 }: { size?: number }) {
       <span className="rune-sparkle--sm rune-sparkle" style={{ top: "40%", left: "90%", animationDelay: "0.8s" }} />
 
       <svg
-        className="crest-glow"
+        className="crest-glow relative"
         width={size}
         height={size}
         viewBox="0 0 32 32"
