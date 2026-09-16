@@ -222,7 +222,63 @@ export default function DashboardPage() {
       <header className="z-40 shrink-0 border-b border-dv-line bg-dv-bg/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <button onClick={() => setTab("ledger")} className="flex items-center gap-3">
-            <span className="grid h-11 w-11 place-items-center">
+            <span className="relative grid h-11 w-11 place-items-center">
+              <svg
+                className="absolute pointer-events-none"
+                style={{
+                  width: 80,
+                  height: 80,
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  opacity: 0.5,
+                }}
+                viewBox="0 0 100 100"
+                aria-hidden="true"
+              >
+                <circle
+                  className="magic-circle-outer"
+                  cx="50"
+                  cy="50"
+                  r="46"
+                  fill="none"
+                  stroke="#8b7dff"
+                  strokeWidth="0.6"
+                  strokeDasharray="2 3"
+                  style={{ transformOrigin: "50px 50px" }}
+                />
+                <circle
+                  className="magic-circle-inner"
+                  cx="50"
+                  cy="50"
+                  r="38"
+                  fill="none"
+                  stroke="#ffe3a1"
+                  strokeWidth="0.5"
+                  strokeDasharray="1 2"
+                  style={{ transformOrigin: "50px 50px" }}
+                />
+                <g className="magic-circle-outer" style={{ transformOrigin: "50px 50px" }}>
+                  <polygon points="50,12 85,70 15,70" fill="none" stroke="#8b7dff" strokeWidth="0.5" opacity="0.7" />
+                  <polygon points="50,88 15,30 85,30" fill="none" stroke="#8b7dff" strokeWidth="0.5" opacity="0.4" />
+                </g>
+                {Array.from({ length: 8 }).map((_, i) => {
+                  const angle = (i * 360) / 8;
+                  const x = 50 + 42 * Math.cos((angle * Math.PI) / 180);
+                  const y = 50 + 42 * Math.sin((angle * Math.PI) / 180);
+                  return (
+                    <circle
+                      key={i}
+                      className="magic-circle-inner"
+                      cx={x}
+                      cy={y}
+                      r="1"
+                      fill="#ffe3a1"
+                      style={{ transformOrigin: "50px 50px" }}
+                    />
+                  );
+                })}
+              </svg>
               <DragonCrest />
             </span>
             <span className="text-left"><span className="eyebrow block">DRAGON VALLEY</span><span className="block text-sm text-dv-brassLight">ATTACK LEDGER</span></span>
@@ -448,18 +504,18 @@ export default function DashboardPage() {
             >
               {tab === id && (
                 <>
-                   <span className="rune-sparkle" style={{ top: "10%", left: "15%", animationDelay: "0s" }} />
-                   <span className="rune-sparkle--sm rune-sparkle" style={{ top: "20%", left: "70%", animationDelay: "0.4s" }} />
-                   <span className="rune-sparkle" style={{ top: "55%", left: "8%", animationDelay: "0.9s" }} />
-                   <span className="rune-sparkle--sm rune-sparkle" style={{ top: "65%", left: "85%", animationDelay: "1.3s" }} />
-                   <span className="rune-sparkle" style={{ top: "80%", left: "40%", animationDelay: "0.2s" }} />
-                   <span className="rune-sparkle--sm rune-sparkle" style={{ top: "15%", left: "45%", animationDelay: "1.6s" }} />
-                   <span className="rune-sparkle" style={{ top: "40%", left: "90%", animationDelay: "0.7s" }} />
-                   <span className="rune-sparkle--sm rune-sparkle" style={{ top: "75%", left: "20%", animationDelay: "1.0s" }} />
-                   <span className="rune-sparkle" style={{ top: "30%", left: "25%", animationDelay: "1.8s" }} />
-                   <span className="rune-sparkle--sm rune-sparkle" style={{ top: "5%", left: "60%", animationDelay: "0.55s" }} />
-                 </>
-               )}
+                  <span className="rune-sparkle" style={{ top: "10%", left: "15%", animationDelay: "0s" }} />
+                  <span className="rune-sparkle--sm rune-sparkle" style={{ top: "20%", left: "70%", animationDelay: "0.4s" }} />
+                  <span className="rune-sparkle" style={{ top: "55%", left: "8%", animationDelay: "0.9s" }} />
+                  <span className="rune-sparkle--sm rune-sparkle" style={{ top: "65%", left: "85%", animationDelay: "1.3s" }} />
+                  <span className="rune-sparkle" style={{ top: "80%", left: "40%", animationDelay: "0.2s" }} />
+                  <span className="rune-sparkle--sm rune-sparkle" style={{ top: "15%", left: "45%", animationDelay: "1.6s" }} />
+                  <span className="rune-sparkle" style={{ top: "40%", left: "90%", animationDelay: "0.7s" }} />
+                  <span className="rune-sparkle--sm rune-sparkle" style={{ top: "75%", left: "20%", animationDelay: "1.0s" }} />
+                  <span className="rune-sparkle" style={{ top: "30%", left: "25%", animationDelay: "1.8s" }} />
+                  <span className="rune-sparkle--sm rune-sparkle" style={{ top: "5%", left: "60%", animationDelay: "0.55s" }} />
+                </>
+              )}
               <span
                 key={`${id}-${tab === id}`}
                 className={"text-base leading-none" + (tab === id ? " animate-rune-active" : "")}
