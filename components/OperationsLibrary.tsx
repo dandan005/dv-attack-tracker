@@ -423,12 +423,20 @@ function SpiritSprite({ spirit }: { spirit: Spirit }) {
   }, [spirit.frames]);
 
   return (
-    <img
-      src={"/spirits/" + spirit.frames[frame]}
-      alt={spirit.name}
-      className="h-full w-full object-cover"
-      style={{ imageRendering: "pixelated" }}
-    />
+    <div className="relative h-full w-full">
+      {spirit.frames.map((f, i) => (
+        <img
+          key={f}
+          src={"/spirits/" + f}
+          alt={spirit.name}
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{
+            imageRendering: "pixelated",
+            opacity: i === frame ? 1 : 0,
+          }}
+        />
+      ))}
+    </div>
   );
 }
 
