@@ -294,7 +294,7 @@ const skillImages: Record<string, string | undefined> = {
   "Strong Current": "strong-current.png",
 };
 
-// Skill rarity → glow color, driving the pulsing border on SkillThumb.
+// Skill rarity → static glow color on SkillThumb's frame.
 type SkillRarity = "common" | "rare" | "epic" | "legendary" | "mythic" | "immortal";
 
 const skillRarity: Record<string, SkillRarity> = {
@@ -323,16 +323,18 @@ const rarityFrame: Partial<Record<SkillRarity, string>> = {
   immortal: "frame-immortal.png",
 };
 
-// Rarity → glow treatment for the SkillThumb wrapper. Lives on the OUTER element
-// (not the clipped icon box) so overflow:hidden on the icon crop never eats the glow.
-// Static glow only — no pulsing animation.
+// Rarity → glow, applied as a drop-shadow FILTER on the frame <img> itself (not a
+// box-shadow on a wrapper div). drop-shadow follows the PNG's alpha channel, so the
+// glow hugs the frame artwork's actual scalloped silhouette instead of glowing around
+// a plain rectangle. Two stacked drop-shadows (tight + wide) give it some depth.
+// Static only — no animation.
 const rarityGlow: Record<SkillRarity, string> = {
   common: "",
-  rare: "shadow-[0_0_6px_2px_rgba(147,197,253,0.55)]",
-  epic: "shadow-[0_0_8px_2px_rgba(196,132,252,0.6)]",
-  legendary: "shadow-[0_0_10px_3px_rgba(255,199,74,0.65)]",
-  mythic: "shadow-[0_0_12px_3px_rgba(139,125,255,0.7)]",
-  immortal: "shadow-[0_0_14px_4px_rgba(120,232,199,0.75)]",
+  rare: "drop-shadow(0 0 2px rgba(147,197,253,0.9)) drop-shadow(0 0 5px rgba(147,197,253,0.55))",
+  epic: "drop-shadow(0 0 2px rgba(196,132,252,0.9)) drop-shadow(0 0 5px rgba(196,132,252,0.6))",
+  legendary: "drop-shadow(0 0 2px rgba(255,199,74,0.95)) drop-shadow(0 0 6px rgba(255,199,74,0.7))",
+  mythic: "drop-shadow(0 0 2px rgba(139,125,255,0.95)) drop-shadow(0 0 6px rgba(139,125,255,0.7))",
+  immortal: "drop-shadow(0 0 2px rgba(120,232,199,0.95)) drop-shadow(0 0 7px rgba(120,232,199,0.75))",
 };
 
 type Spirit = { name: string; image: string };
@@ -485,13 +487,14 @@ export function MainCooking() {
   );
 }
 
-// Icon crop lives on the INNER wrapper (h-16 w-16, overflow-hidden) so the frame
-// overlay + rarity glow can sit on the OUTER wrapper unclipped.
+// Icon crop lives on the INNER wrapper (h-16 w-16, overflow-hidden); the frame
+// overlay sits on the OUTER wrapper unclipped, with its rarity glow applied as a
+// drop-shadow filter on the frame image so it hugs the frame's actual silhouette.
 function SkillThumb({ image, name }: { image?: string; name: string }) {
   const rarity = skillRarity[name] ?? "common";
   const frame = rarityFrame[rarity];
   return (
-    <div className={`relative h-16 w-16 shrink-0 rounded-md ${rarityGlow[rarity]}`}>
+    <div className="relative h-16 w-16 shrink-0">
       <div className="pixel-frame item-slot h-full w-full overflow-hidden">
         {image ? (
           <img src={"/skills/" + image} alt={name} className="h-full w-full object-cover" style={{ imageRendering: "pixelated" }} />
@@ -505,7 +508,7 @@ function SkillThumb({ image, name }: { image?: string; name: string }) {
           alt=""
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 h-full w-full"
-          style={{ imageRendering: "pixelated" }}
+          style={{ imageRendering: "pixelated", filter: rarityGlow[rarity] || undefined }}
         />
       )}
     </div>
