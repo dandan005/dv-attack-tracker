@@ -414,12 +414,19 @@ function MainDishThumb({ image, name, priority }: { image: string; name: string;
 
 function SpiritSprite({ spirit }: { spirit: Spirit }) {
   const [frame, setFrame] = useState(0);
+  const lastTime = useRef(0);
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setFrame((f) => (f + 1) % spirit.frames.length);
-    }, 150);
-    return () => clearInterval(id);
+    let raf: number;
+    const tick = (time: number) => {
+      if (time - lastTime.current >= 150) {
+        setFrame((f) => (f + 1) % spirit.frames.length);
+        lastTime.current = time;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, [spirit.frames]);
 
   return (
