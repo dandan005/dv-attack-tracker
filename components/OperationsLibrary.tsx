@@ -414,12 +414,14 @@ function MainDishThumb({ image, name, priority }: { image: string; name: string;
 
 function SpiritSprite({ spirit }: { spirit: Spirit }) {
   const [frame, setFrame] = useState(0);
+  const [lastGap, setLastGap] = useState(0);
   const lastTime = useRef(0);
 
   useEffect(() => {
     let raf: number;
     const tick = (time: number) => {
       if (time - lastTime.current >= 150) {
+        setLastGap(Math.round(time - lastTime.current));
         setFrame((f) => (f + 1) % spirit.frames.length);
         lastTime.current = time;
       }
@@ -443,6 +445,9 @@ function SpiritSprite({ spirit }: { spirit: Spirit }) {
           }}
         />
       ))}
+      <span className="absolute bottom-0 right-0 bg-black/70 text-[8px] text-white px-1">
+        {lastGap}ms
+      </span>
     </div>
   );
 }
