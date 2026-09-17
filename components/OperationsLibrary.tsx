@@ -294,7 +294,7 @@ const skillImages: Record<string, string | undefined> = {
   "Strong Current": "strong-current.png",
 };
 
-// Skill rarity → static glow color on SkillThumb's frame.
+// Skill rarity → static glow color on SkillThumb's icon.
 type SkillRarity = "common" | "rare" | "epic" | "legendary" | "mythic" | "immortal";
 
 const skillRarity: Record<string, SkillRarity> = {
@@ -323,11 +323,10 @@ const rarityFrame: Partial<Record<SkillRarity, string>> = {
   immortal: "frame-immortal.png",
 };
 
-// Rarity → glow, applied as a drop-shadow FILTER on the frame <img> itself (not a
-// box-shadow on a wrapper div). drop-shadow follows the PNG's alpha channel, so the
-// glow hugs the frame artwork's actual scalloped silhouette instead of glowing around
-// a plain rectangle. Two stacked drop-shadows (tight + wide) give it some depth.
-// Static only — no animation.
+// Rarity → glow, applied as a drop-shadow FILTER on the skill ICON <img> itself
+// (not the frame overlay). drop-shadow follows the icon PNG's alpha channel, so the
+// glow radiates from the actual artwork silhouette. Two stacked drop-shadows
+// (tight + wide) give it some depth. Static only — no animation.
 const rarityGlow: Record<SkillRarity, string> = {
   common: "",
   rare: "drop-shadow(0 0 3px rgba(147,197,253,1)) drop-shadow(0 0 8px rgba(147,197,253,0.75))",
@@ -335,6 +334,18 @@ const rarityGlow: Record<SkillRarity, string> = {
   legendary: "drop-shadow(0 0 4px rgba(255,199,74,1)) drop-shadow(0 0 10px rgba(255,199,74,0.85))",
   mythic: "drop-shadow(0 0 4px rgba(139,125,255,1)) drop-shadow(0 0 10px rgba(139,125,255,0.85))",
   immortal: "drop-shadow(0 0 5px rgba(120,232,199,1)) drop-shadow(0 0 12px rgba(120,232,199,0.9))",
+};
+
+// Rarity → frame size, as a scale factor applied to the frame overlay image via
+// CSS transform (centered by default). 1 = frame exactly fills the icon box, same
+// as before. >1 grows the frame outward past the icon box edges (e.g. 1.15 = 15%
+// bigger); <1 shrinks it inward. Tune per rarity here — no markup changes needed.
+const frameScale: Partial<Record<SkillRarity, number>> = {
+  rare: 1,
+  epic: 1,
+  legendary: 1,
+  mythic: 1,
+  immortal: 1,
 };
 
 type Spirit = { name: string; image: string };
@@ -487,17 +498,28 @@ export function MainCooking() {
   );
 }
 
-// Icon crop lives on the INNER wrapper (h-16 w-16, overflow-hidden); the frame
-// overlay sits on the OUTER wrapper unclipped, with its rarity glow applied as a
-// drop-shadow filter on the frame image so it hugs the frame's actual silhouette.
+// Icon and frame are separate absolutely-positioned layers in an unclipped h-14 w-14
+// wrapper. The icon's wrapper uses only `item-slot` (background/border, no clip) —
+// NOT `pixel-frame`, which bakes in overflow:hidden and would clip the icon's own
+// drop-shadow glow. Trade-off: the icon's square corners are no longer masked to the
+// slot's rounded corners; for these small pixel-art icons that's generally not
+// noticeable, but flag if you want the rounding back a different way.
+// Frame size is independently tunable via `frameScale` (a CSS transform: scale()),
+// so it can grow/shrink relative to the icon without touching this markup.
 function SkillThumb({ image, name }: { image?: string; name: string }) {
   const rarity = skillRarity[name] ?? "common";
   const frame = rarityFrame[rarity];
+  const scale = frameScale[rarity] ?? 1;
   return (
     <div className="relative h-14 w-14 shrink-0">
-      <div className="pixel-frame item-slot h-full w-full overflow-hidden">
+      <div className="item-slot rounded-md h-full w-full">
         {image ? (
-          <img src={"/skills/" + image} alt={name} className="h-full w-full object-cover" style={{ imageRendering: "pixelated" }} />
+          <img
+            src={"/skills/" + image}
+            alt={name}
+            className="h-full w-full object-cover rounded-md"
+            style={{ imageRendering: "pixelated", filter: rarityGlow[rarity] || undefined }}
+          />
         ) : (
           <div className="grid h-full w-full place-items-center text-[10px] text-slate-300/40">?</div>
         )}
@@ -508,7 +530,7 @@ function SkillThumb({ image, name }: { image?: string; name: string }) {
           alt=""
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 h-full w-full"
-          style={{ imageRendering: "pixelated", filter: rarityGlow[rarity] || undefined }}
+          style={{ imageRendering: "pixelated", transform: scale !== 1 ? `scale(${scale})` : undefined }}
         />
       )}
     </div>
