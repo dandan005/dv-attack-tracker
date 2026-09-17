@@ -742,13 +742,7 @@ main {
   to { transform: rotate(360deg); }
 }
 
-/* Skill rarity glow — SkillThumb sets --glow-color per rarity, this rule handles the pulse. */
+/* Skill rarity glow — SkillThumb sets --glow-color per rarity, this rule renders a steady glow. */
 .skill-glow {
-  box-shadow: 0 0 0 1px var(--glow-color), 0 0 6px 1px var(--glow-color);
-  animation: skill-pulse 2.2s ease-in-out infinite;
-}
-
-@keyframes skill-pulse {
-  0%, 100% { box-shadow: 0 0 0 1px var(--glow-color), 0 0 4px 0px var(--glow-color); }
-  50% { box-shadow: 0 0 0 1px var(--glow-color), 0 0 10px 3px var(--glow-color); }
+  box-shadow: 0 0 0 1px var(--glow-color), 0 0 8px 2px var(--glow-color);
 }
