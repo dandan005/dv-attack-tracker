@@ -330,11 +330,11 @@ const rarityFrame: Partial<Record<SkillRarity, string>> = {
 // Static only — no animation.
 const rarityGlow: Record<SkillRarity, string> = {
   common: "",
-  rare: "drop-shadow(0 0 2px rgba(147,197,253,0.9)) drop-shadow(0 0 5px rgba(147,197,253,0.55))",
-  epic: "drop-shadow(0 0 2px rgba(196,132,252,0.9)) drop-shadow(0 0 5px rgba(196,132,252,0.6))",
-  legendary: "drop-shadow(0 0 2px rgba(255,199,74,0.95)) drop-shadow(0 0 6px rgba(255,199,74,0.7))",
-  mythic: "drop-shadow(0 0 2px rgba(139,125,255,0.95)) drop-shadow(0 0 6px rgba(139,125,255,0.7))",
-  immortal: "drop-shadow(0 0 2px rgba(120,232,199,0.95)) drop-shadow(0 0 7px rgba(120,232,199,0.75))",
+  rare: "drop-shadow(0 0 3px rgba(147,197,253,1)) drop-shadow(0 0 8px rgba(147,197,253,0.75))",
+  epic: "drop-shadow(0 0 3px rgba(196,132,252,1)) drop-shadow(0 0 8px rgba(196,132,252,0.8))",
+  legendary: "drop-shadow(0 0 4px rgba(255,199,74,1)) drop-shadow(0 0 10px rgba(255,199,74,0.85))",
+  mythic: "drop-shadow(0 0 4px rgba(139,125,255,1)) drop-shadow(0 0 10px rgba(139,125,255,0.85))",
+  immortal: "drop-shadow(0 0 5px rgba(120,232,199,1)) drop-shadow(0 0 12px rgba(120,232,199,0.9))",
 };
 
 type Spirit = { name: string; image: string };
@@ -494,7 +494,7 @@ function SkillThumb({ image, name }: { image?: string; name: string }) {
   const rarity = skillRarity[name] ?? "common";
   const frame = rarityFrame[rarity];
   return (
-    <div className="relative h-16 w-16 shrink-0">
+    <div className="relative h-14 w-14 shrink-0">
       <div className="pixel-frame item-slot h-full w-full overflow-hidden">
         {image ? (
           <img src={"/skills/" + image} alt={name} className="h-full w-full object-cover" style={{ imageRendering: "pixelated" }} />
