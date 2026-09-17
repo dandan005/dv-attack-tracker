@@ -293,12 +293,12 @@ export default function DashboardPage() {
                   <div className="mt-5 w-full max-w-md space-y-4 text-left">
                     {zeroLoggedMembers.length > 0 && (
                       <div>
-                        <p className="eyebrow text-dv-red">🚨 ZERO ATTACKS LOGGED — EXPULSION RISK</p>
+                        <p className="eyebrow text-dv-ember">🚨 ZERO ATTACKS LOGGED — EXPULSION RISK</p>
                         <ul className="mt-2 space-y-1.5">
                           {zeroLoggedMembers.map((m) => (
                             <li
                               key={m.discord_id}
-                              className="item-slot flex items-center justify-between border border-dv-red/60 bg-dv-red/10 px-3 py-2"
+                              className="item-slot flex items-center justify-between border border-dv-ember/60 bg-dv-ember/10 px-3 py-2"
                             >
                               <span className="flex items-center gap-2 text-[10px] text-slate-200/80">
                                 <img
@@ -308,11 +308,11 @@ export default function DashboardPage() {
                                 />
                                 {m.username}
                               </span>
-                              <span className="text-[10px] text-dv-red">0/6 logged</span>
+                              <span className="text-[10px] text-dv-ember">0/6 logged</span>
                             </li>
                           ))}
                         </ul>
-                        <p className="mt-2 text-[9px] leading-relaxed text-dv-red/80">
+                        <p className="mt-2 text-[9px] leading-relaxed text-dv-ember/80">
                           No attacks logged this entire cycle. Log at least one attack next cycle or you will be expelled from the guild.
                         </p>
                       </div>
