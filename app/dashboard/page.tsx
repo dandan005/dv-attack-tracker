@@ -217,6 +217,13 @@ export default function DashboardPage() {
 
   if (loading) return <main className="min-h-screen flex items-center justify-center"><p className="text-[11px] text-dv-brassLight animate-blink">LOADING GUILD DATA...</p></main>;
 
+  // Split into "missed some days" (mild warning) vs "logged zero attacks
+  // all cycle" (severe warning — next cycle's zero means expulsion).
+  const zeroLoggedMembers = members.filter((m) => m.logged.every((logged) => !logged));
+  const partiallyLoggedMembers = members.filter(
+    (m) => m.logged.some((logged) => logged) && m.logged.some((logged) => !logged)
+  );
+
   return (
     <div className="scanlines fixed inset-0 flex flex-col overflow-hidden">
       <header className="z-40 shrink-0 border-b border-dv-line bg-dv-bg/95 backdrop-blur">
@@ -281,6 +288,66 @@ export default function DashboardPage() {
                   Dragon Valley ranking is being calculated now. You will receive rewards based on the results after calculating is finished.
                 </p>
                 <p className="mt-2 text-xs text-dv-emerald">Until calculation complete: {day7.hoursLeft}h left</p>
+
+                {(zeroLoggedMembers.length > 0 || partiallyLoggedMembers.length > 0) && (
+                  <div className="mt-5 w-full max-w-md space-y-4 text-left">
+                    {zeroLoggedMembers.length > 0 && (
+                      <div>
+                        <p className="eyebrow text-dv-red">🚨 ZERO ATTACKS LOGGED — EXPULSION RISK</p>
+                        <ul className="mt-2 space-y-1.5">
+                          {zeroLoggedMembers.map((m) => (
+                            <li
+                              key={m.discord_id}
+                              className="item-slot flex items-center justify-between border border-dv-red/60 bg-dv-red/10 px-3 py-2"
+                            >
+                              <span className="flex items-center gap-2 text-[10px] text-slate-200/80">
+                                <img
+                                  src={m.avatar_url ?? "/icons/icon-192.png"}
+                                  alt=""
+                                  className="h-5 w-5 pixel-frame border border-dv-line object-cover"
+                                />
+                                {m.username}
+                              </span>
+                              <span className="text-[10px] text-dv-red">0/6 logged</span>
+                            </li>
+                          ))}
+                        </ul>
+                        <p className="mt-2 text-[9px] leading-relaxed text-dv-red/80">
+                          No attacks logged this entire cycle. Log at least one attack next cycle or you will be expelled from the guild.
+                        </p>
+                      </div>
+                    )}
+
+                    {partiallyLoggedMembers.length > 0 && (
+                      <div>
+                        <p className="eyebrow text-dv-brass">⚠️ MISSED ATTACKS THIS CYCLE</p>
+                        <ul className="mt-2 space-y-1.5">
+                          {partiallyLoggedMembers.map((m) => (
+                            <li
+                              key={m.discord_id}
+                              className="item-slot flex items-center justify-between border border-dv-line px-3 py-2"
+                            >
+                              <span className="flex items-center gap-2 text-[10px] text-slate-200/75">
+                                <img
+                                  src={m.avatar_url ?? "/icons/icon-192.png"}
+                                  alt=""
+                                  className="h-5 w-5 pixel-frame border border-dv-line object-cover"
+                                />
+                                {m.username}
+                              </span>
+                              <span className="text-[10px] text-dv-brassLight">
+                                {m.logged.filter(Boolean).length}/6 logged
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                        <p className="mt-2 text-[9px] leading-relaxed text-slate-300/50">
+                          A few attacks were missed — try to log every day next cycle.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             ) : day7.phase === "ranking-results" ? (
               <div className="mt-4 flex min-h-0 flex-1 flex-col items-center justify-center pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
