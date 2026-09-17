@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export function DragonCrest({ size = 38 }: { size?: number }) {
+export function DragonCrest({ size = 44 }: { size?: number }) {
   const circleSize = size * 1.8;
   const glyphs = ["ᛏ", "ᚨ", "ᛒ", "ᚱ", "ᛉ", "ᛃ", "ᚦ", "ᛗ"];
   const [uid] = useState(() => Math.random().toString(36).slice(2, 9));
@@ -11,20 +11,13 @@ export function DragonCrest({ size = 38 }: { size?: number }) {
 
   return (
     <div
-      className="relative shrink-0 flex items-center justify-center"
+      className="relative shrink-0"
       style={{ width: size, height: size }}
     >
       {/* Magic circle overlay — decorative only, sits behind the crest */}
       <svg
-        className="absolute pointer-events-none"
-        style={{
-          width: circleSize,
-          height: circleSize,
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          opacity: 0.5,
-        }}
+        className="absolute inset-0 m-auto pointer-events-none"
+        style={{ width: circleSize, height: circleSize, opacity: 0.5 }}
         viewBox="0 0 100 100"
         aria-hidden="true"
       >
@@ -86,14 +79,8 @@ export function DragonCrest({ size = 38 }: { size?: number }) {
 
       {/* Runic glyph ring — rotates slowly around the crest */}
       <svg
-        className="absolute pointer-events-none crest-rune-ring"
-        style={{
-          width: circleSize,
-          height: circleSize,
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-        }}
+        className="absolute inset-0 m-auto pointer-events-none crest-rune-ring"
+        style={{ width: circleSize, height: circleSize }}
         viewBox="0 0 100 100"
         aria-hidden="true"
       >
@@ -110,7 +97,7 @@ export function DragonCrest({ size = 38 }: { size?: number }) {
               fontSize="7"
               textAnchor="middle"
               dominantBaseline="middle"
-              opacity="0.75"
+              opacity="0.8"
               style={{ filter: "drop-shadow(0 0 2px rgba(255, 227, 161, 0.9))" }}
             >
               {glyph}
@@ -126,9 +113,9 @@ export function DragonCrest({ size = 38 }: { size?: number }) {
       <span className="rune-sparkle" style={{ top: "85%", left: "45%", animationDelay: "0.3s" }} />
       <span className="rune-sparkle--sm rune-sparkle" style={{ top: "40%", left: "90%", animationDelay: "0.8s" }} />
 
-      {/* Shield badge — clip-path lives here, scoped only to the badge itself */}
+      {/* Shield badge — runic-carved seal, clip-path scoped only here */}
       <span
-        className="brand-mark relative"
+        className="brand-mark absolute inset-0 m-auto"
         style={{ width: size, height: size, color: "#ffe3a1" }}
       >
         <svg
@@ -164,26 +151,54 @@ export function DragonCrest({ size = 38 }: { size?: number }) {
             </filter>
           </defs>
 
-          {/* Wide soft halo — the main visible glow */}
+          {/* Wide soft halo */}
           <g filter={`url(#${softId})`} className="crest-glow-pulse-wide">
             <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#ffe3a1" />
           </g>
 
-          {/* Tight bright rim — makes the edge itself glow brighter */}
+          {/* Tight bright rim */}
           <g filter={`url(#${tightId})`} className="crest-glow-pulse-tight">
             <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#fff4d6" />
           </g>
 
-          {/* Crisp pixel-art crest on top, unchanged */}
+          {/* Runic-carved shield */}
           <g shapeRendering="crispEdges" style={{ imageRendering: "pixelated" }}>
-            <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#080a18" />
-            <path d="M8 7h16v10l-2 4-6 4-6-4-2-4V7Z" fill="#8b7dff" />
-            <path d="M10 9h12v8l-2 3-4 3-4-3-2-3V9Z" fill="#080a18" />
+            {/* Base plate, dark stone rather than flat gradient */}
+            <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#0c0f22" />
+
+            {/* Etched rune border — thin glowing outline instead of solid fill */}
+            <path
+              d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z"
+              fill="none"
+              stroke="#8b7dff"
+              strokeWidth="0.6"
+              opacity="0.85"
+            />
+            <path
+              d="M8 7h16v10l-2 4-6 4-6-4-2-4V7Z"
+              fill="none"
+              stroke="#ffe3a1"
+              strokeWidth="0.5"
+              opacity="0.7"
+            />
+
+            {/* Rune-carved corner ticks, like inscriptions along the seams */}
+            <rect x="6" y="9" width="1" height="2" fill="#8b7dff" opacity="0.9" />
+            <rect x="25" y="9" width="1" height="2" fill="#8b7dff" opacity="0.9" />
+            <rect x="9" y="21" width="2" height="1" fill="#ffe3a1" opacity="0.8" />
+            <rect x="21" y="21" width="2" height="1" fill="#ffe3a1" opacity="0.8" />
+
+            {/* Interlocking pixel DV monogram, glowing gold */}
             <path
               d="M11 11h4l2 2v6l-2 2h-4V11Zm2 2v6h1l1-1v-4l-1-1h-1Z"
               fill="#ffe3a1"
             />
-            <path d="M17 11h2v5l1 2 1-2v-5h2v6l-2 4h-2l-2-4v-6Z" fill="#ffe3a1" />
+            <path
+              d="M17 11h2v5l1 2 1-2v-5h2v6l-2 4h-2l-2-4v-6Z"
+              fill="#ffe3a1"
+            />
+
+            {/* Ledger ticks */}
             <rect x="10" y="25" width="3" height="1" fill="#080a18" />
             <rect x="15" y="25" width="3" height="1" fill="#080a18" />
             <rect x="20" y="25" width="2" height="1" fill="#080a18" />
