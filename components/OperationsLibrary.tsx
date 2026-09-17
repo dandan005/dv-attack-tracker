@@ -614,12 +614,7 @@ export function Spirits() {
           {spirits.map((spirit) => (
             <div key={spirit.name} className="flex flex-col items-center gap-2 text-center">
               <div className="pixel-frame item-slot h-16 w-16 overflow-hidden">
-                <img
-                  src={"/spirits/" + spirit.image}
-                  alt={spirit.name}
-                  className="h-full w-full object-cover"
-                  style={{ imageRendering: "pixelated" }}
-                />
+                <SpiritSprite spirit={spirit} />
               </div>
               <span className="text-xs text-dv-brassLight">{spirit.name}</span>
             </div>
