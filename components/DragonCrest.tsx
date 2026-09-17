@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 export function DragonCrest({ size = 38 }: { size?: number }) {
-  const circleSize = size * 1.4;
+  const circleSize = size * 1.5;
   const glyphs = ["ᛏ", "ᚨ", "ᛒ", "ᚱ", "ᛉ", "ᛃ", "ᚦ", "ᛗ"];
   const [uid] = useState(() => Math.random().toString(36).slice(2, 9));
   const softId = `crest-blur-glow-soft-${uid}`;
