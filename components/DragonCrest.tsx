@@ -1,5 +1,6 @@
 export function DragonCrest({ size = 44 }: { size?: number }) {
   const circleSize = size * 1.8;
+  const glyphs = ["ᛏ", "ᚨ", "ᛒ", "ᚱ", "ᛉ", "ᛃ", "ᚦ", "ᛗ"];
 
   return (
     <div
@@ -76,6 +77,41 @@ export function DragonCrest({ size = 44 }: { size?: number }) {
         })}
       </svg>
 
+      {/* Runic glyph ring — rotates slowly around the crest */}
+      <svg
+        className="absolute pointer-events-none crest-rune-ring"
+        style={{
+          width: circleSize,
+          height: circleSize,
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+        viewBox="0 0 100 100"
+        aria-hidden="true"
+      >
+        {glyphs.map((glyph, i) => {
+          const angle = (i * 360) / glyphs.length;
+          const x = 50 + 44 * Math.cos((angle * Math.PI) / 180);
+          const y = 50 + 44 * Math.sin((angle * Math.PI) / 180);
+          return (
+            <text
+              key={i}
+              x={x}
+              y={y}
+              fill="#ffe3a1"
+              fontSize="7"
+              textAnchor="middle"
+              dominantBaseline="middle"
+              opacity="0.75"
+              style={{ filter: "drop-shadow(0 0 2px rgba(255, 227, 161, 0.9))" }}
+            >
+              {glyph}
+            </text>
+          );
+        })}
+      </svg>
+
       <span className="rune-sparkle" style={{ top: "5%", left: "10%", animationDelay: "0s" }} />
       <span className="rune-sparkle--sm rune-sparkle" style={{ top: "15%", left: "75%", animationDelay: "0.5s" }} />
       <span className="rune-sparkle" style={{ top: "60%", left: "5%", animationDelay: "1.0s" }} />
@@ -92,23 +128,38 @@ export function DragonCrest({ size = 44 }: { size?: number }) {
         aria-label="Dragon Valley Attack Ledger guild mark"
       >
         <defs>
-          <filter id="crest-blur-glow" x="-60%" y="-60%" width="220%" height="220%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="1.6" result="blurred" />
+          <filter id="crest-blur-glow-soft" x="-80%" y="-80%" width="260%" height="260%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="2.4" result="blurred" />
             <feColorMatrix
               in="blurred"
               type="matrix"
               values="0 0 0 0 1
                       0 0 0 0 0.83
                       0 0 0 0 0.4
-                      0 0 0 1 0"
-              result="goldBlur"
+                      0 0 0 1.4 0"
+            />
+          </filter>
+          <filter id="crest-blur-glow-tight" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blurred" />
+            <feColorMatrix
+              in="blurred"
+              type="matrix"
+              values="0 0 0 0 1
+                      0 0 0 0 0.9
+                      0 0 0 0 0.55
+                      0 0 0 1.6 0"
             />
           </filter>
         </defs>
 
-        {/* Blurred golden halo, sitting behind the crisp crest */}
-        <g filter="url(#crest-blur-glow)" opacity="0.8" className="crest-glow-pulse">
+        {/* Wide soft halo — the main visible glow */}
+        <g filter="url(#crest-blur-glow-soft)" className="crest-glow-pulse-wide">
           <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#ffe3a1" />
+        </g>
+
+        {/* Tight bright rim — makes the edge itself glow brighter */}
+        <g filter="url(#crest-blur-glow-tight)" className="crest-glow-pulse-tight">
+          <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#fff4d6" />
         </g>
 
         {/* Crisp pixel-art crest on top, unchanged */}
