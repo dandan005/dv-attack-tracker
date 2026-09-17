@@ -341,11 +341,11 @@ const rarityGlow: Record<SkillRarity, string> = {
 // as before. >1 grows the frame outward past the icon box edges (e.g. 1.15 = 15%
 // bigger); <1 shrinks it inward. Tune per rarity here — no markup changes needed.
 const frameScale: Partial<Record<SkillRarity, number>> = {
-  rare: 1.5,
-  epic: 1.5,
-  legendary: 1.5,
-  mythic: 1.5,
-  immortal: 1.5,
+  rare: 1.2,
+  epic: 1.2,
+  legendary: 1.4,
+  mythic: 1.4,
+  immortal: 1.4,
 };
 
 type Spirit = { name: string; image: string };
