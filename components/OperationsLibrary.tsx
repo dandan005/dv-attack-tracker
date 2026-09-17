@@ -314,13 +314,13 @@ const skillRarity: Record<string, SkillRarity> = {
   "Rave": "immortal",
 };
 
-const rarityGlow: Record<SkillRarity, string> = {
-  common: "#e2e8f0",
-  rare: "#f97316",
-  epic: "#a855f7",
-  legendary: "#ef4444",
-  mythic: "#a5f3fc",
-  immortal: "#facc15",
+// Rarity → overlay frame image, placed in /public/skills/frames/. No entry means no overlay (plain slot).
+const rarityFrame: Partial<Record<SkillRarity, string>> = {
+  rare: "frame-rare-epic.png",
+  epic: "frame-rare-epic.png",
+  legendary: "frame-legendary.png",
+  mythic: "frame-mythic.png",
+  immortal: "frame-immortal.png",
 };
 
 type Spirit = { name: string; image: string };
@@ -475,15 +475,22 @@ export function MainCooking() {
 
 function SkillThumb({ image, name }: { image?: string; name: string }) {
   const rarity = skillRarity[name] ?? "common";
+  const frame = rarityFrame[rarity];
   return (
-    <div
-      className="pixel-frame item-slot skill-glow h-14 w-14 shrink-0 overflow-hidden"
-      style={{ "--glow-color": rarityGlow[rarity] } as React.CSSProperties}
-    >
+    <div className="pixel-frame item-slot relative h-14 w-14 shrink-0 overflow-hidden">
       {image ? (
         <img src={"/skills/" + image} alt={name} className="h-full w-full object-cover" style={{ imageRendering: "pixelated" }} />
       ) : (
         <div className="grid h-full w-full place-items-center text-[10px] text-slate-300/40">?</div>
+      )}
+      {frame && (
+        <img
+          src={"/skills/frames/" + frame}
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 h-full w-full"
+          style={{ imageRendering: "pixelated" }}
+        />
       )}
     </div>
   );
