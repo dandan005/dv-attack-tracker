@@ -348,12 +348,12 @@ const frameScale: Partial<Record<SkillRarity, number>> = {
   immortal: 1.28,
 };
 
-type Spirit = { name: string; image: string };
+type Spirit = { name: string; frames: string[] };
 
 const spirits: Spirit[] = [
-  { name: "Sala", image: "sala.png" },
-  { name: "Noah", image: "noah.png" },
-  { name: "Loar", image: "loar.png" },
+  { name: "Sala", frames: ["sala-1.png", "sala-2.png", "sala-3.png", "sala-4.png"] },
+  { name: "Noah", frames: ["noah-1.png", "noah-2.png", "noah-3.png", "noah-4.png"] },
+  { name: "Loar", frames: ["loar-1.png", "loar-2.png", "loar-3.png", "loar-4.png"] },
 ];
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -409,6 +409,26 @@ function MainDishThumb({ image, name, priority }: { image: string; name: string;
       </div>
       <PriorityBadge priority={priority} />
     </div>
+  );
+}
+
+function SpiritSprite({ spirit }: { spirit: Spirit }) {
+  const [frame, setFrame] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setFrame((f) => (f + 1) % spirit.frames.length);
+    }, 150);
+    return () => clearInterval(id);
+  }, [spirit.frames]);
+
+  return (
+    <img
+      src={"/spirits/" + spirit.frames[frame]}
+      alt={spirit.name}
+      className="h-full w-full object-cover"
+      style={{ imageRendering: "pixelated" }}
+    />
   );
 }
 
