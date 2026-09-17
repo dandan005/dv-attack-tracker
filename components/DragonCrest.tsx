@@ -11,9 +11,10 @@ export function DragonCrest({ size = 44 }: { size?: number }) {
 
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
-      {/* Magic circle overlay */}
+      {/* Magic circle overlay — centered via translate, not inset+auto-margin
+          (inset-0 + m-auto breaks once the child is bigger than the parent) */}
       <svg
-        className="absolute inset-0 m-auto pointer-events-none"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         style={{ width: circleSize, height: circleSize, opacity: 0.5 }}
         viewBox="0 0 100 100"
         aria-hidden="true"
@@ -32,24 +33,30 @@ export function DragonCrest({ size = 44 }: { size?: number }) {
         })}
       </svg>
 
-      {/* Runic glyph ring */}
-      <svg
-        className="absolute inset-0 m-auto pointer-events-none crest-rune-ring"
+      {/* Runic glyph ring — outer wrapper handles centering (static transform),
+          inner wrapper handles the spin (animated transform). Two separate
+          elements because one element can't carry both a translate-centering
+          transform and a rotate-animation transform at once — the keyframes
+          would just overwrite the translate. */}
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         style={{ width: circleSize, height: circleSize }}
-        viewBox="0 0 100 100"
-        aria-hidden="true"
       >
-        {glyphs.map((glyph, i) => {
-          const angle = (i * 360) / glyphs.length;
-          const x = 50 + 44 * Math.cos((angle * Math.PI) / 180);
-          const y = 50 + 44 * Math.sin((angle * Math.PI) / 180);
-          return (
-            <text key={i} x={x} y={y} fill="#ffe3a1" fontSize="7" textAnchor="middle" dominantBaseline="middle" opacity="0.8" style={{ filter: "drop-shadow(0 0 2px rgba(255, 227, 161, 0.9))" }}>
-              {glyph}
-            </text>
-          );
-        })}
-      </svg>
+        <div className="crest-rune-ring w-full h-full">
+          <svg viewBox="0 0 100 100" className="w-full h-full" aria-hidden="true">
+            {glyphs.map((glyph, i) => {
+              const angle = (i * 360) / glyphs.length;
+              const x = 50 + 44 * Math.cos((angle * Math.PI) / 180);
+              const y = 50 + 44 * Math.sin((angle * Math.PI) / 180);
+              return (
+                <text key={i} x={x} y={y} fill="#ffe3a1" fontSize="7" textAnchor="middle" dominantBaseline="middle" opacity="0.8" style={{ filter: "drop-shadow(0 0 2px rgba(255, 227, 161, 0.9))" }}>
+                  {glyph}
+                </text>
+              );
+            })}
+          </svg>
+        </div>
+      </div>
 
       <span className="rune-sparkle" style={{ top: "5%", left: "10%", animationDelay: "0s" }} />
       <span className="rune-sparkle--sm rune-sparkle" style={{ top: "15%", left: "75%", animationDelay: "0.5s" }} />
@@ -58,7 +65,7 @@ export function DragonCrest({ size = 44 }: { size?: number }) {
       <span className="rune-sparkle" style={{ top: "85%", left: "45%", animationDelay: "0.3s" }} />
       <span className="rune-sparkle--sm rune-sparkle" style={{ top: "40%", left: "90%", animationDelay: "0.8s" }} />
 
-      {/* Shield badge — NO .brand-mark class here anymore. The SVG alone draws the shape. */}
+      {/* Shield badge — this one was fine, it's sized exactly to the container */}
       <span className="absolute inset-0 m-auto flex items-center justify-center" style={{ width: size, height: size }}>
         <svg
           className="crest-glow relative"
@@ -86,7 +93,6 @@ export function DragonCrest({ size = 44 }: { size?: number }) {
             <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#fff4d6" />
           </g>
 
-          {/* Runic-carved shield — thicker, more visible etching this time */}
           <g shapeRendering="crispEdges" style={{ imageRendering: "pixelated" }}>
             <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#0c0f22" />
             <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="none" stroke="#8b7dff" strokeWidth="1" opacity="1" />
