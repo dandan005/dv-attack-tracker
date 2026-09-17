@@ -294,6 +294,35 @@ const skillImages: Record<string, string | undefined> = {
   "Strong Current": "strong-current.png",
 };
 
+// Skill rarity → glow color, driving the pulsing border on SkillThumb.
+type SkillRarity = "common" | "rare" | "epic" | "legendary" | "mythic" | "immortal";
+
+const skillRarity: Record<string, SkillRarity> = {
+  "Demon Hunt": "common",
+  "Burning Sword": "rare",
+  "Fire Slash": "rare",
+  "Speed Sword": "rare",
+  "Earth's Will": "rare",
+  "Curved Blade": "epic",
+  "Hell Fire Slash": "legendary",
+  "Giga Strike": "legendary",
+  "Red Lightning": "legendary",
+  "Meditation": "legendary",
+  "Strong Current": "mythic",
+  "Wrath of Gods": "mythic",
+  "Warrior Burn": "mythic",
+  "Rave": "immortal",
+};
+
+const rarityGlow: Record<SkillRarity, string> = {
+  common: "#e2e8f0",
+  rare: "#f97316",
+  epic: "#a855f7",
+  legendary: "#ef4444",
+  mythic: "#a5f3fc",
+  immortal: "#facc15",
+};
+
 type Spirit = { name: string; image: string };
 
 const spirits: Spirit[] = [
@@ -445,8 +474,12 @@ export function MainCooking() {
 }
 
 function SkillThumb({ image, name }: { image?: string; name: string }) {
+  const rarity = skillRarity[name] ?? "common";
   return (
-    <div className="pixel-frame item-slot h-14 w-14 shrink-0 overflow-hidden">
+    <div
+      className="pixel-frame item-slot skill-glow h-14 w-14 shrink-0 overflow-hidden"
+      style={{ "--glow-color": rarityGlow[rarity] } as React.CSSProperties}
+    >
       {image ? (
         <img src={"/skills/" + image} alt={name} className="h-full w-full object-cover" style={{ imageRendering: "pixelated" }} />
       ) : (
