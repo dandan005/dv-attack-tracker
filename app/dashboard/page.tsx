@@ -215,7 +215,14 @@ export default function DashboardPage() {
     }
   }
 
-  if (loading) return <main className="min-h-screen flex items-center justify-center"><p className="text-[11px] text-dv-brassLight animate-blink">LOADING GUILD DATA...</p></main>;
+  if (loading) {
+    return (
+      <main className="min-h-screen flex flex-col items-center justify-center gap-3">
+        <span className="text-2xl text-dv-violet animate-rune-active" aria-hidden="true">ᛏ</span>
+        <p className="text-[11px] text-dv-brassLight animate-blink">LOADING GUILD DATA...</p>
+      </main>
+    );
+  }
 
   // Split into "missed some days" (mild warning) vs "logged zero attacks
   // all cycle" (severe warning — next cycle's zero means expulsion).
@@ -279,10 +286,21 @@ export default function DashboardPage() {
       <main className="mx-auto flex w-full max-w-6xl min-h-0 flex-1 flex-col overflow-y-auto px-4 pb-6 pt-5 sm:px-6 md:pt-7">
         {tab === "ledger" && (
           <div className="flex min-h-0 flex-1 flex-col">
-            <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD OPERATIONS / ONLINE</p><h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">GUILD HUB</h1><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">The live raid ledger for the current seven-day cycle.</p></div>
+            <div className="mb-5">
+              <p className="eyebrow text-dv-emerald">ᛏ GUILD OPERATIONS / ONLINE</p>
+              <div className="relative inline-block">
+                <span className="rune-sparkle" style={{ top: "-14%", left: "-5%", animationDelay: "0s" }} />
+                <span className="rune-sparkle--sm rune-sparkle" style={{ top: "5%", left: "102%", animationDelay: "0.6s" }} />
+                <span className="rune-sparkle" style={{ top: "85%", left: "45%", animationDelay: "1.1s" }} />
+                <h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">GUILD HUB</h1>
+              </div>
+              <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">The live raid ledger for the current seven-day cycle.</p>
+            </div>
 
             {day7.phase === "calculation" ? (
-              <div className="mt-4 flex min-h-0 flex-1 flex-col items-center justify-center pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
+              <div className="relative mt-4 flex min-h-0 flex-1 flex-col items-center justify-center pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
+                <span className="absolute top-2 right-3 text-dv-violet/40 text-xs" aria-hidden="true">ᛗ</span>
+                <span className="absolute top-2 left-3 text-dv-violet/40 text-xs" aria-hidden="true">ᚦ</span>
                 <p className="text-sm text-dv-brassLight">⚙️ RANKING CALCULATION IN PROGRESS</p>
                 <p className="mt-2 max-w-md text-xs leading-relaxed text-slate-200/60">
                   Dragon Valley ranking is being calculated now. You will receive rewards based on the results after calculating is finished.
@@ -318,6 +336,12 @@ export default function DashboardPage() {
                       </div>
                     )}
 
+                    {zeroLoggedMembers.length > 0 && partiallyLoggedMembers.length > 0 && (
+                      <div className="soft-divider flex items-center justify-center">
+                        <span className="-mt-2 bg-dv-panel px-2 text-dv-violet/50 text-[10px]" aria-hidden="true">ᛒ</span>
+                      </div>
+                    )}
+
                     {partiallyLoggedMembers.length > 0 && (
                       <div>
                         <p className="eyebrow text-dv-brass">⚠️ MISSED ATTACKS THIS CYCLE</p>
@@ -350,7 +374,9 @@ export default function DashboardPage() {
                 )}
               </div>
             ) : day7.phase === "ranking-results" ? (
-              <div className="mt-4 flex min-h-0 flex-1 flex-col items-center justify-center pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
+              <div className="relative mt-4 flex min-h-0 flex-1 flex-col items-center justify-center pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
+                <span className="absolute top-2 right-3 text-dv-brass/40 text-xs" aria-hidden="true">ᛃ</span>
+                <span className="absolute top-2 left-3 text-dv-brass/40 text-xs" aria-hidden="true">ᛉ</span>
                 <p className="text-sm text-dv-brassLight">🏆 RANKING RESULTS</p>
                 <p className="mt-2 max-w-md text-xs leading-relaxed text-slate-200/60">
                   Ranking has been finalized. Rewards are being distributed now — check your in-game mailbox shortly.
@@ -358,7 +384,9 @@ export default function DashboardPage() {
                 <p className="mt-2 text-xs text-dv-emerald">Distribution ends in: {day7.minutesLeft}m</p>
               </div>
             ) : day7.phase === "onboarding" ? (
-              <div className="mt-4 flex min-h-0 flex-1 flex-col items-center justify-center pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
+              <div className="relative mt-4 flex min-h-0 flex-1 flex-col items-center justify-center pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
+                <span className="absolute top-2 right-3 text-dv-emerald/40 text-xs" aria-hidden="true">ᚱ</span>
+                <span className="absolute top-2 left-3 text-dv-emerald/40 text-xs" aria-hidden="true">ᚨ</span>
                 <p className="text-sm text-dv-brassLight">🛸 ONBOARDING — PREPARING NEXT CYCLE</p>
                 <p className="mt-2 max-w-md text-xs leading-relaxed text-slate-200/60">
                   Rewards have been distributed. Rest up and regear.
@@ -392,15 +420,15 @@ export default function DashboardPage() {
         {tab === "guide" && (
           <section className="space-y-6">
             <div>
-              <p className="eyebrow mb-4 text-dv-emerald">SKILL BUILD</p>
+              <p className="eyebrow mb-4 text-dv-emerald">ᚨ SKILL BUILD</p>
               <SkillBuild />
             </div>
             <div>
-              <p className="eyebrow mb-4 text-dv-emerald">SPIRITS</p>
+              <p className="eyebrow mb-4 text-dv-emerald">ᛒ SPIRITS</p>
               <Spirits />
             </div>
             <div>
-              <p className="eyebrow mb-4 text-dv-emerald">FIELD GUIDE</p>
+              <p className="eyebrow mb-4 text-dv-emerald">ᚱ FIELD GUIDE</p>
               <Guide />
             </div>
           </section>
@@ -408,7 +436,7 @@ export default function DashboardPage() {
 
         {tab === "meals" && (
           <section>
-            <p className="eyebrow mb-4 text-dv-emerald">SEASON MEALS</p>
+            <p className="eyebrow mb-4 text-dv-emerald">ᛉ SEASON MEALS</p>
 
             <div className="mb-4 grid grid-cols-2 gap-2">
               <button
@@ -443,14 +471,14 @@ export default function DashboardPage() {
 
         {tab === "runes" && (
           <section>
-            <p className="eyebrow mb-4 text-dv-emerald">RUNE DESK</p>
+            <p className="eyebrow mb-4 text-dv-emerald">ᛃ RUNE DESK</p>
             <Runes />
           </section>
         )}
 
         {tab === "settings" && me?.is_admin && (
           <section>
-            <div className="mb-5"><p className="eyebrow text-dv-emerald">GUILD SETTINGS</p><h2 className="mt-1 text-xl text-dv-brassLight">Configure the parts the guild actually uses.</h2><p className="mt-2 max-w-2xl text-xs leading-relaxed text-slate-200/60">The raid clock is fixed to the in-game schedule, so there is no anchor date to maintain. Use this panel for the shared raid signal, reminders, and field briefing.</p></div>
+            <div className="mb-5"><p className="eyebrow text-dv-emerald">ᚦ GUILD SETTINGS</p><h2 className="mt-1 text-xl text-dv-brassLight">Configure the parts the guild actually uses.</h2><p className="mt-2 max-w-2xl text-xs leading-relaxed text-slate-200/60">The raid clock is fixed to the in-game schedule, so there is no anchor date to maintain. Use this panel for the shared raid signal, reminders, and field briefing.</p></div>
 
             {dayNumber >= 3 && dayNumber <= 6 && (
               <WyvernTracker
@@ -464,7 +492,7 @@ export default function DashboardPage() {
             <section className="pixel-border bg-dv-panel/95 p-4 shadow-pixel">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div>
-                  <p className="eyebrow text-dv-violet">DISCORD REMINDERS</p>
+                  <p className="eyebrow text-dv-violet">ᛗ DISCORD REMINDERS</p>
                   <h3 className="mt-1 text-base text-dv-brassLight">Ping members missing today&apos;s attack</h3>
                   <p className="mt-2 max-w-xl text-[10px] leading-relaxed text-slate-200/55">Send a reminder to the guild members who have not logged their attack for the current day. This uses the configured Discord webhook.</p>
                 </div>
@@ -475,7 +503,7 @@ export default function DashboardPage() {
             <section className="mt-4 pixel-border bg-dv-panel/95 p-4 shadow-pixel">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div>
-                  <p className="eyebrow text-dv-emerald">RAID CLOCK</p>
+                  <p className="eyebrow text-dv-emerald">ᛏ RAID CLOCK</p>
                   <h3 className="mt-1 text-base text-dv-brassLight">Fixed to the Dragon Valley schedule</h3>
                 </div>
                 <button type="button" onClick={() => setShowWalkthrough(true)} className="pixel-frame border border-dv-violet px-3 py-2 text-[9px] text-dv-violet hover:bg-dv-violet/10">REPLAY FIELD BRIEFING</button>
