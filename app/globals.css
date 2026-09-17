@@ -742,3 +742,11 @@ main {
   to { transform: rotate(360deg); }
 }
 
+@keyframes spirit-cycle {
+  0%, 24.9% { opacity: 1; }
+  25%, 100% { opacity: 0; }
+}
+
+.spirit-frame {
+  animation: spirit-cycle 600ms steps(1, end) infinite;
+}
