@@ -298,7 +298,6 @@ const skillImages: Record<string, string | undefined> = {
 type SkillRarity = "common" | "rare" | "epic" | "legendary" | "mythic" | "immortal";
 
 const skillRarity: Record<string, SkillRarity> = {
-  "Demon Hunt": "mythic",
   "Burning Sword": "rare",
   "Fire Slash": "rare",
   "Speed Sword": "rare",
@@ -308,6 +307,7 @@ const skillRarity: Record<string, SkillRarity> = {
   "Giga Strike": "legendary",
   "Red Lightning": "legendary",
   "Meditation": "legendary",
+  "Demon Hunt": "mythic",
   "Strong Current": "mythic",
   "Wrath of Gods": "mythic",
   "Warrior Burn": "mythic",
@@ -341,11 +341,11 @@ const rarityGlow: Record<SkillRarity, string> = {
 // as before. >1 grows the frame outward past the icon box edges (e.g. 1.15 = 15%
 // bigger); <1 shrinks it inward. Tune per rarity here — no markup changes needed.
 const frameScale: Partial<Record<SkillRarity, number>> = {
-  rare: 1.13,
-  epic: 1.13,
-  legendary: 1.3,
-  mythic: 1.3,
-  immortal: 1.3,
+  rare: 1.12,
+  epic: 1.12,
+  legendary: 1.28,
+  mythic: 1.28,
+  immortal: 1.28,
 };
 
 type Spirit = { name: string; image: string };
