@@ -1,18 +1,18 @@
 "use client";
 
-import { useId } from "react";
+import { useState } from "react";
 
 export function DragonCrest({ size = 44 }: { size?: number }) {
   const circleSize = size * 1.8;
   const glyphs = ["ᛏ", "ᚨ", "ᛒ", "ᚱ", "ᛉ", "ᛃ", "ᚦ", "ᛗ"];
-  const uid = useId();
+  const [uid] = useState(() => Math.random().toString(36).slice(2, 9));
   const softId = `crest-blur-glow-soft-${uid}`;
   const tightId = `crest-blur-glow-tight-${uid}`;
 
   return (
     <div
-      className="relative shrink-0 flex items-center justify-center brand-mark"
-      style={{ width: size, height: size, color: "#ffe3a1" }}
+      className="relative shrink-0 flex items-center justify-center"
+      style={{ width: size, height: size }}
     >
       {/* Magic circle overlay — decorative only, sits behind the crest */}
       <svg
@@ -126,79 +126,70 @@ export function DragonCrest({ size = 44 }: { size?: number }) {
       <span className="rune-sparkle" style={{ top: "85%", left: "45%", animationDelay: "0.3s" }} />
       <span className="rune-sparkle--sm rune-sparkle" style={{ top: "40%", left: "90%", animationDelay: "0.8s" }} />
 
-      <svg
-        className="crest-glow relative"
-        width={size}
-        height={size}
-        viewBox="0 0 32 32"
-        role="img"
-        aria-label="Dragon Valley Attack Ledger guild mark"
+      {/* Shield badge — clip-path lives here, scoped only to the badge itself */}
+      <span
+        className="brand-mark relative"
+        style={{ width: size, height: size, color: "#ffe3a1" }}
       >
-        <defs>
-          <filter id={softId} x="-80%" y="-80%" width="260%" height="260%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="2.4" result="blurred" />
-            <feColorMatrix
-              in="blurred"
-              type="matrix"
-              values="0 0 0 0 1
-                      0 0 0 0 0.83
-                      0 0 0 0 0.4
-                      0 0 0 1.4 0"
+        <svg
+          className="crest-glow relative"
+          width={size}
+          height={size}
+          viewBox="0 0 32 32"
+          role="img"
+          aria-label="Dragon Valley Attack Ledger guild mark"
+        >
+          <defs>
+            <filter id={softId} x="-80%" y="-80%" width="260%" height="260%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="2.4" result="blurred" />
+              <feColorMatrix
+                in="blurred"
+                type="matrix"
+                values="0 0 0 0 1
+                        0 0 0 0 0.83
+                        0 0 0 0 0.4
+                        0 0 0 1.4 0"
+              />
+            </filter>
+            <filter id={tightId} x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blurred" />
+              <feColorMatrix
+                in="blurred"
+                type="matrix"
+                values="0 0 0 0 1
+                        0 0 0 0 0.9
+                        0 0 0 0 0.55
+                        0 0 0 1.6 0"
+              />
+            </filter>
+          </defs>
+
+          {/* Wide soft halo — the main visible glow */}
+          <g filter={`url(#${softId})`} className="crest-glow-pulse-wide">
+            <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#ffe3a1" />
+          </g>
+
+          {/* Tight bright rim — makes the edge itself glow brighter */}
+          <g filter={`url(#${tightId})`} className="crest-glow-pulse-tight">
+            <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#fff4d6" />
+          </g>
+
+          {/* Crisp pixel-art crest on top, unchanged */}
+          <g shapeRendering="crispEdges" style={{ imageRendering: "pixelated" }}>
+            <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#080a18" />
+            <path d="M8 7h16v10l-2 4-6 4-6-4-2-4V7Z" fill="#8b7dff" />
+            <path d="M10 9h12v8l-2 3-4 3-4-3-2-3V9Z" fill="#080a18" />
+            <path
+              d="M11 11h4l2 2v6l-2 2h-4V11Zm2 2v6h1l1-1v-4l-1-1h-1Z"
+              fill="#ffe3a1"
             />
-          </filter>
-          <filter id={tightId} x="-60%" y="-60%" width="220%" height="220%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blurred" />
-            <feColorMatrix
-              in="blurred"
-              type="matrix"
-              values="0 0 0 0 1
-                      0 0 0 0 0.9
-                      0 0 0 0 0.55
-                      0 0 0 1.6 0"
-            />
-          </filter>
-        </defs>
-
-        {/* Wide soft halo — the main visible glow */}
-        <g filter={`url(#${softId})`} className="crest-glow-pulse-wide">
-          <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#ffe3a1" />
-        </g>
-
-        {/* Tight bright rim — makes the edge itself glow brighter */}
-        <g filter={`url(#${tightId})`} className="crest-glow-pulse-tight">
-          <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#fff4d6" />
-        </g>
-
-        {/* Crisp pixel-art crest on top, unchanged */}
-        <g shapeRendering="crispEdges" style={{ imageRendering: "pixelated" }}>
-          {/* Inner guild seal: a simple pixel shield inside the app's brass badge */}
-          <path
-            d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z"
-            fill="#080a18"
-          />
-          <path
-            d="M8 7h16v10l-2 4-6 4-6-4-2-4V7Z"
-            fill="#8b7dff"
-          />
-          <path
-            d="M10 9h12v8l-2 3-4 3-4-3-2-3V9Z"
-            fill="#080a18"
-          />
-          {/* Interlocking pixel DV monogram */}
-          <path
-            d="M11 11h4l2 2v6l-2 2h-4V11Zm2 2v6h1l1-1v-4l-1-1h-1Z"
-            fill="#ffe3a1"
-          />
-          <path
-            d="M17 11h2v5l1 2 1-2v-5h2v6l-2 4h-2l-2-4v-6Z"
-            fill="#ffe3a1"
-          />
-          {/* Ledger ticks: three recorded attack entries */}
-          <rect x="10" y="25" width="3" height="1" fill="#080a18" />
-          <rect x="15" y="25" width="3" height="1" fill="#080a18" />
-          <rect x="20" y="25" width="2" height="1" fill="#080a18" />
-        </g>
-      </svg>
+            <path d="M17 11h2v5l1 2 1-2v-5h2v6l-2 4h-2l-2-4v-6Z" fill="#ffe3a1" />
+            <rect x="10" y="25" width="3" height="1" fill="#080a18" />
+            <rect x="15" y="25" width="3" height="1" fill="#080a18" />
+            <rect x="20" y="25" width="2" height="1" fill="#080a18" />
+          </g>
+        </svg>
+      </span>
     </div>
   );
 }
