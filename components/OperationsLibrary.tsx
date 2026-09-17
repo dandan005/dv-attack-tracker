@@ -285,7 +285,7 @@ const skillImages: Record<string, string | undefined> = {
   "Speed Sword": "speed-sword.png",
   "Wrath of Gods": "wrath-of-gods.png",
   "Demon Hunt": "demon-hunt.png",
-  "Flame Slash": "fire-slash.png",
+  "Flame Slash": "flame-slash.png",
   "Warrior Burn": "warrior-burn.png",
   "Earth's Will": "earths-will.png",
   "Hell Fire Slash": "hell-fire-slash.png",
