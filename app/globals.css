@@ -710,3 +710,34 @@ main {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
+
+/* --- DragonCrest golden glow + runic glyph ring --- */
+
+.crest-glow-pulse-wide {
+  animation: crest-glow-pulse-wide 3s ease-in-out infinite;
+  transform-origin: 16px 16px;
+}
+
+.crest-glow-pulse-tight {
+  animation: crest-glow-pulse-tight 2.4s ease-in-out infinite;
+  transform-origin: 16px 16px;
+}
+
+@keyframes crest-glow-pulse-wide {
+  0%, 100% { opacity: 0.75; }
+  50% { opacity: 1; }
+}
+
+@keyframes crest-glow-pulse-tight {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.9; }
+}
+
+.crest-rune-ring {
+  animation: crest-rune-spin 20s linear infinite;
+}
+
+@keyframes crest-rune-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
