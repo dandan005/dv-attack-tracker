@@ -329,11 +329,11 @@ const rarityFrame: Partial<Record<SkillRarity, string>> = {
 // (tight + wide) give it some depth. Static only — no animation.
 const rarityGlow: Record<SkillRarity, string> = {
   common: "",
-  rare: "drop-shadow(0 0 3px rgba(147,197,253,1)) drop-shadow(0 0 8px rgba(147,197,253,0.75))",
-  epic: "drop-shadow(0 0 3px rgba(196,132,252,1)) drop-shadow(0 0 8px rgba(196,132,252,0.8))",
-  legendary: "drop-shadow(0 0 4px rgba(255,199,74,1)) drop-shadow(0 0 10px rgba(255,199,74,0.85))",
-  mythic: "drop-shadow(0 0 4px rgba(139,125,255,1)) drop-shadow(0 0 10px rgba(139,125,255,0.85))",
-  immortal: "drop-shadow(0 0 5px rgba(120,232,199,1)) drop-shadow(0 0 12px rgba(120,232,199,0.9))",
+  rare: "drop-shadow(0 0 3px rgba(255,159,67,1)) drop-shadow(0 0 8px rgba(255,159,67,0.75))",      // orange
+  epic: "drop-shadow(0 0 3px rgba(167,139,250,1)) drop-shadow(0 0 8px rgba(167,139,250,0.8))",      // violet
+  legendary: "drop-shadow(0 0 4px rgba(239,68,68,1)) drop-shadow(0 0 10px rgba(239,68,68,0.85))",   // red
+  mythic: "drop-shadow(0 0 4px rgba(214,236,255,1)) drop-shadow(0 0 10px rgba(214,236,255,0.85))",  // blueish white
+  immortal: "drop-shadow(0 0 5px rgba(255,199,74,1)) drop-shadow(0 0 12px rgba(255,199,74,0.9))",   // golden yellow
 };
 
 // Rarity → frame size, as a scale factor applied to the frame overlay image via
