@@ -742,7 +742,3 @@ main {
   to { transform: rotate(360deg); }
 }
 
-/* Skill rarity glow — SkillThumb sets --glow-color per rarity, this rule renders a steady glow. */
-.skill-glow {
-  box-shadow: 0 0 0 1px var(--glow-color), 0 0 8px 2px var(--glow-color);
-}
