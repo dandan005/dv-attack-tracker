@@ -1,4 +1,4 @@
-"use client";
+a"use client";
 
 import { useEffect, useMemo, useState } from "react";
 
@@ -298,7 +298,7 @@ const skillImages: Record<string, string | undefined> = {
 type SkillRarity = "common" | "rare" | "epic" | "legendary" | "mythic" | "immortal";
 
 const skillRarity: Record<string, SkillRarity> = {
-  "Demon Hunt": "common",
+  "Demon Hunt": "mythic",
   "Burning Sword": "rare",
   "Fire Slash": "rare",
   "Speed Sword": "rare",
