@@ -272,7 +272,7 @@ type Stage = "Early" | "Mid" | "Late";
 
 const skillsByStage: Record<Stage, string[]> = {
   Early: ["Hell Fire Slash", "Giga Strike", "Red Lightning", "Burning Sword", "Curved Blade", "Meditation", "Speed Sword", "Earth's Will"],
-  Mid: ["Rave", "Fire Slash", "Hell Fire Slash", "Burning Sword", "Curved Blade", "Meditation", "Strong Current", "Wrath of Gods", "Speed Sword", "Earth's Will"],
+  Mid: ["Rave", "Flame Slash", "Hell Fire Slash", "Burning Sword", "Curved Blade", "Meditation", "Strong Current", "Wrath of Gods", "Speed Sword", "Earth's Will"],
   Late: ["Rave", "Demon Hunt", "Giga Strike", "Burning Sword", "Curved Blade", "Wrath of Gods", "Meditation", "Warrior Burn", "Speed Sword", "Earth's Will"],
 };
 
@@ -285,7 +285,7 @@ const skillImages: Record<string, string | undefined> = {
   "Speed Sword": "speed-sword.png",
   "Wrath of Gods": "wrath-of-gods.png",
   "Demon Hunt": "demon-hunt.png",
-  "Fire Slash": "fire-slash.png",
+  "Flame Slash": "fire-slash.png",
   "Warrior Burn": "warrior-burn.png",
   "Earth's Will": "earths-will.png",
   "Hell Fire Slash": "hell-fire-slash.png",
@@ -299,7 +299,7 @@ type SkillRarity = "common" | "rare" | "epic" | "legendary" | "mythic" | "immort
 
 const skillRarity: Record<string, SkillRarity> = {
   "Burning Sword": "rare",
-  "Fire Slash": "rare",
+  "Flame Slash": "rare",
   "Speed Sword": "rare",
   "Earth's Will": "rare",
   "Curved Blade": "epic",
