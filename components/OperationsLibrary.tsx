@@ -344,8 +344,8 @@ const frameScale: Partial<Record<SkillRarity, number>> = {
   rare: 1.12,
   epic: 1.12,
   legendary: 1.12,
-  mythic: 1.15,
-  immortal: 1.151,
+  mythic: 1.20,
+  immortal: 1.20,
 };
 
 type Spirit = { name: string; frames: string[] };
