@@ -325,14 +325,14 @@ const rarityFrame: Partial<Record<SkillRarity, string>> = {
 
 // Rarity → glow treatment for the SkillThumb wrapper. Lives on the OUTER element
 // (not the clipped icon box) so overflow:hidden on the icon crop never eats the glow.
-// Legendary+ also reuse the existing .animate-rune-active pulse from globals.css.
+// Static glow only — no pulsing animation.
 const rarityGlow: Record<SkillRarity, string> = {
   common: "",
   rare: "shadow-[0_0_6px_2px_rgba(147,197,253,0.55)]",
   epic: "shadow-[0_0_8px_2px_rgba(196,132,252,0.6)]",
-  legendary: "shadow-[0_0_10px_3px_rgba(255,199,74,0.65)] animate-rune-active",
-  mythic: "shadow-[0_0_12px_3px_rgba(139,125,255,0.7)] animate-rune-active",
-  immortal: "shadow-[0_0_14px_4px_rgba(120,232,199,0.75)] animate-rune-active",
+  legendary: "shadow-[0_0_10px_3px_rgba(255,199,74,0.65)]",
+  mythic: "shadow-[0_0_12px_3px_rgba(139,125,255,0.7)]",
+  immortal: "shadow-[0_0_14px_4px_rgba(120,232,199,0.75)]",
 };
 
 type Spirit = { name: string; image: string };
