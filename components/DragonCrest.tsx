@@ -1,6 +1,13 @@
+"use client";
+
+import { useId } from "react";
+
 export function DragonCrest({ size = 44 }: { size?: number }) {
   const circleSize = size * 1.8;
   const glyphs = ["ᛏ", "ᚨ", "ᛒ", "ᚱ", "ᛉ", "ᛃ", "ᚦ", "ᛗ"];
+  const uid = useId();
+  const softId = `crest-blur-glow-soft-${uid}`;
+  const tightId = `crest-blur-glow-tight-${uid}`;
 
   return (
     <div
@@ -128,7 +135,7 @@ export function DragonCrest({ size = 44 }: { size?: number }) {
         aria-label="Dragon Valley Attack Ledger guild mark"
       >
         <defs>
-          <filter id="crest-blur-glow-soft" x="-80%" y="-80%" width="260%" height="260%">
+          <filter id={softId} x="-80%" y="-80%" width="260%" height="260%">
             <feGaussianBlur in="SourceGraphic" stdDeviation="2.4" result="blurred" />
             <feColorMatrix
               in="blurred"
@@ -139,7 +146,7 @@ export function DragonCrest({ size = 44 }: { size?: number }) {
                       0 0 0 1.4 0"
             />
           </filter>
-          <filter id="crest-blur-glow-tight" x="-60%" y="-60%" width="220%" height="220%">
+          <filter id={tightId} x="-60%" y="-60%" width="220%" height="220%">
             <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blurred" />
             <feColorMatrix
               in="blurred"
@@ -153,12 +160,12 @@ export function DragonCrest({ size = 44 }: { size?: number }) {
         </defs>
 
         {/* Wide soft halo — the main visible glow */}
-        <g filter="url(#crest-blur-glow-soft)" className="crest-glow-pulse-wide">
+        <g filter={`url(#${softId})`} className="crest-glow-pulse-wide">
           <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#ffe3a1" />
         </g>
 
         {/* Tight bright rim — makes the edge itself glow brighter */}
-        <g filter="url(#crest-blur-glow-tight)" className="crest-glow-pulse-tight">
+        <g filter={`url(#${tightId})`} className="crest-glow-pulse-tight">
           <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#fff4d6" />
         </g>
 
