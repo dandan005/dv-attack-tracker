@@ -138,7 +138,6 @@ input {
   border-radius: 6px;
   background: radial-gradient(circle at 50% 100%, var(--element-deep), transparent 72%);
   box-shadow: inset 0 0 20px rgba(2, 4, 14, 0.34), 0 3px 0 rgba(5, 6, 17, 0.9);
-  transition: transform 180ms steps(2, end), border-color 180ms ease, box-shadow 180ms ease, filter 180ms ease;
 }
 
 .element-choice::before {
@@ -150,8 +149,6 @@ input {
   border-radius: 50%;
   background: radial-gradient(circle, color-mix(in srgb, var(--element) 42%, transparent), transparent 68%);
   opacity: 0.34;
-  transform: translateY(26px) scale(0.72);
-  animation: elementPulse 2.8s steps(3, end) infinite;
 }
 
 .element-choice::after {
@@ -160,7 +157,6 @@ input {
 
 .element-choice:hover,
 .element-choice:focus-visible {
-  transform: translateY(-3px);
   border-color: var(--element);
   filter: brightness(1.14);
   outline: none;
@@ -168,18 +164,12 @@ input {
 }
 
 .element-choice.is-active {
-  transform: translateY(-2px);
   border-color: var(--element);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--element) 22%, transparent), 0 0 28px color-mix(in srgb, var(--element) 32%, transparent), inset 0 0 28px color-mix(in srgb, var(--element) 18%, transparent);
 }
 
 .element-choice.is-bursting {
-  animation: traceAttune 820ms steps(4, end);
   box-shadow: 0 0 0 2px var(--element), 0 0 36px color-mix(in srgb, var(--element) 58%, transparent), inset 0 0 32px color-mix(in srgb, var(--element) 26%, transparent);
-}
-
-.element-choice.is-bursting::before {
-  animation: traceAuraBurst 820ms steps(4, end);
 }
 
 .element-choice.is-pending {
@@ -217,15 +207,7 @@ input {
 }
 
 .sprite-frame {
-  opacity: 0;
-  animation: spriteFrame 1.05s steps(1, end) infinite;
-}
-
-.sprite-frame--b { animation-delay: -0.7s; }
-.sprite-frame--c { animation-delay: -0.35s; }
-
-.element-choice.is-bursting .element-pixel-art {
-  animation: pixelSpritePop 820ms steps(4, end);
+  opacity: 1;
 }
 
 .element-label {
@@ -371,42 +353,6 @@ input {
   letter-spacing: 0.12em;
 }
 
-@keyframes elementPulse {
-  0%, 100% { opacity: 0.22; transform: translateY(28px) scale(0.72); }
-  50% { opacity: 0.62; transform: translateY(18px) scale(1); }
-}
-
-@keyframes spriteFrame {
-  0%, 31% { opacity: 1; }
-  32%, 100% { opacity: 0; }
-}
-
-@keyframes spriteFrameBurst {
-  0%, 31% { opacity: 1; }
-  32%, 66% { opacity: 0; }
-  67%, 100% { opacity: 1; }
-}
-
-@keyframes traceAttune {
-  0% { transform: translateY(0) scale(1); }
-  28% { transform: translateY(-4px) scale(1.04); }
-  54% { transform: translateY(1px) scale(0.98); }
-  76% { transform: translateY(-2px) scale(1.02); }
-  100% { transform: translateY(-2px) scale(1); }
-}
-
-@keyframes traceAuraBurst {
-  0% { opacity: 0.25; transform: translateY(26px) scale(0.72); }
-  42% { opacity: 0.95; transform: translateY(0) scale(1.16); }
-  100% { opacity: 0.34; transform: translateY(26px) scale(0.82); }
-}
-
-@keyframes pixelSpritePop {
-  0% { transform: scale(0.78); filter: drop-shadow(0 0 2px currentColor); }
-  42% { transform: scale(1.18); filter: drop-shadow(0 0 12px currentColor); }
-  100% { transform: scale(1); filter: drop-shadow(0 0 5px currentColor); }
-}
-
 @keyframes attackShimmer {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -440,7 +386,6 @@ input {
   border-radius: 5px;
   background: linear-gradient(180deg, #5a4228, #30233a 72%);
   box-shadow: inset 0 0 0 2px rgba(255, 227, 161, 0.08), 0 3px 0 #050611;
-  animation: bossReveal 420ms steps(3, end);
 }
 
 .boss-slot__header {
@@ -516,11 +461,6 @@ input {
   text-shadow: 2px 2px 0 #050611;
 }
 
-@keyframes bossReveal {
-  0% { opacity: 0; transform: translateY(5px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
 /* Shrunk element badge shown beside the boss name once a trace is locked. */
 .boss-name-row {
   display: flex;
@@ -538,7 +478,6 @@ input {
   --element: #8b7dff;
   display: grid;
   place-items: center;
-  animation: badgeSettle 420ms steps(4, end);
 }
 
 .element-badge--wind { --element: #86e8ff; }
@@ -557,12 +496,6 @@ input {
 .element-orb--sm .element-pixel-art {
   width: 20px;
   height: 20px;
-}
-
-@keyframes badgeSettle {
-  0% { transform: scale(2.2); opacity: 0; }
-  60% { transform: scale(0.85); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
