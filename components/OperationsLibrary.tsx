@@ -329,11 +329,11 @@ const rarityFrame: Partial<Record<SkillRarity, string>> = {
 // (tight + wide) give it some depth. Static only — no animation.
 const rarityGlow: Record<SkillRarity, string> = {
   common: "",
-  rare: "drop-shadow(0 0 3px rgba(255,159,67,1)) drop-shadow(0 0 8px rgba(255,159,67,0.75))",      // orange
-  epic: "drop-shadow(0 0 3px rgba(167,139,250,1)) drop-shadow(0 0 8px rgba(167,139,250,0.8))",      // violet
-  legendary: "drop-shadow(0 0 4px rgba(239,68,68,1)) drop-shadow(0 0 10px rgba(239,68,68,0.85))",   // red
-  mythic: "drop-shadow(0 0 4px rgba(214,236,255,1)) drop-shadow(0 0 10px rgba(214,236,255,0.85))",  // blueish white
-  immortal: "drop-shadow(0 0 5px rgba(255,199,74,1)) drop-shadow(0 0 12px rgba(255,199,74,0.9))",   // golden yellow
+  rare: "drop-shadow(0 0 3px rgba(59,130,246,1)) drop-shadow(0 0 8px rgba(59,130,246,0.75))",       // blue (Water Slash)
+  epic: "drop-shadow(0 0 3px rgba(167,139,250,1)) drop-shadow(0 0 8px rgba(167,139,250,0.8))",       // violet (Dancing Waves) — unchanged
+  legendary: "drop-shadow(0 0 4px rgba(239,68,68,1)) drop-shadow(0 0 10px rgba(239,68,68,0.85))",    // red (Hellfire Slash) — unchanged
+  mythic: "drop-shadow(0 0 4px rgba(45,212,191,1)) drop-shadow(0 0 10px rgba(45,212,191,0.85))",     // cyan/teal (Pillar of Fire)
+  immortal: "drop-shadow(0 0 5px rgba(255,199,74,1)) drop-shadow(0 0 12px rgba(255,199,74,0.9))",    // golden yellow (Rave) — unchanged
 };
 
 // Rarity → frame size, as a scale factor applied to the frame overlay image via
