@@ -190,7 +190,7 @@ input {
   border: none;
   border-radius: 4px;
   background: transparent;
-  box-shadow: 0 0 18px color-mix(in srgb, var(--element) 40%, transparent);
+  /* box-shadow removed */
   image-rendering: pixelated;
 }
 
@@ -203,7 +203,7 @@ input {
   object-fit: contain;
   object-position: center;
   image-rendering: pixelated;
-  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--element) 52%, transparent));
+  /* filter: drop-shadow(...) removed */
 }
 
 .sprite-frame {
