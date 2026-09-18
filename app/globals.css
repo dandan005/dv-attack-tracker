@@ -488,9 +488,7 @@ input {
 .element-orb--sm {
   width: 28px;
   height: 28px;
-  border-color: color-mix(in srgb, var(--element) 76%, white 10%);
-  box-shadow: 0 0 10px color-mix(in srgb, var(--element) 40%, transparent),
-    inset 0 0 8px rgba(255, 255, 255, 0.1), 2px 2px 0 rgba(5, 6, 17, 0.65);
+  /* border-color and box-shadow removed */
 }
 
 .element-orb--sm .element-pixel-art {
