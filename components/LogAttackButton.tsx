@@ -32,6 +32,19 @@ function AttackGlyph({ done, urgent }: { done: boolean; urgent: boolean }) {
   );
 }
 
+// ADD THIS — new helper function, sits at top level, outside any component
+async function logWithRetry(fn: () => Promise<void>, attempts = 3) {
+  for (let i = 0; i < attempts; i++) {
+    try {
+      await fn();
+      return;
+    } catch (err) {
+      if (i === attempts - 1) throw err;
+      await new Promise((r) => setTimeout(r, 500 * (i + 1)));
+    }
+  }
+}
+
 export function LogAttackButton({
   loggedDays,
   onLog,
@@ -63,15 +76,13 @@ export function LogAttackButton({
     if (done || pending) return;
     setPending(true);
     try {
-      // Re-derive at click time rather than trusting state from the last
-      // tick, in case a cycle boundary was crossed between ticks.
       const info = getCycleInfo();
       setDayNumber(info.dayNumber);
       setCycleStartISO(info.cycleStartISO);
-      await onLog(info.dayNumber, info.cycleStartISO);
+      await logWithRetry(() => onLog(info.dayNumber, info.cycleStartISO));
     } catch (err) {
-      console.error("Failed to log attack:", err);
-      alert("Something went wrong logging your attack — please try again.");
+      console.error("Failed to log attack after retries:", err);
+      alert("Couldn't log your attack after several tries — check your connection and try again.");
     } finally {
       setPending(false);
     }
