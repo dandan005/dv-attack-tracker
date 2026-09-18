@@ -492,9 +492,8 @@ input {
 
 .boss-portrait img {
   width: 100%;
-  height: 100%;
+  height: auto;
   display: block;
-  object-fit: cover;
   image-rendering: pixelated;
   filter: saturate(0.88) contrast(1.08);
 }
