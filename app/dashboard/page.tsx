@@ -165,14 +165,13 @@ export default function DashboardPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ dayNumber: day }),
     });
-    if (res.ok) {
+    if (!res.ok) {
+      const json = await res.json().catch(() => ({}));
+      throw new Error(json.error ?? "Could not log attack");
+    }
       setToast("D" + day + " attack logged ⚔️");
       await loadAll();
       setTimeout(() => setToast(null), 2500);
-    } else {
-      const json = await res.json().catch(() => ({}));
-      setToast(json.error ?? "Could not log attack");
-      setTimeout(() => setToast(null), 3000);
     }
   }
 
