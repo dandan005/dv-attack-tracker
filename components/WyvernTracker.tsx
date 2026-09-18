@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PixelPanel, PixelHeader } from "./PixelPanel";
+import { PixelPanel } from "./PixelPanel";
 
 type Element = "wind" | "fire" | "earth" | "water";
 
@@ -23,17 +23,6 @@ const BOSS_SLOTS: Record<Element, BossSlot> = {
 
 function PixelElementArt({ element }: { element: Element }) {
   return <img className="element-pixel-art" src={"/elements/" + element + ".png"} alt="" draggable={false} />;
-}
-
-function WyvernCrest() {
-  return (
-    <svg className="wyvern-crest" viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true">
-      <rect x="3" y="2" width="2" height="3" fill="currentColor" /><rect x="11" y="2" width="2" height="3" fill="currentColor" />
-      <rect x="5" y="4" width="6" height="8" fill="currentColor" /><rect x="3" y="6" width="2" height="5" fill="currentColor" /><rect x="11" y="6" width="2" height="5" fill="currentColor" />
-      <rect x="6" y="6" width="1" height="1" fill="#fff2bd" /><rect x="9" y="6" width="1" height="1" fill="#fff2bd" /><rect x="7" y="9" width="2" height="1" fill="#080a18" />
-      <rect x="2" y="12" width="3" height="2" fill="currentColor" /><rect x="11" y="12" width="3" height="2" fill="currentColor" />
-    </svg>
-  );
 }
 
 function BossPortrait({ element, boss }: { element: Element; boss: BossSlot }) {
@@ -99,8 +88,6 @@ export function WyvernTracker({
 
   return (
     <PixelPanel className="mb-5 animate-rise pb-5">
-      <PixelHeader icon={<WyvernCrest />} title="WYVERN TRACE" />
-
       {showPicker && (
         <>
           <div className="mb-4">
