@@ -443,20 +443,6 @@ input {
   animation: bossReveal 420ms steps(3, end);
 }
 
-.boss-slot::before,
-.boss-slot::after {
-  content: "";
-  position: absolute;
-  top: 10px;
-  bottom: 10px;
-  width: 3px;
-  background: #c98a3e;
-  opacity: 0.8;
-}
-
-.boss-slot::before { left: 4px; }
-.boss-slot::after { right: 4px; }
-
 .boss-slot__header {
   display: flex;
   align-items: center;
