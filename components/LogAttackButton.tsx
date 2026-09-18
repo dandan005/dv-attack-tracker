@@ -69,6 +69,9 @@ export function LogAttackButton({
       setDayNumber(info.dayNumber);
       setCycleStartISO(info.cycleStartISO);
       await onLog(info.dayNumber, info.cycleStartISO);
+    } catch (err) {
+      console.error("Failed to log attack:", err);
+      alert("Something went wrong logging your attack — please try again.");
     } finally {
       setPending(false);
     }
