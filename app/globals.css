@@ -199,7 +199,7 @@ input {
   height: 58px;
   border: none;
   border-radius: 4px;
-  background: #080a18;
+  background: transparent;
   box-shadow: 0 0 18px color-mix(in srgb, var(--element) 40%, transparent), inset 0 0 12px rgba(255, 255, 255, 0.1), 3px 3px 0 rgba(5, 6, 17, 0.65);
   image-rendering: pixelated;
 }
