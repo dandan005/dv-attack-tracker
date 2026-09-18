@@ -173,7 +173,6 @@ export default function DashboardPage() {
       await loadAll();
       setTimeout(() => setToast(null), 2500);
     }
-  }
 
   async function pingMissing() {
     setPinging(true);
