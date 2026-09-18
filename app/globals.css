@@ -474,7 +474,6 @@ input {
 .boss-portrait {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 16 / 9;
   border: 2px solid #8c2e2e;
   border-radius: 3px;
   background: #1a1420;
