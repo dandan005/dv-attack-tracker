@@ -32,13 +32,9 @@ function BossPortrait({ element, boss }: { element: Element; boss: BossSlot }) {
         <span className="eyebrow">WYVERN BOSS</span>
         <span className="boss-slot__element">{element.toUpperCase()} SLOT</span>
       </div>
-      <div className="boss-portrait" style={{ overflow: "hidden" }}>
+      <div className="boss-portrait">
         {boss.image ? (
-          <img
-            src={boss.image}
-            alt={boss.alt}
-            style={{ width: "100%", height: "auto", display: "block" }}
-          />
+          <img src={boss.image} alt={boss.alt} />
         ) : (
           <div className="boss-portrait__empty"><span className="boss-portrait__glyph">?</span><span>PORTRAIT SLOT</span></div>
         )}
