@@ -43,9 +43,13 @@ function BossPortrait({ element, boss }: { element: Element; boss: BossSlot }) {
         <span className="eyebrow">WYVERN BOSS</span>
         <span className="boss-slot__element">{element.toUpperCase()} SLOT</span>
       </div>
-      <div className="boss-portrait">
+      <div className="boss-portrait" style={{ aspectRatio: "4 / 3", overflow: "hidden" }}>
         {boss.image ? (
-          <img src={boss.image} alt={boss.alt} />
+          <img
+            src={boss.image}
+            alt={boss.alt}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
         ) : (
           <div className="boss-portrait__empty"><span className="boss-portrait__glyph">?</span><span>PORTRAIT SLOT</span></div>
         )}
@@ -95,7 +99,7 @@ export function WyvernTracker({
 
   return (
     <PixelPanel className="mb-5 animate-rise pb-5">
-      <PixelHeader icon={<WyvernCrest />} title="WYVERN TRACE" right={<span className="text-[10px] text-dv-bg/70 tracking-wider">RAID SIGNAL</span>} />
+      <PixelHeader icon={<WyvernCrest />} title="WYVERN TRACE" />
 
       {showPicker && (
         <>
@@ -137,9 +141,6 @@ export function WyvernTracker({
 
       {!showPicker && current && boss && (
         <>
-          <div className="flex items-center justify-end mb-3">
-            <span className="status-chip">SYNCED</span>
-          </div>
           <BossPortrait element={current} boss={boss} />
         </>
       )}
