@@ -134,11 +134,11 @@ input {
   gap: 5px;
   color: #eef2ff;
   cursor: pointer;
-  border: none;
+  border: 1px solid color-mix(in srgb, var(--element) 58%, #303d67);
   border-radius: 6px;
   background: radial-gradient(circle at 50% 100%, var(--element-deep), #11172b 72%);
   box-shadow: inset 0 0 20px rgba(2, 4, 14, 0.34), 0 3px 0 rgba(5, 6, 17, 0.9);
-  transition: transform 180ms steps(2, end), box-shadow 180ms ease, filter 180ms ease;
+  transition: transform 180ms steps(2, end), border-color 180ms ease, box-shadow 180ms ease, filter 180ms ease;
 }
 
 .element-choice::before {
@@ -161,6 +161,7 @@ input {
 .element-choice:hover,
 .element-choice:focus-visible {
   transform: translateY(-3px);
+  border-color: var(--element);
   filter: brightness(1.14);
   outline: none;
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--element) 25%, transparent), 0 7px 0 rgba(5, 6, 17, 0.9), 0 0 24px color-mix(in srgb, var(--element) 26%, transparent);
@@ -168,6 +169,7 @@ input {
 
 .element-choice.is-active {
   transform: translateY(-2px);
+  border-color: var(--element);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--element) 22%, transparent), 0 0 28px color-mix(in srgb, var(--element) 32%, transparent), inset 0 0 28px color-mix(in srgb, var(--element) 18%, transparent);
 }
 
@@ -747,4 +749,4 @@ main {
 
 .spirit-frame {
   animation: spirit-cycle 600ms steps(1, end) infinite;
-}
+}a
