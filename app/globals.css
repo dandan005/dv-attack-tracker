@@ -434,7 +434,7 @@ input {
   position: relative;
   margin-top: 12px;
   margin-bottom: 10px;
-  padding: 10px;
+  padding: 10px 0;
   overflow: hidden;
   border: 1px solid rgba(201, 138, 62, 0.72);
   border-radius: 5px;
@@ -462,7 +462,7 @@ input {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 0 4px 8px;
+  padding: 0 14px 8px;
 }
 
 .boss-slot__element {
