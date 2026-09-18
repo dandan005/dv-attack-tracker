@@ -37,7 +37,7 @@ function BossPortrait({ element, boss }: { element: Element; boss: BossSlot }) {
           <img
             src={boss.image}
             alt={boss.alt}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            style={{ width: "100%", height: "100%", objectFit: "contain" }}
           />
         ) : (
           <div className="boss-portrait__empty"><span className="boss-portrait__glyph">?</span><span>PORTRAIT SLOT</span></div>
