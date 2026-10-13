@@ -67,6 +67,7 @@ const ingredientDefaults = [
 ] as const;
 const rarityPalette = { gray: ["#9ca3af", "#4b5563"], green: ["#4ade80", "#166534"], purple: ["#c084fc", "#581c87"], red: ["#f87171", "#7f1d1d"], blue: ["#60a5fa", "#1e3a8a"], gold: ["#fbbf24", "#92400e"] } as const;
 const rarityOf: Record<string, keyof typeof rarityPalette> = { Wheat: "gray", Meat: "gray", Lettuce: "gray", Milk: "gray", Egg: "green", Potato: "purple", Tomato: "purple", Shrimp: "purple", Rice: "purple", Peanut: "purple", Corn: "purple", Strawberry: "purple", Sugarcane: "purple", Cheese: "red", Chili: "blue", Tuna: "blue", Basil: "blue", Cacao: "blue", Caviar: "gold", Truffle: "gold", Honeycomb: "gold" };
+const ingredientInfo: Record<string, [string, string]> = { Meat: ["Meat obtained through exploration. It seems it can provide great strength.", "[Exploration] [Rune]"], Lettuce: ["Lettuce, which can be obtained through Exploration. It looks like it could add a crisp texture.", "[Exploration] [Rune]"], Milk: ["Milk, which can be obtained through Exploration. It can be used to create a smooth taste.", "[Exploration] [Rune]"], Egg: ["A wyvern egg rumored to be valuable. It might break, so be careful.", "[Exploration] [Rune]"], Potato: ["Potatoes that can be found through Exploration. They must fill you up.", "[Arwen] [Rune]"], Tomato: ["Tomatoes, which can be obtained through Ingredient Exchange. They look like they could add a tangy taste.", "[Arwen] [Rune]"], Shrimp: ["Shrimp, which can be obtained through Ingredient Exchange. They look like they could add a springy texture.", "[Gene] [Rune]"], Rice: ["Rice, which can be obtained through Ingredient Exchange. Cooked up, it looks quite hearty.", "[Gene] [Rune]"], Peanut: ["Peanuts, which can be obtained through Ingredient Exchange. They look like they could add a nutty taste.", "[Rosa] [Rune]"], Corn: ["Corn, which can be obtained through Ingredient Exchange. It looks like it could add a satisfying pop.", "[Rosa] [Rune]"], Strawberry: ["Strawberries, which can be obtained through Ingredient Exchange. They look like they could add a sweet and tangy taste.", "[Cedric] [Rune]"], Sugarcane: ["Sugarcane obtained through exploration. Tricky to use, but it could be a good substitute for honeyberries.", "[Cedric] [Rune]"], Cheese: ["Cheese aged over a long time. It has a deep, savory richness.", "[Exploration] [Rune]"], Chili: ["A chili pepper ripened flame-red. One bite looks like it would set your mouth on fire.", "[Lava Mountains] [Rune]"], Tuna: ["A tuna raised roaming the cold seas. The flesh looks thick and rich.", "[Ice Vale] [Rune]"], Basil: ["Basil with a fresh, green fragrance. Added to a dish, it looks like it would bring the flavor to life.", "[Wind Cliff] [Rune]"], Cacao: ["Cacao with a deep aroma. Prepared well, it looks like it could give a bittersweet taste.", "[Wasteland Plateau] [Rune]"], Caviar: ["Caviar, known to be valuable. Even a tiny amount would make the taste special.", "[Rune]"], Truffle: ["A truffle, known to be valuable. It looks like it could add a distinctive, deep aroma.", "[Rune]"], Honeycomb: ["A honeycomb, known to be valuable. It looks like it could give a rich, sweet taste.", "[Rune]"] };
 
 const guideSections = [
   ["The six-day cycle", "OPERATING RHYTHM", "Monday is matchmaking. Tuesday through Thursday are exploration days: spend all three entries each day, search for traces, and stock materials. Friday through Sunday is the raid window."],
@@ -635,6 +636,7 @@ export function Meals() {
   });
   useEffect(() => { localStorage.setItem("dv-command-ingredients", JSON.stringify(owned)); }, [owned]);
   const [qty, setQty] = useState<Record<string, string>>(() => { try { return JSON.parse(localStorage.getItem("dv-command-quantities") || "{}"); } catch { return {}; } }); useEffect(() => { localStorage.setItem("dv-command-quantities", JSON.stringify(qty)); }, [qty]);
+const [selected, setSelected] = useState<string | null>(null);
   const ingredients = ingredientDefaults.map(([name, source, defaultOwned, image]) => ({ name, source, image, owned: qty[name] !== undefined ? Number(qty[name]) > 0 : (owned[name] ?? defaultOwned) }));
   const visible = useMemo(
     () =>
@@ -755,7 +757,7 @@ export function Meals() {
           <div className="grid grid-cols-5 gap-2">
             {ingredients.map((ingredient) => (
               <div key={ingredient.name} className={`flex flex-col items-center gap-1 ${ingredient.name === "Cheese" || ingredient.name === "Caviar" ? "col-start-1" : ""}`}>
-                <div title={ingredient.name} className={`p-1 ${ingredient.owned ? "" : "opacity-60"}`}>
+                <div title={ingredient.name} onClick={() => setSelected(ingredient.name)} className={`p-1 ${ingredient.owned ? "" : "opacity-60"}`}>
                   <IngredientIcon image={ingredient.image} name={ingredient.name} style={{ width: 48, height: 48, padding: 6, background: `linear-gradient(180deg, ${rarityPalette[rarityOf[ingredient.name] ?? "gray"][0]}55, ${rarityPalette[rarityOf[ingredient.name] ?? "gray"][1]})`, borderColor: rarityPalette[rarityOf[ingredient.name] ?? "gray"][0], boxShadow: rarityOf[ingredient.name] === "gold" ? "0 0 8px #fbbf24" : undefined }} />
                 </div>
                 <input
@@ -771,6 +773,13 @@ export function Meals() {
             ))}
           </div>
         </Card>
+          {selected && (
+            <div onClick={() => setSelected(null)} className="mt-3 border border-dv-line bg-dv-panel2 p-3 text-xs text-dv-brassLight">
+              <p className="font-semibold">{selected}</p>
+              <p className="mt-1">{ingredientInfo[selected]?.[0] ?? "No details yet."}</p>
+              <p className="mt-1 text-[10px] text-dv-emerald">{ingredientInfo[selected]?.[1] ?? ""}</p>
+            </div>
+          )}
       </div>
     </div>
   );
