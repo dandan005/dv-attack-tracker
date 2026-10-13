@@ -49,6 +49,7 @@ const meals: Meal[] = [
   { name: "Tomato Basil Ade", rarity: "Legendary dessert", category: "Dessert", effect: "Wyvern damage +30%", ingredients: ["Basil", "Tomato"], tags: ["raid"], image: "tomato-basil-ade.png" },
   { name: "???", rarity: "Legendary appetizer", category: "Appetizer", effect: "Exploration progress +3%", ingredients: [], tags: ["exploration"], image: "question-19.png" },
   { name: "???", rarity: "Immortal appetizer", category: "Appetizer", effect: "Exploration progress +5%", ingredients: [], tags: ["exploration"], image: "question-21.png" },
+  { name: "Gorgonzola", rarity: "Immortal main dish", category: "Main dish", effect: "Guild member ATK/HP +30%", ingredients: ["Honeycomb", "Cheese", "Cheese", "Wheat"], tags: ["raid"], image: "question-40.png" },
   { name: "Truffle Risotto", rarity: "Immortal main dish", category: "Main dish", effect: "Guild member ATK/HP +30%", ingredients: ["Truffle", "Rice", "Meat", "Milk"], tags: ["raid"], image: "question-41.png" },
   { name: "???", rarity: "Great dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: [], tags: ["raid"], image: "question-55.png" },
   { name: "???", rarity: "Great dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: [], tags: ["raid"], image: "question-56.png" },
