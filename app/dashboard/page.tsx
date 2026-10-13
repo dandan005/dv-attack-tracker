@@ -53,7 +53,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<Tab>("ledger");
   const [mealsSubTab, setMealsSubTab] = useState<MealsSubTab>("main");
-  useEffect(() => { window.scrollTo(0, 0); }, [tab]);
+  useEffect(() => { document.querySelector("main")?.scrollTo(0, 0); }, [tab]);
   const [settings, setSettings] = useState<Settings>({ wyvern_element: null, wyvern_set_by: null });
   const [myLoggedDays, setMyLoggedDays] = useState<number[]>([]);
   const [members, setMembers] = useState<MemberRow[]>([]);
