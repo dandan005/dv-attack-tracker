@@ -632,7 +632,8 @@ export function Meals() {
     try { return JSON.parse(localStorage.getItem("dv-command-ingredients") ?? "{}"); } catch { return {}; }
   });
   useEffect(() => { localStorage.setItem("dv-command-ingredients", JSON.stringify(owned)); }, [owned]);
-  const ingredients = ingredientDefaults.map(([name, source, defaultOwned, image]) => ({ name, source, image, owned: owned[name] ?? defaultOwned }));
+  const [qty, setQty] = useState<Record<string, string>>(() => { try { return JSON.parse(localStorage.getItem("dv-command-quantities") || "{}"); } catch { return {}; } }); useEffect(() => { localStorage.setItem("dv-command-quantities", JSON.stringify(qty)); }, [qty]);
+  const ingredients = ingredientDefaults.map(([name, source, defaultOwned, image]) => ({ name, source, image, owned: qty[name] !== undefined ? Number(qty[name]) > 0 : (owned[name] ?? defaultOwned) }));
   const visible = useMemo(
     () =>
       meals
@@ -749,27 +750,22 @@ export function Meals() {
               {ingredients.filter((item) => item.owned).length}/{ingredients.length}
             </span>
           </div>
-          <div>
+          <div className="grid grid-cols-4 gap-2">
             {ingredients.map((ingredient) => (
-              <button
-                type="button"
-                key={ingredient.name}
-                onClick={() => setOwned((current) => ({ ...current, [ingredient.name]: !ingredient.owned }))}
-                className="flex w-full items-center gap-3 border-b border-dv-line/60 py-2.5 text-left last:border-0"
-              >
-                <IngredientIcon image={ingredient.image} name={ingredient.name} />
-                <span>
-                  <span className="block text-xs">{ingredient.name}</span>
-                  <span className="block text-[8px] text-slate-300/50">{ingredient.source}</span>
-                </span>
-                <span
-                  className={`ml-auto grid h-5 w-5 place-items-center border text-[11px] ${
-                    ingredient.owned ? "border-dv-emerald bg-dv-emerald text-dv-bg" : "border-dv-line text-transparent"
-                  }`}
-                >
-                  ◆
-                </span>
-              </button>
+              <div key={ingredient.name} className="flex flex-col items-center gap-1">
+                <div title={ingredient.name} className={`border p-1 ${ingredient.owned ? "border-dv-emerald" : "border-dv-line opacity-60"}`}>
+                  <IngredientIcon image={ingredient.image} name={ingredient.name} />
+                </div>
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min={0}
+                  value={qty[ingredient.name] ?? ""}
+                  placeholder="0"
+                  onChange={(event) => setQty((current) => ({ ...current, [ingredient.name]: event.target.value }))}
+                  className="w-full border border-dv-line bg-dv-panel2 px-1 py-1 text-center text-[10px] text-dv-brassLight outline-none focus:border-dv-violet"
+                />
+              </div>
             ))}
           </div>
         </Card>
