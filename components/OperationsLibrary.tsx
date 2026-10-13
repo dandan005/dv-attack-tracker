@@ -65,6 +65,8 @@ const ingredientDefaults = [
   ["Tuna", "Ice Vale", false, "tuna.jpg"], ["Basil", "Wind Cliff", false, "basil.jpg"], ["Cacao", "Wasteland Plateau", false, "cacao.jpg"],
   ["Caviar", "All regions", false, "caviar.jpg"], ["Truffle", "All regions", false, "truffle.jpg"], ["Honeycomb", "All regions", false, "honeycomb.jpg"],
 ] as const;
+const rarityPalette = { gray: ["#9ca3af", "#4b5563"], green: ["#4ade80", "#166534"], purple: ["#c084fc", "#581c87"], red: ["#f87171", "#7f1d1d"], blue: ["#60a5fa", "#1e3a8a"], gold: ["#fbbf24", "#92400e"] } as const;
+const rarityOf: Record<string, keyof typeof rarityPalette> = { Wheat: "gray", Meat: "gray", Lettuce: "gray", Milk: "gray", Egg: "green", Potato: "purple", Tomato: "purple", Shrimp: "purple", Rice: "purple", Peanut: "purple", Corn: "purple", Strawberry: "purple", Sugarcane: "purple", Cheese: "red", Chili: "blue", Tuna: "blue", Basil: "blue", Cacao: "blue", Caviar: "gold", Truffle: "gold", Honeycomb: "gold" };
 
 const guideSections = [
   ["The six-day cycle", "OPERATING RHYTHM", "Monday is matchmaking. Tuesday through Thursday are exploration days: spend all three entries each day, search for traces, and stock materials. Friday through Sunday is the raid window."],
@@ -360,8 +362,8 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   return <p className="eyebrow mb-2">{children}</p>;
 }
 
-function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <section className={`pixel-border bg-dv-panel/95 shadow-pixel ${className}`}>{children}</section>;
+function Card({ children, className = "", style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
+  return <section className={`pixel-border bg-dv-panel/95 shadow-pixel ${className}`} style={style}>{children}</section>;
 }
 
 function MealThumb({ image, name }: { image?: string; name: string }) {
@@ -740,7 +742,7 @@ export function Meals() {
           </div>
         </Card>
 
-        <Card className="order-first h-fit p-4 lg:order-none">
+        <Card className="order-first h-fit p-4 lg:order-none" style={{ background: "repeating-linear-gradient(90deg, #5a3a1e 0px, #6b4626 6px, #5a3a1e 12px)", borderColor: "#c9a35a", borderWidth: 2 }}>
           <div className="mb-4 flex items-center justify-between">
             <div>
               <SectionLabel>YOUR STORES</SectionLabel>
@@ -753,7 +755,7 @@ export function Meals() {
           <div className="grid grid-cols-4 gap-2">
             {ingredients.map((ingredient) => (
               <div key={ingredient.name} className="flex flex-col items-center gap-1">
-                <div title={ingredient.name} className={`border p-1 ${ingredient.owned ? "border-dv-emerald" : "border-dv-line opacity-60"}`}>
+                <div title={ingredient.name} style={{ background: `linear-gradient(180deg, ${rarityPalette[rarityOf[ingredient.name] ?? "gray"][0]}55, ${rarityPalette[rarityOf[ingredient.name] ?? "gray"][1]})`, borderColor: rarityPalette[rarityOf[ingredient.name] ?? "gray"][0], boxShadow: rarityOf[ingredient.name] === "gold" ? "0 0 8px #fbbf24" : undefined }} className={`border p-1 ${ingredient.owned ? "" : "opacity-60"}`}>
                   <IngredientIcon image={ingredient.image} name={ingredient.name} />
                 </div>
                 <input
