@@ -765,7 +765,7 @@ export function Meals() {
                   value={qty[ingredient.name] ?? ""}
                   placeholder="0"
                   onChange={(event) => setQty((current) => ({ ...current, [ingredient.name]: event.target.value }))}
-                  className="w-full border border-dv-line bg-dv-panel2 px-1 py-1 text-center text-[10px] text-dv-brassLight outline-none focus:border-dv-violet"
+                  className="w-12 border border-dv-line bg-dv-panel2 px-0 py-1 text-center text-[10px] text-dv-brassLight outline-none focus:border-dv-violet"
                 />
               </div>
             ))}
