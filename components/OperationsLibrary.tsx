@@ -772,14 +772,17 @@ const [selected, setSelected] = useState<string | null>(null);
               </div>
             ))}
           </div>
-        </Card>
           {selected && (
-            <div onClick={() => setSelected(null)} className="mt-3 border border-dv-line bg-dv-panel2 p-3 text-xs text-dv-brassLight">
-              <p className="font-semibold">{selected}</p>
-              <p className="mt-1">{ingredientInfo[selected]?.[0] ?? "No details yet."}</p>
-              <p className="mt-1 text-[10px] text-dv-emerald">{ingredientInfo[selected]?.[1] ?? ""}</p>
+            <div onClick={() => setSelected(null)} className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6">
+              <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm border border-dv-line bg-dv-panel2 p-4 text-xs text-dv-brassLight">
+                <p className="font-semibold">{selected}</p>
+                <p className="mt-2">{ingredientInfo[selected]?.[0] ?? "No details yet."}</p>
+                <p className="mt-2 text-[10px] text-dv-emerald">{ingredientInfo[selected]?.[1] ?? ""}</p>
+                <button onClick={() => setSelected(null)} className="mt-3 w-full border border-dv-line py-2 text-[10px] text-dv-brassLight">Close</button>
+              </div>
             </div>
           )}
+        </Card>
       </div>
     </div>
   );
