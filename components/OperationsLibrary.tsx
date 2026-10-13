@@ -739,7 +739,7 @@ export function Meals() {
           </div>
         </Card>
 
-        <Card className="h-fit p-4">
+        <Card className="order-first h-fit p-4 lg:order-none">
           <div className="mb-4 flex items-center justify-between">
             <div>
               <SectionLabel>YOUR STORES</SectionLabel>
