@@ -687,7 +687,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
               placeholder="Search meals, effects, ingredients"
               className="w-full rounded-xl border border-dv-line bg-dv-panel2 px-3 py-3 text-xs text-dv-brassLight outline-none placeholder:text-slate-300/50 focus:border-dv-violet"
             />
-            <div className="mt-3 grid grid-cols-4 gap-2">
+            <div className="mt-3 grid grid-cols-3 gap-2">
               {filterTabs.map(({ value, label }) => (
                 <button
                   type="button"
