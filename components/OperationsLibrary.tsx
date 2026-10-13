@@ -836,7 +836,7 @@ export function Runes() {
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search runes or effects"
-          className="w-full rounded-xl border border-dv-line bg-dv-panel2 px-3 py-3 text-xs text-dv-brassLight outline-none placeholder:text-slate-300/50 focus:border-dv-violet"
+          className="w-full border border-dv-line bg-dv-panel2 px-3 py-3 text-xs text-dv-brassLight outline-none placeholder:text-slate-300/50 focus:border-dv-violet"
         />
       </Card>
 
