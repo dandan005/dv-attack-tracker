@@ -378,9 +378,9 @@ function MealThumb({ image, name }: { image?: string; name: string }) {
   );
 }
 
-function IngredientIcon({ image, name }: { image: string; name: string }) {
+function IngredientIcon({ image, name, style }: { image: string; name: string; style?: React.CSSProperties }) {
   return (
-    <div className="pixel-frame item-slot h-8 w-8 shrink-0 overflow-hidden">
+    <div className="pixel-frame item-slot h-8 w-8 shrink-0 overflow-hidden" style={style}>
       <img src={"/ingredients/" + image} alt={name} className="h-full w-full object-cover" style={{ imageRendering: "pixelated" }} />
     </div>
   );
@@ -742,7 +742,7 @@ export function Meals() {
           </div>
         </Card>
 
-        <Card className="order-first h-fit p-4 lg:order-none" style={{ background: "repeating-linear-gradient(90deg, #5a3a1e 0px, #6b4626 6px, #5a3a1e 12px)", borderColor: "#c9a35a", borderWidth: 2 }}>
+        <Card className="order-first h-fit p-4 lg:order-none">
           <div className="mb-4 flex items-center justify-between">
             <div>
               <SectionLabel>YOUR STORES</SectionLabel>
@@ -755,8 +755,8 @@ export function Meals() {
           <div className="grid grid-cols-4 gap-2">
             {ingredients.map((ingredient) => (
               <div key={ingredient.name} className="flex flex-col items-center gap-1">
-                <div title={ingredient.name} style={{ background: `linear-gradient(180deg, ${rarityPalette[rarityOf[ingredient.name] ?? "gray"][0]}55, ${rarityPalette[rarityOf[ingredient.name] ?? "gray"][1]})`, borderColor: rarityPalette[rarityOf[ingredient.name] ?? "gray"][0], boxShadow: rarityOf[ingredient.name] === "gold" ? "0 0 8px #fbbf24" : undefined }} className={`border p-1 ${ingredient.owned ? "" : "opacity-60"}`}>
-                  <IngredientIcon image={ingredient.image} name={ingredient.name} />
+                <div title={ingredient.name} className={`p-1 ${ingredient.owned ? "" : "opacity-60"}`}>
+                  <IngredientIcon image={ingredient.image} name={ingredient.name} style={{ background: `linear-gradient(180deg, ${rarityPalette[rarityOf[ingredient.name] ?? "gray"][0]}55, ${rarityPalette[rarityOf[ingredient.name] ?? "gray"][1]})`, borderColor: rarityPalette[rarityOf[ingredient.name] ?? "gray"][0], boxShadow: rarityOf[ingredient.name] === "gold" ? "0 0 8px #fbbf24" : undefined }} />
                 </div>
                 <input
                   type="number"
