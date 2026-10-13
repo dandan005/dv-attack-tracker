@@ -24,7 +24,7 @@ const meals: Meal[] = [
   { name: "Basil Pasta", rarity: "Legendary main dish", category: "Main dish", effect: "Guild member ATK/HP +20%", ingredients: ["Basil", "Cheese", "Egg", "Wheat"], tags: ["raid"], image: "basil-pasta.jpg" },
   { name: "Fish & Chips", rarity: "Legendary main dish", category: "Main dish", effect: "Guild member ATK/HP +20%", ingredients: ["Tuna", "Tuna", "Potato", "Potato", "Wheat"], tags: ["raid"], image: "fish-and-chips.png" },
   { name: "Truffle Gnocchi", rarity: "Immortal main dish", category: "Main dish", effect: "Guild member ATK/HP +30%", ingredients: ["Truffle", "Potato", "Wheat", "Salt"], tags: ["raid"], image: "truffle-gnocchi.jpg" },
-  { name: "Strawberry Cake", rarity: "Great dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: ["Strawberry", "Egg", "Wheat", "Wheat", "Milk"], tags: ["raid"], image: "strawberry-cake.jpg" },
+  { name: "Strawberry Cake", rarity: "Rare dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: ["Strawberry", "Egg", "Wheat", "Wheat", "Milk"], tags: ["raid"], image: "strawberry-cake.jpg" },
   { name: "Brownie", rarity: "Epic dessert", category: "Dessert", effect: "Wyvern damage +30%", ingredients: ["Cacao", "Egg", "Wheat", "Wheat", "Milk"], tags: ["raid"], image: "brownie.jpg" },
   { name: "Cheesecake", rarity: "Rare dessert", category: "Dessert", effect: "Wyvern damage +20%", ingredients: ["Cheese", "Egg", "Wheat", "Wheat", "Milk"], tags: ["raid"], image: "cheesecake.jpg" },
   { name: "Honey Frozen Yogurt", rarity: "Immortal dessert", category: "Dessert", effect: "Wyvern damage +50%", ingredients: ["Honeycomb", "Milk", "Milk", "Milk"], tags: ["raid"], image: "honey-frozen-yogurt.jpg" },
@@ -54,7 +54,19 @@ const meals: Meal[] = [
   { name: "Popcorn", rarity: "Great dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: ["Corn", "Corn", "Corn"], tags: ["raid"], image: "question-55.png" },
   { name: "Rice Cracker", rarity: "Great dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: ["Rice", "Rice", "Rice", "Rice"], tags: ["raid"], image: "question-56.png" },
   { name: "PB&J", rarity: "Mythic dessert", category: "Dessert", effect: "Wyvern damage", ingredients: ["Peanut", "Strawberry", "Wheat"], tags: ["raid"], image: "question-62.png" },
-];
+  { name: "Chocolate Chip Cookie", rarity: "Legendary dessert", category: "Dessert", effect: "Wyvern damage +30%", ingredients: ["Cacao", "Sugarcane", "Egg", "Wheat", "Milk"], tags: ["raid"], image: "chocolate-chip-cookie.png" },
+  { name: "Chocolate Ice Cream", rarity: "Legendary dessert", category: "Dessert", effect: "Wyvern damage +30%", ingredients: ["Cacao", "Sugarcane", "Egg", "Milk"], tags: ["raid"], image: "chocolate-ice-cream.png" },
+  { name: "Bread", rarity: "Common dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: ["Egg", "Wheat", "Milk"], tags: ["raid"], image: "bread.png" },
+  { name: "Churros", rarity: "Rare dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: ["Sugarcane", "Wheat", "Wheat", "Milk"], tags: ["raid"], image: "churros.png" },
+  { name: "Strawberry Ice Cream", rarity: "Rare dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: ["Sugarcane", "Strawberry", "Egg", "Milk"], tags: ["raid"], image: "strawberry-ice-cream.png" },
+  { name: "Egg Tart", rarity: "Rare dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: ["Sugarcane", "Egg", "Egg", "Wheat"], tags: ["raid"], image: "egg-tart.png" },
+  { name: "Donut", rarity: "Rare dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: ["Sugarcane", "Egg", "Wheat", "Milk"], tags: ["raid"], image: "donut.png" },
+  { name: "Cocoa", rarity: "Epic dessert", category: "Dessert", effect: "Wyvern damage +30%", ingredients: ["Cacao", "Milk", "Milk"], tags: ["raid"], image: "cocoa.png" },
+  { name: "Fresh Strawberry Milk", rarity: "Rare dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: ["Strawberry", "Milk", "Milk"], tags: ["raid"], image: "fresh-strawberry-milk.png" },
+  { name: "Plain Yogurt", rarity: "Common dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: ["Milk", "Milk", "Milk"], tags: ["raid"], image: "plain-yogurt.png" },
+  { name: "Luna's Cotton Candy", rarity: "Rare dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: ["Sugarcane", "Sugarcane", "Sugarcane", "Sugarcane", "Sugarcane"], tags: ["raid"], image: "lunas-cotton-candy.png" },
+  { name: "Strawberry Tanghulu", rarity: "Rare dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: ["Sugarcane", "Sugarcane", "Strawberry", "Strawberry", "Strawberry"], tags: ["raid"], image: "strawberry-tanghulu.png" },
+  { name: "Pudding", rarity: "Rare dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: ["Sugarcane", "Sugarcane", "Egg", "Milk", "Milk"], tags: ["raid"], image: "pudding.png" },];
 
 const ingredientDefaults = [
   ["Wheat", "Exploration material", true, "wheat.jpg"], ["Meat", "Exploration material", true, "meat.jpeg"], ["Lettuce", "Exploration material", true, "lettuce.jpg"],
