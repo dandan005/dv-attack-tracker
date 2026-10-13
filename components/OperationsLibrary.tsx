@@ -641,7 +641,7 @@ export function Spirits() {
 
 export function Meals() {
   const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<"all" | "Appetizer" | "Main dish" | "Dessert">("all");
+  const [filter, setFilter] = useState<"all" | "Appetizer" | "Main dish" | "Dessert">("Appetizer");
   const [owned, setOwned] = useState<Record<string, boolean>>(() => {
     if (typeof window === "undefined") return {};
     try { return JSON.parse(localStorage.getItem("dv-command-ingredients") ?? "{}"); } catch { return {}; }
@@ -663,7 +663,6 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
   );
 
   const filterTabs: { value: "all" | "Appetizer" | "Main dish" | "Dessert"; label: string }[] = [
-    { value: "all", label: "All meals" },
     { value: "Appetizer", label: "Appetizer" },
     { value: "Main dish", label: "Main" },
     { value: "Dessert", label: "Dessert" },
