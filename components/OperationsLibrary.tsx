@@ -756,7 +756,7 @@ export function Meals() {
             {ingredients.map((ingredient) => (
               <div key={ingredient.name} className={`flex flex-col items-center gap-1 ${ingredient.name === "Cheese" || ingredient.name === "Caviar" ? "col-start-1" : ""}`}>
                 <div title={ingredient.name} className={`p-1 ${ingredient.owned ? "" : "opacity-60"}`}>
-                  <IngredientIcon image={ingredient.image} name={ingredient.name} style={{ width: 48, height: 48, background: `linear-gradient(180deg, ${rarityPalette[rarityOf[ingredient.name] ?? "gray"][0]}55, ${rarityPalette[rarityOf[ingredient.name] ?? "gray"][1]})`, borderColor: rarityPalette[rarityOf[ingredient.name] ?? "gray"][0], boxShadow: rarityOf[ingredient.name] === "gold" ? "0 0 8px #fbbf24" : undefined }} />
+                  <IngredientIcon image={ingredient.image} name={ingredient.name} style={{ width: 48, height: 48, padding: 6, background: `linear-gradient(180deg, ${rarityPalette[rarityOf[ingredient.name] ?? "gray"][0]}55, ${rarityPalette[rarityOf[ingredient.name] ?? "gray"][1]})`, borderColor: rarityPalette[rarityOf[ingredient.name] ?? "gray"][0], boxShadow: rarityOf[ingredient.name] === "gold" ? "0 0 8px #fbbf24" : undefined }} />
                 </div>
                 <input
                   type="number"
