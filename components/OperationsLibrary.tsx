@@ -636,7 +636,7 @@ export function Meals() {
   });
   useEffect(() => { localStorage.setItem("dv-command-ingredients", JSON.stringify(owned)); }, [owned]);
   const [qty, setQty] = useState<Record<string, string>>(() => { try { return JSON.parse(localStorage.getItem("dv-command-quantities") || "{}"); } catch { return {}; } }); useEffect(() => { localStorage.setItem("dv-command-quantities", JSON.stringify(qty)); }, [qty]);
-const [selected, setSelected] = useState<string | null>(null);
+const [selected, setSelected] = useState<{ name: string; x: number; y: number } | null>(null);
   const ingredients = ingredientDefaults.map(([name, source, defaultOwned, image]) => ({ name, source, image, owned: qty[name] !== undefined ? Number(qty[name]) > 0 : (owned[name] ?? defaultOwned) }));
   const visible = useMemo(
     () =>
@@ -755,9 +755,18 @@ const [selected, setSelected] = useState<string | null>(null);
             </span>
           </div>
           <div className="grid grid-cols-5 gap-2">
+          {selected && (
+            <div onClick={() => setSelected(null)} className="fixed inset-0 z-50">
+              <div onClick={(e) => e.stopPropagation()} style={{ top: selected.y + 8, left: Math.min(Math.max(selected.x - 120, 8), window.innerWidth - 248), width: 240 }} className="fixed border border-dv-line bg-black/85 p-3 text-xs text-dv-brassLight">
+                <p className="font-semibold">{selected.name}</p>
+                <p className="mt-2">{ingredientInfo[selected.name]?.[0] ?? "No details yet."}</p>
+                <p className="mt-2 text-[10px] text-dv-emerald">{ingredientInfo[selected.name]?.[1] ?? ""}</p>
+              </div>
+            </div>
+          )}
             {ingredients.map((ingredient) => (
               <div key={ingredient.name} className={`flex flex-col items-center gap-1 ${ingredient.name === "Cheese" || ingredient.name === "Caviar" ? "col-start-1" : ""}`}>
-                <div title={ingredient.name} onClick={() => setSelected(ingredient.name)} className={`p-1 ${ingredient.owned ? "" : "opacity-60"}`}>
+                <div title={ingredient.name} onClick={(e) => { const r = e.currentTarget.getBoundingClientRect(); setSelected({ name: ingredient.name, x: r.left + r.width / 2, y: r.bottom }); }} className={`p-1 ${ingredient.owned ? "" : "opacity-60"}`}>
                   <IngredientIcon image={ingredient.image} name={ingredient.name} style={{ width: 48, height: 48, padding: 6, background: `linear-gradient(180deg, ${rarityPalette[rarityOf[ingredient.name] ?? "gray"][0]}55, ${rarityPalette[rarityOf[ingredient.name] ?? "gray"][1]})`, borderColor: rarityPalette[rarityOf[ingredient.name] ?? "gray"][0], boxShadow: rarityOf[ingredient.name] === "gold" ? "0 0 8px #fbbf24" : undefined }} />
                 </div>
                 <input
@@ -772,16 +781,6 @@ const [selected, setSelected] = useState<string | null>(null);
               </div>
             ))}
           </div>
-          {selected && (
-            <div onClick={() => setSelected(null)} className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6">
-              <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm border border-dv-line bg-dv-panel2 p-4 text-xs text-dv-brassLight">
-                <p className="font-semibold">{selected}</p>
-                <p className="mt-2">{ingredientInfo[selected]?.[0] ?? "No details yet."}</p>
-                <p className="mt-2 text-[10px] text-dv-emerald">{ingredientInfo[selected]?.[1] ?? ""}</p>
-                <button onClick={() => setSelected(null)} className="mt-3 w-full border border-dv-line py-2 text-[10px] text-dv-brassLight">Close</button>
-              </div>
-            </div>
-          )}
         </Card>
       </div>
     </div>
