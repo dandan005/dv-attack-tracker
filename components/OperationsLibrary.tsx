@@ -753,7 +753,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
               return (
                 <article key={`${meal.name}-${index}`} className="p-4">
                   <div className="flex items-center justify-between gap-3">
-                    <div role="button" tabIndex={0} onClick={(e) => { const r = e.currentTarget.getBoundingClientRect(); setSelected({ name: meal.name, x: r.left + r.width / 2, y: r.bottom }); }} className="flex cursor-pointer items-start gap-3">
+                    <div role="button" tabIndex={0} onClick={(e) => { const el = (e.currentTarget.firstElementChild ?? e.currentTarget) as HTMLElement; const r = el.getBoundingClientRect(); setSelected({ name: meal.name, x: r.left + 120, y: r.bottom - 4 }); }} className="flex cursor-pointer items-start gap-3">
                       <MealThumb image={meal.image} name={meal.name} rarity={meal.rarity} />
                       <div>
                         <div className="flex flex-wrap items-center gap-2">
