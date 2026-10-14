@@ -780,15 +780,14 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                       const have = haveOf(item);
                       const ok = have >= n;
                       const img = ingredientDefaults.find((d) => d[0] === item)?.[3];
-                      const pal = rarityPalette[rarityOf[item] ?? "gray"];
+                      
                       return (
                         <span
                           key={item}
-                          className="flex items-center gap-1.5 rounded-lg border px-1.5 py-1 text-[9px]"
-                          style={{ borderColor: pal[0], background: "linear-gradient(180deg, " + pal[0] + "33, " + pal[1] + ")", opacity: ok ? 1 : 0.55 }}
+                          className={"flex items-center gap-1.5 rounded-lg px-1.5 py-1 text-[9px] " + (ok ? "border border-dv-brass bg-dv-brass/15 text-dv-brassLight" : "border border-dv-line bg-dv-panel2 text-slate-300/65")}
                         >
                           {img ? <img src={"/ingredients/" + img} alt="" className="h-5 w-5 object-cover" style={{ imageRendering: "pixelated" }} /> : null}
-                          <span className="text-slate-100">{item}</span>
+                          <span>{item}</span>
                           <span style={{ color: ok ? "#6ee7b7" : "#f87171" }}>{Math.min(have, n)}/{n}</span>
                         </span>
                       );
