@@ -741,7 +741,14 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
 
           <div className="divide-y divide-dv-line">
             {visible.map(({ meal, index }) => {
-              const ready = meal.ingredients.length > 0 && meal.ingredients.every((item) => ingredients.find((ingredient) => ingredient.name === item)?.owned);
+              const need: Record<string, number> = {};
+              meal.ingredients.forEach((n) => { need[n] = (need[n] ?? 0) + 1; });
+              const haveOf = (n: string) => {
+                const q = qty[n];
+                if (q !== undefined && q !== "") return Number(q) || 0;
+                return ingredients.find((i) => i.name === n)?.owned ? need[n] : 0;
+              };
+              const ready = meal.ingredients.length > 0 && Object.keys(need).every((n) => haveOf(n) >= need[n]);
               return (
                 <article key={`${meal.name}-${index}`} className="p-4">
                   <div className="flex items-start justify-between gap-3">
@@ -769,18 +776,20 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                   </div>
 
                   <div className="mt-4 flex flex-wrap gap-1.5">
-                    {meal.ingredients.map((item, index) => {
-                      const isOwned = ingredients.find((ingredient) => ingredient.name === item)?.owned;
+                    {Object.entries(need).map(([item, n]) => {
+                      const have = haveOf(item);
+                      const ok = have >= n;
+                      const img = ingredientDefaults.find((d) => d[0] === item)?.[3];
+                      const pal = rarityPalette[rarityOf[item] ?? "gray"];
                       return (
                         <span
-                          key={`${item}-${index}`}
-                          className={
-                            isOwned
-                              ? "border border-dv-brass bg-dv-brass/15 px-2 py-1 text-[9px] text-dv-brassLight"
-                              : "border border-dv-line bg-dv-panel2 px-2 py-1 text-[9px] text-slate-300/65"
-                          }
+                          key={item}
+                          className="flex items-center gap-1.5 border px-1.5 py-1 text-[9px]"
+                          style={{ borderColor: pal[0], background: "linear-gradient(180deg, " + pal[0] + "33, " + pal[1] + ")", opacity: ok ? 1 : 0.55 }}
                         >
-                          {item}
+                          {img ? <img src={"/ingredients/" + img} alt="" className="h-5 w-5 object-cover" style={{ imageRendering: "pixelated" }} /> : null}
+                          <span className="text-slate-100">{item}</span>
+                          <span style={{ color: ok ? "#6ee7b7" : "#f87171" }}>{Math.min(have, n)}/{n}</span>
                         </span>
                       );
                     })}
