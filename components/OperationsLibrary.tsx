@@ -20,6 +20,7 @@ const meals: Meal[] = [
   { name: "Beef Porridge", rarity: "Great appetizer", category: "Appetizer", effect: "Exploration progress +1%", ingredients: ["Rice", "Rice", "Meat"], tags: ["exploration"], image: "beef-porridge.jpg" },
   { name: "Shrimp Dim Sum", rarity: "Great appetizer", category: "Appetizer", effect: "Exploration progress +1%", ingredients: ["Shrimp", "Meat", "Wheat"], tags: ["exploration"], image: "shrimp-dim-sum.jpg" },
   { name: "Cheese Omelet", rarity: "Rare appetizer", category: "Appetizer", effect: "Exploration progress +2%", ingredients: ["Cheese", "Egg", "Egg", "Milk"], tags: ["exploration"], image: "cheese-omelet.jpg" },
+  { name: "Shrimp Canape", rarity: "Epic appetizer", category: "Appetizer", effect: "Exploration progress +3%", ingredients: ["Cheese", "Shrimp", "Shrimp", "Wheat"], tags: ["exploration"], image: "shrimp-canape.png" },
   { name: "Corn Cheese", rarity: "Epic appetizer", category: "Appetizer", effect: "Exploration progress +3%", ingredients: ["Cheese", "Cheese", "Corn", "Corn"], tags: ["exploration"], image: "corn-cheese.png" },
   { name: "Ham & Cheese Sandwich", rarity: "Epic appetizer", category: "Appetizer", effect: "Exploration progress +3%", ingredients: ["Cheese", "Strawberry", "Meat", "Wheat", "Lettuce"], tags: ["exploration"], image: "ham-cheese-sandwich.jpg" },
   { name: "Ricotta Salad", rarity: "Epic appetizer", category: "Appetizer", effect: "Exploration progress +3%", ingredients: ["Cheese", "Tomato", "Lettuce", "Lettuce"], tags: ["exploration"], image: "ricotta-salad.png" },
