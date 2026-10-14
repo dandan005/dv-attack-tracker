@@ -664,10 +664,10 @@ export function Spirits() {
         <div className="grid grid-cols-3 gap-4 p-4 sm:grid-cols-3">
           {spirits.map((spirit) => (
             <div key={spirit.name} className="flex flex-col items-center gap-2 text-center">
-              <div className="pixel-frame item-slot h-16 w-16 overflow-hidden">
+              <div className="pixel-frame item-slot h-11 w-11 overflow-hidden">
                 <SpiritSprite spirit={spirit} />
               </div>
-              <span className="text-xs text-dv-brassLight">{spirit.name}</span>
+              <span className="text-[10px] leading-tight text-dv-brassLight">{spirit.name}</span>
             </div>
           ))}
         </div>
