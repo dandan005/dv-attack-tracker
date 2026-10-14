@@ -653,13 +653,6 @@ export function SkillBuild() {
 export function Spirits() {
   return (
     <div className="space-y-4">
-      <Card className="p-4">
-        <SectionLabel>SPIRITS</SectionLabel>
-        <h2 className="text-xl text-dv-brassLight">Any high-awaken spirit works.</h2>
-        <p className="mt-2 max-w-xl text-sm text-slate-200/65">
-          Higher awaken level matters more than which spirit you pick.
-        </p>
-      </Card>
       <Card>
         <div className="grid grid-cols-3 gap-4 p-4 sm:grid-cols-3">
           {spirits.map((spirit) => (
