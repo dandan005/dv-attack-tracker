@@ -582,7 +582,7 @@ function SkillThumb({ image, name }: { image?: string; name: string }) {
   const frame = rarityFrame[rarity];
   const scale = frameScale[rarity] ?? 1;
   return (
-    <div className="relative h-14 w-14 shrink-0">
+    <div className="relative h-10 w-10 shrink-0">
       <div className="item-slot rounded-md h-full w-full">
         {image ? (
           <img
@@ -637,11 +637,11 @@ export function SkillBuild() {
             </button>
           ))}
         </div>
-        <div className="grid grid-cols-2 gap-3 p-4 sm:grid-cols-3">
+        <div className="grid grid-cols-4 gap-2 p-4">
           {skillsByStage[stage].map((name, index) => (
-            <div key={`${name}-${index}`} className="flex items-center gap-3">
+            <div key={`${name}-${index}`} className="flex flex-col items-center gap-1.5 text-center">
               <SkillThumb image={skillImages[name]} name={name} />
-              <span className="text-xs text-dv-brassLight">{name}</span>
+              <span className="text-[10px] leading-tight text-dv-brassLight">{name}</span>
             </div>
           ))}
         </div>
