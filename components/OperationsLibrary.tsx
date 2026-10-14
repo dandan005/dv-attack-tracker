@@ -710,9 +710,9 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
     <div className="space-y-4">
       <Card className="p-4">
         <SectionLabel>PROVISIONS / SEASON 5</SectionLabel>
-        <h2 className="text-xl text-dv-brassLight">Cook for the window.</h2>
+        <h2 className="text-xl text-dv-brassLight">Cook with what you have.</h2>
         <p className="mt-2 max-w-xl text-sm text-slate-200/65">
-          Recipes and effects are taken from the Season 5 meal sheet. Toggle your stores to find what you can make now.
+          Recipes and effects are taken from the Season 5 meal sheet. Enter what you have in your inventory and the tabs show how many meals you can cook right now.
         </p>
       </Card>
 
@@ -791,7 +791,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
         <Card className="order-first h-fit p-4 lg:order-none">
           <div className="mb-4 flex items-center justify-between">
             <div>
-              <SectionLabel>YOUR STORES</SectionLabel>
+              <SectionLabel>YOUR INVENTORY</SectionLabel>
               <p className="text-sm text-dv-brassLight">Ingredient ownership</p>
             </div>
             <span className="text-[10px] text-dv-emerald">
