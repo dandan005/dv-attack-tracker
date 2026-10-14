@@ -30,13 +30,13 @@ type AttackLog = {
   day_number: number;
 };
 
-type Tab = "ledger" | "guide" | "meals" | "runes" | "settings";
-type MealsSubTab = "main" | "special";
+type Tab = "ledger" | "guide" | "cooking" | "special" | "runes" | "settings";
 
 const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: "ledger", label: "Ledger", icon: "ᛏ" },
   { id: "guide", label: "Guide", icon: "ᚨ" },
-  { id: "meals", label: "Meals", icon: "ᛒ" },
+  { id: "cooking", label: "Cooking", icon: "ᛒ" },
+  { id: "special", label: "Special", icon: "ᛊ" },
   { id: "runes", label: "Runes", icon: "ᚱ" },
   { id: "settings", label: "Settings", icon: "ᛉ" },
 ];
@@ -52,7 +52,6 @@ export default function DashboardPage() {
   const supabase = createClient();
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<Tab>("ledger");
-  const [mealsSubTab, setMealsSubTab] = useState<MealsSubTab>("main");
   useEffect(() => { document.querySelector("main")?.scrollTo(0, 0); }, [tab]);
   const [settings, setSettings] = useState<Settings>({ wyvern_element: null, wyvern_set_by: null });
   const [myLoggedDays, setMyLoggedDays] = useState<number[]>([]);
@@ -72,7 +71,7 @@ export default function DashboardPage() {
   const { dayNumber, cycleStartISO } = getCycleInfo();
   const day7 = getDay7Phase(now);
 
-  const visibleTabs = TABS.filter((t) => t.id !== "settings" || me?.is_admin);
+  const visibleTabs = TABS.filter((t) => t.id !== "settings");
 
   async function loadAll() {
     const { data: { user } } = await supabase.auth.getUser();
@@ -268,6 +267,7 @@ export default function DashboardPage() {
                 <path d="M10 9.3v5.4l4.5-2.7-4.5-2.7z" fill="currentColor" />
               </svg>
             </button>
+{me?.is_admin && (<button type="button" onClick={() => setTab("settings")} aria-label="Settings" className={"pixel-frame item-slot grid h-8 w-8 place-items-center " + (tab === "settings" ? "text-dv-brassLight" : "text-slate-300/70")}><span className="text-sm">ᛉ</span></button>)}
             {me && (
               <div className="pixel-frame item-slot flex items-center gap-2 px-2 py-1">
                 <img src={me.avatar_url ?? "/icons/icon-192.png"}
@@ -433,40 +433,7 @@ export default function DashboardPage() {
           </section>
         )}
 
-        {tab === "meals" && (
-          <section>
-            <p className="eyebrow mb-4 text-dv-emerald">ᛉ SEASON MEALS</p>
-
-            <div className="mb-4 grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => setMealsSubTab("main")}
-                className={
-                  "border px-3 py-2.5 text-center text-[10px] uppercase tracking-[.06em] " +
-                  (mealsSubTab === "main"
-                    ? "border-dv-violet bg-dv-violet/15 text-dv-brassLight"
-                    : "border-dv-line bg-dv-panel2 text-slate-300/60")
-                }
-              >
-                Main Cooking
-              </button>
-              <button
-                type="button"
-                onClick={() => setMealsSubTab("special")}
-                className={
-                  "border px-3 py-2.5 text-center text-[10px] uppercase tracking-[.06em] " +
-                  (mealsSubTab === "special"
-                    ? "border-dv-violet bg-dv-violet/15 text-dv-brassLight"
-                    : "border-dv-line bg-dv-panel2 text-slate-300/60")
-                }
-              >
-                Special Dish
-              </button>
-            </div>
-
-            {mealsSubTab === "main" ? <MainCooking /> : <Meals />}
-          </section>
-        )}
+{tab === "cooking" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛒ MAIN COOKING</p><MainCooking /></section>)}{tab === "special" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛊ SPECIAL DISH</p><Meals /></section>)}
 
         {tab === "runes" && (
           <section>
