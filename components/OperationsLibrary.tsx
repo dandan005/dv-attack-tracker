@@ -727,7 +727,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                   key={value}
                   onClick={() => setFilter(value)}
                   className={`border px-2 py-2 text-center text-[9px] uppercase ${
-                    filter === value ? "border-dv-brassLight border-b-[3px] bg-dv-violet/15 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/60"
+                    filter === value ? "border-dv-violet border-b-[3px] bg-dv-violet/15 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/60"
                   }`}
                 >
                   {label}<span className={`ml-1.5 rounded px-1.5 py-0.5 text-[9px] ${cookableIn(value) > 0 ? "bg-green-700 text-green-100" : "bg-dv-line text-slate-300/70"}`}>{cookableIn(value)}</span>
