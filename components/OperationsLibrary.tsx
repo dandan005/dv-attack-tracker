@@ -616,9 +616,9 @@ export function SkillBuild() {
     <div className="space-y-4">
       <Card className="p-4">
         <SectionLabel>SKILL BUILD / RAID LOADOUT</SectionLabel>
-        <h2 className="text-xl text-dv-brassLight">Slot skills by stage.</h2>
+        <h2 className="text-xl text-dv-brassLight">Build a different skill set for each stage.</h2>
         <p className="mt-2 max-w-xl text-sm text-slate-200/65">
-          Swap skills as you progress.
+          Early, mid, and late game each get their own set. Swap as the fight gets harder.
         </p>
       </Card>
 
