@@ -388,6 +388,18 @@ function Card({ children, className = "", style }: { children: React.ReactNode; 
   return <section className={`pixel-border bg-dv-panel/95 shadow-pixel ${className}`} style={style}>{children}</section>;
 }
 
+const mealChipPalette: Record<string, [string, string, string]> = {
+  common: ["#1f2430", "#d1d5db", "#3b414a"],
+  great: ["#0f2a1c", "#86efac", "#1f6b3f"],
+  rare: ["#0f2a1c", "#86efac", "#1f6b3f"],
+  epic: ["#2a1750", "#d8b4fe", "#5b2a8c"],
+  legendary: ["#3b0f0b", "#fca5a5", "#7a1f12"],
+  immortal: ["#3a2d06", "#fde68a", "#5a4a12"],
+};
+function mealChipStyle(rarity?: string): React.CSSProperties | undefined {
+  const p = mealChipPalette[(rarity || "").split(" ")[0].toLowerCase()];
+  return p ? { background: p[0], color: p[1], borderColor: p[2] } : undefined;
+}
 const mealRarityPalette: Record<string, [string, string, string]> = {
   common: ["#0e1014", "#3b414a", "#9ca3af"],
   great: ["#04140c", "#1f6b3f", "#4ade80"],
@@ -398,8 +410,9 @@ const mealRarityPalette: Record<string, [string, string, string]> = {
 };
 function MealThumb({ image, name, rarity }: { image?: string; name: string; rarity?: string }) {
   const palette = mealRarityPalette[(rarity || "").split(" ")[0].toLowerCase()];
+  const glows = palette === mealRarityPalette.epic || palette === mealRarityPalette.legendary || palette === mealRarityPalette.immortal;
   const frameStyle: React.CSSProperties | undefined = palette
-    ? { background: "linear-gradient(180deg, " + palette[0] + ", " + palette[1] + ")", borderColor: palette[2], boxShadow: palette === mealRarityPalette.immortal ? "0 0 10px " + palette[2] + "99" : undefined }
+    ? { background: "radial-gradient(circle at 50% 55%, " + palette[2] + "55 0%, transparent 65%), linear-gradient(180deg, " + palette[0] + ", " + palette[1] + ")", borderColor: palette[2], borderWidth: 2, borderStyle: "solid", borderRadius: 10, boxShadow: glows ? "0 0 8px " + palette[2] + "70" : undefined }
     : undefined;
   return (
     <div className="pixel-frame item-slot h-14 w-14 shrink-0 overflow-hidden" style={frameStyle}>
@@ -735,7 +748,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                       <div>
                         <div className="flex flex-wrap items-center gap-2">
                           <h3 className="text-sm text-dv-brassLight">{meal.name}</h3>
-                          <span className="status-chip">{meal.rarity}</span>
+                          <span className="status-chip" style={mealChipStyle(meal.rarity)}>{meal.rarity}</span>
                         </div>
                         <p className="mt-2 text-xs text-dv-emerald">{meal.effect}</p>
                       </div>
