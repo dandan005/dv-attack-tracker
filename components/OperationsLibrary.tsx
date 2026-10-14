@@ -74,7 +74,7 @@ const meals: Meal[] = [
   { name: "Luna's Cotton Candy", rarity: "Rare dessert", category: "Dessert", effect: "Wyvern damage +10%", ingredients: ["Sugarcane", "Sugarcane", "Sugarcane", "Sugarcane", "Sugarcane"], tags: ["raid"], image: "lunas-cotton-candy.png" },
   { name: "Cheesecake", rarity: "Rare dessert", category: "Dessert", effect: "Wyvern damage +20%", ingredients: ["Cheese", "Egg", "Wheat", "Wheat", "Milk"], tags: ["raid"], image: "cheesecake.jpg" },
   { name: "Tomato Basil Ade", rarity: "Legendary dessert", category: "Dessert", effect: "Wyvern damage +30%", ingredients: ["Basil", "Tomato"], tags: ["raid"], image: "tomato-basil-ade.png" },
-  { name: "PB&J", rarity: "Mythic dessert", category: "Dessert", effect: "Wyvern damage", ingredients: ["Peanut", "Strawberry", "Wheat"], tags: ["raid"], image: "question-62.png" },
+  { name: "PB&J", rarity: "Mythic dessert", category: "Dessert", effect: "Wyvern damage +40%", ingredients: ["Peanut", "Strawberry", "Wheat"], tags: ["raid"], image: "question-62.png" },
   { name: "Honey Frozen Yogurt", rarity: "Immortal dessert", category: "Dessert", effect: "Wyvern damage +50%", ingredients: ["Honeycomb", "Milk", "Milk", "Milk"], tags: ["raid"], image: "honey-frozen-yogurt.jpg" }];
 
 const ingredientDefaults = [
@@ -395,6 +395,7 @@ const mealChipPalette: Record<string, [string, string, string]> = {
   epic: ["#2a1750", "#d8b4fe", "#5b2a8c"],
   legendary: ["#3b0f0b", "#fca5a5", "#7a1f12"],
   immortal: ["#3a2d06", "#fde68a", "#5a4a12"],
+  mythic: ["#0b1a4a", "#a5b4fc", "#1e3a8a"],
 };
 function mealChipStyle(rarity?: string): React.CSSProperties | undefined {
   const p = mealChipPalette[(rarity || "").split(" ")[0].toLowerCase()];
@@ -407,10 +408,11 @@ const mealRarityPalette: Record<string, [string, string, string]> = {
   epic: ["#0d0a1a", "#5b2a8c", "#a855f7"],
   legendary: ["#0f0404", "#7a1f12", "#ef4444"],
   immortal: ["#17140a", "#5a4a12", "#fbbf24"],
+  mythic: ["#050a1e", "#0b2a6b", "#4a6cff"],
 };
 function MealThumb({ image, name, rarity }: { image?: string; name: string; rarity?: string }) {
   const palette = mealRarityPalette[(rarity || "").split(" ")[0].toLowerCase()];
-  const glows = palette === mealRarityPalette.epic || palette === mealRarityPalette.legendary || palette === mealRarityPalette.immortal;
+  const glows = palette === mealRarityPalette.epic || palette === mealRarityPalette.legendary || palette === mealRarityPalette.immortal || palette === mealRarityPalette.mythic;
   const frameStyle: React.CSSProperties | undefined = palette
     ? { background: "radial-gradient(circle at 50% 55%, " + palette[2] + "55 0%, transparent 65%), linear-gradient(180deg, " + palette[0] + ", " + palette[1] + ")", borderColor: palette[2], borderWidth: 2, borderStyle: "solid", borderRadius: 10, boxShadow: glows ? "0 0 8px " + palette[2] + "70" : undefined }
     : undefined;
