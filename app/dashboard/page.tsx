@@ -10,6 +10,7 @@ import { WyvernTracker } from "@/components/WyvernTracker";
 import { ExplorationPhase } from "@/components/ExplorationPhase";
 import { Guide, MainCooking, Meals, Runes, SkillBuild, Spirits } from "@/components/OperationsLibrary";
 import { DragonCrest } from "@/components/DragonCrest";
+import { LedgerIcon, GuideIcon, CookingIcon, SpecialIcon, RunesIcon } from "@/components/TabIcons";
 import { Walkthrough } from "@/components/Walkthrough";
 
 type Settings = {
@@ -32,12 +33,12 @@ type AttackLog = {
 
 type Tab = "ledger" | "guide" | "cooking" | "special" | "runes" | "settings";
 
-const TABS: { id: Tab; label: string; icon: string }[] = [
-  { id: "ledger", label: "Ledger", icon: "ᛏ" },
-  { id: "guide", label: "Guide", icon: "ᚨ" },
-  { id: "cooking", label: "Cooking", icon: "ᛒ" },
-  { id: "special", label: "Special", icon: "ᛊ" },
-  { id: "runes", label: "Runes", icon: "ᚱ" },
+const TABS: { id: Tab; label: string; icon: ((props: { className?: string }) => JSX.Element) | string }[] = [
+  { id: "ledger", label: "Ledger", icon: LedgerIcon },
+  { id: "guide", label: "Guide", icon: GuideIcon },
+  { id: "cooking", label: "Cooking", icon: CookingIcon },
+  { id: "special", label: "Special", icon: SpecialIcon },
+  { id: "runes", label: "Runes", icon: RunesIcon },
   { id: "settings", label: "Settings", icon: "ᛉ" },
 ];
 
@@ -523,7 +524,7 @@ export default function DashboardPage() {
                 key={`${id}-${tab === id}`}
                 className={"text-base leading-none" + (tab === id ? " animate-rune-active" : "")}
               >
-                {icon}
+                {typeof icon === "string" ? icon : icon({})}
               </span>
               {label}
             </button>
