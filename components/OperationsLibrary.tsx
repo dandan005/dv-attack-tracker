@@ -806,8 +806,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
           {selected && (
             <div onClick={() => setSelected(null)} className="fixed inset-0 z-50">
               <div onClick={(e) => e.stopPropagation()} style={{ top: selected.y + 8, left: Math.min(Math.max(selected.x - 120, 8), window.innerWidth - 248), width: 240 }} className="fixed rounded-xl border border-dv-line bg-black/85 p-3 text-xs text-dv-brassLight">
-                {ingredientInfo[selected.name] ? null : <p className="font-semibold">{selected.name}</p>}
-                <p className={ingredientInfo[selected.name] ? "" : "mt-2"}>{ingredientInfo[selected.name]?.[0] ?? descFor(selected.name)}</p>
+                                <p>{ingredientInfo[selected.name]?.[0] ?? descFor(selected.name)}</p>
                 {ingredientInfo[selected.name]?.[1] ? <p className="mt-2 text-[10px] text-dv-emerald">{ingredientInfo[selected.name]?.[1]}</p> : null}
               </div>
             </div>
