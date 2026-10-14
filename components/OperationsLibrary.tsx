@@ -751,7 +751,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
               const ready = meal.ingredients.length > 0 && Object.keys(need).every((n) => haveOf(n) >= need[n]);
               return (
                 <article key={`${meal.name}-${index}`} className="p-4">
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center justify-between gap-3">
                     <div className="flex items-start gap-3">
                       <MealThumb image={meal.image} name={meal.name} rarity={meal.rarity} />
                       <div>
@@ -761,6 +761,9 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                         </div>
                         <p className="mt-2 text-xs text-dv-emerald">{meal.effect}</p>
                       </div>
+                    </div>
+                  <div className={"w-24 shrink-0 rounded-lg border px-2 py-2 text-center text-[9px] uppercase leading-tight " + (ready ? "border-dv-emerald bg-dv-emerald/10 text-dv-emerald" : "border-red-400/50 bg-red-500/10 text-red-300/80")}>
+                      {ready ? "Can Be Cooked" : "Missing Ingredients"}
                     </div>
                   </div>
 
@@ -781,9 +784,6 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                         </span>
                       );
                     })}
-                  </div>
-                <div className={"mt-3 inline-flex items-center rounded-lg border px-3 py-1.5 text-[9px] uppercase " + (ready ? "border-dv-emerald bg-dv-emerald/10 text-dv-emerald" : "border-red-400/50 bg-red-500/10 text-red-300/80")}>
-                    {ready ? "Can Be Cooked" : "Missing Ingredients"}
                   </div>
                 </article>
               );
