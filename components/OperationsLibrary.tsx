@@ -784,7 +784,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                       return (
                         <span
                           key={item}
-                          className="flex items-center gap-1.5 border px-1.5 py-1 text-[9px]"
+                          className="flex items-center gap-1.5 rounded-lg border px-1.5 py-1 text-[9px]"
                           style={{ borderColor: pal[0], background: "linear-gradient(180deg, " + pal[0] + "33, " + pal[1] + ")", opacity: ok ? 1 : 0.55 }}
                         >
                           {img ? <img src={"/ingredients/" + img} alt="" className="h-5 w-5 object-cover" style={{ imageRendering: "pixelated" }} /> : null}
