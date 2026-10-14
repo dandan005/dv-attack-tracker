@@ -762,7 +762,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                         <p className="mt-2 text-xs text-dv-emerald">{meal.effect}</p>
                       </div>
                     </div>
-                  <div className={"w-24 shrink-0 rounded-lg border px-2 py-2 text-center text-[9px] uppercase leading-tight " + (ready ? "border-dv-emerald bg-dv-emerald/10 text-dv-emerald" : "border-red-400/50 bg-red-500/10 text-red-300/80")}>
+                  <div className={"w-[76px] shrink-0 rounded-lg border px-1 py-2 text-center text-[8px] uppercase leading-tight " + (ready ? "border-dv-emerald bg-dv-emerald/10 text-dv-emerald" : "border-red-400/50 bg-red-500/10 text-red-300/80")}>
                       {ready ? "Can Be Cooked" : "Missing Ingredients"}
                     </div>
                   </div>
