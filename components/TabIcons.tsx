@@ -90,3 +90,19 @@ export function SettingsIcon({ className }: IconProps) {
     </svg>
   );
 }
+export function ReplayIcon({ className }: IconProps) {
+  return (
+    <svg {...SVG_PROPS} className={className}>
+      <rect x="4" y="2" width="8" height="2" />
+      <rect x="2" y="4" width="2" height="2" />
+      <rect x="12" y="4" width="2" height="2" />
+      <rect x="1" y="6" width="2" height="4" />
+      <rect x="13" y="6" width="2" height="4" />
+      <rect x="2" y="10" width="2" height="2" />
+      <rect x="12" y="10" width="2" height="2" />
+      <rect x="4" y="12" width="8" height="2" />
+      <rect x="11" y="0" width="2" height="5" />
+      <rect x="9" y="2" width="4" height="2" />
+    </svg>
+  );
+}

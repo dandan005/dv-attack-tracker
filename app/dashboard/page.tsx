@@ -10,7 +10,7 @@ import { WyvernTracker } from "@/components/WyvernTracker";
 import { ExplorationPhase } from "@/components/ExplorationPhase";
 import { Guide, MainCooking, Meals, Runes, SkillBuild, Spirits } from "@/components/OperationsLibrary";
 import { DragonCrest } from "@/components/DragonCrest";
-import { LedgerIcon, GuideIcon, CookingIcon, SpecialIcon, RunesIcon, SettingsIcon } from "@/components/TabIcons";
+import { LedgerIcon, GuideIcon, CookingIcon, SpecialIcon, RunesIcon, SettingsIcon, ReplayIcon } from "@/components/TabIcons";
 import { Walkthrough } from "@/components/Walkthrough";
 
 type Settings = {
@@ -251,22 +251,7 @@ export default function DashboardPage() {
               aria-label="Replay walkthrough"
               className="pixel-frame item-slot grid h-8 w-8 place-items-center text-dv-brassLight"
             >
-              <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4">
-                <path
-                  d="M20 12a8 8 0 1 1-2.34-5.66"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M20 4v5h-5"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path d="M10 9.3v5.4l4.5-2.7-4.5-2.7z" fill="currentColor" />
-              </svg>
+              <ReplayIcon className="h-4 w-4" />
             </button>
 {me?.is_admin && (<button type="button" onClick={() => setTab("settings")} aria-label="Settings" className={"pixel-frame item-slot grid h-8 w-8 place-items-center " + (tab === "settings" ? "text-dv-brassLight" : "text-slate-300/70")}><SettingsIcon className="text-sm" /></button>)}
             {me && (
