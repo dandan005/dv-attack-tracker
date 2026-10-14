@@ -60,7 +60,8 @@ const MEAL_DESC: Record<string, string> = {
   "cheesecake": "A dessert for enjoying rich, savory cheese with a moist, dense texture.",
   "honeyfrozenyogurt": "A dessert that lays a fragrant note of honey over cold, fresh yogurt.",
   "tomatobasilade": "A sparkling drink carrying a bouncy texture and a fresh, green aroma.",
-  "pbj": "Why does it ALWAYS land jam-side down?!"
+  "pbj": "Why does it ALWAYS land jam-side down?!",
+  "tunacanape": "A one-bite dish that adds a crisp, clean note to rich tuna."
 };
 
 export function descFor(name: string): string {
