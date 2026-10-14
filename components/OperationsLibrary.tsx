@@ -13,7 +13,7 @@ type Meal = {
 };
 
 const meals: Meal[] = [
-  { name: "Egg Sandwich", rarity: "Common appetizer", category: "Appetizer", effect: "Exploration progress +1(+1)%", ingredients: ["Egg", "Wheat"], tags: ["exploration"], image: "egg-sandwich.jpg" },
+  { name: "Egg Sandwich", rarity: "Common appetizer", category: "Appetizer", effect: "Exploration progress +1(+1)%", ingredients: ["Egg", "Egg", "Wheat", "Wheat"], tags: ["exploration"], image: "egg-sandwich.jpg" },
   { name: "Potato Salad", rarity: "Great appetizer", category: "Appetizer", effect: "Exploration progress +1(+1)%", ingredients: ["Potato", "Potato", "Egg", "Milk", "Lettuce"], tags: ["exploration"], image: "potato-salad.jpg" },
   { name: "Tomato Soup", rarity: "Great appetizer", category: "Appetizer", effect: "Exploration progress +1%", ingredients: ["Tomato", "Tomato", "Wheat", "Milk"], tags: ["exploration"], image: "tomato-soup.png" },
   { name: "Cereal", rarity: "Great appetizer", category: "Appetizer", effect: "Exploration progress +1(+1)%", ingredients: ["Corn", "Corn", "Milk"], tags: ["exploration"], image: "cereal.jpg" },
@@ -73,7 +73,7 @@ const meals: Meal[] = [
   { name: "Churros", rarity: "Great dessert", category: "Dessert", effect: "Wyvern damage +10(+5)%", ingredients: ["Sugarcane", "Wheat", "Wheat", "Milk"], tags: ["raid"], image: "churros.png" },
   { name: "Luna's Cotton Candy", rarity: "Great dessert", category: "Dessert", effect: "Wyvern damage +10(+10)%", ingredients: ["Sugarcane", "Sugarcane", "Sugarcane", "Sugarcane", "Sugarcane"], tags: ["raid"], image: "lunas-cotton-candy.png" },
   { name: "Cheesecake", rarity: "Rare dessert", category: "Dessert", effect: "Wyvern damage +20(+5)%", ingredients: ["Cheese", "Egg", "Wheat", "Wheat", "Milk"], tags: ["raid"], image: "cheesecake.jpg" },
-  { name: "Tomato Basil Ade", rarity: "Legendary dessert", category: "Dessert", effect: "Wyvern damage +30(+10)%", ingredients: ["Basil", "Tomato"], tags: ["raid"], image: "tomato-basil-ade.png" },
+  { name: "Tomato Basil Ade", rarity: "Legendary dessert", category: "Dessert", effect: "Wyvern damage +30(+10)%", ingredients: ["Basil", "Tomato", "Tomato", "Tomato"], tags: ["raid"], image: "tomato-basil-ade.png" },
   { name: "PB&J", rarity: "Mythic dessert", category: "Dessert", effect: "Wyvern damage +40%", ingredients: ["Peanut", "Strawberry", "Wheat"], tags: ["raid"], image: "question-62.png" },
   { name: "Honey Frozen Yogurt", rarity: "Immortal dessert", category: "Dessert", effect: "Wyvern damage +50(+20)%", ingredients: ["Honeycomb", "Milk", "Milk", "Milk"], tags: ["raid"], image: "honey-frozen-yogurt.jpg" }];
 
