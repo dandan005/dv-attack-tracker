@@ -762,17 +762,6 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                         <p className="mt-2 text-xs text-dv-emerald">{meal.effect}</p>
                       </div>
                     </div>
-                    <button
-                      type="button"
-                      disabled={!ready}
-                      className={
-                        ready
-                          ? "border border-dv-violet bg-dv-violet/15 px-3 py-2 text-[9px] uppercase text-dv-violet hover:bg-dv-violet/25"
-                          : "cursor-not-allowed border border-dv-line bg-dv-panel2 px-3 py-2 text-[9px] uppercase text-slate-300/40"
-                      }
-                    >
-                      Cook
-                    </button>
                   </div>
 
                   <div className="mt-4 flex flex-wrap gap-1.5">
@@ -792,6 +781,9 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                         </span>
                       );
                     })}
+                  </div>
+                <div className={"mt-3 inline-flex items-center rounded-lg border px-3 py-1.5 text-[9px] uppercase " + (ready ? "border-dv-emerald bg-dv-emerald/10 text-dv-emerald" : "border-red-400/50 bg-red-500/10 text-red-300/80")}>
+                    {ready ? "Can Be Cooked" : "Missing Ingredients"}
                   </div>
                 </article>
               );
