@@ -729,7 +729,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                     filter === value ? "border-dv-violet bg-dv-violet/15 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/60"
                   }`}
                 >
-                  {label}<span className="ml-2 rounded bg-dv-line px-1 py-0.5 text-[9px]">{meals.filter((m) => m.category === value).length}</span>
+                  {label}
                 </button>
               ))}
             </div>
