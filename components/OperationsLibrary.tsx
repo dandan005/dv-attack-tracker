@@ -712,7 +712,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
         <SectionLabel>PROVISIONS / SEASON 5</SectionLabel>
         <h2 className="text-xl text-dv-brassLight">Cook with what you have.</h2>
         <p className="mt-2 max-w-xl text-sm text-slate-200/65">
-          Recipes and effects are taken from the Season 5 meal sheet. Enter what you have in your inventory and the tabs show how many meals you can cook right now.
+          Enter what you have in your inventory and the tabs show how many meals you can cook right now.
         </p>
       </Card>
 
