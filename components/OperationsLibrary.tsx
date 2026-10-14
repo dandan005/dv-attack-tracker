@@ -1,5 +1,6 @@
 "use client";
 
+import { descFor } from "./mealDescriptions";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 type Meal = {
@@ -683,6 +684,7 @@ export function Meals() {
     try { return JSON.parse(localStorage.getItem("dv-command-ingredients") ?? "{}"); } catch { return {}; }
   });
   useEffect(() => { localStorage.setItem("dv-command-ingredients", JSON.stringify(owned)); }, [owned]);
+  const [openMeal, setOpenMeal] = useState<string | null>(null);
   const [qty, setQty] = useState<Record<string, string>>(() => { try { return JSON.parse(localStorage.getItem("dv-command-quantities") || "{}"); } catch { return {}; } }); useEffect(() => { localStorage.setItem("dv-command-quantities", JSON.stringify(qty)); }, [qty]);
 const [selected, setSelected] = useState<{ name: string; x: number; y: number } | null>(null);
   const ingredients = ingredientDefaults.map(([name, source, defaultOwned, image]) => ({ name, source, image, owned: qty[name] !== undefined ? Number(qty[name]) > 0 : (owned[name] ?? defaultOwned) }));
@@ -752,7 +754,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
               return (
                 <article key={`${meal.name}-${index}`} className="p-4">
                   <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-start gap-3">
+                    <div role="button" tabIndex={0} onClick={() => setOpenMeal(openMeal === meal.name ? null : meal.name)} className="flex cursor-pointer items-start gap-3">
                       <MealThumb image={meal.image} name={meal.name} rarity={meal.rarity} />
                       <div>
                         <div className="flex flex-wrap items-center gap-2">
@@ -767,6 +769,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                     </div>
                   </div>
 
+                  {openMeal === meal.name ? (<p className="mt-3 rounded-lg border border-dv-line bg-dv-panel2 p-3 text-[10px] leading-relaxed text-slate-200">{descFor(meal.name)}</p>) : null}
                   <div className="mt-4 flex flex-wrap gap-1.5">
                     {Object.entries(need).map(([item, n]) => {
                       const have = haveOf(item);
