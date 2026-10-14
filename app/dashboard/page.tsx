@@ -10,7 +10,7 @@ import { WyvernTracker } from "@/components/WyvernTracker";
 import { ExplorationPhase } from "@/components/ExplorationPhase";
 import { Guide, MainCooking, Meals, Runes, SkillBuild, Spirits } from "@/components/OperationsLibrary";
 import { DragonCrest } from "@/components/DragonCrest";
-import { LedgerIcon, GuideIcon, CookingIcon, SpecialIcon, RunesIcon } from "@/components/TabIcons";
+import { LedgerIcon, GuideIcon, CookingIcon, SpecialIcon, RunesIcon, SettingsIcon } from "@/components/TabIcons";
 import { Walkthrough } from "@/components/Walkthrough";
 
 type Settings = {
@@ -39,7 +39,7 @@ const TABS: { id: Tab; label: string; icon: ((props: { className?: string }) => 
   { id: "cooking", label: "Cooking", icon: CookingIcon },
   { id: "special", label: "Special", icon: SpecialIcon },
   { id: "runes", label: "Runes", icon: RunesIcon },
-  { id: "settings", label: "Settings", icon: "ᛉ" },
+  { id: "settings", label: "Settings", icon: SettingsIcon },
 ];
 
 // Day 7 is standby — no attacks are ever logged that day, and it's fully
@@ -236,7 +236,7 @@ export default function DashboardPage() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <button onClick={() => setTab("ledger")} className="flex items-center gap-3">
             <DragonCrest />
-            <span className="text-left"><span className="eyebrow block">DRAGON VALLEY</span><span className="block text-sm text-dv-brassLight">ATTACK LEDGER</span></span>
+            <span className="text-left"><span className="eyebrow block">DRAGON VALLEY</span><span className="block whitespace-nowrap text-sm text-dv-brassLight">ATTACK LEDGER</span></span>
           </button>
           <div className="flex items-center gap-2">
             {syncing && (
@@ -268,7 +268,7 @@ export default function DashboardPage() {
                 <path d="M10 9.3v5.4l4.5-2.7-4.5-2.7z" fill="currentColor" />
               </svg>
             </button>
-{me?.is_admin && (<button type="button" onClick={() => setTab("settings")} aria-label="Settings" className={"pixel-frame item-slot grid h-8 w-8 place-items-center " + (tab === "settings" ? "text-dv-brassLight" : "text-slate-300/70")}><span className="text-sm">ᛉ</span></button>)}
+{me?.is_admin && (<button type="button" onClick={() => setTab("settings")} aria-label="Settings" className={"pixel-frame item-slot grid h-8 w-8 place-items-center " + (tab === "settings" ? "text-dv-brassLight" : "text-slate-300/70")}><SettingsIcon className="text-sm" /></button>)}
             {me && (
               <div className="pixel-frame item-slot flex items-center gap-2 px-2 py-1">
                 <img src={me.avatar_url ?? "/icons/icon-192.png"}
