@@ -388,9 +388,21 @@ function Card({ children, className = "", style }: { children: React.ReactNode; 
   return <section className={`pixel-border bg-dv-panel/95 shadow-pixel ${className}`} style={style}>{children}</section>;
 }
 
-function MealThumb({ image, name }: { image?: string; name: string }) {
+const mealRarityPalette: Record<string, [string, string, string]> = {
+  common: ["#0e1014", "#3b414a", "#9ca3af"],
+  great: ["#04140c", "#1f6b3f", "#4ade80"],
+  rare: ["#04140c", "#1f6b3f", "#4ade80"],
+  epic: ["#0d0a1a", "#5b2a8c", "#a855f7"],
+  legendary: ["#0f0404", "#7a1f12", "#ef4444"],
+  immortal: ["#17140a", "#5a4a12", "#fbbf24"],
+};
+function MealThumb({ image, name, rarity }: { image?: string; name: string; rarity?: string }) {
+  const palette = mealRarityPalette[(rarity || "").split(" ")[0].toLowerCase()];
+  const frameStyle: React.CSSProperties | undefined = palette
+    ? { background: "linear-gradient(180deg, " + palette[0] + ", " + palette[1] + ")", borderColor: palette[2], boxShadow: palette === mealRarityPalette.immortal ? "0 0 10px " + palette[2] + "99" : undefined }
+    : undefined;
   return (
-    <div className="pixel-frame item-slot h-14 w-14 shrink-0 overflow-hidden">
+    <div className="pixel-frame item-slot h-14 w-14 shrink-0 overflow-hidden" style={frameStyle}>
       {image ? (
         <img src={"/meals/" + image} alt={name} className="h-full w-full object-cover" style={{ imageRendering: "pixelated" }} />
       ) : (
@@ -719,7 +731,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                 <article key={`${meal.name}-${index}`} className="p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3">
-                      <MealThumb image={meal.image} name={meal.name} />
+                      <MealThumb image={meal.image} name={meal.name} rarity={meal.rarity} />
                       <div>
                         <div className="flex flex-wrap items-center gap-2">
                           <h3 className="text-sm text-dv-brassLight">{meal.name}</h3>
