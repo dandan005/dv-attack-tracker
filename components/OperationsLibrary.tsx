@@ -776,9 +776,9 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                       return (
                         <span
                           key={item}
-                          className={"flex items-center gap-1.5 rounded-lg px-1.5 py-1 text-[9px] " + (ok ? "border border-dv-brass bg-dv-brass/15 text-dv-brassLight" : "border border-dv-line bg-dv-panel2 text-slate-300/65")}
+                          className={"flex items-center gap-1 rounded-lg px-1 py-0.5 text-[8px] " + (ok ? "border border-dv-brass bg-dv-brass/15 text-dv-brassLight" : "border border-dv-line bg-dv-panel2 text-slate-300/65")}
                         >
-                          {img ? <img src={"/ingredients/" + img} alt="" className="h-5 w-5 object-cover" style={{ imageRendering: "pixelated" }} /> : null}
+                          {img ? <img src={"/ingredients/" + img} alt="" className="h-4 w-4 object-cover" style={{ imageRendering: "pixelated" }} /> : null}
                           <span>{item}</span>
                           <span style={{ color: ok ? "#6ee7b7" : "#f87171" }}>{Math.min(have, n)}/{n}</span>
                         </span>
