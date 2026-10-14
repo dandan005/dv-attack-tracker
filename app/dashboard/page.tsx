@@ -413,7 +413,6 @@ export default function DashboardPage() {
               <Spirits />
             </div>
             <div>
-              <p className="eyebrow mb-4 text-dv-emerald">ᚱ FIELD GUIDE</p>
               <Guide />
             </div>
           </section>

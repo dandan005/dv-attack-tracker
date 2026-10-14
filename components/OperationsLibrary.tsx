@@ -487,15 +487,6 @@ export function Guide() {
   const [open, setOpen] = useState<string[]>([guideSections[0][0], guideSections[1][0]]);
   return (
     <div className="space-y-4">
-      <Card className="p-4">
-        <SectionLabel>FIELD MANUAL / SEASON 5</SectionLabel>
-        <h2 className="font-pixel text-xl leading-snug text-dv-brassLight">
-          Read the room.<br />Then hit the dragon.
-        </h2>
-        <p className="mt-3 max-w-xl text-sm text-slate-200/65">
-          The short version of Dragon Valley operations for the player who has two minutes before the next session.
-        </p>
-      </Card>
       <Card>
         <div className="border-b border-dv-line px-4 py-4">
           <SectionLabel>OPERATIONS INDEX</SectionLabel>
