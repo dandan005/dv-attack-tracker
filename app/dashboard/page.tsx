@@ -59,6 +59,7 @@ export default function DashboardPage() {
   const [settings, setSettings] = useState<Settings>({ wyvern_element: null, wyvern_set_by: null });
   const [myLoggedDays, setMyLoggedDays] = useState<number[]>([]);
   const [myLoggedAt, setMyLoggedAt] = useState<Record<number, string>>({});
+  const [myTier, setMyTier] = useState<number | null>(null);
   const [members, setMembers] = useState<MemberRow[]>([]);
   const [pinging, setPinging] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
@@ -93,7 +94,7 @@ export default function DashboardPage() {
     setSettings(currentSettings);
     const cycle = getCycleInfo();
 
-    const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, avatar_url, is_admin, has_seen_walkthrough");
+    const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, avatar_url, is_admin, has_seen_walkthrough, promotion_tier");
     const { data: logsData } = await supabase.from("attack_logs").select("member_id, day_number, logged_at").eq("cycle_start", cycle.cycleStartISO);
     const logs: AttackLog[] = logsData ?? [];
 
@@ -119,6 +120,7 @@ export default function DashboardPage() {
       const myLogs = logsByMember.get(myRow.id) ?? new Map<number, AttackLog>();
       setMyLoggedDays(CYCLE_DAY_NUMBERS.filter((day) => myLogs.has(day)));
       setMyLoggedAt(Object.fromEntries(CYCLE_DAY_NUMBERS.filter((day) => myLogs.has(day)).map((day) => [day, myLogs.get(day)?.logged_at ?? ""])));
+      setMyTier(myRow.promotion_tier ?? null);
       setMe({
         username: myRow.username,
         avatar_url: myRow.avatar_url,
@@ -164,6 +166,7 @@ export default function DashboardPage() {
     };
   }, []);
 
+  async function saveTier(value: string) { const tier = Number(value); if (!value || !Number.isInteger(tier)) return; const res = await fetch("/api/set-tier", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ promotionTier: tier }) }); if (res.ok) { setMyTier(tier); setToast("Promotion tier set to T" + tier); } else { setToast("Could not save promotion tier"); } setTimeout(() => setToast(null), 2500); }
   async function logAttack(day: number) {
     const res = await fetch("/api/log-attack", {
       method: "POST",
@@ -266,6 +269,7 @@ export default function DashboardPage() {
                   style={{ objectFit: "cover" }}
                   />
                 <span className="whitespace-nowrap text-[10px] text-dv-brassLight">{me.username}</span>
+            <select value={myTier ?? ""} onChange={(e) => saveTier(e.target.value)} aria-label="Promotion tier" className="h-6 w-11 border border-dv-line bg-dv-panel2 text-[10px] text-dv-brassLight"><option value="" disabled>T?</option>{Array.from({ length: 20 }, (_, i) => <option key={i + 1} value={i + 1}>T{i + 1}</option>)}</select>
               </div>
             )}
           </div>
