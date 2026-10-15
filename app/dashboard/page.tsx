@@ -406,7 +406,6 @@ export default function DashboardPage() {
           <section className="space-y-6">
             <div>
               <p className="eyebrow mb-4 text-dv-emerald">ᚨ GUIDE</p>
-              <p className="eyebrow mb-4 text-dv-emerald">ᚨ SKILLS</p>
               <SkillBuild />
             </div>
             <div>

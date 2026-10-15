@@ -612,6 +612,7 @@ export function SkillBuild() {
         </p>
       </Card>
 
+      <p className="eyebrow mb-4 text-dv-emerald">ᚨ SKILLS</p>
       <Card>
         <div className="flex gap-2 border-b border-dv-line p-4">
           {stages.map((item) => (
