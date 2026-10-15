@@ -606,7 +606,6 @@ export function SkillBuild() {
   return (
     <div className="space-y-4">
       <Card className="p-4">
-        <SectionLabel>SKILLS</SectionLabel>
         <h2 className="text-xl text-dv-brassLight">Build a different skill set for each stage.</h2>
         <p className="mt-2 max-w-xl text-sm text-slate-200/65">
           Early, mid, and late game each get their own set. Swap as the fight gets harder.
