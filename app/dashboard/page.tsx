@@ -403,7 +403,7 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {tab === "index" && (<section><Guide /></section>)}
+        {tab === "index" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛒ OPERATIONS INDEX</p><Guide /></section>)}
         {tab === "guide" && (
           <section className="space-y-6">
             <div>
