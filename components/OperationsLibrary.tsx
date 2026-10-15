@@ -553,7 +553,7 @@ export function MainCooking() {
                   const r = e.currentTarget.getBoundingClientRect();
                   setSelected({ name: dish.name, x: r.left + r.width / 2, top: r.top, bottom: r.bottom });
                 }}
-                className={`flex flex-col items-center rounded-md p-1 text-center ${
+                className={`flex flex-col items-center rounded-md bg-transparent p-1 text-center focus:outline-none ${
                   isSelected ? "border-dv-brass bg-dv-brass/10" : "border-dv-line"
                 }`}
               >
