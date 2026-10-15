@@ -36,7 +36,7 @@ type Tab = "ledger" | "index" | "build" | "cooking" | "special" | "runes" | "set
 const TABS: { id: Tab; label: string; icon: ((props: { className?: string }) => JSX.Element) | string }[] = [
   { id: "ledger", label: "Ledger", icon: LedgerIcon },
   { id: "index", label: "Index", icon: GuideIcon },
-  { id: "build", label: "Guide", icon: GuideIcon },
+  { id: "build", label: "Build", icon: BuildIcon },
   { id: "cooking", label: "Cooking", icon: CookingIcon },
   { id: "special", label: "Special", icon: SpecialIcon },
   { id: "runes", label: "Runes", icon: RunesIcon },
@@ -407,7 +407,7 @@ export default function DashboardPage() {
         {tab === "build" && (
           <section className="space-y-6">
             <div>
-              <p className="eyebrow mb-4 text-dv-emerald">ᚨ GUIDE</p>
+              <p className="eyebrow mb-4 text-dv-emerald">ᚨ BUILD</p>
               <SkillBuild />
             </div>
             <div>
