@@ -48,8 +48,16 @@ async function logWithRetry(fn: () => Promise<void>, attempts = 3) {
 export function LogAttackButton({
   loggedDays,
   onLog,
+  loggedAt = {},
+  element = null,
+  checkedIn = 0,
+  total = 0,
 }: {
   loggedDays: number[];
+  loggedAt?: Record<number, string>;
+  element?: string | null;
+  checkedIn?: number;
+  total?: number;
   onLog: (day: number, cycleStartISO: string) => Promise<void>;
 }) {
   const [ms, setMs] = useState<number>(0);
@@ -71,6 +79,8 @@ export function LogAttackButton({
 
   const done = loggedDays.includes(dayNumber);
   const urgent = !done && ms > 0 && ms < 60 * 60 * 1000;
+  const sealed = done && loggedAt[dayNumber] ? new Date(loggedAt[dayNumber]).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) : null;
+  const phaseLabel = dayNumber >= 4 && dayNumber <= 6 ? "WYVERN PHASE" + (element ? " · " + element.toUpperCase() : "") : dayNumber <= 3 ? "EXPLORATION PHASE" : "STANDBY";
 
   async function handleClick() {
     if (done || pending) return;
@@ -90,13 +100,38 @@ export function LogAttackButton({
 
   return (
     <PixelPanel className="animate-rise p-0 overflow-hidden">
-      <div className="px-4 pt-4 pb-3">
-        <div className="flex items-end justify-between gap-3">
-          <div><p className="eyebrow">YOUR RAID LOG</p><h2 className="text-sm text-dv-brassLight mt-2">DAY {dayNumber} ATTACK</h2></div>
-          <div className="text-right"><p className="text-[9px] text-slate-300/55">RESET IN</p><p className={urgent ? "text-sm text-dv-ember animate-blink" : "text-sm text-dv-emerald"}>{formatCountdown(ms)}</p></div>
+      <div className="px-4 pt-3 pb-3">
+        <div className="flex items-baseline justify-between gap-3">
+          <p className="eyebrow">YOUR RAID LOG</p>
+          <p className="text-[9px] text-slate-300/55">{done ? "NEXT ATTACK IN" : "RESET IN"}</p>
         </div>
-        <div className="grid grid-cols-6 gap-1 mt-4">{[1, 2, 3, 4, 5, 6].map((day) => <div key={day} className={["h-1.5 rounded-full", loggedDays.includes(day) ? "bg-dv-emerald" : day === dayNumber ? "bg-dv-brass" : "bg-dv-panel2"].join(" ")} />)}</div>
-        <p className="text-[10px] text-slate-300/50 mt-2">{loggedDays.length}/6 attacks recorded this cycle</p>
+        <div className="flex items-end justify-between gap-3 mt-2">
+          <div>
+            <h2 className="text-sm text-dv-brassLight">DAY {dayNumber} ATTACK</h2>
+            <p className="text-[9px] text-slate-300/70 mt-1">{phaseLabel}</p>
+          </div>
+          <p className={urgent ? "text-sm text-dv-ember animate-blink" : "text-sm text-dv-emerald"}>{formatCountdown(ms)}</p>
+        </div>
+        <div className="grid grid-cols-6 gap-1 mt-4">
+          {[1, 2, 3, 4, 5, 6].map((day) => {
+            const logged = loggedDays.includes(day);
+            const today = day === dayNumber;
+            const missed = !logged && day < dayNumber;
+            return (
+              <div key={day} className="flex flex-col items-center gap-1">
+                <div className={["h-1.5 w-full rounded-full", logged ? "bg-dv-emerald" : missed ? "bg-dv-ember/50" : today ? "bg-dv-brass" : "bg-dv-panel2"].join(" ")} />
+                <span className={["flex items-center gap-0.5 text-[9px] px-1 border", today ? "border-dv-brass text-dv-brassLight" : "border-transparent", !today && logged ? "text-dv-emerald" : "", !today && missed ? "text-dv-ember/70" : "", !today && !logged && !missed ? "text-slate-300/50" : ""].join(" ")}>
+                  {logged && <svg viewBox="0 0 8 8" className="h-2 w-2" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M1 4l2 2 4-4" /></svg>}
+                  D{day}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+        <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 mt-3 text-[10px] text-slate-300/80">
+          <span>{loggedDays.length}/6 RECORDED{sealed ? " · SEALED " + sealed : ""}</span>
+          {total > 0 && <span>{checkedIn} OF {total} CHECKED IN TODAY</span>}
+        </div>
       </div>
 
       <button onClick={handleClick} disabled={done || pending} aria-label={done ? "Attack logged" : "Log today's attack"} className={["attack-action", done ? "is-done" : urgent ? "is-urgent" : "", pending ? "is-pending" : ""].join(" ")}>

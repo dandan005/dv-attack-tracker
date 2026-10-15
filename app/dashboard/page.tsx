@@ -29,6 +29,7 @@ type CurrentMember = {
 type AttackLog = {
   member_id: string;
   day_number: number;
+  logged_at?: string;
 };
 
 type Tab = "ledger" | "index" | "build" | "cooking" | "special" | "runes" | "settings";
@@ -57,6 +58,7 @@ export default function DashboardPage() {
   useEffect(() => { document.querySelector("main")?.scrollTo(0, 0); }, [tab]);
   const [settings, setSettings] = useState<Settings>({ wyvern_element: null, wyvern_set_by: null });
   const [myLoggedDays, setMyLoggedDays] = useState<number[]>([]);
+  const [myLoggedAt, setMyLoggedAt] = useState<Record<number, string>>({});
   const [members, setMembers] = useState<MemberRow[]>([]);
   const [pinging, setPinging] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
@@ -92,7 +94,7 @@ export default function DashboardPage() {
     const cycle = getCycleInfo();
 
     const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, avatar_url, is_admin, has_seen_walkthrough");
-    const { data: logsData } = await supabase.from("attack_logs").select("member_id, day_number").eq("cycle_start", cycle.cycleStartISO);
+    const { data: logsData } = await supabase.from("attack_logs").select("member_id, day_number, logged_at").eq("cycle_start", cycle.cycleStartISO);
     const logs: AttackLog[] = logsData ?? [];
 
     const logsByMember = new Map<string, Map<number, AttackLog>>();
@@ -116,6 +118,7 @@ export default function DashboardPage() {
     if (myRow) {
       const myLogs = logsByMember.get(myRow.id) ?? new Map<number, AttackLog>();
       setMyLoggedDays(CYCLE_DAY_NUMBERS.filter((day) => myLogs.has(day)));
+      setMyLoggedAt(Object.fromEntries(CYCLE_DAY_NUMBERS.filter((day) => myLogs.has(day)).map((day) => [day, myLogs.get(day)?.logged_at ?? ""])));
       setMe({
         username: myRow.username,
         avatar_url: myRow.avatar_url,
@@ -395,7 +398,7 @@ export default function DashboardPage() {
                   </div>
                 )}
 
-                <div className="mt-3"><LogAttackButton loggedDays={myLoggedDays} onLog={logAttack} /></div>
+                <div className="mt-3"><LogAttackButton loggedDays={myLoggedDays} loggedAt={myLoggedAt} element={settings.wyvern_element} checkedIn={members.filter((m) => m.logged[dayNumber - 1]).length} total={dayNumber <= 6 ? members.length : 0} onLog={logAttack} /></div>
                 <div className="mt-3"><GuildProgress members={members} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
               </>
             )}
