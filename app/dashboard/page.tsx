@@ -111,6 +111,7 @@ export default function DashboardPage() {
         username: member.username,
         avatar_url: member.avatar_url,
         logged: CYCLE_DAY_NUMBERS.map((day) => memberLogs.has(day)),
+        promotion_tier: member.promotion_tier ?? null,
       };
     });
     setMembers(rows);
@@ -166,7 +167,7 @@ export default function DashboardPage() {
     };
   }, []);
 
-  async function saveTier(value: string) { const tier = Number(value); if (!value || !Number.isInteger(tier)) return; const res = await fetch("/api/set-tier", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ promotionTier: tier }) }); if (res.ok) { setMyTier(tier); setToast("Promotion tier set to T" + tier); } else { setToast("Could not save promotion tier"); } setTimeout(() => setToast(null), 2500); }
+  async function saveTier(value: string) { const tier = Number(value); if (!value || !Number.isInteger(tier)) return; const res = await fetch("/api/set-tier", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ promotionTier: tier }) }); if (res.ok) { setMyTier(tier); await loadAll(); setToast("Promotion tier set to T" + tier); } else { setToast("Could not save promotion tier"); } setTimeout(() => setToast(null), 2500); }
   async function logAttack(day: number, _cycle?: string, damage?: number | null) {
     const res = await fetch("/api/log-attack", {
       method: "POST",
@@ -269,7 +270,6 @@ export default function DashboardPage() {
                   style={{ objectFit: "cover" }}
                   />
                 <span className="whitespace-nowrap text-[10px] text-dv-brassLight">{me.username}</span>
-            <select value={myTier ?? ""} onChange={(e) => saveTier(e.target.value)} aria-label="Promotion tier" className="h-6 w-11 border border-dv-line bg-dv-panel2 text-[10px] text-dv-brassLight"><option value="" disabled>T?</option>{Array.from({ length: 20 }, (_, i) => <option key={i + 1} value={i + 1}>T{i + 1}</option>)}</select>
               </div>
             )}
           </div>
@@ -403,7 +403,7 @@ export default function DashboardPage() {
                 )}
 
                 <div className="mt-3"><LogAttackButton loggedDays={myLoggedDays} loggedAt={myLoggedAt} element={settings.wyvern_element} checkedIn={members.filter((m) => m.logged[dayNumber - 1]).length} total={dayNumber <= 6 ? members.length : 0} tier={myTier} onNeedTier={() => { setToast("Set your promotion tier in the header first"); setTimeout(() => setToast(null), 2500); }} onLog={logAttack} /></div>
-                <div className="mt-3"><GuildProgress members={members} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
+                <div className="mt-3"><GuildProgress members={members} onSetTier={saveTier} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
               </>
             )}
           </div>

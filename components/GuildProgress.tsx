@@ -7,6 +7,7 @@ export type MemberRow = {
   username: string;
   avatar_url: string | null;
   logged: boolean[];
+  promotion_tier?: number | null;
 };
 
 export function GuildProgress({
@@ -15,12 +16,14 @@ export function GuildProgress({
   pinging,
   currentDay = 1,
   currentUserId,
+  onSetTier,
 }: {
   members: MemberRow[];
   onPingMissing: () => void;
   pinging: boolean;
   currentDay?: number;
   currentUserId?: string;
+  onSetTier?: (value: string) => void;
 }) {
   const total = members.length;
   const doneToday = members.filter((m) => m.logged[currentDay - 1]).length;
@@ -55,6 +58,7 @@ export function GuildProgress({
                   <img src={member.avatar_url ?? "/icons/icon-192.png"} alt="" className="w-5 h-5 pixel-frame border border-dv-line shrink-0" />
                   <span className="block text-[10px] text-slate-200/80 break-words leading-tight">{member.username}</span>
                   {member.discord_id === currentUserId && <span className="text-[8px] text-dv-emerald shrink-0">(YOU)</span>}
+                  {member.discord_id === currentUserId ? <select value={member.promotion_tier ?? ""} onChange={(e) => onSetTier?.(e.target.value)} aria-label="Promotion tier" className="h-5 w-12 shrink-0 border border-dv-line bg-dv-panel2 text-[9px] text-dv-brassLight"><option value="" disabled>T?</option>{Array.from({ length: 20 }, (_, i) => <option key={i + 1} value={i + 1}>T{i + 1}</option>)}</select> : member.promotion_tier != null && <span className="text-[8px] text-dv-brassLight shrink-0">T{member.promotion_tier}</span>}
                 </div>
                 <div className="grid grid-cols-6 gap-1">
                   {member.logged.map((done, index) => {
