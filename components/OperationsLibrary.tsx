@@ -527,7 +527,7 @@ export function MainCooking() {
     () => [...mainDishes].sort((a, b) => dishOrder.indexOf(a.name) - dishOrder.indexOf(b.name)),
     []
   );
-  const [selected, setSelected] = useState<{ name: string; x: number; y: number } | null>(null);
+  const [selected, setSelected] = useState<{ name: string; x: number; top: number; bottom: number } | null>(null);
   const open = sorted.find((d) => d.name === selected?.name) ?? null;
   const popupWidth = Math.min(300, window.innerWidth - 16);
 
@@ -543,20 +543,25 @@ export function MainCooking() {
       </Card>
       <Card className="p-4">
         <div className="grid grid-cols-3 gap-3">
-          {sorted.map((dish) => (
-            <button
-              key={dish.name}
-              type="button"
-              onClick={(e) => {
-                const r = e.currentTarget.getBoundingClientRect();
-                setSelected({ name: dish.name, x: r.left + r.width / 2, y: r.bottom });
-              }}
-              className="flex flex-col items-center rounded-md border border-dv-line p-2 text-center"
-            >
-              <MainDishThumb image={dish.image} name={dish.name} priority={dish.priority} />
-              <span className="mt-1.5 text-[11px] leading-tight text-dv-brassLight">{dish.name}</span>
-            </button>
-          ))}
+          {sorted.map((dish) => {
+            const isSelected = dish.name === selected?.name;
+            return (
+              <button
+                key={dish.name}
+                type="button"
+                onClick={(e) => {
+                  const r = e.currentTarget.getBoundingClientRect();
+                  setSelected({ name: dish.name, x: r.left + r.width / 2, top: r.top, bottom: r.bottom });
+                }}
+                className={`flex flex-col items-center rounded-md border p-2 text-center ${
+                  isSelected ? "border-dv-brass bg-dv-brass/10" : "border-dv-line"
+                }`}
+              >
+                <MainDishThumb image={dish.image} name={dish.name} priority={dish.priority} />
+                <span className="mt-1.5 text-[11px] leading-tight text-dv-brassLight">{dish.name}</span>
+              </button>
+            );
+          })}
         </div>
       </Card>
       {open && selected && (
@@ -564,7 +569,9 @@ export function MainCooking() {
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
-              top: selected.y + 8,
+              ...(selected.bottom < window.innerHeight / 2
+                ? { top: selected.bottom + 8 }
+                : { bottom: window.innerHeight - selected.top + 8 }),
               left: Math.min(Math.max(selected.x - popupWidth / 2, 8), window.innerWidth - popupWidth - 8),
               width: popupWidth,
             }}
