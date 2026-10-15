@@ -520,16 +520,15 @@ export function Guide() {
   );
 }
 
+const dishOrder = ["Savory Hotdog", "BBQ Ribs", "Sandwich", "Immortal Steak", "Hellfire Curry", "Water Slash Soup", "Thunderbolt Burger", "Demon Pizza", "Bubble Hotpot"];
+
 export function MainCooking() {
   const sorted = useMemo(
-    () =>
-      [...mainDishes].sort((a, b) => {
-        const order = ["Savory Hotdog", "BBQ Ribs", "Sandwich", "Immortal Steak", "Hellfire Curry", "Water Slash Soup", "Thunderbolt Burger", "Demon Pizza", "Bubble Hotpot"]; return order.indexOf(a.name) - order.indexOf(b.name);
-      }),
+    () => [...mainDishes].sort((a, b) => dishOrder.indexOf(a.name) - dishOrder.indexOf(b.name)),
     []
   );
-  const [activeName, setActiveName] = useState<string>(sorted[0].name);
-  const active = sorted.find((d) => d.name === activeName) ?? sorted[0];
+  const [openName, setOpenName] = useState<string | null>(null);
+  const open = sorted.find((d) => d.name === openName) ?? null;
 
   return (
     <div className="space-y-4">
@@ -543,40 +542,38 @@ export function MainCooking() {
       </Card>
       <Card className="p-4">
         <div className="grid grid-cols-3 gap-3">
-          {sorted.map((dish) => {
-            const isActive = dish.name === active.name;
-            return (
-              <button
-                key={dish.name}
-                type="button"
-                onClick={() => setActiveName(dish.name)}
-                className={`flex flex-col items-center rounded-md border p-2 text-center ${
-                  isActive ? "border-dv-brass bg-dv-brass/10" : "border-dv-line"
-                }`}
-              >
-                <MainDishThumb image={dish.image} name={dish.name} priority={dish.priority} />
-                <span className="mt-1.5 text-[11px] leading-tight text-dv-brassLight">{dish.name}</span>
-                <span className="mt-1 text-[9px] uppercase text-slate-300/50">
-                  {dish.priority === "E" ? "E" : `P${dish.priority}`}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-        <div className="mt-4 rounded-md border border-dv-line bg-black/30 p-3">
-          <h3 className="text-sm text-dv-brassLight">{active.name}</h3>
-          <p className="mt-1.5 text-xs text-dv-emerald">{active.effect}</p>
-          {active.ingredients && (
-            <div className="mt-3 flex flex-wrap gap-3 text-xs text-slate-200/80">
-              {Object.entries(active.ingredients).map(([key, amount]) => (
-                <span key={key}>
-                  {key}: {amount}
-                </span>
-              ))}
-            </div>
-          )}
+          {sorted.map((dish) => (
+            <button
+              key={dish.name}
+              type="button"
+              onClick={() => setOpenName(dish.name)}
+              className="flex flex-col items-center rounded-md border border-dv-line p-2 text-center"
+            >
+              <MainDishThumb image={dish.image} name={dish.name} priority={dish.priority} />
+              <span className="mt-1.5 text-[11px] leading-tight text-dv-brassLight">{dish.name}</span>
+            </button>
+          ))}
         </div>
       </Card>
+      {open && (
+        <div onClick={() => setOpenName(null)} className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm"><Card className="p-4">
+            <div className="flex flex-col items-center">
+              <MainDishThumb image={open.image} name={open.name} priority={open.priority} />
+            </div>
+            <p className="mt-4 text-xs text-dv-emerald">{open.effect}</p>
+            {open.ingredients && (
+              <div className="mt-3 flex flex-wrap gap-3 text-xs text-slate-200/80">
+                {Object.entries(open.ingredients).map(([key, amount]) => (
+                  <span key={key}>
+                    {key}: {amount}
+                  </span>
+                ))}
+              </div>
+            )}
+          </Card></div>
+        </div>
+      )}
     </div>
   );
 }
