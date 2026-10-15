@@ -533,10 +533,17 @@ export function MainCooking() {
   const active = sorted.find((d) => d.name === activeName) ?? sorted[0];
 
   return (
-    <Card>
-      <div className="p-4">
+    <div className="space-y-4">
+      <Card className="p-4">
         <SectionLabel>MAIN COOKING / CAMPFIRE QUEUE</SectionLabel>
-        <div className="mt-3 grid grid-cols-3 gap-3">
+        <h2 className="text-xl text-dv-brassLight">Cook in order.</h2>
+        <p className="mt-2 max-w-xl text-sm text-slate-200/65">
+          Gold numbers are the fixed priority: 1 through 5, cooked first. Violet <span className="text-dv-violet">E</span> tags
+          are elemental dishes — hold those until the trace confirms which wyvern shows up, then cook to match it.
+        </p>
+      </Card>
+      <Card className="p-4">
+        <div className="grid grid-cols-3 gap-3">
           {sorted.map((dish) => {
             const isActive = dish.name === active.name;
             return (
@@ -570,8 +577,8 @@ export function MainCooking() {
             </div>
           )}
         </div>
-      </div>
-    </Card>
+      </Card>
+    </div>
   );
 }
 
