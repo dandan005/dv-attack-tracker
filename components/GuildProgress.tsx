@@ -26,6 +26,9 @@ export function GuildProgress({
   const doneToday = members.filter((m) => m.logged[currentDay - 1]).length;
   const missingToday = members.filter((m) => !m.logged[currentDay - 1]).length;
   const completeCycle = members.filter((member) => member.logged.every(Boolean)).length;
+  const loggedTotal = members.reduce((s, m) => s + m.logged.filter(Boolean).length, 0);
+  const onTrackPct = total === 0 ? 0 : Math.round((loggedTotal / (total * currentDay)) * 100);
+  const atRisk = members.filter((m) => !m.logged.some(Boolean)).length;
 
   return (
     <PixelPanel className="mb-5 animate-rise">
@@ -36,6 +39,8 @@ export function GuildProgress({
       <div className="grid grid-cols-2 gap-2 mb-5">
         <div className="item-slot p-3"><p className="eyebrow">TODAY</p><p className="text-xl text-dv-emerald mt-1">{doneToday}<span className="text-xs text-slate-300/50">/{total}</span></p></div>
         <div className="item-slot p-3"><p className="eyebrow">CLEAN RUNS</p><p className="text-xl text-dv-brassLight mt-1">{completeCycle}</p></div>
+<div className="item-slot p-3"><p className="eyebrow">CYCLE RATE</p><p className="text-xl text-dv-brassLight mt-1">{onTrackPct}<span className="text-xs text-slate-300/50">%</span></p></div>
+<div className="item-slot p-3"><p className="eyebrow">NO LOGS YET</p><p className="text-xl text-dv-ember mt-1">{atRisk}<span className="text-xs text-slate-300/50">/{total}</span></p></div>
       </div>
       {total === 0 ? (
         <div className="item-slot px-3 py-5 text-center text-[10px] text-slate-300/55">NO GUILD MEMBERS HAVE JOINED YET.</div>
