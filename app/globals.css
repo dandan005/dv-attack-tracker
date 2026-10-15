@@ -703,3 +703,4 @@ main {
 .boss-slot .eyebrow, .boss-slot__element { color: #3a2814; }
 .boss-slot::before, .boss-slot::after { background: linear-gradient(180deg, #3e2c16 0%, #6e5530 22%, #c2a46a 50%, #6e5530 78%, #3e2c16 100%); box-shadow: inset 0 1px 0 rgba(255,227,161,0.18), inset 0 -1px 0 rgba(20,12,5,0.6); }
 .boss-slot::before, .boss-slot::after { border-radius: 4px; }
+.boss-name-row .element-badge { transform: scale(1.4); transform-origin: center; margin-right: 10px; }
