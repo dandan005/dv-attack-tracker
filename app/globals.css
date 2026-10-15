@@ -681,10 +681,10 @@ main {
   left: -18px;
   right: -18px;
   height: 26px;
-  border: 3px solid #3e2812;
+  border: 3px solid #3b4975;
   border-radius: 13px;
-  background: repeating-linear-gradient(180deg, rgba(90,60,25,0.25) 0 2px, transparent 2px 6px), linear-gradient(180deg, #f6e096 0%, #d9ac55 45%, #a87a35 100%);
-  box-shadow: inset 0 2px 0 rgba(255,250,220,0.5), inset 0 -3px 0 rgba(70,40,15,0.5);
+  background: repeating-linear-gradient(180deg, rgba(5,6,17,0.3) 0 2px, transparent 2px 6px), linear-gradient(180deg, #5a67b8 0%, #2c3766 45%, #1b2442 100%);
+  box-shadow: inset 0 2px 0 rgba(139,125,255,0.5), inset 0 -3px 0 rgba(5,6,17,0.6);
   z-index: 2;
 }
 .boss-slot::before { top: -15px; }
