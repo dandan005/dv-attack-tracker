@@ -52,18 +52,23 @@ export function LogAttackButton({
   element = null,
   checkedIn = 0,
   total = 0,
+  tier = null,
+  onNeedTier,
 }: {
   loggedDays: number[];
   loggedAt?: Record<number, string>;
   element?: string | null;
   checkedIn?: number;
   total?: number;
-  onLog: (day: number, cycleStartISO: string) => Promise<void>;
+  tier?: number | null;
+  onNeedTier?: () => void;
+  onLog: (day: number, cycleStartISO: string, damage: number | null) => Promise<void>;
 }) {
   const [ms, setMs] = useState<number>(0);
   const [dayNumber, setDayNumber] = useState<number>(() => getCycleInfo().dayNumber);
   const [cycleStartISO, setCycleStartISO] = useState<string>(() => getCycleInfo().cycleStartISO);
   const [pending, setPending] = useState(false);
+  const [damage, setDamage] = useState("");
 
   useEffect(() => {
     const tick = () => {
@@ -84,12 +89,13 @@ export function LogAttackButton({
 
   async function handleClick() {
     if (done || pending) return;
+    if (tier == null) { onNeedTier?.(); return; }
     setPending(true);
     try {
       const info = getCycleInfo();
       setDayNumber(info.dayNumber);
       setCycleStartISO(info.cycleStartISO);
-      await logWithRetry(() => onLog(info.dayNumber, info.cycleStartISO));
+      await logWithRetry(() => onLog(info.dayNumber, info.cycleStartISO, damage === "" ? null : Number(damage)));
     } catch (err) {
       console.error("Failed to log attack after retries:", err);
       alert("Couldn't log your attack after several tries — check your connection and try again.");
@@ -134,6 +140,7 @@ export function LogAttackButton({
         </div>
       </div>
 
+      {!done && (<div className="px-4 pb-3"><input value={damage} onChange={(e) => setDamage(e.target.value.replace(/[^0-9]/g, ""))} inputMode="numeric" placeholder="DAMAGE SCORE (OPTIONAL)" aria-label="Damage score" className="w-full border border-dv-line bg-dv-panel2 px-3 py-2 text-center text-xs text-dv-brassLight placeholder:text-slate-300/40" /></div>)}
       <button onClick={handleClick} disabled={done || pending} aria-label={done ? "Attack logged" : "Log today's attack"} className={["attack-action", done ? "is-done" : urgent ? "is-urgent" : "", pending ? "is-pending" : ""].join(" ")}>
         <span className="attack-sigil"><AttackGlyph done={done} urgent={urgent} /></span>
         <span className="attack-copy">{done ? "ATTACK SEALED" : pending ? "LOGGING..." : "LOG TODAY'S ATTACK"}<small>{done ? "RAID ENTRY CONFIRMED" : urgent ? "RESET WINDOW CLOSING" : "ADD YOUR RUN TO THE GUILD LEDGER"}</small></span>
