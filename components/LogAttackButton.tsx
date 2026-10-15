@@ -128,7 +128,7 @@ export function LogAttackButton({
             );
           })}
         </div>
-        <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 mt-3 text-[10px] text-slate-300/80">
+        <div className="flex flex-col items-center gap-1 mt-3 text-center text-[10px] text-slate-300/80">
           <span>{loggedDays.length}/6 RECORDED{sealed ? " · SEALED " + sealed : ""}</span>
           {total > 0 && <span>{checkedIn} OF {total} CHECKED IN TODAY</span>}
         </div>
