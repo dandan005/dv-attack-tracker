@@ -529,6 +529,7 @@ export function MainCooking() {
   );
   const [selected, setSelected] = useState<{ name: string; x: number; y: number } | null>(null);
   const open = sorted.find((d) => d.name === selected?.name) ?? null;
+  const popupWidth = Math.min(300, window.innerWidth - 16);
 
   return (
     <div className="space-y-4">
@@ -558,22 +559,29 @@ export function MainCooking() {
           ))}
         </div>
       </Card>
-      {open && (
+      {open && selected && (
         <div onClick={() => setSelected(null)} className="fixed inset-0 z-50">
           <div
             onClick={(e) => e.stopPropagation()}
-            style={{ top: selected!.y + 8, left: Math.min(Math.max(selected!.x - 120, 8), window.innerWidth - 248), width: 240 }}
-            className="fixed rounded-xl border border-dv-line bg-black/85 p-3 text-xs text-dv-brassLight"
+            style={{
+              top: selected.y + 8,
+              left: Math.min(Math.max(selected.x - popupWidth / 2, 8), window.innerWidth - popupWidth - 8),
+              width: popupWidth,
+            }}
+            className="fixed rounded-xl border border-dv-line bg-black/90 p-4 text-xs text-dv-brassLight"
           >
-            <p className="text-dv-emerald">{open.effect}</p>
+            <p className="font-bold uppercase leading-relaxed tracking-wider text-dv-brassLight">{open.effect}</p>
             {open.ingredients && (
-              <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[10px] text-slate-200/80">
+              <div className="mt-3 space-y-1.5 text-slate-200/80">
                 {Object.entries(open.ingredients).map(([key, amount]) => (
-                  <span key={key}>
-                    {key}: {amount}
-                  </span>
+                  <p key={key} className="uppercase tracking-wider">
+                    {key} <span className="text-dv-brassLight">{amount}</span>
+                  </p>
                 ))}
               </div>
+            )}
+            {open.priority === "E" && (
+              <p className="mt-3 text-[10px] uppercase tracking-wider text-dv-emerald">Elemental, cook last</p>
             )}
           </div>
         </div>
