@@ -274,6 +274,7 @@ export default function DashboardPage() {
           <div className="flex min-h-0 flex-1 flex-col">
             <div className="mb-5">
               <p className="eyebrow text-dv-emerald">ᛏ GUILD OPERATIONS / ONLINE</p>
+              <section className="pixel-border bg-dv-panel/95 shadow-pixel mt-2 p-4">
               <div className="relative inline-block">
                 <span className="rune-sparkle" style={{ top: "-14%", left: "-5%", animationDelay: "0s" }} />
                 <span className="rune-sparkle--sm rune-sparkle" style={{ top: "5%", left: "102%", animationDelay: "0.6s" }} />
@@ -281,6 +282,7 @@ export default function DashboardPage() {
                 <h1 className="mt-1 text-2xl text-dv-brassLight sm:text-3xl">GUILD HUB</h1>
               </div>
               <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">The live raid ledger for the current seven-day cycle.</p>
+              </section>
             </div>
 
             {day7.phase === "calculation" ? (
