@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
         identityData.name ||
         data.user.email ||
         "Slayer";
-      const avatarUrl = identityData.avatar_url ?? userMetadata.avatar_url ?? null;
+      const avatarUrl = identityData.avatar_url || userMetadata.avatar_url || null;
 
       try {
         const providerToken = data.session?.provider_token;

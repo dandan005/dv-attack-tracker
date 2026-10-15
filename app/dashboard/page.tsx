@@ -264,7 +264,7 @@ export default function DashboardPage() {
 {me?.is_admin && (<button type="button" onClick={() => setTab("settings")} aria-label="Settings" className={"pixel-frame item-slot grid h-8 w-8 place-items-center " + (tab === "settings" ? "text-dv-brassLight" : "text-slate-300/70")}><SettingsIcon className="text-sm" /></button>)}
             {me && (
               <div className="pixel-frame item-slot flex items-center gap-2 px-2 py-1">
-                <img src={me.avatar_url ?? "/icons/icon-192.png"}
+                <img src={me.avatar_url || "/icons/icon-192.png"}
                   alt=""
                   className="h-6 w-6 shrink-0 aspect-square pixel-frame border border-dv-line object-cover"
                   style={{ objectFit: "cover" }}
