@@ -42,6 +42,7 @@ export function GuildProgress({
 <div className="item-slot p-3"><p className="eyebrow">CYCLE RATE</p><p className="text-xl text-dv-brassLight mt-1">{onTrackPct}<span className="text-xs text-slate-300/50">%</span></p></div>
 <div className="item-slot p-3"><p className="eyebrow">NO LOGS YET</p><p className="text-xl text-dv-ember mt-1">{atRisk}<span className="text-xs text-slate-300/50">/{total}</span></p></div>
       </div>
+<div className="mb-4"><p className="eyebrow mb-2">CHECK-INS BY DAY</p><div className="grid grid-cols-6 gap-1">{[1, 2, 3, 4, 5, 6].map((d) => { const c = members.filter((m) => m.logged[d - 1]).length; const pct = total === 0 ? 0 : Math.round((c / total) * 100); return (<div key={d} className="flex flex-col items-center gap-0.5"><div className="relative h-8 w-full bg-dv-panel2 pixel-frame overflow-hidden"><div className="absolute bottom-0 w-full bg-dv-emerald" style={{ height: pct + "%" }} /></div><span className={["text-[8px]", d === currentDay ? "text-dv-emerald" : "text-dv-brassLight/60"].join(" ")}>D{d}</span></div>); })}</div></div>
       {total === 0 ? (
         <div className="item-slot px-3 py-5 text-center text-[10px] text-slate-300/55">NO GUILD MEMBERS HAVE JOINED YET.</div>
       ) : (
