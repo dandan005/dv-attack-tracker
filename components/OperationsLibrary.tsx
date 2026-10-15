@@ -279,18 +279,19 @@ type MainDish = {
   priority: number | "E";
   image: string;
   effect: string;
+  ingredients?: { cabbage?: number; meat?: number; wheat?: number; salt?: number; egg?: number };
 };
 
 const mainDishes: MainDish[] = [
-  { name: "Bubble Hotpot", priority: 1, image: "bubble-hotpot.png", effect: "Increase the amount of Ingredients obtained from Exploration." },
-  { name: "Sandwich", priority: 2, image: "sandwich.png", effect: "ATK SPD increase while the Wyvern is preparing its powerful attack" },
-  { name: "Immortal Steak", priority: 3, image: "immortal-steak.png", effect: "Increases DMG to Wyvern." },
-  { name: "BBQ Ribs", priority: 4, image: "bbq-ribs.png", effect: "Dmg increase every 20 sec after entering the Raid" },
-  { name: "Savory Hotdog", priority: 5, image: "savory-hotdog.png", effect: "Additional DMG after Wyvern fails a powerful attack" },
-  { name: "Hellfire Curry", priority: "E", image: "hellfire-curry.png", effect: "Increases Fire Attribute DMG to Wyvern" },
-  { name: "Water Slash Soup", priority: "E", image: "water-slash-soup.png", effect: "Increases Water Attribute DMG to Wyvern" },
-  { name: "Thunderbolt Burger", priority: "E", image: "thunderbolt-burger.png", effect: "Increases Wind Attribute DMG to Wyvern" },
-  { name: "Demon Pizza", priority: "E", image: "demon-pizza.png", effect: "Increases Earth Attribute DMG to Wyvern" },
+  { name: "Bubble Hotpot", priority: 1, image: "bubble-hotpot.png", effect: "Increase the amount of Ingredients obtained from Exploration.", ingredients: { cabbage: 30, meat: 10, salt: 60, egg: 1 } },
+  { name: "Sandwich", priority: 2, image: "sandwich.png", effect: "ATK SPD increase while the Wyvern is preparing its powerful attack", ingredients: { cabbage: 40, meat: 10, wheat: 250, egg: 1 } },
+  { name: "Immortal Steak", priority: 3, image: "immortal-steak.png", effect: "Increases DMG to Wyvern.", ingredients: { meat: 30, wheat: 100, egg: 1 } },
+  { name: "BBQ Ribs", priority: 4, image: "bbq-ribs.png", effect: "Dmg increase every 20 sec after entering the Raid", ingredients: { cabbage: 30, meat: 25, egg: 1 } },
+  { name: "Savory Hotdog", priority: 5, image: "savory-hotdog.png", effect: "Additional DMG after Wyvern fails a powerful attack", ingredients: { cabbage: 30, meat: 10, wheat: 200, salt: 100 } },
+  { name: "Hellfire Curry", priority: "E", image: "hellfire-curry.png", effect: "Increases Fire Attribute DMG to Wyvern", ingredients: { cabbage: 20, meat: 15, salt: 140 } },
+  { name: "Water Slash Soup", priority: "E", image: "water-slash-soup.png", effect: "Increases Water Attribute DMG to Wyvern", ingredients: { cabbage: 20, wheat: 100, salt: 160 } },
+  { name: "Thunderbolt Burger", priority: "E", image: "thunderbolt-burger.png", effect: "Increases Wind Attribute DMG to Wyvern", ingredients: { cabbage: 40, meat: 20, wheat: 200 } },
+  { name: "Demon Pizza", priority: "E", image: "demon-pizza.png", effect: "Increases Earth Attribute DMG to Wyvern", ingredients: { meat: 10, wheat: 150, salt: 80, egg: 2 } },
 ];
 
 type Stage = "Early" | "Mid" | "Late";
@@ -528,35 +529,49 @@ export function MainCooking() {
       }),
     []
   );
+  const [activeName, setActiveName] = useState<string>(sorted[0].name);
+  const active = sorted.find((d) => d.name === activeName) ?? sorted[0];
 
   return (
-    <div className="space-y-4">
-      <Card className="p-4">
+    <Card>
+      <div className="p-4">
         <SectionLabel>MAIN COOKING / CAMPFIRE QUEUE</SectionLabel>
-        <h2 className="text-xl text-dv-brassLight">Cook in order.</h2>
-        <p className="mt-2 max-w-xl text-sm text-slate-200/65">
-          Gold numbers are the fixed priority: 1 through 5, cooked first. Violet <span className="text-dv-violet">E</span> tags
-          are elemental dishes — hold those until the trace confirms which wyvern shows up, then cook to match it.
-        </p>
-      </Card>
-
-      <Card>
-        <div className="divide-y divide-dv-line">
-          {sorted.map((dish) => (
-            <article key={dish.name} className="flex items-center gap-3 p-4">
-              <MainDishThumb image={dish.image} name={dish.name} priority={dish.priority} />
-              <div>
-                <h3 className="text-sm text-dv-brassLight">{dish.name}</h3>
-                <p className="mt-1 text-[10px] uppercase text-slate-300/50">
-                  {dish.priority === "E" ? "Elemental — cook last" : `Priority ${dish.priority}`}
-                </p>
-                <p className="mt-1.5 text-xs text-dv-emerald">{dish.effect}</p>
-              </div>
-            </article>
-          ))}
+        <div className="mt-3 grid grid-cols-3 gap-3">
+          {sorted.map((dish) => {
+            const isActive = dish.name === active.name;
+            return (
+              <button
+                key={dish.name}
+                type="button"
+                onClick={() => setActiveName(dish.name)}
+                className={`flex flex-col items-center rounded-md border p-2 text-center ${
+                  isActive ? "border-dv-brass bg-dv-brass/10" : "border-dv-line"
+                }`}
+              >
+                <MainDishThumb image={dish.image} name={dish.name} priority={dish.priority} />
+                <span className="mt-1.5 text-[11px] leading-tight text-dv-brassLight">{dish.name}</span>
+                <span className="mt-1 text-[9px] uppercase text-slate-300/50">
+                  {dish.priority === "E" ? "E" : `P${dish.priority}`}
+                </span>
+              </button>
+            );
+          })}
         </div>
-      </Card>
-    </div>
+        <div className="mt-4 rounded-md border border-dv-line bg-black/30 p-3">
+          <h3 className="text-sm text-dv-brassLight">{active.name}</h3>
+          <p className="mt-1.5 text-xs text-dv-emerald">{active.effect}</p>
+          {active.ingredients && (
+            <div className="mt-3 flex flex-wrap gap-3 text-xs text-slate-200/80">
+              {Object.entries(active.ingredients).map(([key, amount]) => (
+                <span key={key}>
+                  {key}: {amount}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </Card>
   );
 }
 
