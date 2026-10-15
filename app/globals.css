@@ -711,3 +711,10 @@ main {
 .boss-slot .boss-name { margin: 0; text-align: center; color: #fff1c9; letter-spacing: 0.14em; text-shadow: 1px 0 #2a1608, -1px 0 #2a1608, 0 1px #2a1608, 0 -1px #2a1608, 1px 1px #2a1608, -1px -1px #2a1608, 0 2px 0 #2a1608; }
 .boss-slot .boss-name-row .element-badge { margin: 2px 0 6px 0; }
 .boss-slot .boss-name { line-height: 1; padding: 0; margin: 0; }
+.water-fill { background: linear-gradient(180deg, #78e8c7, #3fb99a); transition: height 0.6s ease; }
+.water-fill[style*="height: 0%"] .water-wave { display: none; }
+.water-wave { position: absolute; left: 0; top: -9px; width: 200%; height: 10px; background: radial-gradient(circle 9px at 10px 100%, #78e8c7 98%, transparent 100%) 0 0 / 20px 10px repeat-x; animation: water-slide 2s linear infinite; }
+.water-wave-2 { top: -11px; height: 12px; opacity: 0.45; background: radial-gradient(circle 12px at 14px 100%, #78e8c7 98%, transparent 100%) 0 0 / 28px 12px repeat-x; animation: water-slide-2 3.2s linear infinite; }
+@keyframes water-slide { to { transform: translateX(-20px); } }
+@keyframes water-slide-2 { from { transform: translateX(-28px); } to { transform: translateX(0); } }
+@media (prefers-reduced-motion: reduce) { .water-wave { animation: none; } }

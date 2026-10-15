@@ -45,7 +45,7 @@ export function GuildProgress({
 <div className="item-slot p-3"><p className="eyebrow">CYCLE RATE</p><p className="text-xl text-dv-brassLight mt-1">{onTrackPct}<span className="text-xs text-slate-300/50">%</span></p></div>
 <div className="item-slot p-3"><p className="eyebrow">NO LOGS YET</p><p className="text-xl text-dv-ember mt-1">{atRisk}<span className="text-xs text-slate-300/50">/{total}</span></p></div>
       </div>
-<div className="mb-4"><p className="eyebrow mb-2">CHECK-INS BY DAY</p><div className="grid grid-cols-6 gap-1">{[1, 2, 3, 4, 5, 6].map((d) => { const c = members.filter((m) => m.logged[d - 1]).length; const pct = total === 0 ? 0 : Math.round((c / total) * 100); return (<div key={d} className="flex flex-col items-center gap-0.5"><div className="relative h-8 w-full bg-dv-panel2 pixel-frame overflow-hidden"><div className="absolute bottom-0 w-full bg-dv-emerald" style={{ height: pct + "%" }} /></div><span className={["text-[8px]", d === currentDay ? "text-dv-emerald" : "text-dv-brassLight/60"].join(" ")}>D{d}</span></div>); })}</div></div>
+<div className="mb-4"><p className="eyebrow mb-2">CHECK-INS BY DAY</p><div className="grid grid-cols-6 gap-1">{[1, 2, 3, 4, 5, 6].map((d) => { const c = members.filter((m) => m.logged[d - 1]).length; const pct = total === 0 ? 0 : Math.round((c / total) * 100); return (<div key={d} className="flex flex-col items-center gap-0.5"><div className="relative h-8 w-full bg-dv-panel2 pixel-frame overflow-hidden"><div className="water-fill absolute bottom-0 w-full" style={{ height: pct + "%" }}><span className="water-wave" /><span className="water-wave water-wave-2" /></div></div><span className={["text-[8px]", d === currentDay ? "text-dv-emerald" : "text-dv-brassLight/60"].join(" ")}>D{d}</span></div>); })}</div></div>
       {total === 0 ? (
         <div className="item-slot px-3 py-5 text-center text-[10px] text-slate-300/55">NO GUILD MEMBERS HAVE JOINED YET.</div>
       ) : (
@@ -55,8 +55,8 @@ export function GuildProgress({
             {members.map((member) => (
               <div key={member.discord_id} className="item-slot p-2">
                 <div className="flex items-center gap-2 min-w-0 mb-2">
-                  <img src={member.avatar_url ?? "/icons/icon-192.png"} alt="" className="w-8 h-8 pixel-frame border border-dv-line shrink-0 object-cover" />
-                  <span className="block text-xs text-slate-200/80 break-words leading-tight">{member.username}</span>
+                  <img src={member.avatar_url ?? "/icons/icon-192.png"} alt="" className="w-7 h-7 pixel-frame border border-dv-line shrink-0 object-cover" />
+                  <span className="block text-[11px] text-slate-200/80 break-words leading-tight">{member.username}</span>
                   {member.discord_id === currentUserId && <span className="text-[8px] text-dv-emerald shrink-0">(YOU)</span>}
                   {member.discord_id === currentUserId ? <select value={member.promotion_tier ?? ""} onChange={(e) => onSetTier?.(e.target.value)} aria-label="Promotion tier" className="h-5 w-12 shrink-0 border border-dv-line bg-dv-panel2 text-[9px] text-dv-brassLight"><option value="" disabled>T?</option>{Array.from({ length: 20 }, (_, i) => <option key={i + 1} value={i + 1}>T{i + 1}</option>)}</select> : member.promotion_tier != null && <span className="text-[8px] text-dv-brassLight shrink-0">T{member.promotion_tier}</span>}
                 </div>
@@ -68,7 +68,7 @@ export function GuildProgress({
                     return (
                       <div key={index} className="flex flex-col items-center gap-0.5">
                         <span className={["text-[8px]", isToday ? "text-dv-emerald" : "text-dv-brassLight/60"].join(" ")}>D{dayNum}</span>
-                        <div className={["h-6 w-full pixel-frame flex items-center justify-center text-[9px] leading-none font-bold", done ? "bg-dv-emerald text-dv-bg" : isFuture ? "bg-dv-panel2 text-slate-300/20" : isToday ? "bg-dv-panel2 border border-dv-brass text-dv-brassLight" : "bg-dv-ember/80 text-dv-bg"].join(" ")}>{done ? "✓" : isFuture ? "·" : isToday ? "–" : "✕"}</div>
+                        <div className={["h-5 w-full pixel-frame flex items-center justify-center text-[9px] leading-none font-bold", done ? "bg-dv-emerald text-dv-bg" : isFuture ? "bg-dv-panel2 text-slate-300/20" : isToday ? "bg-dv-panel2 border border-dv-brass text-dv-brassLight" : "bg-dv-ember/80 text-dv-bg"].join(" ")}>{done ? "✓" : isFuture ? "·" : isToday ? "–" : "✕"}</div>
                       </div>
                     );
                   })}
