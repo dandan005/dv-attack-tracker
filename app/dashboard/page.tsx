@@ -407,13 +407,12 @@ export default function DashboardPage() {
 
         {tab === "index" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛒ OPERATIONS INDEX</p><Guide /></section>)}
         {tab === "build" && (
-          <section className="space-y-6">
+          <section className="space-y-3">
             <div>
               <p className="eyebrow mb-4 text-dv-emerald">ᚨ BUILD GUIDE</p>
               <SkillBuild />
             </div>
             <div>
-              <p className="eyebrow mb-4 text-dv-emerald">ᛒ SPIRITS</p>
               <Spirits />
             </div>
             <div>

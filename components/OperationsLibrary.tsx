@@ -638,7 +638,7 @@ export function SkillBuild() {
   const stages: Stage[] = ["Early", "Mid", "Late"];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <Card className="p-4">
         <h2 className="text-lg text-dv-brassLight">Build a different skill set for each stage.</h2>
         <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">
@@ -646,9 +646,9 @@ export function SkillBuild() {
         </p>
       </Card>
 
-      <p className="eyebrow mb-4 text-dv-emerald">ᚨ SKILLS</p>
       <Card>
-        <div className="flex gap-2 border-b border-dv-line p-4">
+      <p className="eyebrow px-4 pt-4 text-dv-emerald">ᚨ SKILLS</p>
+        <div className="flex gap-2 border-b border-dv-line px-4 pb-4 pt-3">
           {stages.map((item) => (
             <button
               type="button"
@@ -679,7 +679,8 @@ export function Spirits() {
   return (
     <div className="space-y-4">
       <Card>
-        <div className="grid grid-cols-3 gap-4 p-4 sm:grid-cols-3">
+              <p className="eyebrow px-4 pt-4 text-dv-emerald">ᛒ SPIRITS</p>
+        <div className="grid grid-cols-3 gap-4 px-4 pb-4 pt-3 sm:grid-cols-3">
           {spirits.map((spirit) => (
             <div key={spirit.name} className="flex flex-col items-center gap-2 text-center">
               <div className="pixel-frame item-slot h-11 w-11 overflow-hidden">
