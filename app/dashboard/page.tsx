@@ -262,7 +262,7 @@ export default function DashboardPage() {
                   className="h-6 w-6 shrink-0 aspect-square pixel-frame border border-dv-line object-cover"
                   style={{ objectFit: "cover" }}
                   />
-                <span className="whitespace-nowrap text-[10px] text-dv-brassLight">{me.username}</span>
+                <span className="max-w-[72px] truncate text-[9px] text-dv-brassLight">{me.username}</span>
               </div>
             )}
           </div>
