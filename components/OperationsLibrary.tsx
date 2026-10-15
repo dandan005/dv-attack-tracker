@@ -524,8 +524,7 @@ export function MainCooking() {
   const sorted = useMemo(
     () =>
       [...mainDishes].sort((a, b) => {
-        const rank = (value: number | "E") => (value === "E" ? 99 : value);
-        return rank(a.priority) - rank(b.priority);
+        const order = ["Savory Hotdog", "BBQ Ribs", "Sandwich", "Immortal Steak", "Hellfire Curry", "Water Slash Soup", "Thunderbolt Burger", "Demon Pizza", "Bubble Hotpot"]; return order.indexOf(a.name) - order.indexOf(b.name);
       }),
     []
   );
