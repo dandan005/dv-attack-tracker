@@ -31,10 +31,11 @@ type AttackLog = {
   day_number: number;
 };
 
-type Tab = "ledger" | "guide" | "cooking" | "special" | "runes" | "settings";
+type Tab = "ledger" | "index" | "guide" | "cooking" | "special" | "runes" | "settings";
 
 const TABS: { id: Tab; label: string; icon: ((props: { className?: string }) => JSX.Element) | string }[] = [
   { id: "ledger", label: "Ledger", icon: LedgerIcon },
+  { id: "index", label: "Index", icon: GuideIcon },
   { id: "guide", label: "Guide", icon: GuideIcon },
   { id: "cooking", label: "Cooking", icon: CookingIcon },
   { id: "special", label: "Special", icon: SpecialIcon },
@@ -402,6 +403,7 @@ export default function DashboardPage() {
           </div>
         )}
 
+        {tab === "index" && (<section><Guide /></section>)}
         {tab === "guide" && (
           <section className="space-y-6">
             <div>
@@ -413,7 +415,6 @@ export default function DashboardPage() {
               <Spirits />
             </div>
             <div>
-              <Guide />
             </div>
           </section>
         )}
