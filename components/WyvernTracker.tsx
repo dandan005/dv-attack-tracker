@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { RaidClock } from "./RaidClock";
 import { PixelPanel } from "./PixelPanel";
 
 type Element = "wind" | "fire" | "earth" | "water";
@@ -13,6 +14,28 @@ const ELEMENTS: { key: Element; label: string; hint: string }[] = [
 ];
 
 type BossSlot = { name: string; image: string; alt: string };
+function BossPortrait({ element, boss }: { element: Element; boss: BossSlot }) {
+  return (
+    <div className={"boss-slot boss-slot--" + element}>
+      <div className="boss-slot__header" style={{ justifyContent: "center" }}>
+        <div className="boss-name-row">
+          <span className={"element-badge element-badge--" + element}>
+            <span className="element-orb element-orb--sm"><PixelElementArt element={element} /></span>
+          </span>
+          <p className="boss-name">{boss.name}</p>
+        </div>
+      </div>
+      <div className="boss-portrait">
+        {boss.image ? (
+          <img src={boss.image} alt={boss.alt} className="block h-auto w-full object-cover" />
+        ) : (
+          <div className="boss-portrait__empty"><span className="boss-portrait__glyph">?</span><span>PORTRAIT SLOT</span></div>
+        )}
+      </div>
+      <RaidClock />
+    </div>
+  );
+}
 
 const BOSS_SLOTS: Record<Element, BossSlot> = {
   wind: { name: "Voltaris", image: "/bosses/boss.png", alt: "Voltaris pixel dragon portrait" },
@@ -25,29 +48,6 @@ function PixelElementArt({ element }: { element: Element }) {
   return <img className="element-pixel-art" src={"/elements/" + element + ".png"} alt="" draggable={false} />;
 }
 
-function BossPortrait({ element, boss }: { element: Element; boss: BossSlot }) {
-  return (
-    <div className={"boss-slot boss-slot--" + element}>
-      <div className="boss-slot__header">
-        <span className="eyebrow">WYVERN BOSS</span>
-        <span className="boss-slot__element">{element.toUpperCase()} SLOT</span>
-      </div>
-      <div className="boss-portrait">
-        {boss.image ? (
-          <img src={boss.image} alt={boss.alt} className="block h-auto w-full object-cover" />
-        ) : (
-          <div className="boss-portrait__empty"><span className="boss-portrait__glyph">?</span><span>PORTRAIT SLOT</span></div>
-        )}
-      </div>
-      <div className="boss-name-row">
-        <span className={"element-badge element-badge--" + element}>
-          <span className="element-orb element-orb--sm"><PixelElementArt element={element} /></span>
-        </span>
-        <p className="boss-name">{boss.name}</p>
-      </div>
-    </div>
-  );
-}
 
 export function WyvernTracker({
   current,
