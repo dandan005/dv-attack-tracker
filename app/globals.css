@@ -709,3 +709,5 @@ main {
 .boss-slot .boss-name-row { flex-direction: column; align-items: center; justify-content: center; gap: 0; }
 .boss-slot .boss-name-row .element-badge { transform: scale(1.6); transform-origin: center; margin: 4px 0 14px 0; }
 .boss-slot .boss-name { margin: 0; text-align: center; color: #fff1c9; letter-spacing: 0.14em; text-shadow: 1px 0 #2a1608, -1px 0 #2a1608, 0 1px #2a1608, 0 -1px #2a1608, 1px 1px #2a1608, -1px -1px #2a1608, 0 2px 0 #2a1608; }
+.boss-slot .boss-name-row .element-badge { margin: 2px 0 6px 0; }
+.boss-slot .boss-name { line-height: 1; padding: 0; margin: 0; }
