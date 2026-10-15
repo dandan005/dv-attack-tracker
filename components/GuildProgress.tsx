@@ -54,9 +54,9 @@ export function GuildProgress({
           <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
             {members.map((member) => (
               <div key={member.discord_id} className="item-slot p-2">
-                <div className="flex items-center gap-1.5 min-w-0 mb-1.5">
-                  <img src={member.avatar_url ?? "/icons/icon-192.png"} alt="" className="w-5 h-5 pixel-frame border border-dv-line shrink-0" />
-                  <span className="block text-[10px] text-slate-200/80 break-words leading-tight">{member.username}</span>
+                <div className="flex items-center gap-2 min-w-0 mb-2">
+                  <img src={member.avatar_url ?? "/icons/icon-192.png"} alt="" className="w-8 h-8 pixel-frame border border-dv-line shrink-0 object-cover" />
+                  <span className="block text-xs text-slate-200/80 break-words leading-tight">{member.username}</span>
                   {member.discord_id === currentUserId && <span className="text-[8px] text-dv-emerald shrink-0">(YOU)</span>}
                   {member.discord_id === currentUserId ? <select value={member.promotion_tier ?? ""} onChange={(e) => onSetTier?.(e.target.value)} aria-label="Promotion tier" className="h-5 w-12 shrink-0 border border-dv-line bg-dv-panel2 text-[9px] text-dv-brassLight"><option value="" disabled>T?</option>{Array.from({ length: 20 }, (_, i) => <option key={i + 1} value={i + 1}>T{i + 1}</option>)}</select> : member.promotion_tier != null && <span className="text-[8px] text-dv-brassLight shrink-0">T{member.promotion_tier}</span>}
                 </div>
@@ -68,7 +68,7 @@ export function GuildProgress({
                     return (
                       <div key={index} className="flex flex-col items-center gap-0.5">
                         <span className={["text-[8px]", isToday ? "text-dv-emerald" : "text-dv-brassLight/60"].join(" ")}>D{dayNum}</span>
-                        <div className={["h-4 w-full pixel-frame flex items-center justify-center text-[9px] leading-none font-bold", done ? "bg-dv-emerald text-dv-bg" : isFuture ? "bg-dv-panel2 text-slate-300/20" : isToday ? "bg-dv-panel2 border border-dv-brass text-dv-brassLight" : "bg-dv-ember/80 text-dv-bg"].join(" ")}>{done ? "✓" : isFuture ? "·" : isToday ? "–" : "✕"}</div>
+                        <div className={["h-6 w-full pixel-frame flex items-center justify-center text-[9px] leading-none font-bold", done ? "bg-dv-emerald text-dv-bg" : isFuture ? "bg-dv-panel2 text-slate-300/20" : isToday ? "bg-dv-panel2 border border-dv-brass text-dv-brassLight" : "bg-dv-ember/80 text-dv-bg"].join(" ")}>{done ? "✓" : isFuture ? "·" : isToday ? "–" : "✕"}</div>
                       </div>
                     );
                   })}

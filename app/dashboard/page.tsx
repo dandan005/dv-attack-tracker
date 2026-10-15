@@ -114,7 +114,7 @@ export default function DashboardPage() {
         promotion_tier: member.promotion_tier ?? null,
       };
     });
-    setMembers(rows);
+    setMembers([...rows].sort((a, b) => a.username.localeCompare(b.username, undefined, { sensitivity: "base" })));
 
     const myRow = (allMembers ?? []).find((member: any) => member.auth_user_id === user.id);
     if (myRow) {
