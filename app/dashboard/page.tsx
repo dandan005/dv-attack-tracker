@@ -384,7 +384,7 @@ export default function DashboardPage() {
             ) : (
               <>
                 {(dayNumber < 3 || (dayNumber >= 3 && dayNumber <= 6 && settings.wyvern_element)) && (
-                  <div className="mt-4">
+                  <div className="mt-2">
                     {dayNumber < 3 ? (
                       <ExplorationPhase currentDay={dayNumber} />
                     ) : (
@@ -398,8 +398,8 @@ export default function DashboardPage() {
                   </div>
                 )}
 
-                <div className="mt-4"><LogAttackButton loggedDays={myLoggedDays} onLog={logAttack} /></div>
-                <div className="mt-4"><GuildProgress members={members} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
+                <div className="mt-2"><LogAttackButton loggedDays={myLoggedDays} onLog={logAttack} /></div>
+                <div className="mt-2"><GuildProgress members={members} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
               </>
             )}
           </div>
