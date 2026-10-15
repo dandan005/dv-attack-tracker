@@ -689,3 +689,10 @@ main {
 }
 .boss-slot::before { top: -15px; }
 .boss-slot::after { bottom: -15px; }
+
+/* Element picker: flat tiles */
+.element-choice { min-height: 104px; gap: 4px; background: #1b2442; border: 1px solid #3b4975; border-radius: 6px; box-shadow: none; }
+.element-choice::before { display: none; }
+.element-choice:hover, .element-choice:focus-visible { border-color: var(--element); filter: none; box-shadow: none; }
+.element-choice.is-active { border-color: var(--element); background: #202a4d; box-shadow: inset 0 0 0 1px var(--element); }
+.element-choice.is-bursting { box-shadow: inset 0 0 0 2px var(--element); }

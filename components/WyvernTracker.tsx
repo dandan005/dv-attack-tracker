@@ -87,8 +87,8 @@ export function WyvernTracker({
       {showPicker && (
         <>
           <div className="mb-4">
-            <p className="text-[11px] text-dv-brassLight">What element is the guild hunting?</p>
-            <p className="text-[10px] text-slate-300/55 mt-1">Broadcast the current trace so everyone is synced.</p>
+            <p className="text-lg text-dv-brassLight">What element is the guild hunting?</p>
+            <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">Broadcast the current trace so everyone is synced.</p>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
@@ -115,7 +115,7 @@ export function WyvernTracker({
           </div>
 
           {changing && (
-            <button type="button" onClick={() => setChanging(false)} className="text-[9px] text-slate-300/55 underline underline-offset-2 mb-1">
+            <button type="button" onClick={() => setChanging(false)} className="pixel-border w-full bg-dv-panel2 px-3 py-2 text-xs text-slate-200/70">
               Cancel
             </button>
           )}
