@@ -17,16 +17,16 @@ export async function GET(request: NextRequest) {
       const userMetadata = (data.user.user_metadata ?? {}) as Record<string, any>;
       const discordId = identityData.provider_id ?? identityData.sub ?? data.user.id;
       const displayName =
-        identityData.global_name ??
-        identityData.custom_claims?.global_name ??
-        userMetadata.global_name ??
-        userMetadata.display_name ??
-        identityData.display_name ??
-        userMetadata.full_name ??
-        identityData.full_name ??
-        userMetadata.name ??
-        identityData.name ??
-        data.user.email ??
+        identityData.global_name ||
+        identityData.custom_claims?.global_name ||
+        userMetadata.global_name ||
+        userMetadata.display_name ||
+        identityData.display_name ||
+        userMetadata.full_name ||
+        identityData.full_name ||
+        userMetadata.name ||
+        identityData.name ||
+        data.user.email ||
         "Slayer";
       const avatarUrl = identityData.avatar_url ?? userMetadata.avatar_url ?? null;
 
