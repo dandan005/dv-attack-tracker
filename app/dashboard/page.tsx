@@ -234,7 +234,7 @@ export default function DashboardPage() {
   return (
     <div className="scanlines fixed inset-0 flex flex-col overflow-hidden">
       <header className="z-40 shrink-0 border-b border-dv-line bg-dv-bg/95 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
+        <div className="mx-auto flex max-w-md items-center justify-between gap-3 px-4 py-3">
           <button onClick={() => setTab("ledger")} className="flex items-center gap-3">
             <DragonCrest />
             <span className="text-left"><span className="eyebrow block">DRAGON VALLEY</span><span className="block whitespace-nowrap text-sm text-dv-brassLight">ATTACK LEDGER</span></span>
@@ -269,7 +269,7 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      <main className="mx-auto flex w-full max-w-6xl min-h-0 flex-1 flex-col overflow-y-auto px-4 pb-6 pt-5 sm:px-6 md:pt-7">
+      <main className="mx-auto flex w-full max-w-md min-h-0 flex-1 flex-col overflow-y-auto px-4 pb-6 pt-5 sm:px-6 md:pt-7">
         {tab === "ledger" && (
           <div className="flex min-h-0 flex-1 flex-col">
             <div className="mb-5">
@@ -477,7 +477,7 @@ export default function DashboardPage() {
         aria-label="Guild hub sections"
         className="z-40 shrink-0 border-t border-dv-line bg-dv-bg/95 backdrop-blur"
       >
-        <div className="mx-auto flex max-w-6xl justify-around px-2 py-2">
+        <div className="mx-auto flex max-w-md justify-around px-2 py-2">
           {visibleTabs.map(({ id, label, icon }) => (
             <button
               key={id}
