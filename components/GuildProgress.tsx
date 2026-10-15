@@ -31,7 +31,7 @@ export function GuildProgress({
   const atRisk = members.filter((m) => !m.logged.some(Boolean)).length;
 
   return (
-    <PixelPanel className="mb-5 animate-rise">
+    <PixelPanel className="animate-rise">
       <div className="flex items-end justify-between gap-3 mb-4">
         <div><p className="eyebrow">GUILD READOUT</p><p className="text-lg text-dv-brassLight mt-1">Keep the line moving.</p></div>
         <span className="text-[10px] border border-dv-ember/50 bg-dv-ember/10 text-dv-ember px-2 py-1 pixel-frame">{missingToday} PENDING</span>

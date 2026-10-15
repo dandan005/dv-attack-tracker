@@ -398,8 +398,8 @@ export default function DashboardPage() {
                   </div>
                 )}
 
-                <div className="mt-2"><LogAttackButton loggedDays={myLoggedDays} onLog={logAttack} /></div>
-                <div className="mt-2"><GuildProgress members={members} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
+                <div className="mt-3"><LogAttackButton loggedDays={myLoggedDays} onLog={logAttack} /></div>
+                <div className="mt-3"><GuildProgress members={members} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
               </>
             )}
           </div>

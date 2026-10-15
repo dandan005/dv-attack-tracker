@@ -89,7 +89,7 @@ export function LogAttackButton({
   }
 
   return (
-    <PixelPanel className="mb-5 animate-rise p-0 overflow-hidden">
+    <PixelPanel className="animate-rise p-0 overflow-hidden">
       <div className="px-4 pt-4 pb-3">
         <div className="flex items-end justify-between gap-3">
           <div><p className="eyebrow">YOUR RAID LOG</p><h2 className="text-sm text-dv-brassLight mt-2">DAY {dayNumber} ATTACK</h2></div>

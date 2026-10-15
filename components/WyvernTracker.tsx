@@ -83,7 +83,7 @@ export function WyvernTracker({
   }
 
   return (
-    <PixelPanel className="mb-5 animate-rise pb-5">
+    <PixelPanel className="animate-rise pb-5">
       {showPicker && (
         <>
           <div className="mb-4">
