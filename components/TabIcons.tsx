@@ -110,7 +110,7 @@ export function ReplayIcon({ className }: IconProps) {
 export function BuildIcon({ className }: IconProps) {
   return (
     <svg {...SVG_PROPS} className={className}>
-      <path d="M5 2h6v3H5zM3 6h4v3H3zM9 6h4v3H9zM3 10h4v3H3zM9 10h4v3H9z" />
+      <path d="M5 1h6v4H5zM1 6h6v4H1zM9 6h6v4H9zM1 11h6v4H1zM9 11h6v4H9z" />
     </svg>
   );
 }
