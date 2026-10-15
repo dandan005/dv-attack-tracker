@@ -488,7 +488,7 @@ export function Guide() {
   const [open, setOpen] = useState<string[]>([guideSections[0][0], guideSections[1][0]]);
   return (
     <div className="space-y-4">
-      <Card className="p-4"><h2 className="text-xl text-dv-brassLight">Open a briefing to get the useful part.</h2><p className="mt-2 max-w-xl text-sm text-slate-200/65">The six-day cycle, trace discovery, elemental wyverns and raid prep in one place. Tap a section to expand it, and keep the ones you need open while you plan your attacks.</p></Card>
+      <Card className="p-4"><h2 className="text-lg text-dv-brassLight">Open a briefing to get the useful part.</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">The six-day cycle, trace discovery, elemental wyverns and raid prep in one place. Tap a section to expand it, and keep the ones you need open while you plan your attacks.</p></Card>
       <Card>
         <div className="divide-y divide-dv-line">
           {guideSections.map(([title, kicker, body], index) => {
@@ -532,8 +532,8 @@ export function MainCooking() {
     <div className="space-y-4">
       <Card className="p-4">
         <SectionLabel>MAIN COOKING / CAMPFIRE QUEUE</SectionLabel>
-        <h2 className="text-xl text-dv-brassLight">Cook in order.</h2>
-        <p className="mt-2 max-w-xl text-sm text-slate-200/65">
+        <h2 className="text-lg text-dv-brassLight">Cook in order.</h2>
+        <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">
           Gold numbers are the fixed priority: 1 through 5, cooked first. Violet <span className="text-dv-violet">E</span> tags
           are elemental dishes — hold those until the trace confirms which wyvern shows up, then cook to match it.
         </p>
@@ -640,8 +640,8 @@ export function SkillBuild() {
   return (
     <div className="space-y-4">
       <Card className="p-4">
-        <h2 className="text-xl text-dv-brassLight">Build a different skill set for each stage.</h2>
-        <p className="mt-2 max-w-xl text-sm text-slate-200/65">
+        <h2 className="text-lg text-dv-brassLight">Build a different skill set for each stage.</h2>
+        <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">
           Early, mid, and late game each get their own set. Swap as the fight gets harder.
         </p>
       </Card>
@@ -728,8 +728,8 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
     <div className="space-y-4">
       <Card className="p-4">
         <SectionLabel>PROVISIONS / SEASON 5</SectionLabel>
-        <h2 className="text-xl text-dv-brassLight">Cook with what you have.</h2>
-        <p className="mt-2 max-w-xl text-sm text-slate-200/65">
+        <h2 className="text-lg text-dv-brassLight">Cook with what you have.</h2>
+        <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">
           Enter what you have in your inventory and the tabs show how many meals you can cook right now.
         </p>
       </Card>
@@ -876,8 +876,8 @@ export function Runes() {
     <div className="space-y-4">
       <Card className="p-4">
         <SectionLabel>RUNE DESK / TIER NOTES</SectionLabel>
-        <h2 className="text-xl text-dv-brassLight">Spend fragments with a plan.</h2>
-        <p className="mt-2 max-w-xl text-sm text-slate-200/65">
+        <h2 className="text-lg text-dv-brassLight">Spend fragments with a plan.</h2>
+        <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">
           Full guild rune notes by tier — Immortal, Mythic, and Legendary — with sub-tier priority and rough Emblem value where it's known.
         </p>
       </Card>
