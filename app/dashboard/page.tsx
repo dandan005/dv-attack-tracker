@@ -237,7 +237,7 @@ export default function DashboardPage() {
         <div className="mx-auto flex max-w-md items-center justify-between gap-3 px-4 py-3">
           <button onClick={() => setTab("ledger")} className="flex items-center gap-3">
             <DragonCrest />
-            <span className="text-left"><span className="eyebrow block">DRAGON VALLEY</span><span className="block whitespace-nowrap text-sm text-dv-brassLight">ATTACK</span><span className="block whitespace-nowrap text-sm text-dv-brassLight">LEDGER</span></span>
+            <span className="text-left"><span className="eyebrow block whitespace-nowrap leading-none">DRAGON VALLEY</span><span className="block whitespace-nowrap text-xs leading-none text-dv-brassLight">ATTACK</span><span className="block whitespace-nowrap text-xs leading-none text-dv-brassLight">LEDGER</span></span>
           </button>
           <div className="flex items-center gap-2">
             {syncing && (
