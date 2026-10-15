@@ -527,8 +527,8 @@ export function MainCooking() {
     () => [...mainDishes].sort((a, b) => dishOrder.indexOf(a.name) - dishOrder.indexOf(b.name)),
     []
   );
-  const [openName, setOpenName] = useState<string | null>(null);
-  const open = sorted.find((d) => d.name === openName) ?? null;
+  const [selected, setSelected] = useState<{ name: string; x: number; y: number } | null>(null);
+  const open = sorted.find((d) => d.name === selected?.name) ?? null;
 
   return (
     <div className="space-y-4">
@@ -546,7 +546,10 @@ export function MainCooking() {
             <button
               key={dish.name}
               type="button"
-              onClick={() => setOpenName(dish.name)}
+              onClick={(e) => {
+                const r = e.currentTarget.getBoundingClientRect();
+                setSelected({ name: dish.name, x: r.left + r.width / 2, y: r.bottom });
+              }}
               className="flex flex-col items-center rounded-md border border-dv-line p-2 text-center"
             >
               <MainDishThumb image={dish.image} name={dish.name} priority={dish.priority} />
@@ -556,14 +559,15 @@ export function MainCooking() {
         </div>
       </Card>
       {open && (
-        <div onClick={() => setOpenName(null)} className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm"><Card className="p-4">
-            <div className="flex flex-col items-center">
-              <MainDishThumb image={open.image} name={open.name} priority={open.priority} />
-            </div>
-            <p className="mt-4 text-xs text-dv-emerald">{open.effect}</p>
+        <div onClick={() => setSelected(null)} className="fixed inset-0 z-50">
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{ top: selected!.y + 8, left: Math.min(Math.max(selected!.x - 120, 8), window.innerWidth - 248), width: 240 }}
+            className="fixed rounded-xl border border-dv-line bg-black/85 p-3 text-xs text-dv-brassLight"
+          >
+            <p className="text-dv-emerald">{open.effect}</p>
             {open.ingredients && (
-              <div className="mt-3 flex flex-wrap gap-3 text-xs text-slate-200/80">
+              <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[10px] text-slate-200/80">
                 {Object.entries(open.ingredients).map(([key, amount]) => (
                   <span key={key}>
                     {key}: {amount}
@@ -571,7 +575,7 @@ export function MainCooking() {
                 ))}
               </div>
             )}
-          </Card></div>
+          </div>
         </div>
       )}
     </div>
