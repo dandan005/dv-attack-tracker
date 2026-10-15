@@ -668,12 +668,12 @@ main {
 
 /* Wyvern boss: textured scroll */
 .boss-slot {
-  background: radial-gradient(ellipse at 30% 20%, rgba(255,240,200,0.35), transparent 60%), repeating-linear-gradient(92deg, #d2ac6a 0 3px, #c79c58 3px 7px, #d8b274 7px 11px), #c9a465;
-  border: 3px solid #5c3d1c;
+  background: radial-gradient(ellipse at 30% 20%, rgba(139,125,255,0.18), transparent 60%), repeating-linear-gradient(92deg, #1b2442 0 3px, #161d38 3px 7px, #202a4d 7px 11px), #11172b;
+  border: 3px solid #3b4975;
   border-radius: 2px;
   overflow: visible;
   padding: 24px 14px;
-  box-shadow: inset 0 0 0 3px #e8c98a, inset 0 0 0 5px #8a6232, inset 0 0 24px rgba(80,50,20,0.45), 0 5px 0 #3a2814;
+  box-shadow: inset 0 0 0 3px #8b7dff, inset 0 0 0 5px #3b4975, inset 0 0 24px rgba(5,6,17,0.6), 0 5px 0 #050611;
 }
 .boss-slot::before, .boss-slot::after {
   content: "";
