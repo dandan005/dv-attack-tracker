@@ -529,7 +529,7 @@ export function MainCooking() {
   );
   const [selected, setSelected] = useState<{ name: string; x: number; top: number; bottom: number } | null>(null);
   const open = sorted.find((d) => d.name === selected?.name) ?? null;
-  const popupWidth = Math.min(300, window.innerWidth - 16);
+  const popupWidth = Math.min(260, window.innerWidth - 16);
 
   return (
     <div className="space-y-4">
@@ -573,13 +573,13 @@ export function MainCooking() {
                 ? { top: selected.bottom + 8 }
                 : { bottom: window.innerHeight - selected.top + 8 }),
               left: Math.min(Math.max(selected.x - popupWidth / 2, 8), window.innerWidth - popupWidth - 8),
-              width: popupWidth,
+              width: popupWidth * 0.8,
             }}
-            className="fixed rounded-xl border border-dv-line bg-black/90 p-4 text-xs text-dv-brassLight"
+            className="fixed rounded-xl border border-dv-line bg-black/90 p-3 text-[10px] text-dv-brassLight"
           >
-            <p className="font-bold uppercase leading-relaxed tracking-wider text-dv-brassLight">{open.effect}</p>
+            <p className="font-bold uppercase leading-snug tracking-wider text-[11px] text-dv-brassLight">{open.effect}</p>
             {open.ingredients && (
-              <div className="mt-3 space-y-1.5 text-slate-200/80">
+              <div className="mt-2 space-y-1 text-slate-200/80">
                 {Object.entries(open.ingredients).map(([key, amount]) => (
                   <p key={key} className="uppercase tracking-wider">
                     {key} <span className="text-dv-brassLight">{amount}</span>
