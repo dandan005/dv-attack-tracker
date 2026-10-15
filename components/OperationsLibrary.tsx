@@ -557,7 +557,7 @@ export function MainCooking() {
                   isSelected ? "border-dv-brass bg-dv-brass/10" : "border-dv-line"
                 }`}
               >
-                <MainDishThumb image={dish.image} name={dish.name} priority={dish.priority} />
+                <div className={`rounded-md ${isSelected ? "ring-1 ring-dv-brass" : ""}`}><MainDishThumb image={dish.image} name={dish.name} priority={dish.priority} /></div>
                 <span className="mt-1.5 text-[11px] leading-tight text-dv-brassLight">{dish.name}</span>
               </button>
             );
