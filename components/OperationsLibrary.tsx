@@ -445,7 +445,7 @@ function PriorityBadge({ priority }: { priority: number | "E" }) {
         "absolute -right-1.5 -top-1.5 grid h-5 w-5 place-items-center rounded-full border text-[10px] font-bold " +
         (isElemental
           ? "border-dv-violet bg-dv-violet text-white"
-          : "border-dv-brass bg-dv-brass text-dv-bg")
+          : "border-dv-brass bg-dv-brass text-white")
       }
       title={isElemental ? "Elemental — cooked last, matched to the wyvern trace" : `Cook priority ${priority}`}
     >
