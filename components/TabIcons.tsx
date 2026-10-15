@@ -106,3 +106,13 @@ export function ReplayIcon({ className }: IconProps) {
     </svg>
   );
 }
+
+export function BuildIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" className={className} shapeRendering="crispEdges" fill="currentColor" aria-hidden="true">
+      <rect x="2" y="2" width="8" height="3" />
+      <rect x="9" y="3" width="4" height="5" />
+      <rect x="6" y="5" width="2" height="9" />
+    </svg>
+  );
+}
