@@ -489,8 +489,8 @@ export function Guide() {
   return (
     <div className="space-y-4">
       <Card>
-        <div className="border-b border-dv-line px-4 py-4">
-          <p className="text-sm">Open a briefing to get the useful part.</p>
+        <div className="border-b border-dv-line p-4">
+          <h2 className="text-xl text-dv-brassLight">Open a briefing to get the useful part.</h2>
         </div>
         <div className="divide-y divide-dv-line">
           {guideSections.map(([title, kicker, body], index) => {
