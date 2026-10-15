@@ -490,7 +490,6 @@ export function Guide() {
     <div className="space-y-4">
       <Card>
         <div className="border-b border-dv-line px-4 py-4">
-          <SectionLabel>OPERATIONS INDEX</SectionLabel>
           <p className="text-sm">Open a briefing to get the useful part.</p>
         </div>
         <div className="divide-y divide-dv-line">
