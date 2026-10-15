@@ -488,10 +488,8 @@ export function Guide() {
   const [open, setOpen] = useState<string[]>([guideSections[0][0], guideSections[1][0]]);
   return (
     <div className="space-y-4">
+      <Card className="p-4"><h2 className="text-xl text-dv-brassLight">Open a briefing to get the useful part.</h2><p className="mt-2 max-w-xl text-sm text-slate-200/65">The six-day cycle, trace discovery, elemental wyverns and raid prep in one place. Tap a section to expand it, and keep the ones you need open while you plan your attacks.</p></Card>
       <Card>
-        <div className="border-b border-dv-line p-4">
-          <h2 className="text-xl text-dv-brassLight">Open a briefing to get the useful part.</h2>
-        </div>
         <div className="divide-y divide-dv-line">
           {guideSections.map(([title, kicker, body], index) => {
             const isOpen = open.includes(title);
