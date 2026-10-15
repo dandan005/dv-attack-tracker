@@ -110,11 +110,8 @@ export function ReplayIcon({ className }: IconProps) {
 export function BuildIcon({ className }: IconProps) {
   return (
     <svg width="20" height="20" viewBox="0 0 16 16" className={className} shapeRendering="crispEdges" fill="currentColor" aria-hidden="true">
-      <rect x="10" y="1" width="4" height="4" />
-      <rect x="7" y="4" width="4" height="4" />
-      <rect x="2" y="5" width="6" height="4" />
-      <rect x="3" y="9" width="4" height="5" />
-      <rect x="1" y="6" width="1" height="2" />
+      <path d="M10 0h4v2h-1v1h1v2h-2v1h-1v2h-1V5H8V4H7V3h1V2h2z" />
+      <path d="M2 5h4v1h2v2h1v3h-1v2H6v2H3v-2H2V9h1V7H2z" />
     </svg>
   );
 }
