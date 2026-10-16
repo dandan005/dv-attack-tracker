@@ -54,7 +54,7 @@ export function GuildProgress({
       ) : (
         <div className="mb-2">
           <p className="eyebrow mb-2">ATTACK LEDGER / MEMBERS</p>
-          <div className="space-y-2 max-h-80 overflow-y-auto pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="space-y-2 max-h-[58dvh] overflow-y-auto pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {members.map((member) => (
               <div key={member.discord_id} className="item-slot p-2">
                 <div className="flex items-center gap-2 min-w-0 mb-2">
