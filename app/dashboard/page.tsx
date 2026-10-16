@@ -265,7 +265,7 @@ export default function DashboardPage() {
               <ReplayIcon className="h-4 w-4" />
             </button>
 {me?.is_admin && (<button type="button" onClick={() => setTab("settings")} aria-label="Settings" className={"pixel-frame item-slot grid h-8 w-8 place-items-center " + (tab === "settings" ? "text-dv-brassLight" : "text-slate-300/70")}><SettingsIcon className="text-sm" /></button>)}
-          {me && <SettingsPopup open={showSettings} onClose={() => setShowSettings(false)} me={{ ...me, promotion_tier: myTier, guild_verified_at: null }} stats={{ loggedThisCycle: myLoggedDays.length, cleanRuns: 0, cycleRate: 0 }} onSetTier={(t) => saveTier(String(t))} onSignOut={async () => { await supabase.auth.signOut(); window.location.href = "/"; }} />}
+          {me && <SettingsPopup open={showSettings} onClose={() => setShowSettings(false)} me={{ ...me, promotion_tier: myTier, guild_verified_at: null }} stats={{ loggedThisCycle: myLoggedDays.length, cleanRuns: members.filter((m) => m.logged.every(Boolean)).length, cycleRate: members.length === 0 ? 0 : Math.round((members.reduce((s, m) => s + m.logged.filter(Boolean).length, 0) / (members.length * Math.max(dayNumber, 1))) * 100) }} onSetTier={(t) => saveTier(String(t))} onSignOut={async () => { await supabase.auth.signOut(); window.location.href = "/"; }} />}
             {me && (
               <div onClick={() => setShowSettings(true)} role="button" aria-label="Open settings" className="pixel-frame item-slot flex cursor-pointer items-center gap-2 px-2 py-1">
                 <img src={me.avatar_url || "/icons/icon-192.png"}
