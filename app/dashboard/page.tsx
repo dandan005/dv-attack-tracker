@@ -13,6 +13,7 @@ import { DragonCrest } from "@/components/DragonCrest";
 import { LedgerIcon, GuideIcon, BuildIcon, CookingIcon, SpecialIcon, RunesIcon, SettingsIcon, ReplayIcon } from "@/components/TabIcons";
 import { Walkthrough } from "@/components/Walkthrough";
 import { rankByTier } from "@/lib/ranks";
+import { SettingsPopup } from "@/components/SettingsPopup";
 
 type Settings = {
   wyvern_element: string | null;
@@ -58,6 +59,7 @@ export default function DashboardPage() {
   const [tab, setTab] = useState<Tab>("ledger");
   useEffect(() => { document.querySelector("main")?.scrollTo(0, 0); }, [tab]);
   const [settings, setSettings] = useState<Settings>({ wyvern_element: null, wyvern_set_by: null });
+  const [showSettings, setShowSettings] = useState(false);
   const [myLoggedDays, setMyLoggedDays] = useState<number[]>([]);
   const [myLoggedAt, setMyLoggedAt] = useState<Record<number, string>>({});
   const [myTier, setMyTier] = useState<number | null>(null);
@@ -263,8 +265,9 @@ export default function DashboardPage() {
               <ReplayIcon className="h-4 w-4" />
             </button>
 {me?.is_admin && (<button type="button" onClick={() => setTab("settings")} aria-label="Settings" className={"pixel-frame item-slot grid h-8 w-8 place-items-center " + (tab === "settings" ? "text-dv-brassLight" : "text-slate-300/70")}><SettingsIcon className="text-sm" /></button>)}
+          {me && <SettingsPopup open={showSettings} onClose={() => setShowSettings(false)} me={{ ...me, promotion_tier: myTier, guild_verified_at: null }} stats={{ loggedThisCycle: myLoggedDays.length, cleanRuns: 0, cycleRate: 0 }} onSetTier={(t) => saveTier(String(t))} onSignOut={async () => { await supabase.auth.signOut(); window.location.href = "/"; }} />}
             {me && (
-              <div className="pixel-frame item-slot flex items-center gap-2 px-2 py-1">
+              <div onClick={() => setShowSettings(true)} role="button" aria-label="Open settings" className="pixel-frame item-slot flex cursor-pointer items-center gap-2 px-2 py-1">
                 <img src={me.avatar_url || "/icons/icon-192.png"}
                   alt=""
                   className="h-6 w-6 shrink-0 aspect-square pixel-frame border border-dv-line object-cover"
