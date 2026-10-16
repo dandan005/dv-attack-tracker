@@ -48,13 +48,13 @@ export function GuildProgress({
 <div className="item-slot p-3"><p className="eyebrow">NO LOGS YET</p><p className="text-xl text-dv-ember mt-1">{atRisk}<span className="text-xs text-slate-300/50">/{total}</span></p></div>
       </div>
 <div className="mb-4"><p className="eyebrow mb-2">CHECK-INS BY DAY</p><div className="grid grid-cols-6 gap-1">{[1, 2, 3, 4, 5, 6].map((d) => { const c = members.filter((m) => m.logged[d - 1]).length; const pct = total === 0 ? 0 : Math.round((c / total) * 100); return (<div key={d} className="flex flex-col items-center gap-0.5"><div className="relative h-8 w-full bg-dv-panel2 pixel-frame overflow-hidden"><div className="water-fill absolute bottom-0 w-full" style={{ height: pct + "%" }}><span className="water-wave" /><span className="water-wave water-wave-2" /></div><span className="absolute inset-0 z-10 flex items-center justify-center text-[9px] text-white" style={{ textShadow: "0 1px 0 #080a18" }}>{c}</span></div><span className={["text-[8px]", d === currentDay ? "text-dv-emerald" : "text-dv-brassLight/60"].join(" ")}>D{d}</span></div>); })}</div></div>
-</PixelPanel><PixelPanel className="animate-rise mt-3">
+</PixelPanel><PixelPanel className="animate-rise mt-3 mb-6">
       {total === 0 ? (
         <div className="item-slot px-3 py-5 text-center text-[10px] text-slate-300/55">NO GUILD MEMBERS HAVE JOINED YET.</div>
       ) : (
         <div className="mb-2">
           <p className="eyebrow mb-2">ATTACK LEDGER / MEMBERS</p>
-          <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
+          <div className="space-y-2 max-h-80 overflow-y-auto pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {members.map((member) => (
               <div key={member.discord_id} className="item-slot p-2">
                 <div className="flex items-center gap-2 min-w-0 mb-2">
