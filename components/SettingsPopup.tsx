@@ -156,15 +156,7 @@ export function SettingsPopup({
             )}
           </Section>
 
-          {me.is_admin && onAdminResetCycle && (
-            <Section title="ADMIN">
-              <Row label="Reset cycle" value="Clears this cycle's logs for everyone">
-                <button onClick={onAdminResetCycle} className="rounded-md border border-red-400/60 px-3 py-1 text-[9px] tracking-[0.15em] text-red-300">
-                  RESET
-                </button>
-              </Row>
-            </Section>
-          )}
+          {me.is_admin && (<Section title="RAID SCHEDULE"><Row label="Day 1 start" value="Mon 14:00 UTC · Mon 10:00 PM PHT" /><Row label="Attack window" value="D1–D6 · 6 attack days" /><Row label="Day 7" value="Standby · Results · Onboarding" /><Row label="Reminder mode" value="Manual + Vercel cron" /></Section>)}
 
           <Section title="ACCOUNT">
             {onSwitchAccount && (
