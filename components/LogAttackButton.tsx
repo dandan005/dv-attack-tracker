@@ -140,7 +140,7 @@ export function LogAttackButton({
         </div>
       </div>
 
-      {!done && (<div className="px-4 pb-3"><input value={damage} onChange={(e) => setDamage(e.target.value.replace(/[^0-9]/g, ""))} inputMode="numeric" placeholder="DAMAGE SCORE (OPTIONAL)" aria-label="Damage score" className="w-full border-2 border-dv-brassLight/60 bg-black/45 px-3 py-3 text-center text-sm tracking-[0.25em] text-dv-brassLight outline-none shadow-[inset_0_0_14px_rgba(0,0,0,0.7)] placeholder:tracking-[0.25em] placeholder:text-dv-brassLight/70 focus:border-dv-brassLight focus:shadow-[0_0_14px_rgba(214,170,90,0.45)]" /></div>)}
+      {!done && (<div className="px-4 pb-3"><input value={damage} onChange={(e) => setDamage(e.target.value.replace(/[^0-9]/g, ""))} inputMode="numeric" placeholder="DAMAGE SCORE (OPTIONAL)" aria-label="Damage score" className="w-full border border-dv-brassLight/60 bg-black/45 px-3 py-2 text-center text-xs text-dv-brassLight outline-none shadow-[inset_0_0_14px_rgba(0,0,0,0.7)] placeholder:text-dv-brassLight/70 focus:border-dv-brassLight focus:shadow-[0_0_14px_rgba(214,170,90,0.45)]" /></div>)}
       <button onClick={handleClick} disabled={done || pending} aria-label={done ? "Attack logged" : "Log today's attack"} className={["attack-action", done ? "is-done" : urgent ? "is-urgent" : "", pending ? "is-pending" : ""].join(" ")}>
         <span className="attack-sigil"><AttackGlyph done={done} urgent={urgent} /></span>
         <span className="attack-copy">{done ? "ATTACK SEALED" : pending ? "LOGGING..." : "LOG TODAY'S ATTACK"}<small>{done ? "RAID ENTRY CONFIRMED" : urgent ? "RESET WINDOW CLOSING" : "ADD YOUR RUN TO THE GUILD LEDGER"}</small></span>
