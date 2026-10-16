@@ -12,6 +12,7 @@ import { Guide, MainCooking, Meals, Runes, SkillBuild, Spirits } from "@/compone
 import { DragonCrest } from "@/components/DragonCrest";
 import { LedgerIcon, GuideIcon, BuildIcon, CookingIcon, SpecialIcon, RunesIcon, SettingsIcon, ReplayIcon } from "@/components/TabIcons";
 import { Walkthrough } from "@/components/Walkthrough";
+import { rankByTier } from "@/lib/ranks";
 
 type Settings = {
   wyvern_element: string | null;
@@ -167,7 +168,7 @@ export default function DashboardPage() {
     };
   }, []);
 
-  async function saveTier(value: string) { const tier = Number(value); if (!value || !Number.isInteger(tier)) return; const res = await fetch("/api/set-tier", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ promotionTier: tier }) }); if (res.ok) { setMyTier(tier); await loadAll(); setToast("Promotion tier set to T" + tier); } else { setToast("Could not save promotion tier"); } setTimeout(() => setToast(null), 2500); }
+  async function saveTier(value: string) { const tier = Number(value); if (!value || !Number.isInteger(tier)) return; const res = await fetch("/api/set-tier", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ promotionTier: tier }) }); if (res.ok) { setMyTier(tier); await loadAll(); setToast("Rank set to " + (rankByTier(tier)?.name ?? "T" + tier)); } else { setToast("Could not save promotion tier"); } setTimeout(() => setToast(null), 2500); }
   async function logAttack(day: number, _cycle?: string, damage?: number | null) {
     const res = await fetch("/api/log-attack", {
       method: "POST",
@@ -402,7 +403,7 @@ export default function DashboardPage() {
                   </div>
                 )}
 
-                <div className="mt-3"><LogAttackButton loggedDays={myLoggedDays} loggedAt={myLoggedAt} element={settings.wyvern_element} checkedIn={members.filter((m) => m.logged[dayNumber - 1]).length} total={dayNumber <= 6 ? members.length : 0} tier={myTier} onNeedTier={() => { setToast("Set your promotion tier in the header first"); setTimeout(() => setToast(null), 2500); }} onLog={logAttack} /></div>
+                <div className="mt-3"><LogAttackButton loggedDays={myLoggedDays} loggedAt={myLoggedAt} element={settings.wyvern_element} checkedIn={members.filter((m) => m.logged[dayNumber - 1]).length} total={dayNumber <= 6 ? members.length : 0} tier={myTier} onNeedTier={() => { setToast("Set your rank in the ledger row next to your name"); setTimeout(() => setToast(null), 2500); }} onLog={logAttack} /></div>
                 <div className="mt-3"><GuildProgress members={members} onSetTier={saveTier} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
               </>
             )}

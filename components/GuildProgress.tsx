@@ -1,6 +1,8 @@
 "use client";
 
 import { PixelPanel } from "./PixelPanel";
+import { RankPicker } from "./RankPicker";
+import { rankByTier, rankImg } from "@/lib/ranks";
 
 export type MemberRow = {
   discord_id: string;
@@ -58,7 +60,7 @@ export function GuildProgress({
                   <img src={member.avatar_url || "/icons/icon-192.png"} onError={(e) => { if (!e.currentTarget.src.endsWith("/icons/icon-192.png")) e.currentTarget.src = "/icons/icon-192.png"; }} alt="" className="w-7 h-7 pixel-frame border border-dv-line shrink-0 object-cover" />
                   <span className="block text-[11px] text-slate-200/80 break-words leading-tight">{member.username}</span>
                   {member.discord_id === currentUserId && <span className="text-[8px] text-dv-emerald shrink-0">(YOU)</span>}
-                  {member.discord_id === currentUserId ? <select value={member.promotion_tier ?? ""} onChange={(e) => onSetTier?.(e.target.value)} aria-label="Promotion tier" className="h-5 w-12 shrink-0 border border-dv-line bg-dv-panel2 text-[9px] text-dv-brassLight"><option value="" disabled>T?</option>{Array.from({ length: 20 }, (_, i) => <option key={i + 1} value={i + 1}>T{i + 1}</option>)}</select> : member.promotion_tier != null && <span className="text-[8px] text-dv-brassLight shrink-0">T{member.promotion_tier}</span>}
+                  {member.discord_id === currentUserId ? <RankPicker tier={member.promotion_tier ?? null} onSelect={(t) => onSetTier?.(String(t))} /> : rankByTier(member.promotion_tier) && <span className="flex items-center gap-1 text-[8px] text-dv-brassLight shrink-0"><img src={rankImg(rankByTier(member.promotion_tier)!.file)} alt="" className="h-4 w-4" />{rankByTier(member.promotion_tier)!.name}</span>}
                 </div>
                 <div className="grid grid-cols-6 gap-1">
                   {member.logged.map((done, index) => {

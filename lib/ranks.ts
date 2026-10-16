@@ -1,0 +1,31 @@
+export const RANKS = [
+  { tier: 1, name: "Stone", file: "stone" },
+  { tier: 2, name: "Bronze", file: "bronze" },
+  { tier: 3, name: "Iron", file: "iron" },
+  { tier: 4, name: "Silver", file: "silver" },
+  { tier: 5, name: "Gold", file: "gold" },
+  { tier: 6, name: "Mithril", file: "mythril" },
+  { tier: 7, name: "Orichalcum", file: "orichalcum" },
+  { tier: 8, name: "Arcanite", file: "arcanite" },
+  { tier: 9, name: "Adamantite", file: "adamant" },
+  { tier: 10, name: "Ether", file: "ether" },
+  { tier: 11, name: "Black Mythril", file: "black-mythril" },
+  { tier: 12, name: "Demon Metal", file: "demon-metal" },
+  { tier: 13, name: "Dragonos", file: "dragonos" },
+  { tier: 14, name: "Ragnablood", file: "ragnablood" },
+  { tier: 15, name: "Warfrost", file: "warfrost" },
+  { tier: 16, name: "Dark Knox", file: "dark-nox" },
+  { tier: 17, name: "Blue Abyss", file: "blue-abyss" },
+  { tier: 18, name: "Infinaut", file: "infinaut" },
+  { tier: 19, name: "Cyclos", file: "cyclos" },
+  { tier: 20, name: "Ancient Canine", file: "ancient-canine" },
+  { tier: 21, name: "Gigarock", file: "gigarock" },
+  { tier: 22, name: "Eisenhart", file: "eishenhart" },
+  { tier: 23, name: "Diadust", file: "diadust" },
+  { tier: 24, name: "Eldenwood", file: "elden-wood" },
+  { tier: 25, name: "Blitz Gold", file: "blitz-gold" },
+  { tier: 26, name: "Aurorite", file: "aurorite" },
+];
+
+export const rankByTier = (t: number | null | undefined) => RANKS.find((r) => r.tier === t) ?? null;
+export const rankImg = (file: string) => "/ranks/" + file + ".png";

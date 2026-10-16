@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
   const tier = Number(body.promotionTier);
-  if (!Number.isInteger(tier) || tier < 0) {
+  if (!Number.isInteger(tier) || tier < 1 || tier > 26) {
     return NextResponse.json({ error: "Invalid promotion tier" }, { status: 400 });
   }
 
