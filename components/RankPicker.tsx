@@ -9,21 +9,27 @@ export function RankPicker({ tier, onSelect }: { tier: number | null; onSelect: 
   const current = rankByTier(tier);
 
   const popup = (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 p-3 sm:items-center" onClick={() => setOpen(false)}>
-      <div className="pixel-frame item-slot w-full max-w-md max-h-[80vh] overflow-y-auto p-3" style={{ maxHeight: "80dvh", overflowY: "auto", overscrollBehavior: "contain", touchAction: "pan-y" }} onClick={(e) => e.stopPropagation()}>
-        <div className="mb-3 flex items-center justify-between">
-          <p className="eyebrow">CHOOSE YOUR RANK</p>
-          <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="px-2 text-xs text-slate-300/70">X</button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" onClick={() => setOpen(false)}>
+      <div
+        className="w-full max-w-sm border-2 border-dv-brass bg-dv-panel2"
+        style={{ maxHeight: "78dvh", overflowY: "auto", overscrollBehavior: "contain", touchAction: "pan-y", boxShadow: "0 0 0 2px #000, 0 0 24px rgba(212,175,90,0.25)" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-dv-line bg-dv-panel2 px-3 py-2">
+          <p className="text-[10px] tracking-widest text-dv-brassLight">CHOOSE YOUR RANK</p>
+          <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="border border-dv-line px-2 py-0.5 text-[10px] text-slate-300/80">X</button>
         </div>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-2 p-3">
           {RANKS.map((r) => (
             <button
               key={r.tier}
               type="button"
               onClick={() => { onSelect(r.tier); setOpen(false); }}
-              className={["flex flex-col items-center gap-1 border p-2 text-[9px]", r.tier === tier ? "border-dv-brass bg-dv-panel2 text-dv-brassLight" : "border-dv-line text-slate-200/80"].join(" ")}
+              className={["relative flex flex-col items-center gap-1 border px-1 pb-2 pt-3 text-[8px]", r.tier === tier ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-black/20 text-slate-200/80"].join(" ")}
+              style={r.tier === tier ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}
             >
-              <img src={rankImg(r.file)} alt="" className="h-10 w-10 object-contain" style={{ imageRendering: "pixelated" }} />
+              <span className="absolute left-1 top-0.5 text-[7px] text-slate-400/70">{r.tier}</span>
+              <img src={rankImg(r.file)} alt="" className="h-11 w-11 object-contain" style={{ imageRendering: "pixelated" }} />
               <span className="text-center leading-tight">{r.name.toUpperCase()}</span>
             </button>
           ))}
