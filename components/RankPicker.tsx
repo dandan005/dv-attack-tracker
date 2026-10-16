@@ -10,7 +10,7 @@ export function RankPicker({ tier, onSelect }: { tier: number | null; onSelect: 
 
   const popup = (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 p-3 sm:items-center" onClick={() => setOpen(false)}>
-      <div className="pixel-frame item-slot w-full max-w-md max-h-[80vh] overflow-y-auto p-3" onClick={(e) => e.stopPropagation()}>
+      <div className="pixel-frame item-slot w-full max-w-md max-h-[80vh] overflow-y-auto p-3" style={{ maxHeight: "80dvh", overflowY: "auto", overscrollBehavior: "contain", touchAction: "pan-y" }} onClick={(e) => e.stopPropagation()}>
         <div className="mb-3 flex items-center justify-between">
           <p className="eyebrow">CHOOSE YOUR RANK</p>
           <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="px-2 text-xs text-slate-300/70">X</button>
