@@ -11,8 +11,8 @@ export function RankPicker({ tier, onSelect }: { tier: number | null; onSelect: 
   const popup = (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" onClick={() => setOpen(false)}>
       <div
-        className="w-full max-w-sm border-2 border-dv-brass bg-dv-panel2"
-        style={{ maxHeight: "78dvh", overflowY: "auto", overscrollBehavior: "contain", touchAction: "pan-y", boxShadow: "0 0 0 2px #000, 0 0 24px rgba(212,175,90,0.25)" }}
+        className="[&::-webkit-scrollbar]:hidden w-full max-w-sm border-2 border-dv-brass bg-dv-panel2"
+        style={{ maxHeight: "78dvh", overflowY: "auto", overscrollBehavior: "contain", scrollbarWidth: "none", touchAction: "pan-y", boxShadow: "0 0 0 2px #000, 0 0 24px rgba(212,175,90,0.25)" }}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-dv-line bg-dv-panel2 px-3 py-2">
