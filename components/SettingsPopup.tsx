@@ -92,13 +92,13 @@ export function SettingsPopup({
   if (!open || typeof document === "undefined") return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 bg-black/20" onClick={onClose}>
       <div
         role="dialog"
         aria-label="Settings"
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm rounded-xl border border-dv-brassLight/60 bg-dv-panel2 shadow-[0_0_24px_rgba(214,170,90,0.25)]"
-        style={{ maxHeight: "80dvh", overflowY: "auto", touchAction: "pan-y" }}
+        className="fixed right-3 top-[118px] w-[min(22rem,calc(100vw-1.5rem))] rounded-xl border border-dv-brassLight/60 bg-dv-panel2 shadow-[0_0_24px_rgba(214,170,90,0.25)]"
+        style={{ maxHeight: "calc(100dvh - 130px)", overflowY: "auto", touchAction: "pan-y" }}
       >
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-dv-line bg-dv-panel2 px-4 py-3">
           <span className="text-[11px] tracking-[0.25em] text-dv-brassLight">SETTINGS</span>
