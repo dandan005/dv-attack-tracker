@@ -66,6 +66,8 @@ function OptionPicker({ title, current, options, onSelect }: { title: string; cu
   );
 }
 
+if (typeof window !== "undefined" && !cache) { fetch("/api/profile").then((r) => (r.ok ? r.json() : null)).then((d: P | null) => { if (d && !cache) cache = d; }).catch(() => {}); }
+
 export function ProfileFields({ Row }: { Row: RowC }) {
   const [p, setP] = useState<P | null>(cache);
   const [lv, setLv] = useState(txt(cache?.level));
