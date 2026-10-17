@@ -3,7 +3,7 @@ import { createAdminClient } from "@/lib/supabase/server";
 import { getGuildMember } from "@/lib/auth";
 import { getCycleInfo } from "@/lib/cycle";
 
-async function findMissingAndPing() {
+async function findMissingAndPing(forceHour?: number) {
   const admin = createAdminClient();
 
   const { data: settings } = await admin
@@ -35,7 +35,7 @@ async function findMissingAndPing() {
   }
 
   const mentions = missing.map((m: any) => `<@${m.discord_id}>`).join(" ");
-  const pingHour = new Date().getUTCHours();
+  const pingHour = forceHour ?? new Date().getUTCHours();
   const intro = pingHour === 14 ? `⚔️ **Dragon Valley — D${dayNumber} is live!**` : pingHour === 13 ? `🚨 **LAST CALL — D${dayNumber} resets in 1 hour!**` : `🐉 **D${dayNumber} check-in — still waiting on:**`;
   const outro = pingHour === 14 ? "Your attack is not logged yet. Get it in today!" : pingHour === 13 ? "Attack now or lose the day. No excuses!" : "The dragon will not slay itself. Log your attack!";
   const content = `${intro}\n${mentions}\n${outro}`;
@@ -73,7 +73,9 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const result = await findMissingAndPing();
+  const p = req.nextUrl.searchParams.get("ping");
+  const forceHour = p === "1" ? 14 : p === "3" ? 13 : p === "2" ? 23 : undefined;
+  const result = await findMissingAndPing(forceHour);
   if ("error" in result) {
     return NextResponse.json({ error: result.error }, { status: result.status });
   }
