@@ -9,21 +9,25 @@ type Data = { me: string; members: Row[] };
 const TABS = [{ v: "ALL", label: "GLOBAL" }, { v: "1", label: "G1" }, { v: "2", label: "G2" }];
 const MAPS: Record<string, string> = { wasteland: "WASTELAND", lava: "LAVA MTS", icevale: "ICEVALE", windcliff: "WINDCLIFF" };
 
+const cache: Record<string, Data> = {};
+const load = (v: string) => fetch("/api/ranking?guild=" + v).then((r) => (r.ok ? r.json() : Promise.reject())).then((d: Data) => { cache[v] = d; return d; });
+if (typeof window !== "undefined") { for (const t of TABS) load(t.v).catch(() => {}); }
+
 export function RankingCard() {
   const [view, setView] = useState("ALL");
-  const [data, setData] = useState<Data | null>(null);
+  const [data, setData] = useState<Data | null>(cache["ALL"] ?? null);
   const [err, setErr] = useState(false);
   const [all, setAll] = useState(false);
 
   useEffect(() => {
     let off = false;
-    setData(null);
+    setData(cache[view] ?? null);
     setErr(false);
     setAll(false);
-    fetch("/api/ranking?guild=" + view)
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
+    load(view)
+      
       .then((d) => { if (!off) setData(d); })
-      .catch(() => { if (!off) setErr(true); });
+      .catch(() => { if (!off && !cache[view]) setErr(true); });
     return () => { off = true; };
   }, [view]);
 
