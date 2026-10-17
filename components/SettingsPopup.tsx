@@ -3,6 +3,7 @@
 import { createPortal } from "react-dom";
 import { useEffect, useState } from "react";
 import { RankPicker } from "./RankPicker";
+import { ProfileFields } from "./ProfileFields";
 import { GuildAssign } from "./GuildAssign";
 import { rankByTier, rankImg } from "@/lib/ranks";
 
@@ -144,6 +145,8 @@ export function SettingsPopup({
               </Row>
             )}
           </Section>
+
+          <Section title="PLAYER STATS"><ProfileFields Row={Row} /></Section>
 
           <Section title="HELP">
             {onReplayWalkthrough && (
