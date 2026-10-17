@@ -40,8 +40,8 @@ type Tab = "ledger" | "index" | "build" | "cooking" | "special" | "runes" | "set
 
 const TABS: { id: Tab; label: string; icon: ((props: { className?: string }) => JSX.Element) | string }[] = [
   { id: "ledger", label: "Ledger", icon: LedgerIcon },
-  { id: "index", label: "Index", icon: GuideIcon },
-  { id: "build", label: "Build", icon: BuildIcon },
+  { id: "index", label: "Ranking", icon: GuideIcon },
+  { id: "build", label: "Guide", icon: BuildIcon },
   { id: "cooking", label: "Cooking", icon: CookingIcon },
   { id: "special", label: "Special", icon: SpecialIcon },
   { id: "runes", label: "Runes", icon: RunesIcon },
@@ -416,13 +416,13 @@ export default function DashboardPage() {
                 )}
 
                 <div className="mt-3"><LogAttackButton loggedDays={myLoggedDays} loggedAt={myLoggedAt} element={settings.wyvern_element} checkedIn={members.filter((m) => m.logged[dayNumber - 1]).length} total={dayNumber <= 6 ? members.length : 0} tier={myTier} onNeedTier={() => { setToast("Set your rank in the ledger row next to your name"); setTimeout(() => setToast(null), 2500); }} onLog={logAttack} /></div>
-                <div className="mt-3"><GuildProgress headerExtra={isSuper && guildList.length > 0 && (<div className="mb-2 flex gap-2">{["ALL", ...guildList.map((g) => String(g.id))].map((v) => { const g = guildList.find((x) => String(x.id) === v); return (<button key={v} type="button" onClick={() => setGuildView(v)} className={["h-6 flex-1 border px-2 text-[9px]", v === effView ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/80"].join(" ")} style={v === effView ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}>{g ? g.code : "ALL"}</button>); })}</div>)} members={shownMembers} onSetTier={saveTier} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div><RankingCard />
+                <div className="mt-3"><GuildProgress headerExtra={isSuper && guildList.length > 0 && (<div className="mb-2 flex gap-2">{["ALL", ...guildList.map((g) => String(g.id))].map((v) => { const g = guildList.find((x) => String(x.id) === v); return (<button key={v} type="button" onClick={() => setGuildView(v)} className={["h-6 flex-1 border px-2 text-[9px]", v === effView ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/80"].join(" ")} style={v === effView ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}>{g ? g.code : "ALL"}</button>); })}</div>)} members={shownMembers} onSetTier={saveTier} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
               </>
             )}
           </div>
         )}
 
-        {tab === "index" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛒ OPERATIONS INDEX</p><Guide /></section>)}
+        {tab === "index" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛒ RANKING</p><RankingCard /></section>)}
         {tab === "build" && (
           <section className="space-y-3">
             <div>
@@ -430,7 +430,7 @@ export default function DashboardPage() {
               <SkillBuild />
             </div>
             <div>
-              <Spirits />
+              <Spirits /></div><div><p className="eyebrow mb-4 text-dv-emerald">ᛒ OPERATIONS INDEX</p><Guide />
             </div>
             <div>
             </div>
