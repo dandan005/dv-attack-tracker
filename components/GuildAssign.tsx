@@ -68,18 +68,22 @@ function GuildPicker({ name, guildId, guilds, busy, onSelect }: { name: string; 
   );
 }
 
+let cache: { members: M[]; guilds: G[] } | null = null;
+
 export function GuildAssign() {
-  const [data, setData] = useState<{ members: M[]; guilds: G[] } | null>(null);
+  const [data, setData] = useState<{ members: M[]; guilds: G[] } | null>(cache);
   const [busy, setBusy] = useState<Id | null>(null);
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     fetch("/api/assign-guild")
       .then((r) => (r.ok ? r.json() : null))
-      .then(setData)
+      .then((d) => { if (d) { cache = d; setData(d); } else setFailed(true); })
       .catch(() => {});
   }, []);
 
-  if (!data) return null;
+  if (failed) return null;
+  if (!data) return (<div className="mb-4"><div className="mb-2 text-[9px] tracking-[0.25em] text-dv-brassLight/80">GUILDS</div><div className="text-[9px] text-slate-400/80">LOADING...</div></div>);
 
   async function assign(memberId: Id, guildId: number | null) {
     setBusy(memberId);
