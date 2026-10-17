@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { rankByTier, rankImg } from "@/lib/ranks";
+import { gameAvatar } from "@/lib/gameAvatars";
 import { PixelPanel } from "@/components/PixelPanel";
 
 type Row = { id: string; username: string | null; avatar_url: string | null; promotion_tier: number | null; level: number | null; stage: number | null; dv_map: string | null; gr_boss: number | null; guild_id: number | null };
@@ -57,7 +58,7 @@ export function RankingCard() {
             <div key={m.id} className="item-slot p-2" style={isMe ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}>
               <div className="flex items-center gap-2 min-w-0 mb-2">
                 <span className="w-5 shrink-0 text-[10px] text-dv-brassLight">{m.stage != null ? i + 1 : "-"}</span>
-                <img src={m.avatar_url || "/icons/icon-192.png"} onError={(e) => { if (!e.currentTarget.src.endsWith("/icons/icon-192.png")) e.currentTarget.src = "/icons/icon-192.png"; }} alt="" className="w-7 h-7 pixel-frame border border-dv-line shrink-0 object-cover" />
+                <img src={gameAvatar(m.username) || m.avatar_url || "/icons/icon-192.png"} onError={(e) => { if (!e.currentTarget.src.endsWith("/icons/icon-192.png")) e.currentTarget.src = "/icons/icon-192.png"; }} alt="" className="w-7 h-7 pixel-frame border border-dv-line shrink-0 object-cover" />
                 <span className="block text-[11px] text-slate-200/80 break-words leading-tight">{m.username || "-"}</span>
                 {isMe && <span className="text-[8px] text-dv-emerald shrink-0">(YOU)</span>}
                 <span className="flex-1" />
