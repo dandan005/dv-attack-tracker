@@ -12,6 +12,8 @@ export async function POST(req: NextRequest) {
 
   const supabase = auth.supabase;
   const member = auth.member;
+  const { data: g } = await createAdminClient().from("members").select("guild_id").eq("id", member.id).single();
+  if (!g?.guild_id) return NextResponse.json({ error: "Ask an admin to assign you to a guild first" }, { status: 403 });
 
   const body = await req.json();
   const dayNumber = Number(body.dayNumber);
