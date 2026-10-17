@@ -62,6 +62,7 @@ export default function DashboardPage() {
   const [settings, setSettings] = useState<Settings>({ wyvern_element: null, wyvern_set_by: null });
   const [showSettings, setShowSettings] = useState(false);
   const [myLoggedDays, setMyLoggedDays] = useState<number[]>([]);
+  const [myCleanRuns, setMyCleanRuns] = useState(0);
   const [myLoggedAt, setMyLoggedAt] = useState<Record<number, string>>({});
   const [myTier, setMyTier] = useState<number | null>(null);
   const [members, setMembers] = useState<MemberRow[]>([]);
@@ -124,6 +125,10 @@ export default function DashboardPage() {
     if (myRow) {
       const myLogs = logsByMember.get(myRow.id) ?? new Map<number, AttackLog>();
       setMyLoggedDays(CYCLE_DAY_NUMBERS.filter((day) => myLogs.has(day)));
+      const { data: myAll } = await supabase.from("attack_logs").select("cycle_start, day_number").eq("member_id", myRow.id);
+      const byCycle = new Map<string, Set<number>>();
+      (myAll ?? []).forEach((l: any) => { if (!byCycle.has(l.cycle_start)) byCycle.set(l.cycle_start, new Set()); byCycle.get(l.cycle_start)!.add(l.day_number); });
+      setMyCleanRuns(Array.from(byCycle.values()).filter((d) => CYCLE_DAY_NUMBERS.every((n) => d.has(n))).length);
       setMyLoggedAt(Object.fromEntries(CYCLE_DAY_NUMBERS.filter((day) => myLogs.has(day)).map((day) => [day, myLogs.get(day)?.logged_at ?? ""])));
       setMyTier(myRow.promotion_tier ?? null);
       setMe({
@@ -258,7 +263,7 @@ export default function DashboardPage() {
                 <span className="text-[9px] text-dv-emerald">SYNCING</span>
               </div>
             )}
-          {me && <SettingsPopup open={showSettings} onClose={() => setShowSettings(false)} me={{ ...me, promotion_tier: myTier, guild_verified_at: me.guild_verified_at ?? null }} stats={{ loggedThisCycle: myLoggedDays.length, cleanRuns: members.filter((m) => m.logged.every(Boolean)).length, cycleRate: members.length === 0 ? 0 : Math.round((members.reduce((s, m) => s + m.logged.filter(Boolean).length, 0) / (members.length * Math.max(dayNumber, 1))) * 100) }} onReplayWalkthrough={() => { setShowSettings(false); setShowWalkthrough(true); }} onSetTier={(t) => saveTier(String(t))} onSignOut={async () => { await supabase.auth.signOut(); window.location.href = "/"; }} />}
+          {me && <SettingsPopup open={showSettings} onClose={() => setShowSettings(false)} me={{ ...me, promotion_tier: myTier, guild_verified_at: me.guild_verified_at ?? null }} stats={{ loggedThisCycle: myLoggedDays.length, cleanRuns: myCleanRuns, cycleRate: members.length === 0 ? 0 : Math.round((members.reduce((s, m) => s + m.logged.filter(Boolean).length, 0) / (members.length * Math.max(dayNumber, 1))) * 100) }} onReplayWalkthrough={() => { setShowSettings(false); setShowWalkthrough(true); }} onSetTier={(t) => saveTier(String(t))} onSignOut={async () => { await supabase.auth.signOut(); window.location.href = "/"; }} />}
             {me && (
               <div onClick={() => setShowSettings(true)} role="button" aria-label="Open settings" className="pixel-frame item-slot flex cursor-pointer items-center gap-2 px-2 py-1">
                 <img src={me.avatar_url || "/icons/icon-192.png"}
