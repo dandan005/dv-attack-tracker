@@ -24,3 +24,17 @@ export async function POST(req: NextRequest) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true });
 }
+export async function GET() {
+  const auth = await getGuildMember();
+  if (auth.error || !auth.member) return NextResponse.json({ error: auth.error }, { status: 403 });
+
+  const admin = createAdminClient();
+  const { data: me } = await admin.from("members").select("is_super_admin").eq("id", auth.member.id).single();
+  if (!me?.is_super_admin) return NextResponse.json({ error: "Super admin only" }, { status: 403 });
+
+  const [{ data: members }, { data: guilds }] = await Promise.all([
+    admin.from("members").select("id, username, guild_id").order("username"),
+    admin.from("guilds").select("id, code, name").order("id"),
+  ]);
+  return NextResponse.json({ members: members ?? [], guilds: guilds ?? [] });
+}
