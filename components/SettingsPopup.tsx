@@ -95,7 +95,7 @@ export function SettingsPopup({
         role="dialog"
         aria-label="Settings"
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm rounded-xl border border-dv-line bg-dv-panel2"
+        className="no-scrollbar w-full max-w-sm rounded-xl border border-dv-line bg-dv-panel2"
         style={{ maxHeight: "calc(100dvh - 130px)", overflowY: "auto", touchAction: "pan-y" }}
       >
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-dv-line bg-dv-panel2 px-4 py-3">
