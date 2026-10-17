@@ -430,47 +430,6 @@ export default function DashboardPage() {
           </section>
         )}
 
-        {tab === "settings" && me?.is_admin && (
-          <section>
-            <div className="mb-5"><p className="eyebrow text-dv-emerald">ᚦ GUILD SETTINGS</p><h2 className="mt-1 text-xl text-dv-brassLight">Configure the parts the guild actually uses.</h2><p className="mt-2 max-w-2xl text-xs leading-relaxed text-slate-200/60">The raid clock is fixed to the in-game schedule, so there is no anchor date to maintain. Use this panel for the shared raid signal, reminders, and field briefing.</p></div>
-
-            {dayNumber >= 3 && dayNumber <= 6 && (
-              <WyvernTracker
-                current={settings.wyvern_element as any}
-                setBy={settings.wyvern_set_by}
-                onSelect={setWyvern}
-                isAdmin={me?.is_admin ?? false}
-              />
-            )}
-
-            <section className="pixel-border bg-dv-panel/95 p-4 shadow-pixel">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div>
-                  <p className="eyebrow text-dv-violet">ᛗ DISCORD REMINDERS</p>
-                  <h3 className="mt-1 text-base text-dv-brassLight">Ping members missing today&apos;s attack</h3>
-                  <p className="mt-2 max-w-xl text-[10px] leading-relaxed text-slate-200/55">Send a reminder to the guild members who have not logged their attack for the current day. This uses the configured Discord webhook.</p>
-                </div>
-                <button type="button" onClick={pingMissing} disabled={pinging} className="pixel-frame shrink-0 bg-dv-brass px-4 py-3 text-[10px] text-dv-bg shadow-pixel-sm hover:bg-dv-brassLight active:translate-y-[2px] disabled:cursor-wait disabled:opacity-60">{pinging ? "PINGING..." : "PING MISSING MEMBERS"}</button>
-              </div>
-            </section>
-
-            <section className="mt-4 pixel-border bg-dv-panel/95 p-4 shadow-pixel">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div>
-                  <p className="eyebrow text-dv-emerald">ᛏ RAID CLOCK</p>
-                  <h3 className="mt-1 text-base text-dv-brassLight">Fixed to the Dragon Valley schedule</h3>
-                </div>
-                <button type="button" onClick={() => setShowWalkthrough(true)} className="pixel-frame border border-dv-violet px-3 py-2 text-[9px] text-dv-violet hover:bg-dv-violet/10">REPLAY FIELD BRIEFING</button>
-              </div>
-              <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                <div className="item-slot border border-dv-line px-3 py-3"><p className="text-[9px] text-slate-300/45">DAY 1 START</p><p className="mt-1 text-[10px] text-dv-brassLight">MON 14:00 UTC · MON 10:00 PM PHT</p></div>
-                <div className="item-slot border border-dv-line px-3 py-3"><p className="text-[9px] text-slate-300/45">ATTACK WINDOW</p><p className="mt-1 text-[10px] text-dv-brassLight">D1–D6 · 6 ATTACK DAYS</p></div>
-                <div className="item-slot border border-dv-line px-3 py-3"><p className="text-[9px] text-slate-300/45">DAY 7</p><p className="mt-1 text-[10px] text-dv-brassLight">STANDBY · RESULTS · ONBOARDING</p></div>
-                <div className="item-slot border border-dv-line px-3 py-3"><p className="text-[9px] text-slate-300/45">REMINDER MODE</p><p className="mt-1 text-[10px] text-dv-brassLight">MANUAL + VERCEL CRON</p></div>
-              </div>
-            </section>
-          </section>
-        )}
 
         {toast && <div role="status" className="fixed bottom-20 left-1/2 z-50 -translate-x-1/2 pixel-frame bg-dv-brass px-4 py-3 text-[10px] text-dv-bg shadow-pixel animate-rise">{toast}</div>}
       </main>
