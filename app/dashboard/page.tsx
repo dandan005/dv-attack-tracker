@@ -426,7 +426,7 @@ export default function DashboardPage() {
         {tab === "build" && (
           <section className="space-y-3">
             <div>
-              <p className="eyebrow mb-4 text-dv-emerald">ᚨ BUILD GUIDE</p>
+              <p className="eyebrow mb-4 text-dv-emerald">ᚨ GUIDE</p>
               <SkillBuild />
             </div>
             <div>
