@@ -45,7 +45,7 @@ export function RankingCard() {
           return (
             <div key={m.id} className={["flex items-center gap-2 border px-2 py-1.5", m.id === data?.me ? "border-dv-brass bg-black/40" : "border-dv-line bg-dv-panel2"].join(" ")}>
               <span className="w-5 text-[9px] text-dv-brassLight">{m.stage != null ? i + 1 : "-"}</span>
-              {m.avatar_url ? <img src={m.avatar_url} alt="" className="h-6 w-6 shrink-0" /> : <span className="h-6 w-6 shrink-0 bg-black/40" />}
+              <img src={m.avatar_url || "/icons/icon-192.png"} onError={(e) => { if (!e.currentTarget.src.endsWith("/icons/icon-192.png")) e.currentTarget.src = "/icons/icon-192.png"; }} alt="" className="h-6 w-6 shrink-0" />
               <div className="min-w-0 flex-1">
                 <div className="truncate text-[10px] text-slate-200">{m.username || "-"}</div>
                 <div className="truncate text-[8px] text-slate-300/70">LV {m.level ?? "-"} · {m.dv_map ? (MAPS[m.dv_map] ?? m.dv_map) : "-"} · BOSS {m.gr_boss ?? "-"}</div>
