@@ -22,5 +22,11 @@ export async function GET(req: NextRequest) {
 
   const { data, error } = await q.order("stage", { ascending: false, nullsFirst: false });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ me: auth.member.id, members: data ?? [] });
+  const admin = createAdminClient();
+  const { data: all } = await admin.from("members").select("username");
+  const claimed = new Set((all ?? []).map((m: any) => (m.username || "").toLowerCase()));
+  const { data: ro } = await admin.from("roster").select("*");
+  const gid2 = g && g !== "ALL" ? Number(g) : null;
+  const extra = (ro ?? []).filter((r: any) => !claimed.has(r.key) && (gid2 === null || r.guild_id === null || r.guild_id === gid2)).map((r: any) => ({ id: "roster-" + r.key, username: r.name, avatar_url: null, promotion_tier: r.promotion_tier, level: r.level, stage: r.stage, dv_map: r.dv_map, gr_boss: r.gr_boss, guild_id: r.guild_id }));
+  return NextResponse.json({ me: auth.member.id, members: [...(data ?? []), ...extra] });
 }
