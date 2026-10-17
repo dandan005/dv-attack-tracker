@@ -51,8 +51,6 @@ export function RankingCard() {
           const stats: [string, string, string][] = [
             ["LEVEL", m.level != null ? String(m.level) : "-", "text-slate-200/80"],
             ["STAGE", m.stage != null ? String(m.stage) : "-", "text-dv-emerald"],
-            ["MAP", m.dv_map ? (MAPS[m.dv_map] ?? m.dv_map) : "-", "text-slate-200/80"],
-            ["BOSS", m.gr_boss != null ? String(m.gr_boss) : "-", "text-slate-200/80"],
           ];
           return (
             <div key={m.id} className="item-slot p-2" style={isMe ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}>
@@ -64,7 +62,7 @@ export function RankingCard() {
                 <span className="flex-1" />
                 {r && <span className="flex items-center gap-1 text-[9px] text-slate-200/80 shrink-0"><img src={rankImg(r.file)} alt="" className="h-4 w-4" />{r.name}</span>}
               </div>
-              <div className="grid grid-cols-4 gap-1">
+              <div className="grid grid-cols-2 gap-1">
                 {stats.map(([l, v, c]) => (
                   <div key={l} className="min-w-0"><p className="eyebrow">{l}</p><p className={"truncate text-[10px] mt-1 " + c}>{v}</p></div>
                 ))}
