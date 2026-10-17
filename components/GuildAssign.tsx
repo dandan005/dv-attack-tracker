@@ -1,10 +1,72 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 type Id = string | number;
 type G = { id: number; code: string; name: string };
 type M = { id: Id; username: string; guild_id: number | null };
+
+function GuildPicker({ name, guildId, guilds, busy, onSelect }: { name: string; guildId: number | null; guilds: G[]; busy: boolean; onSelect: (id: number | null) => void }) {
+  const [open, setOpen] = useState(false);
+  const current = guilds.find((g) => g.id === guildId);
+  const options: { id: number | null; label: string }[] = [
+    { id: null, label: "NO GUILD" },
+    ...guilds.map((g) => ({ id: g.id, label: `${g.code} · ${g.name}` })),
+  ];
+
+  const popup = (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" onClick={() => setOpen(false)}>
+      <div
+        className="w-full max-w-xs rounded-xl border-2 border-dv-line bg-dv-panel2"
+        style={{ boxShadow: "0 0 0 2px #000, 0 0 24px rgba(212,175,90,0.25)" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between rounded-t-xl border-b border-dv-line bg-dv-panel2 px-3 py-2">
+          <div className="min-w-0">
+            <p className="text-[10px] tracking-widest text-dv-brassLight">CHOOSE GUILD</p>
+            <p className="mt-1 truncate text-[8px] text-slate-400/80">{name || "(NO NAME)"}</p>
+          </div>
+          <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="border border-dv-line px-2 py-0.5 text-[10px] text-slate-300/80">X</button>
+        </div>
+        <div className="flex flex-col gap-2 p-3">
+          {options.map((o) => {
+            const selected = o.id === guildId;
+            return (
+              <button
+                key={String(o.id)}
+                type="button"
+                disabled={busy}
+                onClick={() => { setOpen(false); if (!selected) onSelect(o.id); }}
+                className={["flex w-full items-center justify-between rounded-md border px-3 py-3 text-[10px]", selected ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-black/20 text-slate-200/80"].join(" ")}
+                style={selected ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}
+              >
+                <span>{o.label}</span>
+                <span className="text-[8px]">{selected ? "●" : ""}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      <button
+        type="button"
+        disabled={busy}
+        onClick={() => setOpen(true)}
+        aria-label="Choose guild"
+        className="flex h-6 shrink-0 items-center gap-1 border border-dv-line bg-dv-panel2 px-1.5 text-[9px] text-dv-brassLight"
+      >
+        {current ? `${current.code} · ${current.name}` : "NO GUILD"}
+        <span className="text-[7px] text-slate-400/70">▼</span>
+      </button>
+      {open && typeof document !== "undefined" && createPortal(popup, document.body)}
+    </>
+  );
+}
 
 export function GuildAssign() {
   const [data, setData] = useState<{ members: M[]; guilds: G[] } | null>(null);
@@ -19,8 +81,7 @@ export function GuildAssign() {
 
   if (!data) return null;
 
-  async function assign(memberId: Id, value: string) {
-    const guildId = value === "" ? null : Number(value);
+  async function assign(memberId: Id, guildId: number | null) {
     setBusy(memberId);
     const r = await fetch("/api/assign-guild", {
       method: "POST",
@@ -40,17 +101,7 @@ export function GuildAssign() {
         {data.members.map((m) => (
           <div key={String(m.id)} className="flex items-center justify-between gap-2">
             <span className="truncate text-[10px] text-dv-brassLight">{m.username || "(no name)"}</span>
-            <select
-              value={m.guild_id ?? ""}
-              disabled={busy === m.id}
-              onChange={(e) => assign(m.id, e.target.value)}
-              className="border border-dv-line bg-transparent text-[10px] text-dv-brassLight"
-            >
-              <option value="">No guild</option>
-              {data.guilds.map((g) => (
-                <option key={g.id} value={g.id}>{g.code} · {g.name}</option>
-              ))}
-            </select>
+            <GuildPicker name={m.username} guildId={m.guild_id} guilds={data.guilds} busy={busy === m.id} onSelect={(id) => assign(m.id, id)} />
           </div>
         ))}
       </div>
