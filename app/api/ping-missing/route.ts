@@ -35,7 +35,10 @@ async function findMissingAndPing() {
   }
 
   const mentions = missing.map((m: any) => `<@${m.discord_id}>`).join(" ");
-  const content = `⚔️ **Dragon Valley — D${dayNumber} attack reminder**\n${mentions}\nYou haven't logged your attack yet — don't let the guild down!`;
+  const pingHour = new Date().getUTCHours();
+  const intro = pingHour === 14 ? `⚔️ **Dragon Valley — D${dayNumber} is live!**` : pingHour === 13 ? `🚨 **LAST CALL — D${dayNumber} resets in 1 hour!**` : `🐉 **D${dayNumber} check-in — still waiting on:**`;
+  const outro = pingHour === 14 ? "Your attack is not logged yet. Get it in today!" : pingHour === 13 ? "Attack now or lose the day. No excuses!" : "The dragon will not slay itself. Log your attack!";
+  const content = `${intro}\n${mentions}\n${outro}`;
 
   await fetch(webhookUrl, {
     method: "POST",
