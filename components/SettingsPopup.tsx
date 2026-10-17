@@ -27,7 +27,6 @@ type Props = {
   stats: SettingsStats;
   onSetTier: (tier: number) => void;
   onReplayWalkthrough?: () => void;
-  onSwitchAccount?: () => void;
   onSignOut: () => void;
   onAdminResetCycle?: () => void;
 };
@@ -69,7 +68,6 @@ export function SettingsPopup({
   stats,
   onSetTier,
   onReplayWalkthrough,
-  onSwitchAccount,
   onSignOut,
   onAdminResetCycle,
 }: Props) {
@@ -159,13 +157,6 @@ export function SettingsPopup({
           {me.is_admin && (<Section title="RAID SCHEDULE"><Row label="Day 1 start" value="Mon 14:00 UTC · Mon 10:00 PM PHT" /><Row label="Attack window" value="D1–D6 · 6 attack days" /><Row label="Day 7" value="Standby · Results · Onboarding" /><Row label="Reminder mode" value="Manual + Vercel cron" /></Section>)}
 
           <Section title="ACCOUNT">
-            {onSwitchAccount && (
-              <Row label="Switch Discord account">
-                <button onClick={onSwitchAccount} className="rounded-md border border-dv-line px-3 py-1 text-[9px] tracking-[0.15em] text-slate-200/80">
-                  SWITCH
-                </button>
-              </Row>
-            )}
             <Row label="Sign out" value={confirmSignOut ? "Tap again to confirm" : "You will need to sign in again"}>
               <button
                 onClick={() => (confirmSignOut ? onSignOut() : setConfirmSignOut(true))}
