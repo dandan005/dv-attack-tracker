@@ -82,6 +82,7 @@ export function GuildAssign() {
       .catch(() => {});
   }, []);
 
+  useEffect(() => { if (data) cache = data; }, [data]);
   if (failed) return null;
   if (!data) return (<div className="mb-4"><div className="mb-2 text-[9px] tracking-[0.25em] text-dv-brassLight/80">GUILDS</div><div className="text-[9px] text-slate-400/80">LOADING...</div></div>);
 
