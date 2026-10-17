@@ -15,6 +15,7 @@ export type MemberRow = {
 export function GuildProgress({
   members,
   onPingMissing,
+  headerExtra,
   pinging,
   currentDay = 1,
   currentUserId,
@@ -22,6 +23,7 @@ export function GuildProgress({
 }: {
   members: MemberRow[];
   onPingMissing: () => void;
+  headerExtra?: React.ReactNode;
   pinging: boolean;
   currentDay?: number;
   currentUserId?: string;
@@ -54,6 +56,7 @@ export function GuildProgress({
       ) : (
         <div className="mb-2">
           <p className="eyebrow mb-2">ATTACK LEDGER / MEMBERS</p>
+          {headerExtra}
           <div className="space-y-2 max-h-[66dvh] overflow-y-auto pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {members.map((member) => (
               <div key={member.discord_id} className="item-slot p-2">
