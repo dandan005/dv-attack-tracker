@@ -71,12 +71,15 @@ export async function POST(req: NextRequest) {
   }
 
   const admin = createAdminClient();
-  const { data: me } = await admin.from("members").select("guild_id").eq("id", auth.member.id).single();
-  if (!me?.guild_id) {
+  const { data: me } = await admin.from("members").select("guild_id, is_super_admin").eq("id", auth.member.id).single();
+  const body = await req.json().catch(() => ({}));
+  const isAll = !!me?.is_super_admin && body.guild === "ALL";
+  const target = me?.is_super_admin && typeof body.guild === "number" ? body.guild : me?.guild_id;
+  if (!isAll && !target) {
     return NextResponse.json({ error: "No guild assigned" }, { status: 403 });
   }
 
-  const result = await findMissingAndPing(undefined, me.guild_id);
+  const result = await findMissingAndPing(undefined, isAll ? undefined : (target as number));
   if ("error" in result) {
     return NextResponse.json({ error: result.error }, { status: result.status });
   }

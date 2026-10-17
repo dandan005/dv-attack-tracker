@@ -8,6 +8,7 @@ export type MemberRow = {
   username: string;
   avatar_url: string | null;
   logged: boolean[];
+  guild_id?: number | null;
   promotion_tier?: number | null;
 };
 

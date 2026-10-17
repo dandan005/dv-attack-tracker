@@ -66,6 +66,12 @@ export default function DashboardPage() {
   const [myLoggedAt, setMyLoggedAt] = useState<Record<number, string>>({});
   const [myTier, setMyTier] = useState<number | null>(null);
   const [members, setMembers] = useState<MemberRow[]>([]);
+  const [isSuper, setIsSuper] = useState(false);
+  const [myGuildId, setMyGuildId] = useState<number | null>(null);
+  const [guildView, setGuildView] = useState<string>("");
+  const [guildList, setGuildList] = useState<{ id: number; code: string }[]>([]);
+  const effView = guildView || (myGuildId !== null ? String(myGuildId) : "ALL");
+  const shownMembers = isSuper && effView !== "ALL" ? members.filter((m) => String(m.guild_id) === effView) : members;
   const [pinging, setPinging] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [me, setMe] = useState<CurrentMember | null>(null);
@@ -99,7 +105,7 @@ export default function DashboardPage() {
     setSettings(currentSettings);
     const cycle = getCycleInfo();
 
-    const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, avatar_url, is_admin, has_seen_walkthrough, promotion_tier, guild_verified_at");
+    const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, avatar_url, is_admin, has_seen_walkthrough, promotion_tier, guild_verified_at, guild_id, is_super_admin");
     const { data: logsData } = await supabase.from("attack_logs").select("member_id, day_number, logged_at").eq("cycle_start", cycle.cycleStartISO);
     const logs: AttackLog[] = logsData ?? [];
 
@@ -117,6 +123,7 @@ export default function DashboardPage() {
         avatar_url: member.avatar_url,
         logged: CYCLE_DAY_NUMBERS.map((day) => memberLogs.has(day)),
         promotion_tier: member.promotion_tier ?? null,
+        guild_id: member.guild_id ?? null,
       };
     });
     setMembers([...rows].sort((a, b) => a.username.localeCompare(b.username, undefined, { sensitivity: "base" })));
@@ -131,6 +138,9 @@ export default function DashboardPage() {
       setMyCleanRuns(Array.from(byCycle.values()).filter((d) => CYCLE_DAY_NUMBERS.every((n) => d.has(n))).length);
       setMyLoggedAt(Object.fromEntries(CYCLE_DAY_NUMBERS.filter((day) => myLogs.has(day)).map((day) => [day, myLogs.get(day)?.logged_at ?? ""])));
       setMyTier(myRow.promotion_tier ?? null);
+      setIsSuper(!!myRow.is_super_admin);
+      setMyGuildId(myRow.guild_id ?? null);
+      if (myRow.is_super_admin) fetch("/api/assign-guild").then((r) => (r.ok ? r.json() : null)).then((d) => { if (d) setGuildList(d.guilds); }).catch(() => {});
       setMe({
         username: myRow.username,
         avatar_url: myRow.avatar_url,
@@ -196,7 +206,7 @@ export default function DashboardPage() {
   async function pingMissing() {
     setPinging(true);
     try {
-      const res = await fetch("/api/ping-missing", { method: "POST" });
+      const res = await fetch("/api/ping-missing", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ guild: isSuper ? (effView === "ALL" ? "ALL" : Number(effView)) : undefined }) });
       const json = await res.json().catch(() => ({}));
       setToast(res.ok ? "Pinged " + json.missing + " member(s) on Discord" : (json.error ?? "Could not ping missing members"));
     } catch {
@@ -405,7 +415,7 @@ export default function DashboardPage() {
                 )}
 
                 <div className="mt-3"><LogAttackButton loggedDays={myLoggedDays} loggedAt={myLoggedAt} element={settings.wyvern_element} checkedIn={members.filter((m) => m.logged[dayNumber - 1]).length} total={dayNumber <= 6 ? members.length : 0} tier={myTier} onNeedTier={() => { setToast("Set your rank in the ledger row next to your name"); setTimeout(() => setToast(null), 2500); }} onLog={logAttack} /></div>
-                <div className="mt-3"><GuildProgress members={members} onSetTier={saveTier} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
+                <div className="mt-3">{isSuper && guildList.length > 0 && (<div className="mb-2 flex gap-2">{["ALL", ...guildList.map((g) => String(g.id))].map((v) => { const g = guildList.find((x) => String(x.id) === v); return (<button key={v} type="button" onClick={() => setGuildView(v)} className={["h-6 border px-2 text-[9px]", v === effView ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/80"].join(" ")} style={v === effView ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}>{g ? g.code : "ALL"}</button>); })}</div>)}<GuildProgress members={shownMembers} onSetTier={saveTier} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
               </>
             )}
           </div>
