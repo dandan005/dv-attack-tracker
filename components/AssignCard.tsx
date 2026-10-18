@@ -10,8 +10,9 @@ export default function AssignCard() {
   const [rows, setRows] = useState<Row[]>([]);
   const [err, setErr] = useState(false);
   useEffect(() => {
-    setErr(false);
-    fetch("/api/ranking?guild=" + view).then((r) => (r.ok ? r.json() : Promise.reject())).then((d) => setRows(d.members)).catch(() => setErr(true));
+    let live = true; setErr(false); setRows([]);
+    fetch("/api/ranking?guild=" + view).then((r) => (r.ok ? r.json() : Promise.reject())).then((d) => { if (live) setRows(d.members); }).catch(() => { if (live) setErr(true); });
+    return () => { live = false; };
   }, [view]);
   const unassigned = rows.filter((m) => !MAPS.some(([k]) => k === m.dv_map));
   return (
