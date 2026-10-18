@@ -28,7 +28,7 @@ export default function AssignCard() {
       {err && <p className="text-[10px]">Could not load.</p>}
       {sec === "dv" && MAPS.map(([k, label]) => { const ms = rows.filter((m) => m.dv_map === k); return (<div key={k} className="pixel-frame p-3"><p className="eyebrow mb-2 text-dv-emerald">{label} ({ms.length}/5)</p>{ms.map((m) => (<p key={m.id} className="text-[10px]">{m.username}</p>))}</div>); })}
       {sec === "dv" && (<div className="pixel-frame p-3"><p className="eyebrow mb-2 text-dv-emerald">UNASSIGNED ({unassigned.length})</p>{unassigned.map((m) => (<p key={m.id} className="text-[10px]">{m.username}</p>))}</div>)}
-      {sec === "gr" && GR.map((g) => { const ms = rows.filter((m) => m.gr_boss === g.n); return (<div key={g.n} className="pixel-frame p-3"><p className="eyebrow mb-1 text-dv-emerald">{g.r} {g.name} ({ms.length}/{g.slots})</p><p className="mb-2 text-[8px] opacity-70">{g.map} / {g.pts} PTS</p>{ms.map((m) => (<p key={m.id} className="text-[10px]">{m.username}</p>))}</div>); })}
+      {sec === "gr" && GR.map((g) => { const ms = rows.filter((m) => m.gr_boss === g.n); return (<div key={g.n} className="pixel-frame p-3"><p className="eyebrow mb-1 text-dv-emerald">{g.r} {g.name} ({ms.length}/{g.slots})</p><p className="mb-2 text-[8px] opacity-70">{g.pts} PTS</p>{ms.map((m) => (<p key={m.id} className="text-[10px]">{m.username}</p>))}</div>); })}
     </div>
   );
 }
