@@ -133,3 +133,22 @@ export function RankingIcon({ className }: IconProps) {
     </svg>
   );
 }
+
+export function AssignIcon({ className }: IconProps) {
+  return (
+    <svg {...SVG_PROPS} className={className}>
+      <rect x="5" y="0" width="6" height="3" />
+      <rect x="2" y="2" width="3" height="1" />
+      <rect x="11" y="2" width="3" height="1" />
+      <rect x="2" y="2" width="1" height="13" />
+      <rect x="13" y="2" width="1" height="13" />
+      <rect x="2" y="14" width="12" height="1" />
+      <rect x="4" y="6" width="2" height="1" />
+      <rect x="7" y="6" width="5" height="1" />
+      <rect x="4" y="9" width="2" height="1" />
+      <rect x="7" y="9" width="5" height="1" />
+      <rect x="4" y="12" width="2" height="1" />
+      <rect x="7" y="12" width="5" height="1" />
+    </svg>
+  );
+}
