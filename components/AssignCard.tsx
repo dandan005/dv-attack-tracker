@@ -4,14 +4,16 @@ import { useEffect, useState } from "react";
 type Row = { id: string; username: string | null; dv_map: string | null; gr_boss: number | null };
 const TABS = [{ v: "1", label: "G1" }, { v: "2", label: "G2" }];
 const MAPS: [string, string][] = [["wasteland", "WASTELAND PLATEAU"], ["lava", "LAVA MOUNTAINS"], ["icevale", "ICE VALE"], ["windcliff", "WIND CLIFF"]];
+const cache: Record<string, Row[]> = {};
+if (typeof window !== "undefined") { for (const v of ["1", "2"]) fetch("/api/ranking?guild=" + v).then((r) => (r.ok ? r.json() : Promise.reject())).then((d) => { cache[v] = d.members; }).catch(() => {}); }
 
 export default function AssignCard() {
   const [view, setView] = useState("2");
-  const [rows, setRows] = useState<Row[]>([]);
+  const [rows, setRows] = useState<Row[]>(cache["2"] ?? []);
   const [err, setErr] = useState(false);
   useEffect(() => {
-    let live = true; setErr(false); setRows([]);
-    fetch("/api/ranking?guild=" + view).then((r) => (r.ok ? r.json() : Promise.reject())).then((d) => { if (live) setRows(d.members); }).catch(() => { if (live) setErr(true); });
+    let live = true; setErr(false); setRows(cache[view] ?? []);
+    fetch("/api/ranking?guild=" + view).then((r) => (r.ok ? r.json() : Promise.reject())).then((d) => { cache[view] = d.members; if (live) setRows(d.members); }).catch(() => { if (live) setErr(true); });
     return () => { live = false; };
   }, [view]);
   const unassigned = rows.filter((m) => !MAPS.some(([k]) => k === m.dv_map));
