@@ -38,11 +38,9 @@ export default function AssignCard() {
 
   return (
     <PixelPanel className="animate-rise">
-      <div className="mb-3 flex gap-2">{SECS.map((s) => (<button key={s.v} type="button" onClick={() => setSec(s.v)} className={tabCls(sec === s.v)}>{s.label}</button>))}</div>
-      <div className="mb-3">
-        <select value={view} onChange={(e) => setView(e.target.value)} className="h-8 w-full border border-dv-brass bg-black/40 px-2 text-[10px] text-dv-brassLight">
-          {TABS.map((t) => (<option key={t.v} value={t.v}>{t.label}</option>))}
-        </select>
+      <div className="mb-3 flex gap-2">
+        <select value={sec} onChange={(e) => setSec(e.target.value)} className="h-8 flex-1 border border-dv-brass bg-black/40 px-2 text-[10px] text-dv-brassLight">{SECS.map((s) => (<option key={s.v} value={s.v}>{s.label}</option>))}</select>
+        <select value={view} onChange={(e) => setView(e.target.value)} className="h-8 flex-1 border border-dv-brass bg-black/40 px-2 text-[10px] text-dv-brassLight">{TABS.map((t) => (<option key={t.v} value={t.v}>{t.label}</option>))}</select>
       </div>
       {err && <p className="eyebrow py-2">COULD NOT LOAD</p>}
 
