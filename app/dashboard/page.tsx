@@ -449,7 +449,7 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {tab === "index" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛒ RANKING</p><RankingCard /></section>)}
+        {tab === "index" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛒ RANKING</p><div className="space-y-4"><section className="pixel-border bg-dv-panel/95 shadow-pixel p-4"><p className="eyebrow mb-2">RANKING / LEADERBOARD</p><h2 className="text-lg text-dv-brassLight">Know the board.</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">Players are ranked by rank tier first, then stage, then level. Switch between GLOBAL, G1 and G2 to see everyone or a single guild.</p></section><RankingCard /></div></section>)}
         {tab === "build" && (
           <section className="space-y-3">
             <div>
