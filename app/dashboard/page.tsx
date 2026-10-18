@@ -309,7 +309,7 @@ export default function DashboardPage() {
             )}
 
             {day7.phase === "calculation" ? (
-              <div className="relative mt-4 flex flex-col items-center justify-start pixel-border bg-dv-panel/95 px-5 pt-2 pb-8 text-center shadow-pixel">
+              <div className="relative flex flex-col items-center justify-start pixel-border bg-dv-panel/95 px-5 pt-2 pb-8 text-center shadow-pixel">
                 <span className="absolute top-2 right-3 text-dv-violet/40 text-xs" aria-hidden="true">ᛗ</span>
                 <span className="absolute top-2 left-3 text-dv-violet/40 text-xs" aria-hidden="true">ᚦ</span>
                 <p className="text-sm text-dv-brassLight">⚙️ RANKING CALCULATION IN PROGRESS</p>
