@@ -487,7 +487,7 @@ export default function DashboardPage() {
                 "relative flex flex-1 flex-col items-center gap-1 px-1 py-1.5 text-[9px] uppercase tracking-[.1em] " +
                 (tab === id
                   ? "text-dv-brassLight"
-                  : "text-slate-300/55 hover:text-dv-brassLight")
+                  : "text-slate-300/55 [@media(hover:hover)]:hover:text-dv-brassLight")
               }
             >
               {tab === id && (
