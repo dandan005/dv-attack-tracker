@@ -25,7 +25,7 @@ function BossPortrait({ element, boss }: { element: Element; boss: BossSlot }) {
           <p className="boss-name">{boss.name}</p>
         </div>
       </div>
-      <div className="boss-portrait">
+      <div className="boss-portrait" style={{ backgroundImage: "url(/bosses/" + element + ".svg)", backgroundSize: "cover", backgroundPosition: "center" }}>
         {boss.image ? (
           <img src={boss.image} alt={boss.alt} className="block h-auto w-full object-cover" />
         ) : (
