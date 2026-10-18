@@ -362,6 +362,7 @@ export default function DashboardPage() {
                             </li>
                           ))}
                         </ul>
+                        <p className="mt-2 max-w-md text-xs leading-relaxed text-slate-200/60">Perfect runs this cycle — every attack logged. Keep it up next cycle.</p>
                       </div>
                     )}
 
