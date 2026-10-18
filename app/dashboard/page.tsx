@@ -36,7 +36,7 @@ type AttackLog = {
   logged_at?: string;
 };
 
-type Tab = "ledger" | "index" | "build" | "cooking" | "special" | "settings";
+type Tab = "ledger" | "index" | "build" | "cooking" | "special" | "assign" | "settings";
 
 const TABS: { id: Tab; label: string; icon: ((props: { className?: string }) => JSX.Element) | string }[] = [
   { id: "ledger", label: "Ledger", icon: LedgerIcon },
@@ -44,6 +44,7 @@ const TABS: { id: Tab; label: string; icon: ((props: { className?: string }) => 
   { id: "build", label: "Guide", icon: GuideIcon },
   { id: "cooking", label: "Cooking", icon: CookingIcon },
   { id: "special", label: "Special", icon: SpecialIcon },
+  { id: "assign", label: "Assign", icon: LedgerIcon },
   
   { id: "settings", label: "Settings", icon: SettingsIcon },
 ];
@@ -438,6 +439,7 @@ export default function DashboardPage() {
         )}
 
 {tab === "cooking" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛒ MAIN COOKING</p><MainCooking /></section>)}{tab === "special" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛊ SPECIAL DISH</p><Meals /></section>)}
+        {tab === "assign" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛃ ASSIGNMENT</p><p className="text-[10px]">Coming soon.</p></section>)}
 
 
 
