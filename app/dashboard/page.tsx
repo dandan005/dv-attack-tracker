@@ -465,7 +465,7 @@ export default function DashboardPage() {
         )}
 
 {tab === "cooking" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛒ MAIN COOKING</p><MainCooking /></section>)}{tab === "special" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛊ SPECIAL DISH</p><Meals /></section>)}
-        {tab === "assign" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛃ ASSIGNMENT</p><AssignCard /></section>)}
+        {tab === "assign" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛃ ASSIGNMENT</p><div className="space-y-4"><section className="pixel-border bg-dv-panel/95 shadow-pixel p-4"><p className="eyebrow mb-2">ASSIGNMENT / ROSTER</p><h2 className="text-lg text-dv-brassLight">Set the roster.</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">Pick DV MAPS or GUILD REQUEST, then tap a player to assign. Each map holds 5 players. Guild Request slots run 4, 5, 5, 5, 5, 6 for bosses I to VI.</p></section><AssignCard /></div></section>)}
 
 
 
