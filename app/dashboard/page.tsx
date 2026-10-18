@@ -260,6 +260,7 @@ export default function DashboardPage() {
   const partiallyLoggedMembers = members.filter(
     (m) => m.logged.some((logged) => logged) && m.logged.some((logged) => !logged)
   );
+  const perfectMembers = members.filter((m) => m.logged.length > 0 && m.logged.every(Boolean));
 
   return (
     <div className="scanlines fixed inset-0 flex flex-col overflow-hidden">
@@ -314,7 +315,7 @@ export default function DashboardPage() {
                 </p>
                 <p className="mt-2 text-xs text-dv-emerald">Until calculation complete: {day7.hoursLeft}h left</p>
 
-                {(zeroLoggedMembers.length > 0 || partiallyLoggedMembers.length > 0) && (
+                {(zeroLoggedMembers.length > 0 || partiallyLoggedMembers.length > 0 || perfectMembers.length > 0) && (
                   <div className="mt-5 w-full max-w-md space-y-4 text-left">
                     {zeroLoggedMembers.length > 0 && (
                       <div>
@@ -342,6 +343,24 @@ export default function DashboardPage() {
                         </p>
                       </div>
                     )}
+                    {perfectMembers.length > 0 && (
+                      <div>
+                        <p className="eyebrow text-dv-emerald">✅ PERFECT RUNS THIS CYCLE</p>
+                        <ul className="mt-2 space-y-1.5">
+                          {perfectMembers.map((m) => (
+                            <li key={m.discord_id} className="item-slot flex items-center justify-between border border-dv-line px-3 py-2">
+                              <span className="flex items-center gap-2 text-[10px] text-slate-200/75">
+                                <img src={m.avatar_url ?? "/icons/icon-192.png"} alt="" className="h-5 w-5 pixel-frame border border-dv-line object-cover" />
+                                {m.username}
+                              </span>
+                              <span className="text-[10px] text-dv-emerald">6/6 logged</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+
 
                     {zeroLoggedMembers.length > 0 && partiallyLoggedMembers.length > 0 && (
                       <div className="soft-divider flex items-center justify-center">
