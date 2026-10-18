@@ -296,6 +296,7 @@ export default function DashboardPage() {
       <main className="mx-auto flex w-full max-w-md min-h-0 flex-1 flex-col overflow-y-auto px-4 pb-6 pt-5 sm:px-6 md:pt-7">
         {tab === "ledger" && (
           <div className="flex flex-col">
+            {day7.phase !== "calculation" && day7.phase !== "ranking-results" && day7.phase !== "onboarding" && (
             <div className="mb-1">
               <p className="eyebrow text-dv-emerald">ᛏ GUILD OPERATIONS / ONLINE</p>
               <section className="pixel-border bg-dv-panel/95 shadow-pixel mt-4 p-4">
@@ -305,6 +306,7 @@ export default function DashboardPage() {
               <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">The live raid ledger for the current seven-day cycle. Track every attack, see who has checked in each day, and keep an eye on the Wyvern boss element locked for this raid.</p>
               </section>
             </div>
+            )}
 
             {day7.phase === "calculation" ? (
               <div className="relative mt-4 flex flex-col items-center justify-start pixel-border bg-dv-panel/95 p-5 pb-8 text-center shadow-pixel">
