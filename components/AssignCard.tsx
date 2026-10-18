@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { PixelPanel } from "@/components/PixelPanel";
+import DvMapScene from "@/components/DvMapScene";
 
 type Row = { id: string; username: string | null; dv_map: string | null; gr_boss: number | null };
 const TABS = [{ v: "1", label: "G1" }, { v: "2", label: "G2" }];
@@ -55,11 +56,7 @@ export default function AssignCard() {
       )}
 
       <div className="space-y-2">
-        {sec === "dv" && MAPS.map(([k, label]) => { const ms = rows.filter((m) => m.dv_map === k); return (
-          <div key={k} className="item-slot p-2">
-            <div className="flex items-center gap-2 mb-2"><span className="flex-1 text-[11px] text-slate-200/80">{label}</span><span className="text-[9px] text-dv-emerald">{ms.length}/5</span></div>
-            {ms.map((m) => (<p key={m.id} onClick={() => pick(m)} className="text-[10px] text-slate-200/80 cursor-pointer">{m.username}</p>))}
-          </div>); })}
+        {sec === "dv" && MAPS.map(([k, label]) => (<DvMapScene key={k} k={k} label={label} members={rows.filter((m) => m.dv_map === k)} onPick={pick} />))}
         {sec === "dv" && (
           <div className="item-slot p-2">
             <div className="flex items-center gap-2 mb-2"><span className="flex-1 text-[11px] text-slate-200/80">UNASSIGNED</span><span className="text-[9px] text-dv-emerald">{unassigned.length}</span></div>
