@@ -430,7 +430,7 @@ export default function DashboardPage() {
               <SkillBuild />
             </div>
             <div>
-              <Spirits /></div><div><p className="eyebrow mb-4 text-dv-emerald">ᛒ OPERATIONS INDEX</p><Guide />
+              <Spirits /></div><div><p className="eyebrow mb-4 text-dv-emerald">ᛒ OPERATIONS INDEX</p><Guide /></div><div><p className="eyebrow mb-4 text-dv-emerald">ᛃ RUNE DESK</p><Runes />
             </div>
             <div>
             </div>
