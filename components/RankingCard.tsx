@@ -55,7 +55,7 @@ export function RankingCard() {
           return (
             <div key={m.id} className="item-slot p-2" style={isMe ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}>
               <div className="flex items-center gap-2 min-w-0 mb-2">
-                <span className="w-5 shrink-0 text-[10px] text-dv-brassLight">{m.stage != null ? i + 1 : "-"}</span>
+                <span className="relative w-8 h-8 shrink-0 flex items-center justify-center"><img src={"/ranks/" + (m.stage == null ? "pos-default" : i === 0 ? "pos-gold" : i === 1 ? "pos-silver" : i === 2 ? "pos-bronze" : "pos-default") + ".png"} alt="" className="absolute inset-0 w-full h-full object-contain" /><span className="relative text-[10px] font-bold text-white" style={{ textShadow: "0 0 3px #000, 0 0 3px #000" }}>{m.stage != null ? i + 1 : "-"}</span></span>
                 <img src={gameAvatar(m.username) || m.avatar_url || "/icons/icon-192.png"} onError={(e) => { if (!e.currentTarget.src.endsWith("/icons/icon-192.png")) e.currentTarget.src = "/icons/icon-192.png"; }} alt="" className="w-7 h-7 pixel-frame border border-dv-line shrink-0 object-cover" />
                 <span className="block text-[11px] text-slate-200/80 break-words leading-tight">{m.username || "-"}</span>
                 {isMe && <span className="text-[8px] text-dv-emerald shrink-0">(YOU)</span>}
