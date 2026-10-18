@@ -317,6 +317,28 @@ export default function DashboardPage() {
 
                 {(zeroLoggedMembers.length > 0 || partiallyLoggedMembers.length > 0 || perfectMembers.length > 0) && (
                   <div className="mt-5 w-full max-w-md space-y-4 text-left">
+                    {perfectMembers.length > 0 && (
+                      <div>
+                        <p className="eyebrow text-dv-emerald">✅ PERFECT RUNS THIS CYCLE</p>
+                        <ul className="mt-2 space-y-1.5">
+                          {perfectMembers.map((m) => (
+                            <li key={m.discord_id} className="item-slot flex items-center justify-between border border-dv-line px-3 py-2">
+                              <span className="flex items-center gap-2 text-[10px] text-slate-200/75">
+                                <img src={m.avatar_url ?? "/icons/icon-192.png"} alt="" className="h-5 w-5 pixel-frame border border-dv-line object-cover" />
+                                {m.username}
+                              </span>
+                              <span className="text-[10px] text-dv-emerald">6/6 logged</span>
+                            </li>
+                          ))}
+                        </ul>
+                        <p className="mt-2 text-[9px] leading-relaxed text-slate-300/50">Perfect runs this cycle — every attack logged. Keep it up next cycle.</p>
+                      </div>
+                    )}
+                    {zeroLoggedMembers.length > 0 && perfectMembers.length > 0 && (
+                      <div className="soft-divider flex items-center justify-center">
+                        <span className="-mt-2 bg-dv-panel px-2 text-dv-violet/50 text-[10px]" aria-hidden="true">ᛒ</span>
+                      </div>
+                    )}
                     {zeroLoggedMembers.length > 0 && (
                       <div>
                         <p className="eyebrow text-dv-ember">🚨 ZERO ATTACKS LOGGED — EXPULSION RISK</p>
@@ -343,31 +365,6 @@ export default function DashboardPage() {
                         </p>
                       </div>
                     )}
-                    {zeroLoggedMembers.length > 0 && perfectMembers.length > 0 && (
-                      <div className="soft-divider flex items-center justify-center">
-                        <span className="-mt-2 bg-dv-panel px-2 text-dv-violet/50 text-[10px]" aria-hidden="true">ᛒ</span>
-                      </div>
-                    )}
-                    {perfectMembers.length > 0 && (
-                      <div>
-                        <p className="eyebrow text-dv-emerald">✅ PERFECT RUNS THIS CYCLE</p>
-                        <ul className="mt-2 space-y-1.5">
-                          {perfectMembers.map((m) => (
-                            <li key={m.discord_id} className="item-slot flex items-center justify-between border border-dv-line px-3 py-2">
-                              <span className="flex items-center gap-2 text-[10px] text-slate-200/75">
-                                <img src={m.avatar_url ?? "/icons/icon-192.png"} alt="" className="h-5 w-5 pixel-frame border border-dv-line object-cover" />
-                                {m.username}
-                              </span>
-                              <span className="text-[10px] text-dv-emerald">6/6 logged</span>
-                            </li>
-                          ))}
-                        </ul>
-                        <p className="mt-2 text-[9px] leading-relaxed text-slate-300/50">Perfect runs this cycle — every attack logged. Keep it up next cycle.</p>
-                      </div>
-                    )}
-
-
-
                     {(zeroLoggedMembers.length > 0 || perfectMembers.length > 0) && partiallyLoggedMembers.length > 0 && (
                       <div className="soft-divider flex items-center justify-center">
                         <span className="-mt-2 bg-dv-panel px-2 text-dv-violet/50 text-[10px]" aria-hidden="true">ᛒ</span>
