@@ -11,7 +11,7 @@ import { WyvernTracker } from "@/components/WyvernTracker";
 import { ExplorationPhase } from "@/components/ExplorationPhase";
 import { Guide, MainCooking, Meals, Runes, SkillBuild, Spirits } from "@/components/OperationsLibrary";
 import { DragonCrest } from "@/components/DragonCrest";
-import { LedgerIcon, RankingIcon, GuideIcon, CookingIcon, SpecialIcon, RunesIcon, SettingsIcon, ReplayIcon } from "@/components/TabIcons";
+import { LedgerIcon, RankingIcon, GuideIcon, CookingIcon, SpecialIcon, SettingsIcon, ReplayIcon } from "@/components/TabIcons";
 import { Walkthrough } from "@/components/Walkthrough";
 import { rankByTier } from "@/lib/ranks";
 import { SettingsPopup } from "@/components/SettingsPopup";
@@ -36,7 +36,7 @@ type AttackLog = {
   logged_at?: string;
 };
 
-type Tab = "ledger" | "index" | "build" | "cooking" | "special" | "runes" | "settings";
+type Tab = "ledger" | "index" | "build" | "cooking" | "special" | "settings";
 
 const TABS: { id: Tab; label: string; icon: ((props: { className?: string }) => JSX.Element) | string }[] = [
   { id: "ledger", label: "Ledger", icon: LedgerIcon },
@@ -44,7 +44,7 @@ const TABS: { id: Tab; label: string; icon: ((props: { className?: string }) => 
   { id: "build", label: "Guide", icon: GuideIcon },
   { id: "cooking", label: "Cooking", icon: CookingIcon },
   { id: "special", label: "Special", icon: SpecialIcon },
-  { id: "runes", label: "Runes", icon: RunesIcon },
+  
   { id: "settings", label: "Settings", icon: SettingsIcon },
 ];
 
@@ -439,12 +439,6 @@ export default function DashboardPage() {
 
 {tab === "cooking" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛒ MAIN COOKING</p><MainCooking /></section>)}{tab === "special" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛊ SPECIAL DISH</p><Meals /></section>)}
 
-        {tab === "runes" && (
-          <section>
-            <p className="eyebrow mb-4 text-dv-emerald">ᛃ RUNE DESK</p>
-            <Runes />
-          </section>
-        )}
 
 
         {toast && <div role="status" className="fixed bottom-20 left-1/2 z-50 -translate-x-1/2 pixel-frame bg-dv-brass px-4 py-3 text-[10px] text-dv-bg shadow-pixel animate-rise">{toast}</div>}
