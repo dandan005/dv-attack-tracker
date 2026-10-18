@@ -1,4 +1,5 @@
 "use client";
+import { gameAvatar } from "@/lib/gameAvatars";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -324,7 +325,7 @@ export default function DashboardPage() {
                           {perfectMembers.map((m) => (
                             <li key={m.discord_id} className="item-slot flex items-center justify-between border border-dv-line px-3 py-2">
                               <span className="flex items-center gap-2 text-[10px] text-slate-200/75">
-                                <img src={m.avatar_url ?? "/icons/icon-192.png"} alt="" className="h-5 w-5 pixel-frame border border-dv-line object-cover" />
+                                <img src={gameAvatar(m.username) ?? m.avatar_url ?? "/icons/icon-192.png"} alt="" className="h-5 w-5 pixel-frame border border-dv-line object-cover" />
                                 {m.username}
                               </span>
                               <span className="text-[10px] text-dv-emerald">6/6 logged</span>
@@ -350,7 +351,7 @@ export default function DashboardPage() {
                             >
                               <span className="flex items-center gap-2 text-[10px] text-slate-200/80">
                                 <img
-                                  src={m.avatar_url ?? "/icons/icon-192.png"}
+                                  src={gameAvatar(m.username) ?? m.avatar_url ?? "/icons/icon-192.png"}
                                   alt=""
                                   className="h-5 w-5 pixel-frame border border-dv-line object-cover"
                                 />
@@ -382,7 +383,7 @@ export default function DashboardPage() {
                             >
                               <span className="flex items-center gap-2 text-[10px] text-slate-200/75">
                                 <img
-                                  src={m.avatar_url ?? "/icons/icon-192.png"}
+                                  src={gameAvatar(m.username) ?? m.avatar_url ?? "/icons/icon-192.png"}
                                   alt=""
                                   className="h-5 w-5 pixel-frame border border-dv-line object-cover"
                                 />
