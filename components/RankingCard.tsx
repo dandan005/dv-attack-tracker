@@ -44,7 +44,7 @@ export function RankingCard() {
       </div>
       {err && <p className="eyebrow py-2">COULD NOT LOAD</p>}
       {!err && !data && <p className="eyebrow py-2">LOADING...</p>}
-      {!err && data && <p className="eyebrow py-2">{shown.length} PLAYERS</p>}
+      {!err && data && <p className="eyebrow py-2">{list.length} PLAYERS</p>}
       <div className="space-y-2">
         {shown.map((m, i) => {
           const r = rankByTier(m.promotion_tier);
