@@ -343,6 +343,11 @@ export default function DashboardPage() {
                         </p>
                       </div>
                     )}
+                    {zeroLoggedMembers.length > 0 && perfectMembers.length > 0 && (
+                      <div className="soft-divider flex items-center justify-center">
+                        <span className="-mt-2 bg-dv-panel px-2 text-dv-violet/50 text-[10px]" aria-hidden="true">ᛒ</span>
+                      </div>
+                    )}
                     {perfectMembers.length > 0 && (
                       <div>
                         <p className="eyebrow text-dv-emerald">✅ PERFECT RUNS THIS CYCLE</p>
@@ -362,7 +367,7 @@ export default function DashboardPage() {
 
 
 
-                    {zeroLoggedMembers.length > 0 && partiallyLoggedMembers.length > 0 && (
+                    {(zeroLoggedMembers.length > 0 || perfectMembers.length > 0) && partiallyLoggedMembers.length > 0 && (
                       <div className="soft-divider flex items-center justify-center">
                         <span className="-mt-2 bg-dv-panel px-2 text-dv-violet/50 text-[10px]" aria-hidden="true">ᛒ</span>
                       </div>
