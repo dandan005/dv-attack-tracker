@@ -42,9 +42,9 @@ const TABS: { id: Tab; label: string; icon: ((props: { className?: string }) => 
   { id: "ledger", label: "Ledger", icon: LedgerIcon },
   { id: "index", label: "Ranking", icon: RankingIcon },
   { id: "build", label: "Guide", icon: GuideIcon },
+  { id: "assign", label: "Assign", icon: LedgerIcon },
   { id: "cooking", label: "Cooking", icon: CookingIcon },
   { id: "special", label: "Special", icon: SpecialIcon },
-  { id: "assign", label: "Assign", icon: LedgerIcon },
   
   { id: "settings", label: "Settings", icon: SettingsIcon },
 ];
