@@ -11,7 +11,7 @@ import { WyvernTracker } from "@/components/WyvernTracker";
 import { ExplorationPhase } from "@/components/ExplorationPhase";
 import { Guide, MainCooking, Meals, Runes, SkillBuild, Spirits } from "@/components/OperationsLibrary";
 import { DragonCrest } from "@/components/DragonCrest";
-import { LedgerIcon, RankingIcon, GuideIcon, CookingIcon, SpecialIcon, RunesIcon, SettingsIcon, ReplayIcon } from "@/components/TabIcons";
+import { LedgerIcon, RankingIcon, GuideIcon, CookingIcon, SpecialIcon, AssignIcon, SettingsIcon, ReplayIcon } from "@/components/TabIcons";
 import { Walkthrough } from "@/components/Walkthrough";
 import { rankByTier } from "@/lib/ranks";
 import { SettingsPopup } from "@/components/SettingsPopup";
@@ -42,7 +42,7 @@ const TABS: { id: Tab; label: string; icon: ((props: { className?: string }) => 
   { id: "ledger", label: "Ledger", icon: LedgerIcon },
   { id: "index", label: "Ranking", icon: RankingIcon },
   { id: "build", label: "Guide", icon: GuideIcon },
-  { id: "assign", label: "Assign", icon: RunesIcon },
+  { id: "assign", label: "Assign", icon: AssignIcon },
   { id: "cooking", label: "Cooking", icon: CookingIcon },
   { id: "special", label: "Special", icon: SpecialIcon },
   
