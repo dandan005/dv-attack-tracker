@@ -12,6 +12,7 @@ import { ExplorationPhase } from "@/components/ExplorationPhase";
 import { Guide, MainCooking, Meals, Runes, SkillBuild, Spirits } from "@/components/OperationsLibrary";
 import { DragonCrest } from "@/components/DragonCrest";
 import { LedgerIcon, RankingIcon, GuideIcon, CookingIcon, SpecialIcon, AssignIcon, SettingsIcon, ReplayIcon } from "@/components/TabIcons";
+import AssignCard from "@/components/AssignCard";
 import { Walkthrough } from "@/components/Walkthrough";
 import { rankByTier } from "@/lib/ranks";
 import { SettingsPopup } from "@/components/SettingsPopup";
@@ -439,7 +440,7 @@ export default function DashboardPage() {
         )}
 
 {tab === "cooking" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛒ MAIN COOKING</p><MainCooking /></section>)}{tab === "special" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛊ SPECIAL DISH</p><Meals /></section>)}
-        {tab === "assign" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛃ ASSIGNMENT</p><p className="text-[10px]">Coming soon.</p></section>)}
+        {tab === "assign" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛃ ASSIGNMENT</p><AssignCard /></section>)}
 
 
 
