@@ -38,10 +38,10 @@ function BossPortrait({ element, boss }: { element: Element; boss: BossSlot }) {
 }
 
 const BOSS_SLOTS: Record<Element, BossSlot> = {
-  wind: { name: "Voltaris", image: "/bosses/boss.png", alt: "Voltaris pixel dragon portrait" },
-  fire: { name: "Pyros", image: "/bosses/boss.png", alt: "Pyros pixel dragon portrait" },
-  earth: { name: "Bardoran", image: "/bosses/boss.png", alt: "Bardoran pixel dragon portrait" },
-  water: { name: "Glacion", image: "/bosses/boss.png", alt: "Glacion pixel dragon portrait" },
+  wind: { name: "Voltaris", image: "/bosses/wind-dragon.png", alt: "Voltaris pixel dragon portrait" },
+  fire: { name: "Pyros", image: "/bosses/fire-dragon.png", alt: "Pyros pixel dragon portrait" },
+  earth: { name: "Bardoran", image: "/bosses/earth-dragon.png", alt: "Bardoran pixel dragon portrait" },
+  water: { name: "Glacion", image: "/bosses/water-dragon.png", alt: "Glacion pixel dragon portrait" },
 };
 
 function PixelElementArt({ element }: { element: Element }) {
