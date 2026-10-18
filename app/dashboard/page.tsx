@@ -293,7 +293,7 @@ export default function DashboardPage() {
 
       <main className="mx-auto flex w-full max-w-md min-h-0 flex-1 flex-col overflow-y-auto px-4 pb-6 pt-5 sm:px-6 md:pt-7">
         {tab === "ledger" && (
-          <div className="flex min-h-0 flex-1 flex-col">
+          <div className="flex flex-col">
             <div className="mb-1">
               <p className="eyebrow text-dv-emerald">ᛏ GUILD OPERATIONS / ONLINE</p>
               <section className="pixel-border bg-dv-panel/95 shadow-pixel mt-4 p-4">
