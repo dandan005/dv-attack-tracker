@@ -1,5 +1,5 @@
 "use client";
-import type { CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
 import { gameAvatar } from "@/lib/gameAvatars";
 
 type P = { id: string; username: string | null; avatar_url?: string | null };
@@ -72,10 +72,23 @@ function Scenery({ k }: { k: string }) {
 
 function Fire({ lit }: { lit: boolean }) {
   return (
-    <svg viewBox="0 0 24 20" className="h-12 w-14" shapeRendering="crispEdges">
+    <svg viewBox="0 0 24 20" className="h-12 w-14" shapeRendering="crispEdges" style={{ overflow: "visible" }}>
+      <style>{"@keyframes dvFlame{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.18)}}@keyframes dvEmber{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-14px);opacity:0}}.dv-flame{transform-box:fill-box;transform-origin:50% 100%;animation:dvFlame .5s steps(2,end) infinite}.dv-ember{animation:dvEmber 1.4s steps(5,end) infinite}"}</style>
       <rect x="3" y="15" width="18" height="3" fill="#5b3a1e" />
       <rect x="6" y="12" width="12" height="4" fill="#7a4c28" />
-      {lit && (<><rect x="8" y="8" width="8" height="5" fill="#f97316" /><rect x="9" y="4" width="6" height="5" fill="#f97316" /><rect x="11" y="1" width="2" height="5" fill="#fb923c" /><rect x="10" y="9" width="4" height="4" fill="#fde047" /></>)}
+      {lit && (
+        <g>
+          <g className="dv-flame">
+            <rect x="8" y="8" width="8" height="5" fill="#f97316" />
+            <rect x="9" y="4" width="6" height="5" fill="#f97316" />
+            <rect x="11" y="1" width="2" height="5" fill="#fb923c" />
+            <rect x="10" y="9" width="4" height="4" fill="#fde047" />
+          </g>
+          <rect className="dv-ember" x="7" y="3" width="1" height="1" fill="#fde047" />
+          <rect className="dv-ember" x="16" y="4" width="1" height="1" fill="#fb923c" style={{ animationDelay: ".5s" }} />
+          <rect className="dv-ember" x="12" y="2" width="1" height="1" fill="#fde047" style={{ animationDelay: ".9s" }} />
+        </g>
+      )}
     </svg>
   );
 }
@@ -131,6 +144,7 @@ function Seat({ m, accent, pos, onPick }: { m: P | null; accent: string; pos: { 
 export default function DvMapScene({ k, label, members, onPick }: { k: string; label: string; members: P[]; onPick: (m: any) => void }) {
   const t = THEME[k] ?? THEME.wasteland;
   const full = members.length >= 5;
+  const [lit, setLit] = useState(false);
   const mid: CSSProperties = { transform: "translate(-50%, -50%)" };
   return (
     <div className="pixel-border relative overflow-hidden" style={{ background: "linear-gradient(" + t.top + "," + t.bottom + ")", minHeight: "calc(100dvh - 16rem)", aspectRatio: "10 / 17" }}>
@@ -148,8 +162,8 @@ export default function DvMapScene({ k, label, members, onPick }: { k: string; l
       </div>
       <Tag text="EXPLORATION" style={{ left: "32%", top: "40%" }} />
       <Tag text="CHEF" style={{ left: "70%", top: "45%" }} />
-      <div className="pointer-events-none absolute" style={{ left: "50%", top: "64%", ...mid }}><Fire lit={k !== "icevale"} /></div>
-      <Tag text="COOKING" style={{ left: "50%", top: "72%", ...mid }} />
+      <div className="pointer-events-none absolute" style={{ left: "50%", top: "64%", ...mid }}><Fire lit={lit} /></div>
+      <button type="button" onClick={() => setLit(!lit)} className="absolute border px-2 py-1 text-[8px] text-white" style={{ background: "rgba(30,30,30,.92)", borderColor: lit ? "#fbbf24" : "#0b0b0b", left: "50%", top: "72%", zIndex: 20, ...mid }}>COOKING</button>
       {POS.map((pos, i) => (<Seat key={i} m={members[i] ?? null} accent={t.accent} pos={pos} onPick={onPick} />))}
     </div>
   );
