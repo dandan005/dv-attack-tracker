@@ -1,10 +1,10 @@
 "use client";
+import { PlayerList } from "@/components/PlayerList";
 
 import { createPortal } from "react-dom";
 import { useEffect, useState } from "react";
 import { RankPicker } from "./RankPicker";
 import { ProfileFields } from "./ProfileFields";
-import { GuildAssign } from "./GuildAssign";
 import { rankByTier, rankImg } from "@/lib/ranks";
 
 export type SettingsMe = {
@@ -158,7 +158,8 @@ export function SettingsPopup({
             )}
           </Section>
 
-          {me.is_admin && (<Section title="RAID SCHEDULE"><Row label="Day 1 start" value="Mon 14:00 UTC · Mon 10:00 PM PHT" /><Row label="Attack window" value="D1–D6 · 6 attack days" /><Row label="Day 7" value="Standby · Results · Onboarding" /><Row label="Reminder mode" value="Manual + cron-job.org" /></Section>)}{me.is_admin && <GuildAssign />}
+          {me.is_admin && (<Section title="RAID SCHEDULE"><Row label="Day 1 start" value="Mon 14:00 UTC · Mon 10:00 PM PHT" /><Row label="Attack window" value="D1–D6 · 6 attack days" /><Row label="Day 7" value="Standby · Results · Onboarding" /><Row label="Reminder mode" value="Manual + cron-job.org" /></Section>)}
+        {me.is_admin && (<Section title="PLAYERS"><PlayerList /></Section>)}
 
           <Section title="ACCOUNT">
             <Row label="Sign out" value={confirmSignOut ? "Tap again to confirm" : "You will need to sign in again"}>
