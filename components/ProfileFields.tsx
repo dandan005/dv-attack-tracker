@@ -123,12 +123,6 @@ export function ProfileFields({ Row }: { Row: RowC }) {
       <Row label="Stage" value="The ranking sorts by this">
         <input type="number" inputMode="numeric" value={st} onChange={(e) => setSt(e.target.value)} onBlur={() => saveNum("stage", st)} className={box} />
       </Row>
-      <Row label="DV map" value="Shown in the ranking">
-        <OptionPicker title="CHOOSE DV MAP" current={p.dv_map} options={MAPS} onSelect={(v) => save({ dv_map: v })} />
-      </Row>
-      <Row label="GR boss" value="Shown in the ranking">
-        <OptionPicker title="CHOOSE GR BOSS" current={p.gr_boss == null ? null : String(p.gr_boss)} options={BOSSES} onSelect={(v) => save({ gr_boss: v === null ? null : Number(v) })} />
-      </Row>
-    </>
+          </>
   );
 }
