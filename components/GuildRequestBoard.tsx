@@ -137,19 +137,19 @@ export default function GuildRequestBoard({ bosses, rows, onPick }: { bosses: B[
   const shadow = { textShadow: "0 1px 0 rgba(0,0,0,.7)" };
   const sel = bosses.find((b) => b.n === open) ?? null;
   return (
-    <div className="pixel-border relative overflow-hidden p-2" style={{ background: "linear-gradient(#2f4a1e, #1a1208 55%, #2f4a1e)" }}>
+    <div className="pixel-border relative overflow-hidden bg-dv-panel/95 p-2 shadow-pixel">
       <div className="border px-2 py-2 text-center text-[10px] text-dv-brassLight" style={{ background: "#2a1a12", borderColor: "#b8893a" }}>GUILD REQUEST</div>
       <p className="my-3 px-1 text-center text-[8px] leading-relaxed text-white/85" style={shadow}>{"COMPLETE THE REQUEST TO PURIFY CORRUPTED TERRAIN AND RECEIVE A REWARD FROM THE NATIONAL ADVENTURERS' GUILD."}</p>
-      <div className="px-1 py-3" style={{ background: "#3a2414", borderTop: "3px solid #7a4c28", borderBottom: "3px solid #7a4c28" }}>
+      <div className="border border-dv-line bg-dv-bg/70 px-1 py-3">
         <div className="grid grid-cols-3 gap-x-2 gap-y-4">
           {bosses.map((g) => {
             const ms = rows.filter((m) => m.gr_boss === g.n);
             return (
               <div key={g.n} className="flex min-w-0 flex-col items-center">
                 <span className="mb-1 text-[11px] text-white" style={shadow}>{g.r}</span>
-                <button type="button" onClick={() => setOpen(g.n)} className="block w-full border-2 p-1" style={{ background: "#d9c39a", borderColor: "#8a6a3a" }}>
-                  <p className="text-center text-[9px]" style={{ color: "#5a3a1a" }}>WANTED</p>
-                  <div className="my-1 aspect-square border-2 p-1" style={{ background: "#4a3a30", borderColor: "#8a4a1a" }}><Beast n={g.n} /></div>
+                <button type="button" onClick={() => setOpen(g.n)} className="block w-full border-2 border-dv-brass/70 bg-dv-panel2 p-1">
+                  <p className="eyebrow text-center text-[9px]">WANTED</p>
+                  <div className="my-1 aspect-square border border-dv-line bg-dv-bg p-1"><Beast n={g.n} /></div>
                   <div className="flex justify-center gap-0.5">
                     {Array.from({ length: g.slots }, (_, i) => (<span key={i} className="text-[8px] leading-none" style={{ color: i < ms.length ? "#f59e0b" : "#6b5a4a" }}>{i < ms.length ? "★" : "✕"}</span>))}
                   </div>
