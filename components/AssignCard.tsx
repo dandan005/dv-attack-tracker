@@ -46,13 +46,13 @@ export default function AssignCard() {
       {err && <p className="eyebrow py-2">COULD NOT LOAD</p>}
 
       {picking && (
-        <div className="mb-3 space-y-2">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => setPicking(null)}><div className="pixel-border bg-dv-panel max-h-[80vh] w-full max-w-sm space-y-2 overflow-y-auto p-4 shadow-pixel" onClick={(e) => e.stopPropagation()}>
           <p className="eyebrow py-2">ASSIGN {picking.username} TO {sec === "dv" ? "MAP" : "BOSS"}</p>
           {sec === "dv" && MAPS.map(([k, label]) => { const full = rows.filter((m) => m.dv_map === k).length >= 5; return (<button key={k} type="button" disabled={full} onClick={() => save("dv_map", k)} className="item-slot block w-full p-2 text-left text-[10px] disabled:opacity-40">{label}</button>); })}
           {sec === "gr" && GR.map((g) => { const full = rows.filter((m) => m.gr_boss === g.n).length >= g.slots; return (<button key={g.n} type="button" disabled={full} onClick={() => save("gr_boss", g.n)} className="item-slot block w-full p-2 text-left text-[10px] disabled:opacity-40">{g.r} {g.name}</button>); })}
           <button type="button" onClick={() => save(sec === "dv" ? "dv_map" : "gr_boss", null)} className="item-slot block w-full p-2 text-[10px]">NONE</button>
           <button type="button" onClick={() => setPicking(null)} className="item-slot block w-full p-2 text-[10px]">CANCEL</button>
-        </div>
+        </div></div>
       )}
 
       <div className="space-y-2">
