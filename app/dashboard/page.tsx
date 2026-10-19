@@ -43,8 +43,8 @@ type Tab = "ledger" | "index" | "build" | "cooking" | "special" | "assign" | "se
 const TABS: { id: Tab; label: string; icon: ((props: { className?: string }) => JSX.Element) | string }[] = [
   { id: "ledger", label: "Ledger", icon: LedgerIcon },
   { id: "index", label: "Ranking", icon: RankingIcon },
-  { id: "build", label: "Guide", icon: GuideIcon },
   { id: "assign", label: "Assign", icon: AssignIcon },
+  { id: "build", label: "Guide", icon: GuideIcon },
   { id: "cooking", label: "Cooking", icon: CookingIcon },
   { id: "special", label: "Special", icon: SpecialIcon },
   
