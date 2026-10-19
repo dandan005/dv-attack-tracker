@@ -161,6 +161,16 @@ function Seat({ m, accent, pos, onPick }: { m: P | null; accent: string; pos: { 
   );
 }
 
+const ING_FILE = (n: string) => "/ingredients/" + n.toLowerCase() + (n === "Meat" ? ".jpeg" : ".jpg");
+function Ing({ n, cls }: { n: string; cls?: string }) {
+  return (
+    <span className={"inline-flex items-center gap-1 " + (cls ?? "")}>
+      <img src={ING_FILE(n)} alt="" className="h-4 w-4 object-cover" style={{ imageRendering: "pixelated" }} />
+      <span>{n.toUpperCase()}</span>
+    </span>
+  );
+}
+
 function ExploreModal({ k, label, onClose }: { k: string; label: string; onClose: () => void }) {
   const info = INFO[k] ?? INFO.wasteland;
   const c = getCycleInfo();
@@ -175,12 +185,12 @@ function ExploreModal({ k, label, onClose }: { k: string; label: string; onClose
         <div>
           <p className="eyebrow mb-1">PLACES</p>
           {info.places ? (
-            <div className="space-y-1">{info.places.map(([p, g]) => (<div key={p} className="item-slot flex items-center gap-2 p-2"><span className="flex-1 text-[10px] text-slate-200/80">{p}</span><span className="text-[9px] text-dv-emerald">{g}</span></div>))}</div>
+            <div className="space-y-1">{info.places.map(([p, g]) => (<div key={p} className="item-slot flex items-center gap-2 p-2"><span className="flex-1 text-[10px] text-slate-200/80">{p}</span><Ing n={g} cls="text-[9px] text-dv-emerald" /></div>))}</div>
           ) : (<p className="text-[9px] text-slate-200/50">NOT RECORDED YET</p>)}
         </div>
-        <div><p className="eyebrow mb-1">EVERY MAP</p><div className="flex flex-wrap gap-1">{GENERAL.map((g) => (<span key={g} className={chip}>{g}</span>))}</div></div>
-        <div><p className="eyebrow mb-1">MAP RARE</p><div className="flex flex-wrap gap-1"><span className={chip}>{info.rare}</span></div></div>
-        <div><p className="eyebrow mb-1">CHEF {info.chef.toUpperCase()}</p><div className="flex flex-wrap gap-1">{info.sells.map((g) => (<span key={g} className={chip}>{g}</span>))}</div></div>
+        <div><p className="eyebrow mb-1">EVERY MAP</p><div className="flex flex-wrap gap-1">{GENERAL.map((g) => (<span key={g} className={chip}><Ing n={g} /></span>))}</div></div>
+        <div><p className="eyebrow mb-1">MAP RARE</p><div className="flex flex-wrap gap-1"><span className={chip}><Ing n={info.rare} /></span></div></div>
+        <div><p className="eyebrow mb-1">CHEF {info.chef.toUpperCase()}</p><div className="flex flex-wrap gap-1">{info.sells.map((g) => (<span key={g} className={chip}><Ing n={g} /></span>))}</div></div>
         <button type="button" onClick={onClose} className="item-slot block w-full p-2 text-[10px]">CLOSE</button>
       </div>
     </div>
