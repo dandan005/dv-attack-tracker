@@ -48,7 +48,7 @@ export function RankingCard() {
       </div>
       {err && <p className="eyebrow py-2">COULD NOT LOAD</p>}
       {!err && !data && <p className="eyebrow py-2">LOADING...</p>}
-      {!err && data && <div className="flex items-center justify-between"><p className="eyebrow py-2">{list.length} PLAYERS</p>{staff && <button type="button" onClick={() => setEdit("new")} className="h-6 border border-dv-brass bg-black/40 px-2 text-[9px] text-dv-brassLight">+ ADD PLAYER</button>}</div>}
+      {!err && data && <div className="flex items-center justify-between"><p className="eyebrow py-2">{list.length} PLAYERS</p></div>}
       <div className="space-y-2">
         {shown.map((m, i) => {
           const r = rankByTier(m.promotion_tier);
