@@ -426,9 +426,9 @@ export default function DashboardPage() {
                   <p className="mt-1 text-2xl text-dv-emerald">{formatCountdown(day7.msLeft)}</p>
                 </div>
                 <div className="mt-5 w-full max-w-md text-left">
-                  <p className="eyebrow text-dv-emerald">BEFORE DAY 1</p>
+                  <p className="eyebrow text-dv-emerald">GET READY</p>
                   <ul className="mt-2 space-y-1.5">
-                    {[["Restock ingredients", "Check your bag against the Special tab."], ["Cook the main dishes", "Follow the priority order in the Cooking tab."], ["Check your assignment", "Confirm your DV map in the Assign tab."], ["Review the guide", "Skim the Guide tab before your first run."]].map(([ttl, d]) => (
+                    {[["Check your assignment", "Confirm your DV map in the Assign tab."], ["Learn the cooking order", "Cooking opens on Days 1–3. Study the priority order in the Cooking tab."], ["Know what to gather", "Ingredients come in on Days 1–3. The Special tab shows what each meal needs."], ["Review the guide", "Skim the Guide tab before your first run."]].map(([ttl, d]) => (
                       <li key={ttl} className="item-slot border border-dv-line px-3 py-2">
                         <p className="text-[10px] text-slate-200/80">{ttl}</p>
                         <p className="mt-0.5 text-[9px] text-slate-300/50">{d}</p>
