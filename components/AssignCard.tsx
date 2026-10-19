@@ -27,7 +27,9 @@ export default function AssignCard() {
   }, [view]);
 
   const unassigned = rows.filter((m) => !MAPS.some(([k]) => k === m.dv_map));
-  const pick = (m: Row) => { if (canEdit(roles, m)) setPicking(m); };
+  const staff = !!roles && !!(roles.is_creator || roles.is_admin || roles.is_super_admin); const mine = rows.find((m) => !!roles && m.id === roles.me); const maps = staff ? MAPS : MAPS.filter(([k]) => mine?.dv_map === k); const bosses = staff ? GR : GR.filter((g) => mine?.gr_boss === g.n);
+  useEffect(() => { if (roles && !staff && roles.guild_id && view !== String(roles.guild_id)) setView(String(roles.guild_id)); }, [roles, staff, view]);
+  const pick = (m: Row) => { if (staff && canEdit(roles, m)) setPicking(m); };
   const save = async (field: "dv_map" | "gr_boss", value: string | number | null) => {
     if (!picking) return;
     if (await postAssign(picking.id, field, value)) {
@@ -41,7 +43,7 @@ export default function AssignCard() {
     <PixelPanel className="animate-rise">
       <div className="mb-3 flex gap-2">
         <select value={sec} onChange={(e) => setSec(e.target.value)} className="h-8 flex-1 border border-dv-brass bg-black/40 px-2 text-[10px] text-dv-brassLight">{SECS.map((s) => (<option key={s.v} value={s.v}>{s.label}</option>))}</select>
-        <select value={view} onChange={(e) => setView(e.target.value)} className="h-8 flex-1 border border-dv-brass bg-black/40 px-2 text-[10px] text-dv-brassLight">{TABS.map((t) => (<option key={t.v} value={t.v}>{t.label}</option>))}</select>
+        <select value={view} disabled={!staff} onChange={(e) => setView(e.target.value)} className="h-8 flex-1 border border-dv-brass bg-black/40 px-2 text-[10px] text-dv-brassLight">{TABS.map((t) => (<option key={t.v} value={t.v}>{t.label}</option>))}</select>
       </div>
       {err && <p className="eyebrow py-2">COULD NOT LOAD</p>}
 
@@ -56,13 +58,15 @@ export default function AssignCard() {
       )}
 
       <div className="space-y-2">
-        {sec === "dv" && MAPS.map(([k, label]) => (<DvMapScene key={k} k={k} label={label} members={rows.filter((m) => m.dv_map === k)} onPick={pick} />))}
-        {sec === "dv" && (
+        {sec === "dv" && !staff && roles && !mine?.dv_map && (<p className="eyebrow py-2">NO MAP ASSIGNED YET</p>)}
+        {sec === "dv" && maps.map(([k, label]) => (<DvMapScene key={k} k={k} label={label} members={rows.filter((m) => m.dv_map === k)} onPick={pick} />))}
+        {sec === "dv" && staff && (
           <div className="item-slot p-2">
             <div className="flex items-center gap-2 mb-2"><span className="flex-1 text-[11px] text-slate-200/80">UNASSIGNED</span><span className="text-[9px] text-dv-emerald">{unassigned.length}</span></div>
             {unassigned.map((m) => (<p key={m.id} onClick={() => pick(m)} className="text-[10px] text-slate-200/80 cursor-pointer">{m.username}</p>))}
           </div>)}
-        {sec === "gr" && GR.map((g) => { const ms = rows.filter((m) => m.gr_boss === g.n); return (
+        {sec === "gr" && !staff && roles && !mine?.gr_boss && (<p className="eyebrow py-2">NO BOSS ASSIGNED YET</p>)}
+        {sec === "gr" && bosses.map((g) => { const ms = rows.filter((m) => m.gr_boss === g.n); return (
           <div key={g.n} className="item-slot p-2">
             <div className="flex items-center gap-2 mb-2"><span className="text-[10px] text-dv-brassLight">{g.r}</span><span className="flex-1 text-[11px] text-slate-200/80">{g.name}</span></div>
             <div className="grid grid-cols-2 gap-1 mb-2"><div><p className="eyebrow">SLOTS</p><p className="text-[10px] mt-1 text-slate-200/80">{ms.length}/{g.slots}</p></div><div><p className="eyebrow">POINTS</p><p className="text-[10px] mt-1 text-dv-emerald">{g.pts}</p></div></div>
