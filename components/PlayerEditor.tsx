@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { RANKS } from "@/lib/ranks";
+import { RankPicker } from "./RankPicker";
 
 export type EditRow = { id: string; username: string | null; level: number | null; stage: number | null; guild_id: number | null; custom_avatar?: string | null; promotion_tier?: number | null };
 
@@ -57,7 +57,7 @@ export function PlayerEditor({ row, defaultGuild, onClose, onDone }: { row: Edit
           ))}
         </div>
         <p className="eyebrow mb-1 mt-3">RANK</p>
-        <select value={tier ?? ""} onChange={(e) => setTier(e.target.value ? Number(e.target.value) : null)} className={box}><option value="">NO RANK</option>{RANKS.map((r) => <option key={r.tier} value={r.tier}>{r.name}</option>)}</select>
+        <RankPicker tier={tier} onSelect={setTier} />
         <p className="eyebrow mb-1 mt-3">AVATAR</p>
         <div className="grid max-h-36 grid-cols-6 gap-1 overflow-y-auto">
           <button type="button" onClick={() => setAvatar(null)} className={["h-10 border text-[8px]", avatar === null ? "border-dv-brass text-dv-brassLight" : "border-dv-line text-slate-300/80"].join(" ")}>AUTO</button>
