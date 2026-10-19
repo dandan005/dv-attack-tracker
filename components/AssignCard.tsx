@@ -9,7 +9,8 @@ const SECS = [{ v: "dv", label: "DV MAPS" }, { v: "gr", label: "GUILD REQUEST" }
 const MAPS: [string, string][] = [["wasteland", "WASTELAND PLATEAU"], ["lava", "LAVA MOUNTAINS"], ["icevale", "ICE VALE"], ["windcliff", "WIND CLIFF"]];
 const GR = [{ n: 1, r: "I", name: "PURIFY LAND OF HATE", slots: 4, pts: "5,000" }, { n: 2, r: "II", name: "ANCIENT RUINS", slots: 5, pts: "7,500" }, { n: 3, r: "III", name: "FROZEN WOOD", slots: 5, pts: "7,500" }, { n: 4, r: "IV", name: "RISING STRATA", slots: 5, pts: "7,500" }, { n: 5, r: "V", name: "GRAY AREA", slots: 5, pts: "7,500" }, { n: 6, r: "VI", name: "ANCIENT ALTAR", slots: 6, pts: "10,000" }];
 const cache: Record<string, Row[]> = {};
-if (typeof window !== "undefined") { for (const v of ["1", "2"]) fetch("/api/ranking?guild=" + v).then((r) => (r.ok ? r.json() : Promise.reject())).then((d) => { cache[v] = d.members; }).catch(() => {}); }
+let rolesCache: any = null;
+if (typeof window !== "undefined") { for (const v of ["1", "2"]) fetch("/api/ranking?guild=" + v).then((r) => (r.ok ? r.json() : Promise.reject())).then((d) => { cache[v] = d.members; rolesCache = { ...d.roles, me: d.me }; }).catch(() => {}); }
 
 const tabCls = (on: boolean) => "h-6 flex-1 border px-2 text-[9px] " + (on ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/80");
 
@@ -18,11 +19,11 @@ export default function AssignCard() {
   const [rows, setRows] = useState<Row[]>(cache["2"] ?? []);
   const [err, setErr] = useState(false);
   const [sec, setSec] = useState("dv");
-  const [roles, setRoles] = useState<any>(null);
+  const [roles, setRoles] = useState<any>(rolesCache);
   const [picking, setPicking] = useState<Row | null>(null);
   useEffect(() => {
     let live = true; setErr(false); setRows(cache[view] ?? []);
-    fetch("/api/ranking?guild=" + view).then((r) => (r.ok ? r.json() : Promise.reject())).then((d) => { cache[view] = d.members; if (live) { setRows(d.members); setRoles({ ...d.roles, me: d.me }); } }).catch(() => { if (live) setErr(true); });
+    fetch("/api/ranking?guild=" + view).then((r) => (r.ok ? r.json() : Promise.reject())).then((d) => { cache[view] = d.members; if (live) { setRows(d.members); rolesCache = { ...d.roles, me: d.me }; setRoles(rolesCache); } }).catch(() => { if (live) setErr(true); });
     return () => { live = false; };
   }, [view]);
 
@@ -34,7 +35,7 @@ export default function AssignCard() {
     if (!picking) return;
     if (await postAssign(picking.id, field, value)) {
       const patch = field === "dv_map" ? { dv_map: value as string | null } : { gr_boss: value as number | null };
-      setRows(rows.map((m) => (m.id === picking.id ? { ...m, ...patch } : m)));
+      const next = rows.map((m) => (m.id === picking.id ? { ...m, ...patch } : m)); cache[view] = next; setRows(next);
       setPicking(null);
     }
   };
