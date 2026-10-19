@@ -24,6 +24,7 @@ export default function AssignCard() {
   const [sec, setSec] = useState("dv");
   const [roles, setRoles] = useState<any>(rolesCache);
   const [picking, setPicking] = useState<Row | null>(null);
+  const [seatMap, setSeatMap] = useState<string | null>(null);
   useEffect(() => {
     let live = true; setErr(false); setRows(cache[view] ?? []);
     fetch("/api/ranking?guild=" + view).then((r) => (r.ok ? r.json() : Promise.reject())).then((d) => { cache[view] = d.members; if (live) { setRows(d.members); rolesCache = { ...d.roles, me: d.me }; setRoles(rolesCache); } }).catch(() => { if (live) setErr(true); });
@@ -42,6 +43,13 @@ export default function AssignCard() {
       setPicking(null);
     }
   };
+  const fillSeat = async (m: Row) => {
+    if (!seatMap) return;
+    if (await postAssign(m.id, "dv_map", seatMap)) {
+      const next = rows.map((r) => (r.id === m.id ? { ...r, dv_map: seatMap } : r)); cache[view] = next; setRows(next);
+      setSeatMap(null);
+    }
+  };
 
   return (
     <PixelPanel className="animate-rise">
@@ -50,6 +58,15 @@ export default function AssignCard() {
         <select value={view} disabled={!staff} onChange={(e) => setView(e.target.value)} className="h-8 flex-1 border border-dv-brass bg-black/40 px-2 text-[10px] text-dv-brassLight">{TABS.map((t) => (<option key={t.v} value={t.v}>{t.label}</option>))}</select>
       </div>
       {err && <p className="eyebrow py-2">COULD NOT LOAD</p>}
+
+      {seatMap && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => setSeatMap(null)}><div className="pixel-border bg-dv-panel max-h-[80vh] w-full max-w-sm space-y-2 overflow-y-auto p-4 shadow-pixel" onClick={(e) => e.stopPropagation()}>
+          <p className="eyebrow py-2">ADD TO {MAPS.find(([k]) => k === seatMap)?.[1]}</p>
+          {unassigned.filter((m) => canEdit(roles, m)).map((m) => (<button key={m.id} type="button" onClick={() => fillSeat(m)} className="item-slot block w-full p-2 text-left text-[10px]">{m.username}</button>))}
+          {unassigned.filter((m) => canEdit(roles, m)).length === 0 && <p className="text-[10px] text-slate-200/70">NO UNASSIGNED PLAYERS</p>}
+          <button type="button" onClick={() => setSeatMap(null)} className="item-slot block w-full p-2 text-[10px]">CANCEL</button>
+        </div></div>
+      )}
 
       {picking && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => setPicking(null)}><div className="pixel-border bg-dv-panel max-h-[80vh] w-full max-w-sm space-y-2 overflow-y-auto p-4 shadow-pixel" onClick={(e) => e.stopPropagation()}>
@@ -63,7 +80,7 @@ export default function AssignCard() {
 
       <div className="space-y-2">
         {sec === "dv" && !staff && roles && !mine?.dv_map && (<p className="eyebrow py-2">NO MAP ASSIGNED YET</p>)}
-        {sec === "dv" && maps.map(([k, label]) => (<DvMapScene key={k} k={k} label={label} members={rows.filter((m) => m.dv_map === k)} onPick={pick} />))}
+        {sec === "dv" && maps.map(([k, label]) => (<DvMapScene key={k} k={k} label={label} members={rows.filter((m) => m.dv_map === k)} onPick={pick} onEmpty={staff ? setSeatMap : undefined} />))}
         {sec === "dv" && staff && (
           <div className="item-slot p-2">
             <div className="flex items-center gap-2 mb-2"><span className="flex-1 text-[11px] text-slate-200/80">UNASSIGNED</span><span className="text-[9px] text-dv-emerald">{unassigned.length}</span></div>

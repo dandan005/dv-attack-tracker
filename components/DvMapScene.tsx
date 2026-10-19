@@ -143,14 +143,14 @@ function Tag({ text, style }: { text: string; style: CSSProperties }) {
   return <span className="pointer-events-none absolute border px-2 py-1 text-[8px] text-white" style={{ background: "rgba(30,30,30,.92)", borderColor: "#0b0b0b", ...style }}>{text}</span>;
 }
 
-function Seat({ m, accent, pos, onPick }: { m: P | null; accent: string; pos: { x: number; y: number }; onPick: (m: any) => void }) {
+function Seat({ m, accent, pos, onPick, onEmpty }: { m: P | null; accent: string; pos: { x: number; y: number }; onPick: (m: any) => void; onEmpty?: () => void }) {
   const wrap: CSSProperties = { left: pos.x + "%", top: pos.y + "%", transform: "translate(-50%, -50%)" };
   const log = <div className="-mt-2 h-3 w-16 rounded-full" style={{ background: "#3a2414", border: "1px solid #1c120a" }} />;
   if (!m) return (
-    <div className="absolute flex flex-col items-center" style={wrap}>
+    <button type="button" disabled={!onEmpty} onClick={() => onEmpty?.()} className="absolute flex flex-col items-center" style={wrap}>
       <div className="relative z-10 h-12 w-12 border border-dashed opacity-50" style={{ borderColor: accent }} />
       {log}
-    </div>
+    </button>
   );
   return (
     <button type="button" onClick={() => onPick(m)} className="absolute flex flex-col items-center" style={wrap}>
@@ -197,7 +197,7 @@ function ExploreModal({ k, label, onClose }: { k: string; label: string; onClose
   );
 }
 
-export default function DvMapScene({ k, label, members, onPick }: { k: string; label: string; members: P[]; onPick: (m: any) => void }) {
+export default function DvMapScene({ k, label, members, onPick, onEmpty }: { k: string; label: string; members: P[]; onPick: (m: any) => void; onEmpty?: (k: string) => void }) {
   const t = THEME[k] ?? THEME.wasteland;
   const full = members.length >= 5;
   const [lit, setLit] = useState(false);
@@ -222,7 +222,7 @@ export default function DvMapScene({ k, label, members, onPick }: { k: string; l
       <button type="button" onClick={() => setSmoke(!smoke)} className="absolute border px-2 py-1 text-[8px] text-white" style={{ background: "rgba(30,30,30,.92)", borderColor: smoke ? "#fbbf24" : "#0b0b0b", left: "70%", top: "45%", zIndex: 20 }}>CHEF</button>
       <div className="pointer-events-none absolute" style={{ left: "50%", top: "64%", ...mid }}><Fire lit={lit} /></div>
       <button type="button" onClick={() => setLit(!lit)} className="absolute border px-2 py-1 text-[8px] text-white" style={{ background: "rgba(30,30,30,.92)", borderColor: lit ? "#fbbf24" : "#0b0b0b", left: "50%", top: "72%", zIndex: 20, ...mid }}>COOKING</button>
-      {POS.map((pos, i) => (<Seat key={i} m={members[i] ?? null} accent={t.accent} pos={pos} onPick={onPick} />))}
+      {POS.map((pos, i) => (<Seat key={i} m={members[i] ?? null} accent={t.accent} pos={pos} onPick={onPick} onEmpty={onEmpty ? () => onEmpty(k) : undefined} />))}
       {explore && <ExploreModal k={k} label={label} onClose={() => setExplore(false)} />}
     </div>
   );
