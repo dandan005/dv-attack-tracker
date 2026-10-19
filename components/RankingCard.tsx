@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 import { rankByTier, rankImg } from "@/lib/ranks";
 import { gameAvatar } from "@/lib/gameAvatars";
 import { PixelPanel } from "@/components/PixelPanel";
+import { PlayerEditor, type EditRow } from "@/components/PlayerEditor";
 
 type Row = { id: string; username: string | null; avatar_url: string | null; promotion_tier: number | null; level: number | null; stage: number | null; dv_map: string | null; gr_boss: number | null; guild_id: number | null };
-type Data = { me: string; members: Row[] };
+type Data = { me: string; members: Row[]; roles?: { is_creator: boolean; is_admin: boolean; is_super_admin: boolean } };
 
 const TABS = [{ v: "ALL", label: "GLOBAL" }, { v: "1", label: "G1" }, { v: "2", label: "G2" }];
 const MAPS: Record<string, string> = { wasteland: "WASTELAND", lava: "LAVA MTS", icevale: "ICEVALE", windcliff: "WINDCLIFF" };
@@ -19,6 +20,7 @@ export function RankingCard() {
   const [data, setData] = useState<Data | null>(cache["ALL"] ?? null);
   const [err, setErr] = useState(false);
   const [all, setAll] = useState(false);
+  const [edit, setEdit] = useState<EditRow | "new" | null>(null);
 
   useEffect(() => {
     let off = false;
@@ -32,6 +34,8 @@ export function RankingCard() {
     return () => { off = true; };
   }, [view]);
 
+  const staff = !!(data?.roles && (data.roles.is_creator || data.roles.is_admin || data.roles.is_super_admin));
+  const refresh = () => Promise.all(TABS.map((t) => load(t.v).catch(() => null))).then(() => { setData(cache[view] ?? null); setEdit(null); });
   const list = data?.members ?? [];
   const shown = all ? list : list.slice(0, 10);
 
@@ -44,7 +48,7 @@ export function RankingCard() {
       </div>
       {err && <p className="eyebrow py-2">COULD NOT LOAD</p>}
       {!err && !data && <p className="eyebrow py-2">LOADING...</p>}
-      {!err && data && <p className="eyebrow py-2">{list.length} PLAYERS</p>}
+      {!err && data && <div className="flex items-center justify-between"><p className="eyebrow py-2">{list.length} PLAYERS</p>{staff && <button type="button" onClick={() => setEdit("new")} className="h-6 border border-dv-brass bg-black/40 px-2 text-[9px] text-dv-brassLight">+ ADD PLAYER</button>}</div>}
       <div className="space-y-2">
         {shown.map((m, i) => {
           const r = rankByTier(m.promotion_tier);
@@ -54,7 +58,7 @@ export function RankingCard() {
             ["STAGE", m.stage != null ? String(m.stage) : "-", "text-dv-emerald"],
           ];
           return (
-            <div key={m.id} className="item-slot p-2" style={isMe ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}>
+            <div key={m.id} onClick={staff ? () => setEdit({ id: m.id, username: m.username, level: m.level, stage: m.stage, guild_id: m.guild_id }) : undefined} className={"item-slot p-2" + (staff ? " cursor-pointer" : "")} style={isMe ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}>
               <div className="flex items-center gap-2 min-w-0 mb-2">
                 <span className="relative w-8 h-8 shrink-0 flex items-center justify-center"><img src={"/ranks/" + (m.stage == null ? "pos-default" : i === 0 ? "pos-gold" : i === 1 ? "pos-silver" : i === 2 ? "pos-bronze" : "pos-default") + ".png"} alt="" className="absolute inset-0 w-full h-full object-contain" /><span className="relative text-[10px] font-bold text-white" style={{ textShadow: "0 0 3px #000, 0 0 3px #000" }}>{m.stage != null ? i + 1 : "-"}</span></span>
                 <img src={gameAvatar(m.username) || m.avatar_url || "/icons/icon-192.png"} onError={(e) => { if (!e.currentTarget.src.endsWith("/icons/icon-192.png")) e.currentTarget.src = "/icons/icon-192.png"; }} alt="" className="w-7 h-7 pixel-frame border border-dv-line shrink-0 object-cover" />
@@ -75,6 +79,7 @@ export function RankingCard() {
       {list.length > 10 && (
         <button type="button" onClick={() => setAll(!all)} className="mt-3 h-6 w-full border border-dv-line bg-dv-panel2 text-[9px] text-slate-300/80">{all ? "SHOW LESS" : "SHOW ALL (" + list.length + ")"}</button>
       )}
+    {edit && <PlayerEditor row={edit === "new" ? null : edit} defaultGuild={view === "ALL" ? null : Number(view)} onClose={() => setEdit(null)} onDone={refresh} />}
     </PixelPanel>
   );
 }
