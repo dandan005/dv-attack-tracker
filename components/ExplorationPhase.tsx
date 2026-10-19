@@ -27,16 +27,6 @@ export function ExplorationPhase({ currentDay }: { currentDay: number }) {
         <span className="status-chip shrink-0">DAY {currentDay}/2</span>
       </div>
 
-      <div className="grid grid-cols-3 gap-2 mb-3">
-        {[1, 2, 3].map((entry) => (
-          <div key={entry} className="pixel-frame border border-dv-line bg-dv-bg/70 px-2 py-3 text-center">
-            <span className="block text-dv-violet text-[12px]">◆</span>
-            <span className="block text-[10px] text-dv-brassLight mt-1">ENTRY {entry}</span>
-            <span className="block text-[10px] text-slate-200/65 mt-1">AVAILABLE</span>
-          </div>
-        ))}
-      </div>
-
       <div className="pixel-frame border border-dv-violet/60 bg-dv-panel2 px-3 py-3 flex items-start gap-2 mb-3">
         <span className="text-dv-violet">◆</span>
         <div>
