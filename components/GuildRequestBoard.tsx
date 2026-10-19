@@ -1,7 +1,19 @@
 "use client";
+import { useState } from "react";
+import { gameAvatar } from "@/lib/gameAvatars";
 
-type P = { id: string; username: string | null; gr_boss: number | null };
+type P = { id: string; username: string | null; avatar_url?: string | null; gr_boss: number | null };
 type B = { n: number; r: string; name: string; slots: number; pts: string };
+const FB = "/icons/icon-192.png";
+
+const INFO: Record<number, { el: "fire" | "earth" | "water"; bless: string; curse: string; bg: [string, string] }> = {
+  1: { el: "fire", bless: "MSPD INCREASED", curse: "SKILLS WITH COOLDOWN CONDITION CAN NOT BE USED", bg: ["#1c2a4a", "#3a3326"] },
+  2: { el: "earth", bless: "DMG OF EPIC GRADE ACTIVE ATTACK SKILLS INCREASED BY 1000%", curse: "WIND ATTRIBUTE SKILLS CAN NOT BE USED", bg: ["#5a4636", "#2a1c1c"] },
+  3: { el: "water", bless: "MSPD INCREASED", curse: "FULGUROUS CAN NOT BE USED", bg: ["#0f1a3a", "#3a3a6a"] },
+  4: { el: "earth", bless: "DMG OF COMMON GRADE ACTIVE ATTACK SKILLS INCREASED BY 2000%", curse: "MYTHIC GRADE SKILLS CAN NOT BE USED", bg: ["#5a7aa0", "#5a2a1a"] },
+  5: { el: "fire", bless: "[IRON WILL] EFFECT X10", curse: "COOLDOWN RECHARGE SPEED REDUCED", bg: ["#7a3a3a", "#3a1a1a"] },
+  6: { el: "earth", bless: "DMG OF COMMON GRADE ACTIVE ATTACK SKILLS INCREASED BY 2000%", curse: "MANA RECOVERY REDUCED", bg: ["#e8a050", "#7a3a20"] },
+};
 
 function Beast({ n }: { n: number }) {
   const p = { viewBox: "0 0 24 24", className: "h-full w-full", shapeRendering: "crispEdges" as const };
@@ -51,8 +63,79 @@ function Beast({ n }: { n: number }) {
   );
 }
 
+function Element({ el }: { el: "fire" | "earth" | "water" }) {
+  return (
+    <span className="flex h-8 w-8 items-center justify-center rounded-full border-2" style={{ background: "#3a2414", borderColor: "#c9a05a" }}>
+      <svg viewBox="0 0 12 12" className="h-5 w-5" shapeRendering="crispEdges">
+        {el === "fire" && (<><rect x="4" y="5" width="4" height="5" fill="#f97316" /><rect x="5" y="2" width="2" height="4" fill="#fb923c" /><rect x="5" y="7" width="2" height="3" fill="#fde047" /></>)}
+        {el === "earth" && (<><rect x="5" y="1" width="2" height="2" fill="#f5c46a" /><rect x="3" y="3" width="6" height="2" fill="#f5c46a" /><rect x="2" y="5" width="8" height="2" fill="#e8a33a" /><rect x="3" y="7" width="6" height="2" fill="#e8a33a" /><rect x="5" y="9" width="2" height="2" fill="#c9852a" /></>)}
+        {el === "water" && (<><rect x="5" y="1" width="2" height="2" fill="#7fd0ff" /><rect x="4" y="3" width="4" height="2" fill="#4fb3ff" /><rect x="3" y="5" width="6" height="4" fill="#2f8ae0" /><rect x="4" y="9" width="4" height="1" fill="#2f8ae0" /></>)}
+      </svg>
+    </span>
+  );
+}
+
+function Silhouette() {
+  return (
+    <svg viewBox="0 0 12 12" className="h-full w-full" shapeRendering="crispEdges">
+      <rect x="4" y="2" width="4" height="4" fill="#a8a090" /><rect x="2" y="7" width="8" height="4" fill="#a8a090" />
+    </svg>
+  );
+}
+
+function Detail({ g, ms, onClose, onPick }: { g: B; ms: P[]; onClose: () => void; onPick: (m: any) => void }) {
+  const info = INFO[g.n];
+  const open = g.slots - ms.length;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={onClose}>
+      <div className="max-h-[88vh] w-full max-w-sm overflow-y-auto border-2 p-2" style={{ background: "#c9b48a", borderColor: "#8a6a3a" }} onClick={(e) => e.stopPropagation()}>
+        <div className="border px-2 py-2 text-center text-[10px]" style={{ background: "#6a1a12", borderColor: "#3a0a06", color: "#f5c46a" }}>{"NATIONAL ADVENTURERS' GUILD"}</div>
+        <div className="mt-2 border" style={{ borderColor: "#2a1a12" }}>
+          <p className="px-2 py-2 text-center text-[9px] text-white" style={{ background: "#2a1c18" }}>{g.r}. REQUEST TO PURIFY {g.name}</p>
+          <div className="relative flex h-32 items-end justify-center" style={{ background: "linear-gradient(" + info.bg[0] + "," + info.bg[1] + ")" }}>
+            <div className="absolute left-2 top-2"><Element el={info.el} /></div>
+            <div className="mb-2 h-24 w-24"><Beast n={g.n} /></div>
+          </div>
+        </div>
+        <div className="mt-2 grid grid-cols-2 gap-2">
+          <div className="border" style={{ borderColor: "#3a4a1a" }}>
+            <p className="py-1 text-center text-[8px]" style={{ background: "#3a4a1a", color: "#e6f08a" }}>BLESSING EFFECT</p>
+            <p className="flex min-h-[64px] items-center justify-center px-1 py-2 text-center text-[8px] leading-relaxed text-white" style={{ background: "#9aa84a" }}>{info.bless}</p>
+          </div>
+          <div className="border" style={{ borderColor: "#2a1050" }}>
+            <p className="py-1 text-center text-[8px]" style={{ background: "#2a1050", color: "#d6a8ff" }}>CORRUPTION EFFECT</p>
+            <p className="flex min-h-[64px] items-center justify-center px-1 py-2 text-center text-[8px] leading-relaxed text-white" style={{ background: "#6e4a8e" }}>{info.curse}</p>
+          </div>
+        </div>
+        <p className="mt-2 py-1 text-center text-[9px] text-white" style={{ background: "#7a6040" }}>REQUEST PROGRESS</p>
+        <div className="flex items-center gap-2 p-2" style={{ background: "#4a3a2a" }}>
+          <div className="flex flex-1 flex-wrap justify-center gap-1.5">
+            {Array.from({ length: g.slots }, (_, i) => {
+              const m = ms[i];
+              if (!m) return (<span key={i} className="block h-9 w-9 rounded-full border-2 p-1" style={{ background: "#6a5a48", borderColor: "#c9b48a" }}><Silhouette /></span>);
+              return (
+                <button key={m.id} type="button" onClick={() => { onClose(); onPick(m); }} className="block h-9 w-9 overflow-hidden rounded-full border-2" style={{ borderColor: "#c9b48a" }}>
+                  <img src={gameAvatar(m.username) || m.avatar_url || FB} onError={(e) => { if (!e.currentTarget.src.endsWith(FB)) e.currentTarget.src = FB; }} alt={m.username ?? ""} className="h-full w-full object-cover" />
+                </button>
+              );
+            })}
+          </div>
+          <div className="shrink-0 border-2 px-2 py-1 text-center" style={{ background: "#1a1410", borderColor: "#2a1a12" }}>
+            <p className="text-[8px] text-dv-emerald">REWARD</p>
+            <p className="text-[10px] text-white">{g.pts}</p>
+          </div>
+        </div>
+        <p className="mt-2 px-2 py-4 text-center text-[9px] leading-relaxed text-white/85" style={{ background: "#4a3c2c" }}>{open <= 0 ? "ALL SLOTS FILLED." : open + (open === 1 ? " SLOT" : " SLOTS") + " OPEN."}</p>
+        <button type="button" onClick={onClose} className="mt-2 block w-full border-2 p-2 text-[10px] text-white" style={{ background: "#555", borderColor: "#2a2a2a" }}>CLOSE</button>
+      </div>
+    </div>
+  );
+}
+
 export default function GuildRequestBoard({ bosses, rows, onPick }: { bosses: B[]; rows: P[]; onPick: (m: any) => void }) {
+  const [open, setOpen] = useState<number | null>(null);
   const shadow = { textShadow: "0 1px 0 rgba(0,0,0,.7)" };
+  const sel = bosses.find((b) => b.n === open) ?? null;
   return (
     <div className="pixel-border relative overflow-hidden p-2" style={{ background: "linear-gradient(#2f4a1e, #1a1208 55%, #2f4a1e)" }}>
       <div className="border px-2 py-2 text-center text-[10px] text-dv-brassLight" style={{ background: "#2a1a12", borderColor: "#b8893a" }}>GUILD REQUEST</div>
@@ -64,13 +147,13 @@ export default function GuildRequestBoard({ bosses, rows, onPick }: { bosses: B[
             return (
               <div key={g.n} className="flex min-w-0 flex-col items-center">
                 <span className="mb-1 text-[11px] text-white" style={shadow}>{g.r}</span>
-                <div className="w-full border-2 p-1" style={{ background: "#d9c39a", borderColor: "#8a6a3a" }}>
+                <button type="button" onClick={() => setOpen(g.n)} className="block w-full border-2 p-1" style={{ background: "#d9c39a", borderColor: "#8a6a3a" }}>
                   <p className="text-center text-[9px]" style={{ color: "#5a3a1a" }}>WANTED</p>
                   <div className="my-1 aspect-square border-2 p-1" style={{ background: "#4a3a30", borderColor: "#8a4a1a" }}><Beast n={g.n} /></div>
                   <div className="flex justify-center gap-0.5">
                     {Array.from({ length: g.slots }, (_, i) => (<span key={i} className="text-[8px] leading-none" style={{ color: i < ms.length ? "#f59e0b" : "#6b5a4a" }}>{i < ms.length ? "★" : "✕"}</span>))}
                   </div>
-                </div>
+                </button>
                 <p className="mt-1 w-full truncate text-center text-[8px] text-white/85" style={shadow}>{g.name}</p>
                 <p className="text-center text-[8px] text-dv-emerald" style={shadow}>{ms.length}/{g.slots} · {g.pts}</p>
                 <div className="mt-1 w-full space-y-0.5">
@@ -81,6 +164,7 @@ export default function GuildRequestBoard({ bosses, rows, onPick }: { bosses: B[
           })}
         </div>
       </div>
+      {sel && <Detail g={sel} ms={rows.filter((m) => m.gr_boss === sel.n)} onClose={() => setOpen(null)} onPick={onPick} />}
     </div>
   );
 }
