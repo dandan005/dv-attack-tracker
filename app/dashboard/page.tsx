@@ -295,7 +295,7 @@ export default function DashboardPage() {
 
       <main className="mx-auto flex w-full max-w-md min-h-0 flex-1 flex-col overflow-y-auto px-4 pb-6 pt-5 sm:px-6 md:pt-7">
         {tab === "ledger" && (
-          <div className="flex flex-col">
+          <div className="flex min-h-0 flex-1 flex-col">
             {day7.phase !== "calculation" && day7.phase !== "ranking-results" && day7.phase !== "onboarding" && (
             <div className="mb-1">
               <p className="eyebrow text-dv-emerald">ᛏ GUILD OPERATIONS / ONLINE</p>
@@ -416,13 +416,36 @@ export default function DashboardPage() {
                 <p className="mt-2 text-xs text-dv-emerald">Distribution ends in: {day7.minutesLeft}m</p>
               </div>
             ) : day7.phase === "onboarding" ? (
-              <div className="relative mt-4 pixel-border bg-dv-panel/95 p-4 shadow-pixel">
-                <p className="eyebrow mb-2">CYCLE BREAK / ONBOARDING</p>
-                <h2 className="text-lg text-dv-brassLight">Rest up and regear.</h2>
-                <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">Rewards have been distributed. Restock, cook and regear before Day 1 opens.</p>
-                <div className="mt-4 border border-dv-line bg-black/30 px-4 py-3 text-center">
+              <div className="relative mt-4 flex min-h-0 flex-1 flex-col items-center pixel-border bg-dv-panel/95 px-5 pt-3 pb-6 text-center shadow-pixel">
+                <span className="absolute top-2 right-3 text-dv-emerald/40 text-xs" aria-hidden="true">ᚱ</span>
+                <span className="absolute top-2 left-3 text-dv-emerald/40 text-xs" aria-hidden="true">ᚨ</span>
+                <p className="text-sm text-dv-brassLight">🛸 ONBOARDING — PREPARING NEXT CYCLE</p>
+                <p className="mt-2 max-w-md text-xs leading-relaxed text-slate-200/60">Rewards have been distributed. Rest up and regear.</p>
+                <div className="mt-4 w-full max-w-md border border-dv-line bg-black/30 px-4 py-3">
                   <p className="eyebrow">DAY 1 OPENS IN</p>
                   <p className="mt-1 text-2xl text-dv-emerald">{formatCountdown(day7.msLeft)}</p>
+                </div>
+                <div className="mt-5 w-full max-w-md text-left">
+                  <p className="eyebrow text-dv-emerald">BEFORE DAY 1</p>
+                  <ul className="mt-2 space-y-1.5">
+                    {[["Restock ingredients", "Check your bag against the Special tab."], ["Cook the main dishes", "Follow the priority order in the Cooking tab."], ["Check your assignment", "Confirm your DV map in the Assign tab."], ["Review the guide", "Skim the Guide tab before your first run."]].map(([ttl, d]) => (
+                      <li key={ttl} className="item-slot border border-dv-line px-3 py-2">
+                        <p className="text-[10px] text-slate-200/80">{ttl}</p>
+                        <p className="mt-0.5 text-[9px] text-slate-300/50">{d}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="mt-5 w-full max-w-md text-left">
+                  <p className="eyebrow text-dv-emerald">CYCLE TIMELINE</p>
+                  <ul className="mt-2 space-y-1.5">
+                    {[["D1–D6", "Attack days. Log every run."], ["D7", "Ranking calculation."], ["D7", "Rewards distributed."], ["NOW", "Onboarding. Prepare the next cycle."]].map(([a1, b1], idx) => (
+                      <li key={idx} className={"item-slot flex items-center gap-3 border px-3 py-2 " + (idx === 3 ? "border-dv-emerald" : "border-dv-line opacity-60")}>
+                        <span className={"w-12 shrink-0 text-[9px] " + (idx === 3 ? "text-dv-emerald" : "text-dv-brassLight")}>{a1}</span>
+                        <span className="text-[10px] text-slate-200/80">{b1}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             ) : (
