@@ -416,7 +416,7 @@ export default function DashboardPage() {
                 <p className="mt-2 text-xs text-dv-emerald">Distribution ends in: {day7.minutesLeft}m</p>
               </div>
             ) : day7.phase === "onboarding" ? (
-              <div className="relative mt-4 flex flex-1 flex-col items-center pixel-border bg-dv-panel/95 px-5 pt-3 pb-6 text-center shadow-pixel">
+              <div className="relative mt-0 flex flex-1 flex-col items-center pixel-border bg-dv-panel/95 px-5 pt-3 pb-6 text-center shadow-pixel">
                 <span className="absolute top-2 right-3 text-dv-emerald/40 text-xs" aria-hidden="true">ᚱ</span>
                 <span className="absolute top-2 left-3 text-dv-emerald/40 text-xs" aria-hidden="true">ᚨ</span>
                 <p className="text-sm text-dv-brassLight">🛸 ONBOARDING — PREPARING NEXT CYCLE</p>
