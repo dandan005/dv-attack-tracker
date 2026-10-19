@@ -281,7 +281,7 @@ export default function DashboardPage() {
               </div>
             )}
           {me && <SettingsPopup open={showSettings} onClose={() => setShowSettings(false)} me={{ ...me, promotion_tier: myTier, guild_verified_at: me.guild_verified_at ?? null }} stats={{ loggedThisCycle: myLoggedDays.length, cleanRuns: myCleanRuns, cycleRate: members.length === 0 ? 0 : Math.round((members.reduce((s, m) => s + m.logged.filter(Boolean).length, 0) / (members.length * Math.max(dayNumber, 1))) * 100) }} onReplayWalkthrough={() => { setShowSettings(false); setShowWalkthrough(true); }} onSetTier={(t) => saveTier(String(t))} onSignOut={async () => { await supabase.auth.signOut(); window.location.href = "/"; }} />}
-            <button type="button" onClick={() => setTab("index")} aria-label="Open Ranking" title="Ranking" className="pixel-frame item-slot flex h-8 w-8 shrink-0 items-center justify-center text-dv-brassLight hover:text-white">
+            <button type="button" onClick={() => setTab("index")} aria-label="Open Ranking" title="Ranking" className="pixel-frame item-slot flex h-8 w-8 shrink-0 items-center justify-center text-dv-brassLight">
               <RankingIcon className="h-4 w-4" />
             </button>
             {me && (
