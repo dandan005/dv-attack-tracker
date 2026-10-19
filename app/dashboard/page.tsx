@@ -416,14 +416,14 @@ export default function DashboardPage() {
                 <p className="mt-2 text-xs text-dv-emerald">Distribution ends in: {day7.minutesLeft}m</p>
               </div>
             ) : day7.phase === "onboarding" ? (
-              <div className="relative mt-4 flex min-h-0 flex-1 flex-col items-center justify-center pixel-border bg-dv-panel/95 p-5 text-center shadow-pixel">
-                <span className="absolute top-2 right-3 text-dv-emerald/40 text-xs" aria-hidden="true">ᚱ</span>
-                <span className="absolute top-2 left-3 text-dv-emerald/40 text-xs" aria-hidden="true">ᚨ</span>
-                <p className="text-sm text-dv-brassLight">🛸 ONBOARDING — PREPARING NEXT CYCLE</p>
-                <p className="mt-2 max-w-md text-xs leading-relaxed text-slate-200/60">
-                  Rewards have been distributed. Rest up and regear.
-                </p>
-                <p className="mt-2 text-xs text-dv-emerald">Day 1 opens in: {formatCountdown(day7.msLeft)}</p>
+              <div className="relative mt-4 pixel-border bg-dv-panel/95 p-4 shadow-pixel">
+                <p className="eyebrow mb-2">CYCLE BREAK / ONBOARDING</p>
+                <h2 className="text-lg text-dv-brassLight">Rest up and regear.</h2>
+                <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">Rewards have been distributed. Restock, cook and regear before Day 1 opens.</p>
+                <div className="mt-4 border border-dv-line bg-black/30 px-4 py-3 text-center">
+                  <p className="eyebrow">DAY 1 OPENS IN</p>
+                  <p className="mt-1 text-2xl text-dv-emerald">{formatCountdown(day7.msLeft)}</p>
+                </div>
               </div>
             ) : (
               <>
