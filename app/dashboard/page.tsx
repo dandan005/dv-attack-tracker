@@ -92,7 +92,7 @@ export default function DashboardPage() {
   const { dayNumber, cycleStartISO } = getCycleInfo();
   const day7 = getDay7Phase(now);
 
-  const visibleTabs = TABS.filter((t) => t.id !== "settings");
+  const visibleTabs = TABS.filter((t) => t.id !== "settings" && t.id !== "index");
 
   async function loadAll() {
     const { data: { user } } = await supabase.auth.getUser();
@@ -280,6 +280,9 @@ export default function DashboardPage() {
               </div>
             )}
           {me && <SettingsPopup open={showSettings} onClose={() => setShowSettings(false)} me={{ ...me, promotion_tier: myTier, guild_verified_at: me.guild_verified_at ?? null }} stats={{ loggedThisCycle: myLoggedDays.length, cleanRuns: myCleanRuns, cycleRate: members.length === 0 ? 0 : Math.round((members.reduce((s, m) => s + m.logged.filter(Boolean).length, 0) / (members.length * Math.max(dayNumber, 1))) * 100) }} onReplayWalkthrough={() => { setShowSettings(false); setShowWalkthrough(true); }} onSetTier={(t) => saveTier(String(t))} onSignOut={async () => { await supabase.auth.signOut(); window.location.href = "/"; }} />}
+            <button type="button" onClick={() => setTab("index")} aria-label="Open Ranking" title="Ranking" className="pixel-frame item-slot flex h-8 w-8 shrink-0 items-center justify-center text-dv-brassLight hover:text-white">
+              <RankingIcon className="h-4 w-4" />
+            </button>
             {me && (
               <div onClick={() => setShowSettings(true)} role="button" aria-label="Open settings" className="pixel-frame item-slot flex cursor-pointer items-center gap-2 px-2 py-1">
                 <img src={me.avatar_url || "/icons/icon-192.png"}
