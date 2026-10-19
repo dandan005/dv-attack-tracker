@@ -15,11 +15,11 @@ const POS = [{ x: 49, y: 50 }, { x: 24, y: 57 }, { x: 75, y: 57 }, { x: 29, y: 7
 const SHADOW: CSSProperties = { textShadow: "0 1px 0 rgba(0,0,0,.7)" };
 
 type MapInfo = { chef: string; rare: string; sells: string[]; places?: [string, string][] };
-const GENERAL = ["Meat", "Wheat", "Lettuce", "Salt", "Egg", "Cheese"];
+const GENERAL = ["Meat", "Wheat", "Lettuce", "Milk", "Egg", "Cheese"];
 const INFO: Record<string, MapInfo> = {
   wasteland: { chef: "Arwen", rare: "Cacao", sells: ["Potato", "Tomato"] },
   lava: { chef: "Gene", rare: "Chili", sells: ["Shrimp", "Rice"] },
-  icevale: { chef: "Rosa", rare: "Tuna", sells: ["Peanut", "Corn"], places: [["White Peak", "Meat"], ["Frozen Hill", "Wheat"], ["Frost Valley", "Salt"], ["Drift Ice Region", "Lettuce"]] },
+  icevale: { chef: "Rosa", rare: "Tuna", sells: ["Peanut", "Corn"], places: [["White Peak", "Meat"], ["Frozen Hill", "Wheat"], ["Frost Valley", "Milk"], ["Drift Ice Region", "Lettuce"]] },
   windcliff: { chef: "Cedric", rare: "Basil", sells: ["Strawberry", "Sugarcane"] },
 };
 
