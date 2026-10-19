@@ -37,24 +37,6 @@ export function ExplorationPhase({ currentDay }: { currentDay: number }) {
         ))}
       </div>
 
-      <div className="pixel-frame border border-dv-line bg-dv-panel2 px-3 py-3 mb-3">
-        <p className="text-[10px] text-dv-emerald tracking-wide mb-2">EACH ENTRY REWARDS</p>
-        <div className="grid grid-cols-3 gap-2 text-center">
-          <div>
-            <span className="block text-[11px] text-dv-brassLight">Materials</span>
-            <span className="block text-[9px] text-slate-200/60 mt-0.5">varies by zone</span>
-          </div>
-          <div>
-            <span className="block text-[11px] text-dv-brassLight">Points</span>
-            <span className="block text-[9px] text-slate-200/60 mt-0.5">leaderboard rank</span>
-          </div>
-          <div>
-            <span className="block text-[11px] text-dv-brassLight">Bar Fill</span>
-            <span className="block text-[9px] text-slate-200/60 mt-0.5">raises trace odds</span>
-          </div>
-        </div>
-      </div>
-
       <div className="pixel-frame border border-dv-violet/60 bg-dv-panel2 px-3 py-3 flex items-start gap-2 mb-3">
         <span className="text-dv-violet">◆</span>
         <div>
