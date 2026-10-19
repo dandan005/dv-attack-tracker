@@ -81,11 +81,6 @@ export default function AssignCard() {
       <div className="space-y-2">
         {sec === "dv" && !staff && roles && !mine?.dv_map && (<p className="eyebrow py-2">NO MAP ASSIGNED YET</p>)}
         {sec === "dv" && maps.map(([k, label]) => (<DvMapScene key={k} k={k} label={label} members={rows.filter((m) => m.dv_map === k)} onPick={pick} onEmpty={staff ? setSeatMap : undefined} />))}
-        {sec === "dv" && staff && (
-          <div className="item-slot p-2">
-            <div className="flex items-center gap-2 mb-2"><span className="flex-1 text-[11px] text-slate-200/80">UNASSIGNED</span><span className="text-[9px] text-dv-emerald">{unassigned.length}</span></div>
-            {unassigned.map((m) => (<p key={m.id} onClick={() => pick(m)} className="text-[10px] text-slate-200/80 cursor-pointer">{m.username}</p>))}
-          </div>)}
         {sec === "gr" && !staff && roles && !mine?.gr_boss && (<p className="eyebrow py-2">NO BOSS ASSIGNED YET</p>)}
         {sec === "gr" && (<GuildRequestBoard bosses={bosses} rows={rows} onPick={pick} />)}
       </div>
