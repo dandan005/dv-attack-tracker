@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { PixelPanel } from "@/components/PixelPanel";
 import DvMapScene from "@/components/DvMapScene";
+import GuildRequestBoard from "@/components/GuildRequestBoard";
 
 type Row = { id: string; username: string | null; dv_map: string | null; gr_boss: number | null };
 const TABS = [{ v: "1", label: "G1" }, { v: "2", label: "G2" }];
@@ -69,12 +70,7 @@ export default function AssignCard() {
             {unassigned.map((m) => (<p key={m.id} onClick={() => pick(m)} className="text-[10px] text-slate-200/80 cursor-pointer">{m.username}</p>))}
           </div>)}
         {sec === "gr" && !staff && roles && !mine?.gr_boss && (<p className="eyebrow py-2">NO BOSS ASSIGNED YET</p>)}
-        {sec === "gr" && bosses.map((g) => { const ms = rows.filter((m) => m.gr_boss === g.n); return (
-          <div key={g.n} className="item-slot p-2">
-            <div className="flex items-center gap-2 mb-2"><span className="text-[10px] text-dv-brassLight">{g.r}</span><span className="flex-1 text-[11px] text-slate-200/80">{g.name}</span></div>
-            <div className="grid grid-cols-2 gap-1 mb-2"><div><p className="eyebrow">SLOTS</p><p className="text-[10px] mt-1 text-slate-200/80">{ms.length}/{g.slots}</p></div><div><p className="eyebrow">POINTS</p><p className="text-[10px] mt-1 text-dv-emerald">{g.pts}</p></div></div>
-            {ms.map((m) => (<p key={m.id} onClick={() => pick(m)} className="text-[10px] text-slate-200/80 cursor-pointer">{m.username}</p>))}
-          </div>); })}
+        {sec === "gr" && (<GuildRequestBoard bosses={bosses} rows={rows} onPick={pick} />)}
       </div>
     </PixelPanel>
   );
