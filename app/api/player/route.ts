@@ -58,6 +58,8 @@ export async function POST(req: NextRequest) {
   const patch: Record<string, unknown> = { level, stage, guild_id: g };
   if (nm) patch[isRoster ? "name" : "username"] = nm;
   if (typeof body.avatar === "string") patch.custom_avatar = /^[a-z0-9]{1,30}$/.test(body.avatar) ? body.avatar : null;
+  const t = body.tier;
+  if (t === null || (typeof t === "number" && Number.isInteger(t) && t >= 1 && t <= 26)) patch.promotion_tier = t;
   const { error } = isRoster ? await db.from("roster").update(patch).eq("key", id.slice(7)) : await db.from("members").update(patch).eq("id", id);
   if (error) return err("Update failed", 500);
   return NextResponse.json({ ok: true });
