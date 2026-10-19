@@ -106,9 +106,19 @@ function Flag() {
   );
 }
 
-function Stall() {
+function Stall({ smoke }: { smoke: boolean }) {
   return (
-    <svg viewBox="0 0 50 40" className="block w-full" shapeRendering="crispEdges">
+    <svg viewBox="0 0 50 40" className="block w-full" shapeRendering="crispEdges" style={{ overflow: "visible" }}>
+      <style>{"@keyframes dvSmoke{0%{transform:translateY(0) scale(.6);opacity:.9}100%{transform:translateY(-26px) scale(1.6);opacity:0}}.dv-smoke{transform-box:fill-box;transform-origin:50% 50%;animation:dvSmoke 2s steps(8,end) infinite}"}</style>
+      <rect x="11" y="3" width="7" height="10" fill="#5a3a2a" />
+      <rect x="10" y="2" width="9" height="2" fill="#3a2418" />
+      {smoke && (
+        <g>
+          <rect className="dv-smoke" x="12" y="0" width="4" height="4" fill="#d8d8d8" />
+          <rect className="dv-smoke" x="14" y="0" width="3" height="3" fill="#bdbdbd" style={{ animationDelay: ".7s" }} />
+          <rect className="dv-smoke" x="11" y="0" width="4" height="4" fill="#e6e6e6" style={{ animationDelay: "1.3s" }} />
+        </g>
+      )}
       <polygon points="4,14 25,4 46,14" fill="#e8a33a" stroke="#9a6a1a" strokeWidth="1" />
       <rect x="6" y="14" width="38" height="16" fill="#7a4c28" />
       <rect x="10" y="20" width="12" height="6" fill="#2a1a12" />
@@ -145,6 +155,7 @@ export default function DvMapScene({ k, label, members, onPick }: { k: string; l
   const t = THEME[k] ?? THEME.wasteland;
   const full = members.length >= 5;
   const [lit, setLit] = useState(false);
+  const [smoke, setSmoke] = useState(false);
   const mid: CSSProperties = { transform: "translate(-50%, -50%)" };
   return (
     <div className="pixel-border relative overflow-hidden" style={{ background: "linear-gradient(" + t.top + "," + t.bottom + ")", minHeight: "calc(100dvh - 16rem)", aspectRatio: "10 / 17" }}>
@@ -158,10 +169,10 @@ export default function DvMapScene({ k, label, members, onPick }: { k: string; l
       <div className="pointer-events-none absolute" style={{ left: "17%", top: "34%", width: "12%" }}><div style={{ aspectRatio: "24 / 40" }}><Flag /></div></div>
       <div className="pointer-events-none absolute" style={{ left: "56%", top: "35%", width: "26%" }}>
         <span className="block pr-2 text-right text-[9px] text-white" style={SHADOW}>{t.chef}</span>
-        <Stall />
+        <Stall smoke={smoke} />
       </div>
       <Tag text="EXPLORATION" style={{ left: "32%", top: "40%" }} />
-      <Tag text="CHEF" style={{ left: "70%", top: "45%" }} />
+      <button type="button" onClick={() => setSmoke(!smoke)} className="absolute border px-2 py-1 text-[8px] text-white" style={{ background: "rgba(30,30,30,.92)", borderColor: smoke ? "#fbbf24" : "#0b0b0b", left: "70%", top: "45%", zIndex: 20 }}>CHEF</button>
       <div className="pointer-events-none absolute" style={{ left: "50%", top: "64%", ...mid }}><Fire lit={lit} /></div>
       <button type="button" onClick={() => setLit(!lit)} className="absolute border px-2 py-1 text-[8px] text-white" style={{ background: "rgba(30,30,30,.92)", borderColor: lit ? "#fbbf24" : "#0b0b0b", left: "50%", top: "72%", zIndex: 20, ...mid }}>COOKING</button>
       {POS.map((pos, i) => (<Seat key={i} m={members[i] ?? null} accent={t.accent} pos={pos} onPick={onPick} />))}
