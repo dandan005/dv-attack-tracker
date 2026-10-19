@@ -10,7 +10,9 @@ const MAPS: [string, string][] = [["wasteland", "WASTELAND PLATEAU"], ["lava", "
 const GR = [{ n: 1, r: "I", name: "PURIFY LAND OF HATE", slots: 4, pts: "5,000" }, { n: 2, r: "II", name: "ANCIENT RUINS", slots: 5, pts: "7,500" }, { n: 3, r: "III", name: "FROZEN WOOD", slots: 5, pts: "7,500" }, { n: 4, r: "IV", name: "RISING STRATA", slots: 5, pts: "7,500" }, { n: 5, r: "V", name: "GRAY AREA", slots: 5, pts: "7,500" }, { n: 6, r: "VI", name: "ANCIENT ALTAR", slots: 6, pts: "10,000" }];
 const cache: Record<string, Row[]> = {};
 let rolesCache: any = null;
-if (typeof window !== "undefined") { for (const v of ["1", "2"]) fetch("/api/ranking?guild=" + v).then((r) => (r.ok ? r.json() : Promise.reject())).then((d) => { cache[v] = d.members; rolesCache = { ...d.roles, me: d.me }; }).catch(() => {}); }
+let warmed = false;
+export function warmAssign() { if (warmed || typeof window === "undefined") return; warmed = true; for (const v of ["1", "2"]) fetch("/api/ranking?guild=" + v).then((r) => (r.ok ? r.json() : Promise.reject())).then((d) => { cache[v] = d.members; rolesCache = { ...d.roles, me: d.me }; }).catch(() => { warmed = false; }); }
+warmAssign();
 
 const tabCls = (on: boolean) => "h-6 flex-1 border px-2 text-[9px] " + (on ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/80");
 
