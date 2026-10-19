@@ -1,6 +1,7 @@
 "use client";
 import { useState, type CSSProperties } from "react";
 import { gameAvatar } from "@/lib/gameAvatars";
+import { getCycleInfo, formatCountdown } from "@/lib/cycle";
 
 type P = { id: string; username: string | null; avatar_url?: string | null };
 const FB = "/icons/icon-192.png";
@@ -12,6 +13,15 @@ const THEME: Record<string, { top: string; bottom: string; accent: string; chef:
 };
 const POS = [{ x: 49, y: 50 }, { x: 24, y: 57 }, { x: 75, y: 57 }, { x: 29, y: 71 }, { x: 70, y: 71 }];
 const SHADOW: CSSProperties = { textShadow: "0 1px 0 rgba(0,0,0,.7)" };
+
+type MapInfo = { chef: string; rare: string; sells: string[]; places?: [string, string][] };
+const GENERAL = ["Meat", "Wheat", "Lettuce", "Salt", "Egg", "Cheese"];
+const INFO: Record<string, MapInfo> = {
+  wasteland: { chef: "Arwen", rare: "Cacao", sells: ["Potato", "Tomato"] },
+  lava: { chef: "Gene", rare: "Chili", sells: ["Shrimp", "Rice"] },
+  icevale: { chef: "Rosa", rare: "Tuna", sells: ["Peanut", "Corn"], places: [["White Peak", "Meat"], ["Frozen Hill", "Wheat"], ["Frost Valley", "Salt"], ["Drift Ice Region", "Lettuce"]] },
+  windcliff: { chef: "Cedric", rare: "Basil", sells: ["Strawberry", "Sugarcane"] },
+};
 
 function Scenery({ k }: { k: string }) {
   const c = "pointer-events-none absolute inset-0 h-full w-full";
@@ -151,11 +161,38 @@ function Seat({ m, accent, pos, onPick }: { m: P | null; accent: string; pos: { 
   );
 }
 
+function ExploreModal({ k, label, onClose }: { k: string; label: string; onClose: () => void }) {
+  const info = INFO[k] ?? INFO.wasteland;
+  const c = getCycleInfo();
+  const d = c.dayNumber;
+  const head = d <= 3 ? "EXPLORATION ENDS IN " + formatCountdown(c.msUntilReset + (3 - d) * 86400000) : d <= 6 ? "EXPLORATION ENDED. RAID DAYS." : "EXPLORATION OPENS AT DAY 1";
+  const chip = "item-slot border border-dv-line px-2 py-1 text-[9px] text-slate-200/80";
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={onClose}>
+      <div className="pixel-border bg-dv-panel max-h-[80vh] w-full max-w-sm space-y-3 overflow-y-auto p-4 shadow-pixel" onClick={(e) => e.stopPropagation()}>
+        <p className="eyebrow">EXPLORATION / {label}</p>
+        <p className="text-[10px] text-dv-brassLight">{head}</p>
+        <div>
+          <p className="eyebrow mb-1">PLACES</p>
+          {info.places ? (
+            <div className="space-y-1">{info.places.map(([p, g]) => (<div key={p} className="item-slot flex items-center gap-2 p-2"><span className="flex-1 text-[10px] text-slate-200/80">{p}</span><span className="text-[9px] text-dv-emerald">{g}</span></div>))}</div>
+          ) : (<p className="text-[9px] text-slate-200/50">NOT RECORDED YET</p>)}
+        </div>
+        <div><p className="eyebrow mb-1">EVERY MAP</p><div className="flex flex-wrap gap-1">{GENERAL.map((g) => (<span key={g} className={chip}>{g}</span>))}</div></div>
+        <div><p className="eyebrow mb-1">MAP RARE</p><div className="flex flex-wrap gap-1"><span className={chip}>{info.rare}</span></div></div>
+        <div><p className="eyebrow mb-1">CHEF {info.chef.toUpperCase()}</p><div className="flex flex-wrap gap-1">{info.sells.map((g) => (<span key={g} className={chip}>{g}</span>))}</div></div>
+        <button type="button" onClick={onClose} className="item-slot block w-full p-2 text-[10px]">CLOSE</button>
+      </div>
+    </div>
+  );
+}
+
 export default function DvMapScene({ k, label, members, onPick }: { k: string; label: string; members: P[]; onPick: (m: any) => void }) {
   const t = THEME[k] ?? THEME.wasteland;
   const full = members.length >= 5;
   const [lit, setLit] = useState(false);
   const [smoke, setSmoke] = useState(false);
+  const [explore, setExplore] = useState(false);
   const mid: CSSProperties = { transform: "translate(-50%, -50%)" };
   return (
     <div className="pixel-border relative overflow-hidden" style={{ background: "linear-gradient(" + t.top + "," + t.bottom + ")", minHeight: "calc(100dvh - 16rem)", aspectRatio: "10 / 17" }}>
@@ -171,11 +208,12 @@ export default function DvMapScene({ k, label, members, onPick }: { k: string; l
         <span className="block pr-2 text-right text-[9px] text-white" style={SHADOW}>{t.chef}</span>
         <Stall smoke={smoke} />
       </div>
-      <Tag text="EXPLORATION" style={{ left: "32%", top: "40%" }} />
+      <button type="button" onClick={() => setExplore(true)} className="absolute border px-2 py-1 text-[8px] text-white" style={{ background: "rgba(30,30,30,.92)", borderColor: "#0b0b0b", left: "32%", top: "40%", zIndex: 20 }}>EXPLORATION</button>
       <button type="button" onClick={() => setSmoke(!smoke)} className="absolute border px-2 py-1 text-[8px] text-white" style={{ background: "rgba(30,30,30,.92)", borderColor: smoke ? "#fbbf24" : "#0b0b0b", left: "70%", top: "45%", zIndex: 20 }}>CHEF</button>
       <div className="pointer-events-none absolute" style={{ left: "50%", top: "64%", ...mid }}><Fire lit={lit} /></div>
       <button type="button" onClick={() => setLit(!lit)} className="absolute border px-2 py-1 text-[8px] text-white" style={{ background: "rgba(30,30,30,.92)", borderColor: lit ? "#fbbf24" : "#0b0b0b", left: "50%", top: "72%", zIndex: 20, ...mid }}>COOKING</button>
       {POS.map((pos, i) => (<Seat key={i} m={members[i] ?? null} accent={t.accent} pos={pos} onPick={onPick} />))}
+      {explore && <ExploreModal k={k} label={label} onClose={() => setExplore(false)} />}
     </div>
   );
 }
