@@ -54,7 +54,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true });
   }
 
-  const patch = { level, stage, guild_id: g };
+  const nm = typeof body.name === "string" ? body.name.trim().slice(0, 40) : "";
+  const patch: Record<string, unknown> = { level, stage, guild_id: g };
+  if (nm) patch[isRoster ? "name" : "username"] = nm;
+  if (typeof body.avatar === "string") patch.custom_avatar = /^[a-z0-9]{1,30}$/.test(body.avatar) ? body.avatar : null;
   const { error } = isRoster ? await db.from("roster").update(patch).eq("key", id.slice(7)) : await db.from("members").update(patch).eq("id", id);
   if (error) return err("Update failed", 500);
   return NextResponse.json({ ok: true });

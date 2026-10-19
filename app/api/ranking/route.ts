@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   const g = req.nextUrl.searchParams.get("guild");
   let q = admin
     .from("members")
-    .select("id, username, avatar_url, promotion_tier, level, stage, dv_map, gr_boss, guild_id")
+    .select("id, username, avatar_url, custom_avatar, promotion_tier, level, stage, dv_map, gr_boss, guild_id")
     .not("guild_id", "is", null);
   if (g && g !== "ALL") {
     const gid = Number(g);
@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
   const gid2 = g && g !== "ALL" ? Number(g) : null;
   const extra = (ro ?? [])
     .filter((r: any) => !claimed.has(r.key) && (gid2 === null || r.guild_id === null || r.guild_id === gid2))
-    .map((r: any) => ({ id: "roster-" + r.key, username: r.name, avatar_url: null, promotion_tier: r.promotion_tier, level: r.level, stage: r.stage, dv_map: r.dv_map, gr_boss: r.gr_boss, guild_id: r.guild_id }));
+    .map((r: any) => ({ id: "roster-" + r.key, username: r.name, avatar_url: null, custom_avatar: r.custom_avatar ?? null, promotion_tier: r.promotion_tier, level: r.level, stage: r.stage, dv_map: r.dv_map, gr_boss: r.gr_boss, guild_id: r.guild_id }));
   const members = [...(data ?? []), ...extra].sort((a: any, b: any) => (b.promotion_tier ?? 0) - (a.promotion_tier ?? 0) || (b.stage ?? 0) - (a.stage ?? 0) || (b.level ?? 0) - (a.level ?? 0));
   return NextResponse.json({
     me: auth.member.id,

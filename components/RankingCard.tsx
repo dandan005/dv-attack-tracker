@@ -5,7 +5,7 @@ import { gameAvatar } from "@/lib/gameAvatars";
 import { PixelPanel } from "@/components/PixelPanel";
 import { PlayerEditor, type EditRow } from "@/components/PlayerEditor";
 
-type Row = { id: string; username: string | null; avatar_url: string | null; promotion_tier: number | null; level: number | null; stage: number | null; dv_map: string | null; gr_boss: number | null; guild_id: number | null };
+type Row = { id: string; username: string | null; avatar_url: string | null; custom_avatar?: string | null; promotion_tier: number | null; level: number | null; stage: number | null; dv_map: string | null; gr_boss: number | null; guild_id: number | null };
 type Data = { me: string; members: Row[]; roles?: { is_creator: boolean; is_admin: boolean; is_super_admin: boolean } };
 
 const TABS = [{ v: "ALL", label: "GLOBAL" }, { v: "1", label: "G1" }, { v: "2", label: "G2" }];
@@ -58,10 +58,10 @@ export function RankingCard() {
             ["STAGE", m.stage != null ? String(m.stage) : "-", "text-dv-emerald"],
           ];
           return (
-            <div key={m.id} onClick={staff ? () => setEdit({ id: m.id, username: m.username, level: m.level, stage: m.stage, guild_id: m.guild_id }) : undefined} className={"item-slot p-2" + (staff ? " cursor-pointer" : "")} style={isMe ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}>
+            <div key={m.id} onClick={staff ? () => setEdit({ id: m.id, username: m.username, level: m.level, stage: m.stage, guild_id: m.guild_id, custom_avatar: m.custom_avatar }) : undefined} className={"item-slot p-2" + (staff ? " cursor-pointer" : "")} style={isMe ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}>
               <div className="flex items-center gap-2 min-w-0 mb-2">
                 <span className="relative w-8 h-8 shrink-0 flex items-center justify-center"><img src={"/ranks/" + (m.stage == null ? "pos-default" : i === 0 ? "pos-gold" : i === 1 ? "pos-silver" : i === 2 ? "pos-bronze" : "pos-default") + ".png"} alt="" className="absolute inset-0 w-full h-full object-contain" /><span className="relative text-[10px] font-bold text-white" style={{ textShadow: "0 0 3px #000, 0 0 3px #000" }}>{m.stage != null ? i + 1 : "-"}</span></span>
-                <img src={gameAvatar(m.username) || m.avatar_url || "/icons/icon-192.png"} onError={(e) => { if (!e.currentTarget.src.endsWith("/icons/icon-192.png")) e.currentTarget.src = "/icons/icon-192.png"; }} alt="" className="w-7 h-7 pixel-frame border border-dv-line shrink-0 object-cover" />
+                <img src={(m.custom_avatar ? "/avatars/" + m.custom_avatar + ".png" : null) || gameAvatar(m.username) || m.avatar_url || "/icons/icon-192.png"} onError={(e) => { if (!e.currentTarget.src.endsWith("/icons/icon-192.png")) e.currentTarget.src = "/icons/icon-192.png"; }} alt="" className="w-7 h-7 pixel-frame border border-dv-line shrink-0 object-cover" />
                 <span className="block text-[11px] text-slate-200/80 break-words leading-tight">{m.username || "-"}</span>
                 {isMe && <span className="text-[8px] text-dv-emerald shrink-0">(YOU)</span>}
                 <span className="flex-1" />
