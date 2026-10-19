@@ -12,7 +12,7 @@ import { WyvernTracker } from "@/components/WyvernTracker";
 import { ExplorationPhase } from "@/components/ExplorationPhase";
 import { Guide, MainCooking, Meals, Runes, SkillBuild, Spirits } from "@/components/OperationsLibrary";
 import { DragonCrest } from "@/components/DragonCrest";
-import { LedgerIcon, RankingIcon, GuideIcon, CookingIcon, SpecialIcon, AssignIcon, SettingsIcon, ReplayIcon } from "@/components/TabIcons";
+import { LedgerIcon, RankingIcon, GuideIcon, CookingIcon, SpecialIcon, RunesIcon, AssignIcon, SettingsIcon, ReplayIcon } from "@/components/TabIcons";
 import AssignCard, { warmAssign } from "@/components/AssignCard";
 import { Walkthrough } from "@/components/Walkthrough";
 import { rankByTier } from "@/lib/ranks";
@@ -38,7 +38,7 @@ type AttackLog = {
   logged_at?: string;
 };
 
-type Tab = "ledger" | "index" | "build" | "cooking" | "special" | "assign" | "settings";
+type Tab = "ledger" | "index" | "build" | "cooking" | "special" | "runes" | "assign" | "settings";
 
 const TABS: { id: Tab; label: string; icon: ((props: { className?: string }) => JSX.Element) | string }[] = [
   { id: "ledger", label: "Ledger", icon: LedgerIcon },
@@ -47,6 +47,7 @@ const TABS: { id: Tab; label: string; icon: ((props: { className?: string }) => 
   { id: "build", label: "Guide", icon: GuideIcon },
   { id: "cooking", label: "Cooking", icon: CookingIcon },
   { id: "special", label: "Special", icon: SpecialIcon },
+  { id: "runes", label: "Runes", icon: RunesIcon },
   
   { id: "settings", label: "Settings", icon: SettingsIcon },
 ];
@@ -498,14 +499,20 @@ export default function DashboardPage() {
               <SkillBuild />
             </div>
             <div>
-              <Spirits /></div><div><p className="eyebrow mb-4 text-dv-emerald">ᛒ OPERATIONS INDEX</p><Guide /></div><div><p className="eyebrow mb-4 text-dv-emerald">ᛃ RUNE DESK</p><Runes />
-            </div>
+              <Spirits /></div><div><p className="eyebrow mb-4 text-dv-emerald">ᛒ OPERATIONS INDEX</p><Guide /></div>
             <div>
             </div>
           </section>
         )}
 
 {tab === "cooking" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛒ MAIN COOKING</p><MainCooking /></section>)}{tab === "special" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛊ SPECIAL DISH</p><Meals /></section>)}
+
+        {tab === "runes" && (
+          <section>
+            <p className="eyebrow mb-4 text-dv-emerald">ᛃ RUNE DESK</p>
+            <Runes />
+          </section>
+        )}
         {tab === "assign" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛃ ASSIGNMENT</p><div className="space-y-4"><section className="pixel-border bg-dv-panel/95 shadow-pixel p-4"><p className="eyebrow mb-2">ASSIGNMENT / ROSTER</p><h2 className="text-lg text-dv-brassLight">Set the roster.</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">Pick DV MAPS or GUILD REQUEST, then tap a player to assign. Each map holds 5 players. Guild Request slots run 4, 5, 5, 5, 5, 6 for bosses I to VI.</p></section><AssignCard /></div></section>)}
 
 
