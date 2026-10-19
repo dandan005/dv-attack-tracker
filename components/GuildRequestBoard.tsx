@@ -83,7 +83,7 @@ function Silhouette() {
   );
 }
 
-function Detail({ g, ms, onClose, onPick }: { g: B; ms: P[]; onClose: () => void; onPick: (m: any) => void }) {
+function Detail({ g, ms, onClose, onPick, onFill }: { g: B; ms: P[]; onClose: () => void; onPick: (m: any) => void; onFill?: () => void }) {
   const info = INFO[g.n];
   const open = g.slots - ms.length;
   return (
@@ -112,7 +112,7 @@ function Detail({ g, ms, onClose, onPick }: { g: B; ms: P[]; onClose: () => void
           <div className="flex flex-1 flex-wrap justify-center gap-1.5">
             {Array.from({ length: g.slots }, (_, i) => {
               const m = ms[i];
-              if (!m) return (<span key={i} className="block h-9 w-9 rounded-full border-2 p-1" style={{ background: "#6a5a48", borderColor: "#c9b48a" }}><Silhouette /></span>);
+              if (!m) return (<button key={i} type="button" disabled={!onFill} onClick={() => { onClose(); onFill?.(); }} className="block h-9 w-9 rounded-full border-2 p-1 disabled:opacity-100" style={{ background: "#6a5a48", borderColor: "#c9b48a" }}><Silhouette /></button>);
               return (
                 <button key={m.id} type="button" onClick={() => { onClose(); onPick(m); }} className="block h-9 w-9 overflow-hidden rounded-full border-2" style={{ borderColor: "#c9b48a" }}>
                   <img src={gameAvatar(m.username) || m.avatar_url || FB} onError={(e) => { if (!e.currentTarget.src.endsWith(FB)) e.currentTarget.src = FB; }} alt={m.username ?? ""} className="h-full w-full object-cover" />
@@ -132,7 +132,7 @@ function Detail({ g, ms, onClose, onPick }: { g: B; ms: P[]; onClose: () => void
   );
 }
 
-export default function GuildRequestBoard({ bosses, rows, onPick }: { bosses: B[]; rows: P[]; onPick: (m: any) => void }) {
+export default function GuildRequestBoard({ bosses, rows, onPick, onFill }: { bosses: B[]; rows: P[]; onPick: (m: any) => void; onFill?: (n: number) => void }) {
   const [open, setOpen] = useState<number | null>(null);
   const shadow = { textShadow: "0 1px 0 rgba(0,0,0,.7)" };
   const sel = bosses.find((b) => b.n === open) ?? null;
@@ -164,7 +164,7 @@ export default function GuildRequestBoard({ bosses, rows, onPick }: { bosses: B[
           })}
         </div>
       </div>
-      {sel && <Detail g={sel} ms={rows.filter((m) => m.gr_boss === sel.n)} onClose={() => setOpen(null)} onPick={onPick} />}
+      {sel && <Detail g={sel} ms={rows.filter((m) => m.gr_boss === sel.n)} onClose={() => setOpen(null)} onPick={onPick} onFill={onFill ? () => onFill(sel.n) : undefined} />}
     </div>
   );
 }

@@ -25,6 +25,7 @@ export default function AssignCard() {
   const [roles, setRoles] = useState<any>(rolesCache);
   const [picking, setPicking] = useState<Row | null>(null);
   const [seatMap, setSeatMap] = useState<string | null>(null);
+  const [gfBoss, setGfBoss] = useState<number | null>(null);
   useEffect(() => {
     let live = true; setErr(false); setRows(cache[view] ?? []);
     fetch("/api/ranking?guild=" + view).then((r) => (r.ok ? r.json() : Promise.reject())).then((d) => { cache[view] = d.members; if (live) { setRows(d.members); rolesCache = { ...d.roles, me: d.me }; setRoles(rolesCache); } }).catch(() => { if (live) setErr(true); });
@@ -51,6 +52,14 @@ export default function AssignCard() {
     }
   };
 
+  const fillBoss = async (m: Row) => {
+    if (gfBoss == null) return;
+    if (await postAssign(m.id, "gr_boss", gfBoss)) {
+      const next = rows.map((r) => (r.id === m.id ? { ...r, gr_boss: gfBoss } : r)); cache[view] = next; setRows(next);
+      setGfBoss(null);
+    }
+  };
+
   return (
     <PixelPanel className="animate-rise">
       <div className="mb-3 flex gap-2">
@@ -58,6 +67,15 @@ export default function AssignCard() {
         <select value={view} disabled={!staff} onChange={(e) => setView(e.target.value)} className="h-8 flex-1 border border-dv-brass bg-black/40 px-2 text-[10px] text-dv-brassLight">{TABS.map((t) => (<option key={t.v} value={t.v}>{t.label}</option>))}</select>
       </div>
       {err && <p className="eyebrow py-2">COULD NOT LOAD</p>}
+
+      {gfBoss != null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => setGfBoss(null)}><div className="pixel-border bg-dv-panel max-h-[80vh] w-full max-w-sm space-y-2 overflow-y-auto p-4 shadow-pixel" onClick={(e) => e.stopPropagation()}>
+          <p className="eyebrow py-2">ASSIGN TO BOSS {GR.find((g) => g.n === gfBoss)?.r}</p>
+          {rows.filter((m) => m.gr_boss == null && canEdit(roles, m)).map((m) => (<button key={m.id} type="button" onClick={() => fillBoss(m)} className="item-slot block w-full p-2 text-left text-[10px]">{m.username}</button>))}
+          {rows.filter((m) => m.gr_boss == null && canEdit(roles, m)).length === 0 && <p className="text-[10px] text-slate-200/70">NO UNASSIGNED PLAYERS</p>}
+          <button type="button" onClick={() => setGfBoss(null)} className="item-slot block w-full p-2 text-[10px]">CANCEL</button>
+        </div></div>
+      )}
 
       {seatMap && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => setSeatMap(null)}><div className="pixel-border bg-dv-panel max-h-[80vh] w-full max-w-sm space-y-2 overflow-y-auto p-4 shadow-pixel" onClick={(e) => e.stopPropagation()}>
@@ -82,7 +100,7 @@ export default function AssignCard() {
         {sec === "dv" && !staff && roles && !mine?.dv_map && (<p className="eyebrow py-2">NO MAP ASSIGNED YET</p>)}
         {sec === "dv" && maps.map(([k, label]) => (<DvMapScene key={k} k={k} label={label} members={rows.filter((m) => m.dv_map === k)} onPick={pick} onEmpty={staff ? setSeatMap : undefined} />))}
         {sec === "gr" && !staff && roles && !mine?.gr_boss && (<p className="eyebrow py-2">NO BOSS ASSIGNED YET</p>)}
-        {sec === "gr" && (<GuildRequestBoard bosses={bosses} rows={rows} onPick={pick} />)}
+        {sec === "gr" && (<GuildRequestBoard bosses={bosses} rows={rows} onPick={pick} onFill={staff ? setGfBoss : undefined} />)}
       </div>
     </PixelPanel>
   );
