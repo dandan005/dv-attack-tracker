@@ -421,20 +421,20 @@ export default function DashboardPage() {
                 <span className="absolute top-2 left-3 text-dv-emerald/40 text-xs" aria-hidden="true">ᚨ</span>
                 <p className="text-sm text-dv-brassLight">🛸 ONBOARDING — PREPARING NEXT CYCLE</p>
                 <p className="mt-2 max-w-md text-xs leading-relaxed text-slate-200/60">Rewards have been distributed. Rest up and regear.</p>
-                <div className="mt-4 w-full max-w-md border border-dv-emerald/40 bg-black/40 px-3 py-4">
+                <div className="item-slot mt-4 w-full max-w-md border border-dv-line px-3 py-4">
                   <p className="eyebrow text-center">DAY 1 OPENS IN</p>
-                  <div className="mt-3 flex items-start justify-center gap-2">
+                  <div className="mt-3 flex items-center justify-center gap-2">
                     {formatCountdown(day7.msLeft).split(":").map((v, i) => (
-                      <div key={i} className="flex items-start gap-2">
-                        <div className="flex w-16 flex-col items-center border border-dv-line bg-dv-panel2 py-2">
+                      <div key={i} className="flex items-center gap-2">
+                        <div className="item-slot flex w-16 flex-col items-center border border-dv-line py-2">
                           <span className="text-2xl text-dv-emerald">{v}</span>
-                          <span className="mt-1 text-[8px] text-slate-300/50">{["HRS", "MIN", "SEC"][i] ?? ""}</span>
+                          <span className="mt-1 text-[8px] text-dv-brassLight/70">{["HRS", "MIN", "SEC"][i] ?? ""}</span>
                         </div>
-                        {i < 2 && <span className="pt-2 text-xl text-dv-emerald/50">:</span>}
+                        {i < 2 && <span className="text-2xl text-dv-emerald/60">:</span>}
                       </div>
                     ))}
                   </div>
-                  <div className="mt-4 h-2 w-full border border-dv-line bg-black/50">
+                  <div className="item-slot mt-4 h-2.5 w-full overflow-hidden border border-dv-line">
                     <div className="h-full bg-dv-emerald" style={{ width: Math.max(0, Math.min(100, (1 - day7.msLeft / 50400000) * 100)) + "%" }} />
                   </div>
                   <p className="mt-1 text-center text-[8px] text-slate-300/50">ONBOARDING PROGRESS</p>
