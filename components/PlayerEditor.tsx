@@ -72,7 +72,7 @@ export function PlayerEditor({ row, defaultGuild, onClose, onDone }: { row: Edit
         </div>
         {row && (
           <button type="button" disabled={busy} onClick={() => (sure ? send("delete") : setSure(true))} className="mt-2 h-7 w-full border border-red-500/60 bg-red-950/40 text-[9px] text-red-300">
-            {sure ? "TAP AGAIN TO CONFIRM" : row.id.startsWith("roster-") ? "DELETE PLAYER" : "REMOVE FROM GUILD"}
+            {sure ? "TAP AGAIN TO CONFIRM" : row.id.startsWith("roster-") ? "DELETE PLAYER" : "DELETE ACCOUNT"}
           </button>
         )}
       </div>
