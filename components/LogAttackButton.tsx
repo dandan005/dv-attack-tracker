@@ -39,6 +39,8 @@ async function logWithRetry(fn: () => Promise<void>, attempts = 3) {
       await fn();
       return;
     } catch (err) {
+      const st = (err as any)?.status;
+      if (st && st < 500) throw err;
       if (i === attempts - 1) throw err;
       await new Promise((r) => setTimeout(r, 500 * (i + 1)));
     }
@@ -98,7 +100,8 @@ export function LogAttackButton({
       await logWithRetry(() => onLog(info.dayNumber, info.cycleStartISO, damage === "" ? null : Number(damage)));
     } catch (err) {
       console.error("Failed to log attack after retries:", err);
-      alert("Couldn't log your attack after several tries — check your connection and try again.");
+      const st = (err as any)?.status;
+      alert(st && st < 500 ? (err as any).message : "Couldn't log your attack after several tries — check your connection and try again.");
     } finally {
       setPending(false);
     }

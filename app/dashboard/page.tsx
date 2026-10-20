@@ -202,7 +202,9 @@ export default function DashboardPage() {
     });
     if (!res.ok) {
       const json = await res.json().catch(() => ({}));
-      throw new Error(json.error ?? "Could not log attack");
+      const e: any = new Error(json.error ?? "Could not log attack");
+      e.status = res.status;
+      throw e;
     }
       setToast("D" + day + " attack logged ⚔️");
       await loadAll();
