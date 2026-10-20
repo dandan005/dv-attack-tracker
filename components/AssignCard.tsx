@@ -60,12 +60,32 @@ export default function AssignCard() {
     }
   };
 
+  const autoAssign = async () => {
+    if (!window.confirm("Auto-assign G" + view + " by rank? This replaces its current DV map and Guild Request assignments.")) return;
+    const DV_ORDER = ["wasteland", "lava", "icevale", "windcliff"];
+    const plan = rows.map((m, i) => ({
+      m,
+      dv: i < 20 ? DV_ORDER[Math.floor(i / 5)] : null,
+      gr: i < 6 ? 6 : i < 11 ? 5 : i < 16 ? 4 : i < 20 ? 1 : null,
+    })).filter((p) => canEdit(roles, p.m));
+    const next = rows.map((r) => ({ ...r }));
+    for (const p of plan) {
+      const idx = next.findIndex((r) => r.id === p.m.id);
+      if (!(await postAssign(p.m.id, "dv_map", p.dv))) break;
+      next[idx] = { ...next[idx], dv_map: p.dv };
+      if (!(await postAssign(p.m.id, "gr_boss", p.gr))) break;
+      next[idx] = { ...next[idx], gr_boss: p.gr };
+    }
+    cache[view] = next; setRows(next);
+  };
+
   return (
     <PixelPanel className="animate-rise">
       <div className="mb-3 flex gap-2">
         <select value={sec} onChange={(e) => setSec(e.target.value)} className="h-8 flex-1 border border-dv-brass bg-black/40 px-2 text-[10px] text-dv-brassLight">{SECS.map((s) => (<option key={s.v} value={s.v}>{s.label}</option>))}</select>
         <select value={view} disabled={!staff} onChange={(e) => setView(e.target.value)} className="h-8 flex-1 border border-dv-brass bg-black/40 px-2 text-[10px] text-dv-brassLight">{TABS.map((t) => (<option key={t.v} value={t.v}>{t.label}</option>))}</select>
       </div>
+      {staff && (<button type="button" onClick={autoAssign} className="item-slot mb-3 block w-full p-2 text-[10px] text-dv-brassLight">AUTO ASSIGN G{view} BY RANK</button>)}
       {err && <p className="eyebrow py-2">COULD NOT LOAD</p>}
 
       {gfBoss != null && (
