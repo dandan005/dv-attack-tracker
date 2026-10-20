@@ -4,6 +4,7 @@ import { PixelPanel } from "./PixelPanel";
 import { rankByTier, rankImg } from "@/lib/ranks";
 
 export type MemberRow = {
+  id?: string;
   discord_id: string;
   username: string;
   avatar_url: string | null;
@@ -19,6 +20,7 @@ export function GuildProgress({
   onPingMissing,
   headerExtra,
   guildStats,
+  onMark,
   pinging,
   currentDay = 1,
   currentUserId,
@@ -28,6 +30,7 @@ export function GuildProgress({
   onPingMissing: () => void;
   headerExtra?: React.ReactNode;
   guildStats?: { signed: number; total: number } | null;
+  onMark?: (memberId: string, day: number, done: boolean) => void;
   pinging: boolean;
   currentDay?: number;
   currentUserId?: string;
@@ -76,7 +79,7 @@ export function GuildProgress({
                     const isToday = dayNum === currentDay;
                     const isFuture = dayNum > currentDay;
                     return (
-                      <div key={index} className="flex flex-col items-center gap-0.5">
+                      <div key={index} onClick={onMark && member.id ? () => onMark(member.id!, dayNum, !done) : undefined} className={"flex flex-col items-center gap-0.5" + (onMark && member.id ? " cursor-pointer" : "")}>
                         <span className={["text-[8px]", isToday ? "text-dv-emerald" : "text-dv-brassLight/60"].join(" ")}>D{dayNum}</span>
                         <div className={["h-5 w-full pixel-frame flex items-center justify-center text-[9px] leading-none font-bold", done ? "bg-dv-emerald text-dv-bg" : isFuture ? "bg-dv-panel2 text-slate-300/20" : isToday ? "bg-dv-panel2 border border-dv-brass text-dv-brassLight" : "bg-dv-ember/80 text-dv-bg"].join(" ")}>{done ? "✓" : isFuture ? "·" : isToday ? "–" : "✕"}</div>
                       </div>
