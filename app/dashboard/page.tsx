@@ -73,6 +73,7 @@ export default function DashboardPage() {
   const [myTier, setMyTier] = useState<number | null>(null);
   const [members, setMembers] = useState<MemberRow[]>([]);
   const [isSuper, setIsSuper] = useState(false);
+  const [canReadout, setCanReadout] = useState(false);
   const [myGuildId, setMyGuildId] = useState<number | null>(null);
   const [guildView, setGuildView] = useState<string>("");
   const [guildList, setGuildList] = useState<{ id: number; code: string }[]>([]);
@@ -114,7 +115,7 @@ export default function DashboardPage() {
     setSettings(currentSettings);
     const cycle = getCycleInfo();
 
-    const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, avatar_url, is_admin, has_seen_walkthrough, promotion_tier, guild_verified_at, guild_id, is_super_admin, level, stage");
+    const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, avatar_url, is_admin, has_seen_walkthrough, promotion_tier, guild_verified_at, guild_id, is_super_admin, is_creator, level, stage");
     const { data: logsData } = await supabase.from("attack_logs").select("member_id, day_number, logged_at").eq("cycle_start", cycle.cycleStartISO);
     const logs: AttackLog[] = logsData ?? [];
 
@@ -157,6 +158,7 @@ export default function DashboardPage() {
       setMyLoggedAt(Object.fromEntries(CYCLE_DAY_NUMBERS.filter((day) => myLogs.has(day)).map((day) => [day, myLogs.get(day)?.logged_at ?? ""])));
       setMyTier(myRow.promotion_tier ?? null);
       setIsSuper(!!myRow.is_super_admin);
+      setCanReadout(!!(myRow.is_creator || myRow.is_admin || myRow.is_super_admin));
       setMyGuildId(myRow.guild_id ?? null);
       if (myRow.is_super_admin) fetch("/api/assign-guild").then((r) => (r.ok ? r.json() : null)).then((d) => { if (d) setGuildList(d.guilds); }).catch(() => {});
       setMe({
@@ -520,7 +522,7 @@ export default function DashboardPage() {
                 )}
 
                 <div className="mt-3"><LogAttackButton loggedDays={myLoggedDays} loggedAt={myLoggedAt} element={settings.wyvern_element} checkedIn={members.filter((m) => m.logged[dayNumber - 1]).length} total={dayNumber <= 6 ? members.length : 0} tier={myTier} onNeedTier={() => { setToast("Set your rank in the ledger row next to your name"); setTimeout(() => setToast(null), 2500); }} onLog={logAttack} /></div>
-                <div className="mt-3"><GuildProgress headerExtra={isSuper && guildList.length > 0 && (<div className="mb-2 flex gap-2">{["ALL", ...guildList.map((g) => String(g.id))].map((v) => { const g = guildList.find((x) => String(x.id) === v); return (<button key={v} type="button" onClick={() => setGuildView(v)} className={["h-6 flex-1 border px-2 text-[9px]", v === effView ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/80"].join(" ")} style={v === effView ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}>{g ? g.code : "ALL"}</button>); })}</div>)} members={shownMembers} guildStats={{ signed: guildSigned, total: guildTotal }} onMark={isSuper ? markAttack : undefined} onSetTier={saveTier} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
+                <div className="mt-3"><GuildProgress showReadout={canReadout} headerExtra={isSuper && guildList.length > 0 && (<div className="mb-2 flex gap-2">{["ALL", ...guildList.map((g) => String(g.id))].map((v) => { const g = guildList.find((x) => String(x.id) === v); return (<button key={v} type="button" onClick={() => setGuildView(v)} className={["h-6 flex-1 border px-2 text-[9px]", v === effView ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/80"].join(" ")} style={v === effView ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}>{g ? g.code : "ALL"}</button>); })}</div>)} members={shownMembers} guildStats={{ signed: guildSigned, total: guildTotal }} onMark={isSuper ? markAttack : undefined} onSetTier={saveTier} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
               </>
             )}
           </div>

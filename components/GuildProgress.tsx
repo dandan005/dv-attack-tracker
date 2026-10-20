@@ -25,7 +25,9 @@ export function GuildProgress({
   currentDay = 1,
   currentUserId,
   onSetTier,
+  showReadout = true,
 }: {
+  showReadout?: boolean;
   members: MemberRow[];
   onPingMissing: () => void;
   headerExtra?: React.ReactNode;
@@ -45,7 +47,7 @@ export function GuildProgress({
   const atRisk = members.filter((m) => !m.logged.some(Boolean)).length;
 
   return (
-    <><PixelPanel className="animate-rise">
+    <>{showReadout && <PixelPanel className="animate-rise">
       <div className="flex items-end justify-between gap-3 mb-4">
         <div><p className="eyebrow">GUILD READOUT</p><p className="text-lg text-dv-brassLight mt-1">Keep the line moving.</p>{guildStats && <p className="eyebrow mt-1 text-slate-200/70">{guildStats.signed} OF {guildStats.total} SIGNED IN</p>}</div>
         <span className="text-[10px] border border-dv-ember/50 bg-dv-ember/10 text-dv-ember px-2 py-1 pixel-frame">{missingToday} PENDING</span>
@@ -57,7 +59,7 @@ export function GuildProgress({
 <div className="item-slot p-3"><p className="eyebrow">NO LOGS YET</p><p className="text-xl text-dv-ember mt-1">{atRisk}<span className="text-xs text-slate-300/50">/{total}</span></p></div>
       </div>
 <div className="mb-4"><p className="eyebrow mb-2">CHECK-INS BY DAY</p><div className="grid grid-cols-6 gap-1">{[1, 2, 3, 4, 5, 6].map((d) => { const c = members.filter((m) => m.logged[d - 1]).length; const pct = total === 0 ? 0 : Math.round((c / total) * 100); return (<div key={d} className="flex flex-col items-center gap-0.5"><div className="relative h-8 w-full bg-dv-panel2 pixel-frame overflow-hidden"><div className="water-fill absolute bottom-0 w-full" style={{ height: pct + "%" }}><span className="water-wave" /><span className="water-wave water-wave-2" /></div><span className="absolute inset-0 z-10 flex items-center justify-center text-[9px] text-white" style={{ textShadow: "0 1px 0 #080a18" }}>{c}</span></div><span className={["text-[8px]", d === currentDay ? "text-dv-emerald" : "text-dv-brassLight/60"].join(" ")}>D{d}</span></div>); })}</div></div>
-</PixelPanel><PixelPanel className="animate-rise mt-3 mb-3">
+</PixelPanel>}<PixelPanel className="animate-rise mt-3 mb-3">
       {total === 0 ? (
         <div className="item-slot px-3 py-5 text-center text-[10px] text-slate-300/55">NO GUILD MEMBERS HAVE JOINED YET.</div>
       ) : (
