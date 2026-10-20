@@ -517,7 +517,7 @@ export default function DashboardPage() {
             <Runes />
           </section>
         )}
-        {tab === "assign" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛃ ASSIGNMENT</p><div className="space-y-4"><section className="pixel-border bg-dv-panel/95 shadow-pixel p-4"><p className="eyebrow mb-2">ASSIGNMENT / ROSTER</p><h2 className="text-lg text-dv-brassLight">Set the roster.</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">Pick DV MAPS or GUILD REQUEST, then tap a player to assign. Each map holds 5 players. Guild Request slots run 4, 5, 5, 5, 5, 6 for bosses I to VI.</p></section><AssignCard /></div></section>)}
+        {tab === "assign" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛃ ASSIGNMENT</p><div className="space-y-4"><section className="pixel-border bg-dv-panel/95 shadow-pixel p-4"><p className="eyebrow mb-2">ASSIGNMENT / ROSTER</p><h2 className="text-lg text-dv-brassLight">Set the roster.</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">Pick DV MAPS or GUILD REQUEST, then tap an empty seat or boss slot to add a player. Tap a player in a seat to change or remove them.</p></section><AssignCard /></div></section>)}
 
 
 
