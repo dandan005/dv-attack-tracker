@@ -12,6 +12,7 @@ const GR = [{ n: 1, r: "I", name: "PURIFY LAND OF HATE", slots: 4, pts: "5,000" 
 const cache: Record<string, Row[]> = {};
 let rolesCache: any = null;
 let warmed = false;
+const autoDone: Record<string, boolean> = {};
 export function warmAssign() { if (warmed || typeof window === "undefined") return; warmed = true; for (const v of ["1", "2"]) fetch("/api/ranking?guild=" + v).then((r) => (r.ok ? r.json() : Promise.reject())).then((d) => { cache[v] = d.members; rolesCache = { ...d.roles, me: d.me }; }).catch(() => { warmed = false; }); }
 warmAssign();
 
@@ -60,8 +61,8 @@ export default function AssignCard() {
     }
   };
 
-  const autoAssign = async () => {
-    if (!window.confirm("Auto-assign G" + view + " by rank? This replaces its current DV map and Guild Request assignments.")) return;
+  const runAuto = async (silent: boolean) => {
+    if (!silent && !window.confirm("Auto-assign G" + view + " by rank? This replaces its current DV map and Guild Request assignments.")) return;
     const DV_ORDER = ["wasteland", "lava", "icevale", "windcliff"];
     const plan = rows.map((m, i) => ({
       m,
@@ -78,6 +79,12 @@ export default function AssignCard() {
     }
     cache[view] = next; setRows(next);
   };
+  useEffect(() => {
+    if (!staff || rows.length === 0 || autoDone[view]) return;
+    autoDone[view] = true;
+    if (rows.some((m) => m.dv_map || m.gr_boss)) return;
+    runAuto(true);
+  }, [rows, staff, view]);
 
   return (
     <PixelPanel className="animate-rise">
@@ -85,7 +92,7 @@ export default function AssignCard() {
         <select value={sec} onChange={(e) => setSec(e.target.value)} className="h-8 flex-1 border border-dv-brass bg-black/40 px-2 text-[10px] text-dv-brassLight">{SECS.map((s) => (<option key={s.v} value={s.v}>{s.label}</option>))}</select>
         <select value={view} disabled={!staff} onChange={(e) => setView(e.target.value)} className="h-8 flex-1 border border-dv-brass bg-black/40 px-2 text-[10px] text-dv-brassLight">{TABS.map((t) => (<option key={t.v} value={t.v}>{t.label}</option>))}</select>
       </div>
-      {staff && (<button type="button" onClick={autoAssign} className="item-slot mb-3 block w-full p-2 text-[10px] text-dv-brassLight">AUTO ASSIGN G{view} BY RANK</button>)}
+      {staff && (<button type="button" onClick={() => runAuto(false)} className="item-slot mb-3 block w-full p-2 text-[10px] text-dv-brassLight">AUTO ASSIGN G{view} BY RANK</button>)}
       {err && <p className="eyebrow py-2">COULD NOT LOAD</p>}
 
       {gfBoss != null && (
