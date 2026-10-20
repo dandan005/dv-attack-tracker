@@ -3,16 +3,17 @@ import { useEffect, useState } from "react";
 import { PixelPanel } from "@/components/PixelPanel";
 import DvMapScene from "@/components/DvMapScene";
 import GuildRequestBoard from "@/components/GuildRequestBoard";
+import { getCycleInfo } from "@/lib/cycle";
 
 type Row = { id: string; username: string | null; dv_map: string | null; gr_boss: number | null };
 const TABS = [{ v: "1", label: "G1" }, { v: "2", label: "G2" }];
 const SECS = [{ v: "dv", label: "DV MAPS" }, { v: "gr", label: "GUILD REQUEST" }];
 const MAPS: [string, string][] = [["wasteland", "WASTELAND PLATEAU"], ["lava", "LAVA MOUNTAINS"], ["icevale", "ICE VALE"], ["windcliff", "WIND CLIFF"]];
 const GR = [{ n: 1, r: "I", name: "PURIFY LAND OF HATE", slots: 4, pts: "5,000" }, { n: 2, r: "II", name: "ANCIENT RUINS", slots: 5, pts: "7,500" }, { n: 3, r: "III", name: "FROZEN WOOD", slots: 5, pts: "7,500" }, { n: 4, r: "IV", name: "RISING STRATA", slots: 5, pts: "7,500" }, { n: 5, r: "V", name: "GRAY AREA", slots: 5, pts: "7,500" }, { n: 6, r: "VI", name: "ANCIENT ALTAR", slots: 6, pts: "10,000" }];
+const DV_ORDER = ["wasteland", "lava", "icevale", "windcliff"];
 const cache: Record<string, Row[]> = {};
 let rolesCache: any = null;
 let warmed = false;
-const autoDone: Record<string, boolean> = {};
 export function warmAssign() { if (warmed || typeof window === "undefined") return; warmed = true; for (const v of ["1", "2"]) fetch("/api/ranking?guild=" + v).then((r) => (r.ok ? r.json() : Promise.reject())).then((d) => { cache[v] = d.members; rolesCache = { ...d.roles, me: d.me }; }).catch(() => { warmed = false; }); }
 warmAssign();
 
@@ -33,10 +34,15 @@ export default function AssignCard() {
     return () => { live = false; };
   }, [view]);
 
+  const cyc = getCycleInfo();
+  const day = cyc.dayNumber;
+  const closed = day === 7;
+  const locked = day >= 4;
+
   const unassigned = rows.filter((m) => !MAPS.some(([k]) => k === m.dv_map));
   const staff = !!roles && !!(roles.is_creator || roles.is_admin || roles.is_super_admin); const mine = rows.find((m) => !!roles && m.id === roles.me); const maps = staff ? MAPS : MAPS.filter(([k]) => mine?.dv_map === k); const bosses = staff ? GR : GR.filter((g) => mine?.gr_boss === g.n);
   useEffect(() => { if (roles && !staff && roles.guild_id && view !== String(roles.guild_id)) setView(String(roles.guild_id)); }, [roles, staff, view]);
-  const pick = (m: Row) => { if (staff && canEdit(roles, m)) setPicking(m); };
+  const pick = (m: Row) => { if (!locked && staff && canEdit(roles, m)) setPicking(m); };
   const save = async (field: "dv_map" | "gr_boss", value: string | number | null) => {
     if (!picking) return;
     if (await postAssign(picking.id, field, value)) {
@@ -61,13 +67,13 @@ export default function AssignCard() {
     }
   };
 
-  const runAuto = async (silent: boolean) => {
+  // clear = true wipes this guild's assignments (day 7 reset); otherwise assigns by rank.
+  const runAuto = async (silent: boolean, clear = false) => {
     if (!silent && !window.confirm("Auto-assign G" + view + " by rank? This replaces its current DV map and Guild Request assignments.")) return;
-    const DV_ORDER = ["wasteland", "lava", "icevale", "windcliff"];
     const plan = rows.map((m, i) => ({
       m,
-      dv: i < 20 ? DV_ORDER[Math.floor(i / 5)] : null,
-      gr: i < 6 ? 6 : i < 11 ? 5 : i < 16 ? 4 : i < 20 ? 1 : null,
+      dv: clear || i >= 20 ? null : DV_ORDER[Math.floor(i / 5)],
+      gr: clear ? null : i < 6 ? 6 : i < 11 ? 5 : i < 16 ? 4 : i < 20 ? 1 : null,
     })).filter((p) => canEdit(roles, p.m));
     const next = rows.map((r) => ({ ...r }));
     for (const p of plan) {
@@ -79,12 +85,22 @@ export default function AssignCard() {
     }
     cache[view] = next; setRows(next);
   };
+
+  // Day 1: assign by rank once per cycle. Day 7: reset assignments once per cycle.
   useEffect(() => {
-    if (!staff || rows.length === 0 || autoDone[view]) return;
-    autoDone[view] = true;
-    if (rows.some((m) => m.dv_map || m.gr_boss)) return;
-    runAuto(true);
+    if (!staff || rows.length === 0) return;
+    if (day !== 1 && day !== 7) return;
+    const key = "dvcycle-" + view + "-" + cyc.cycleStartISO + "-" + day;
+    try { if (localStorage.getItem(key)) return; localStorage.setItem(key, "1"); } catch {}
+    runAuto(true, day === 7);
   }, [rows, staff, view]);
+
+  if (closed) return (
+    <PixelPanel className="animate-rise">
+      <p className="eyebrow py-2">ASSIGN CLOSED</p>
+      <p className="text-[11px] leading-relaxed text-slate-200/75">Assignments reopen on Day 1 of the next cycle.</p>
+    </PixelPanel>
+  );
 
   return (
     <PixelPanel className="animate-rise">
@@ -92,7 +108,8 @@ export default function AssignCard() {
         <select value={sec} onChange={(e) => setSec(e.target.value)} className="h-8 flex-1 border border-dv-brass bg-black/40 px-2 text-[10px] text-dv-brassLight">{SECS.map((s) => (<option key={s.v} value={s.v}>{s.label}</option>))}</select>
         <select value={view} disabled={!staff} onChange={(e) => setView(e.target.value)} className="h-8 flex-1 border border-dv-brass bg-black/40 px-2 text-[10px] text-dv-brassLight">{TABS.map((t) => (<option key={t.v} value={t.v}>{t.label}</option>))}</select>
       </div>
-      {staff && (<button type="button" onClick={() => runAuto(false)} className="item-slot mb-3 block w-full p-2 text-[10px] text-dv-brassLight">AUTO ASSIGN G{view} BY RANK</button>)}
+      {locked && <p className="eyebrow py-2">LOCKED UNTIL DAY 1 · VIEW ONLY</p>}
+      {staff && !locked && (<button type="button" onClick={() => runAuto(false)} className="item-slot mb-3 block w-full p-2 text-[10px] text-dv-brassLight">AUTO ASSIGN G{view} BY RANK</button>)}
       {err && <p className="eyebrow py-2">COULD NOT LOAD</p>}
 
       {gfBoss != null && (
@@ -125,9 +142,9 @@ export default function AssignCard() {
 
       <div className="space-y-2">
         {sec === "dv" && !staff && roles && !mine?.dv_map && (<p className="eyebrow py-2">NO MAP ASSIGNED YET</p>)}
-        {sec === "dv" && maps.map(([k, label]) => (<DvMapScene key={k} k={k} label={label} members={rows.filter((m) => m.dv_map === k)} onPick={pick} onEmpty={staff ? setSeatMap : undefined} />))}
+        {sec === "dv" && maps.map(([k, label]) => (<DvMapScene key={k} k={k} label={label} members={rows.filter((m) => m.dv_map === k)} onPick={pick} onEmpty={staff && !locked ? setSeatMap : undefined} />))}
         {sec === "gr" && !staff && roles && !mine?.gr_boss && (<p className="eyebrow py-2">NO BOSS ASSIGNED YET</p>)}
-        {sec === "gr" && (<GuildRequestBoard bosses={bosses} rows={rows} onPick={pick} onFill={staff ? setGfBoss : undefined} />)}
+        {sec === "gr" && (<GuildRequestBoard bosses={bosses} rows={rows} onPick={pick} onFill={staff && !locked ? setGfBoss : undefined} />)}
       </div>
     </PixelPanel>
   );
