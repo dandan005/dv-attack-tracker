@@ -10,6 +10,8 @@ export type MemberRow = {
   logged: boolean[];
   guild_id?: number | null;
   promotion_tier?: number | null;
+  stage?: number | null;
+  level?: number | null;
 };
 
 export function GuildProgress({

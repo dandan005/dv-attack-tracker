@@ -111,7 +111,7 @@ export default function DashboardPage() {
     setSettings(currentSettings);
     const cycle = getCycleInfo();
 
-    const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, avatar_url, is_admin, has_seen_walkthrough, promotion_tier, guild_verified_at, guild_id, is_super_admin");
+    const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, avatar_url, is_admin, has_seen_walkthrough, promotion_tier, guild_verified_at, guild_id, is_super_admin, level, stage");
     const { data: logsData } = await supabase.from("attack_logs").select("member_id, day_number, logged_at").eq("cycle_start", cycle.cycleStartISO);
     const logs: AttackLog[] = logsData ?? [];
 
@@ -130,9 +130,11 @@ export default function DashboardPage() {
         logged: CYCLE_DAY_NUMBERS.map((day) => memberLogs.has(day)),
         promotion_tier: member.promotion_tier ?? null,
         guild_id: member.guild_id ?? null,
+        stage: member.stage ?? null,
+        level: member.level ?? null,
       };
     });
-    setMembers([...rows].sort((a, b) => a.username.localeCompare(b.username, undefined, { sensitivity: "base" })));
+    setMembers([...rows].sort((a, b) => (b.promotion_tier ?? 0) - (a.promotion_tier ?? 0) || (b.stage ?? -1) - (a.stage ?? -1) || (b.level ?? -1) - (a.level ?? -1)));
 
     const myRow = (allMembers ?? []).find((member: any) => member.auth_user_id === user.id);
     if (myRow) {
