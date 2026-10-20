@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
   if (!canGuild(target.guild_id)) return err("Forbidden", 403);
 
   if (action === "delete") {
-    const { error } = isRoster ? await db.from("roster").delete().eq("key", id.slice(7)) : await db.from("members").update({ guild_id: null }).eq("id", id);
+    const { error } = isRoster ? await db.from("roster").delete().eq("key", id.slice(7)) : await db.from("members").delete().eq("id", id);
     if (error) return err("Delete failed", 500);
     return NextResponse.json({ ok: true });
   }
