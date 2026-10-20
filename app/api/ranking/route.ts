@@ -9,10 +9,12 @@ export async function GET(req: NextRequest) {
   }
   const admin = createAdminClient();
   const g = req.nextUrl.searchParams.get("guild");
+  const { data: caller } = await admin.from("members").select("is_creator, is_admin, is_super_admin").eq("id", auth.member.id).maybeSingle();
+  const canSeeUnassigned = !!(caller?.is_creator || caller?.is_admin || caller?.is_super_admin) && req.nextUrl.searchParams.get("include") === "unassigned";
   let q = admin
     .from("members")
-    .select("id, username, avatar_url, custom_avatar, promotion_tier, level, stage, dv_map, gr_boss, guild_id")
-    .not("guild_id", "is", null);
+    .select("id, username, avatar_url, custom_avatar, promotion_tier, level, stage, dv_map, gr_boss, guild_id");
+  if (!canSeeUnassigned) q = q.not("guild_id", "is", null);
   if (g && g !== "ALL") {
     const gid = Number(g);
     if (!Number.isInteger(gid)) return NextResponse.json({ error: "Invalid guild" }, { status: 400 });

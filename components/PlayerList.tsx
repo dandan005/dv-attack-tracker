@@ -17,7 +17,7 @@ export function PlayerList() {
   const [all, setAll] = useState(false);
   const [edit, setEdit] = useState<EditRow | "new" | null>(null);
 
-  const load = () => fetch("/api/ranking?guild=ALL").then((r) => (r.ok ? r.json() : Promise.reject())).then((d: Data) => { setData(d); setErr(false); }).catch(() => setErr(true));
+  const load = () => fetch("/api/ranking?guild=ALL&include=unassigned").then((r) => (r.ok ? r.json() : Promise.reject())).then((d: Data) => { setData(d); setErr(false); }).catch(() => setErr(true));
   useEffect(() => { load(); }, []);
 
   const staff = !!(data?.roles && (data.roles.is_creator || data.roles.is_admin || data.roles.is_super_admin));
