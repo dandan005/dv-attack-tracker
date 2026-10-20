@@ -18,6 +18,7 @@ export function GuildProgress({
   members,
   onPingMissing,
   headerExtra,
+  guildStats,
   pinging,
   currentDay = 1,
   currentUserId,
@@ -26,6 +27,7 @@ export function GuildProgress({
   members: MemberRow[];
   onPingMissing: () => void;
   headerExtra?: React.ReactNode;
+  guildStats?: { signed: number; total: number } | null;
   pinging: boolean;
   currentDay?: number;
   currentUserId?: string;
@@ -42,7 +44,7 @@ export function GuildProgress({
   return (
     <><PixelPanel className="animate-rise">
       <div className="flex items-end justify-between gap-3 mb-4">
-        <div><p className="eyebrow">GUILD READOUT</p><p className="text-lg text-dv-brassLight mt-1">Keep the line moving.</p></div>
+        <div><p className="eyebrow">GUILD READOUT</p><p className="text-lg text-dv-brassLight mt-1">Keep the line moving.</p>{guildStats && <p className="eyebrow mt-1 text-slate-200/70">{guildStats.signed} OF {guildStats.total} SIGNED IN</p>}</div>
         <span className="text-[10px] border border-dv-ember/50 bg-dv-ember/10 text-dv-ember px-2 py-1 pixel-frame">{missingToday} PENDING</span>
       </div>
       <div className="grid grid-cols-2 gap-2 mb-5">
