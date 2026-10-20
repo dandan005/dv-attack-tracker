@@ -27,7 +27,7 @@ export function PlayerList() {
 
   const rows = data.members
     .filter((m) => (g === "ALL" || String(m.guild_id) === g) && (m.username ?? "").toLowerCase().includes(q.toLowerCase()))
-    .sort((a, b) => (a.username ?? "").localeCompare(b.username ?? ""));
+    .sort((a, b) => (b.promotion_tier ?? 0) - (a.promotion_tier ?? 0) || (b.stage ?? -1) - (a.stage ?? -1) || (b.level ?? -1) - (a.level ?? -1));
   const list = all || q ? rows : rows.slice(0, 10);
 
   return (
