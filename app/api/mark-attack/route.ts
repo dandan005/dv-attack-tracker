@@ -21,7 +21,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Bad request" }, { status: 400 });
   }
 
-  const { cycleStartISO } = getCycleInfo();
+  const { cycleStartISO, dayNumber: today } = getCycleInfo();
+  if (dayNumber > today) return NextResponse.json({ error: "That day hasn't started yet" }, { status: 400 });
 
   if (done) {
     const { error } = await db.from("attack_logs").upsert(
