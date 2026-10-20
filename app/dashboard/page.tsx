@@ -1,7 +1,7 @@
 "use client";
 import { gameAvatar } from "@/lib/gameAvatars";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { getCycleInfo, getDay7Phase, formatCountdown } from "@/lib/cycle";
@@ -223,14 +223,25 @@ export default function DashboardPage() {
       setTimeout(() => setToast(null), 2500);
     }
 
+  const markingRef = useRef<Set<string>>(new Set());
+
   async function markAttack(memberId: string, day: number, done: boolean) {
-    const res = await fetch("/api/mark-attack", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ memberId, dayNumber: day, done }) });
-    if (!res.ok) {
-      const json = await res.json().catch(() => ({}));
-      alert(json.error ?? "Could not update");
-      return;
+    const key = memberId + ":" + day;
+    if (markingRef.current.has(key)) return;
+    markingRef.current.add(key);
+    try {
+      const res = await fetch("/api/mark-attack", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ memberId, dayNumber: day, done }) });
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        alert(json.error ?? "Could not update");
+        return;
+      }
+      await loadAll();
+    } catch {
+      alert("Network error, try again");
+    } finally {
+      markingRef.current.delete(key);
     }
-    await loadAll();
   }
 
   async function pingMissing() {
