@@ -881,20 +881,22 @@ export function Runes() {
         <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">
           Full guild rune notes by tier — Immortal, Mythic, and Legendary — with sub-tier priority and rough Emblem value where it's known.
         </p>
-        <div className="relative mt-4"><svg aria-hidden="true" viewBox="0 0 16 16" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-dv-brassLight" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="7" cy="7" r="4.5" /><path d="M10.5 10.5L14 14" /></svg><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search runes or effects" className="w-full rounded-xl border border-dv-line bg-dv-panel2 pl-9 pr-9 py-3 text-xs text-dv-brassLight outline-none placeholder:text-slate-300/50 focus:border-dv-brassLight" />{query ? <button type="button" aria-label="Clear search" onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-slate-300/60">×</button> : null}</div>
       </Card>
 
-      {filteredTiers.length === 0 && (
-        <Card className="p-4">
-          <p className="text-xs text-slate-300/60">No runes match that search.</p>
-        </Card>
-      )}
+      <Card>
+        <div className="border-b border-dv-line p-4">
+        <div className="relative mt-4"><svg aria-hidden="true" viewBox="0 0 16 16" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-dv-brassLight" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="7" cy="7" r="4.5" /><path d="M10.5 10.5L14 14" /></svg><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search runes or effects" className="w-full rounded-xl border border-dv-line bg-dv-panel2 pl-9 pr-9 py-3 text-xs text-dv-brassLight outline-none placeholder:text-slate-300/50 focus:border-dv-brassLight" />{query ? <button type="button" aria-label="Clear search" onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-slate-300/60">×</button> : null}</div>
+        </div>
 
-      {filteredTiers.map((tier) => {
-        const style = tierStyles[tier.accent];
-        const isOpen = isSearching || openTiers.includes(tier.name);
-        return (
-          <Card key={tier.name}>
+        {filteredTiers.length === 0 && (
+          <p className="p-4 text-xs text-slate-300/60">No runes match that search.</p>
+        )}
+
+        {filteredTiers.map((tier) => {
+          const style = tierStyles[tier.accent];
+          const isOpen = isSearching || openTiers.includes(tier.name);
+          return (
+          <div key={tier.name} className="border-b border-dv-line last:border-b-0">
             <button
               type="button"
               onClick={() => setOpenTiers((current) => (current.includes(tier.name) ? current.filter((item) => item !== tier.name) : [...current, tier.name]))}
@@ -934,9 +936,10 @@ export function Runes() {
                 ))}
               </div>
             )}
-          </Card>
-        );
-      })}
+          </div>
+          );
+        })}
+      </Card>
     </div>
   );
 }
