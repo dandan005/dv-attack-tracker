@@ -884,12 +884,7 @@ export function Runes() {
       </Card>
 
       <Card className="p-4">
-        <input
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search runes or effects"
-          className="w-full border border-dv-line bg-dv-panel2 px-3 py-3 text-xs text-dv-brassLight outline-none placeholder:text-slate-300/50 focus:border-dv-violet"
-        />
+        <div className="relative"><svg aria-hidden="true" viewBox="0 0 16 16" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-dv-brassLight" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="7" cy="7" r="4.5" /><path d="M10.5 10.5L14 14" /></svg><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search runes or effects" className="w-full rounded-xl border border-dv-line bg-dv-panel2 pl-9 pr-9 py-3 text-xs text-dv-brassLight outline-none placeholder:text-slate-300/50 focus:border-dv-brassLight" />{query ? <button type="button" aria-label="Clear search" onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-slate-300/60">×</button> : null}</div>
       </Card>
 
       {filteredTiers.length === 0 && (
