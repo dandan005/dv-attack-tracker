@@ -145,7 +145,7 @@ export function LogAttackButton({
 
       {!done && (<div className="flex justify-center px-4 pb-3"><input value={damage} onChange={(e) => setDamage(e.target.value.replace(/[^0-9]/g, ""))} inputMode="numeric" size={22} placeholder="DAMAGE SCORE (OPTIONAL)" aria-label="Damage score" className="rounded-lg border border-dv-line bg-transparent px-3 py-2 text-center text-xs text-dv-brassLight/80 outline-none placeholder:text-slate-300/50 focus:border-dv-brassLight/50" /></div>)}
       <button onClick={handleClick} style={{ borderRadius: 8 }} disabled={done || pending} aria-label={done ? "Attack logged" : "Log today's attack"} className={["attack-action", done ? "is-done" : urgent ? "is-urgent" : "", pending ? "is-pending" : ""].join(" ")}>
-        <span className="attack-sigil"><AttackGlyph done={done} urgent={urgent} /></span>
+        <span className="attack-sigil">{pending ? <span className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-current border-t-transparent" /> : <AttackGlyph done={done} urgent={urgent} />}</span>
         <span className="attack-copy">{done ? "ATTACK SEALED" : pending ? "LOGGING..." : "LOG TODAY'S ATTACK"}<small>{done ? "RAID ENTRY CONFIRMED" : urgent ? "RESET WINDOW CLOSING" : "ADD YOUR RUN TO THE GUILD LEDGER"}</small></span>
       </button>
     </PixelPanel>
