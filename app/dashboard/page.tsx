@@ -77,7 +77,7 @@ export default function DashboardPage() {
   const [myGuildId, setMyGuildId] = useState<number | null>(null);
   const [guildView, setGuildView] = useState<string>("");
   const [guildList, setGuildList] = useState<{ id: number; code: string }[]>([]);
-  const effView = guildView || (myGuildId !== null ? String(myGuildId) : "ALL");
+  const effView = guildView || "ALL";
   const shownMembers = isSuper && effView !== "ALL" ? members.filter((m) => String(m.guild_id) === effView) : members;
   const [rosterCounts, setRosterCounts] = useState<Record<string, number>>({});
   const guildSigned = effView === "ALL" ? members.length : members.filter((m) => String(m.guild_id) === effView).length;
@@ -522,7 +522,7 @@ export default function DashboardPage() {
                 )}
 
                 <div className="mt-3"><LogAttackButton loggedDays={myLoggedDays} loggedAt={myLoggedAt} element={settings.wyvern_element} checkedIn={members.filter((m) => m.logged[dayNumber - 1]).length} total={dayNumber <= 6 ? members.length : 0} tier={myTier} onNeedTier={() => { setToast("Set your rank in the ledger row next to your name"); setTimeout(() => setToast(null), 2500); }} onLog={logAttack} /></div>
-                <div className="mt-3"><GuildProgress showReadout={canReadout} headerExtra={isSuper && guildList.length > 0 && (<div className="mb-2 flex gap-2">{["ALL", ...guildList.map((g) => String(g.id))].map((v) => { const g = guildList.find((x) => String(x.id) === v); return (<button key={v} type="button" onClick={() => setGuildView(v)} className={["h-6 flex-1 border px-2 text-[9px]", v === effView ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/80"].join(" ")} style={v === effView ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}>{g ? g.code : "ALL"}</button>); })}</div>)} members={shownMembers} guildStats={{ signed: guildSigned, total: guildTotal }} onMark={isSuper ? markAttack : undefined} onSetTier={saveTier} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={pingMissing} pinging={pinging} /></div>
+                <div className="mt-3"><GuildProgress showReadout={canReadout} headerExtra={isSuper && guildList.length > 0 && (<div className="mb-2 flex gap-2">{["ALL", ...guildList.map((g) => String(g.id))].map((v) => { const g = guildList.find((x) => String(x.id) === v); return (<button key={v} type="button" onClick={() => setGuildView(v)} className={["h-6 flex-1 border px-2 text-[9px]", v === effView ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/80"].join(" ")} style={v === effView ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}>{g ? g.code : "ALL"}</button>); })}</div>)} members={shownMembers} guildStats={{ signed: guildSigned, total: guildTotal }} onMark={isSuper ? markAttack : undefined} onSetTier={saveTier} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={canReadout ? pingMissing : undefined} pinging={pinging} /></div>
               </>
             )}
           </div>

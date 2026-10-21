@@ -71,7 +71,10 @@ export async function POST(req: NextRequest) {
   }
 
   const admin = createAdminClient();
-  const { data: me } = await admin.from("members").select("guild_id, is_super_admin").eq("id", auth.member.id).single();
+  const { data: me } = await admin.from("members").select("guild_id, is_super_admin, is_admin, is_creator").eq("id", auth.member.id).single();
+  if (!me?.is_creator && !me?.is_admin && !me?.is_super_admin) {
+    return NextResponse.json({ error: "Only admins can ping members" }, { status: 403 });
+  }
   const body = await req.json().catch(() => ({}));
   const isAll = !!me?.is_super_admin && body.guild === "ALL";
   const target = me?.is_super_admin && typeof body.guild === "number" ? body.guild : me?.guild_id;
