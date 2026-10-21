@@ -654,9 +654,10 @@ export function SkillBuild() {
               type="button"
               key={item}
               onClick={() => setStage(item)}
-              className={`flex-1 border px-3 py-2 text-center text-[10px] uppercase ${
-                stage === item ? "border-dv-violet bg-dv-violet/15 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/60"
+              className={`h-6 flex-1 border px-2 text-[9px] uppercase ${
+                stage === item ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/80"
               }`}
+              style={stage === item ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}
             >
               {item} Game
             </button>
@@ -745,9 +746,10 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                   type="button"
                   key={value}
                   onClick={() => setFilter(value)}
-                  className={`border px-2 py-2 text-center text-[9px] uppercase ${
-                    filter === value ? "border-dv-violet border-b-[3px] bg-dv-violet/15 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/60"
+                  className={`h-6 border px-2 text-center text-[9px] uppercase ${
+                    filter === value ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/80"
                   }`}
+                  style={filter === value ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}
                 >
                   {label}<span className={`ml-1.5 rounded px-1.5 py-0.5 text-[9px] ${cookableIn(value) > 0 ? "bg-green-700 text-green-100" : "bg-dv-line text-slate-300/70"}`}>{cookableIn(value)}</span>
                 </button>
