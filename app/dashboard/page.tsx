@@ -77,8 +77,8 @@ export default function DashboardPage() {
   const [myGuildId, setMyGuildId] = useState<number | null>(null);
   const [guildView, setGuildView] = useState<string>("");
   const [guildList, setGuildList] = useState<{ id: number; code: string }[]>([]);
-  const effView = guildView || "ALL";
-  const shownMembers = isSuper && effView !== "ALL" ? members.filter((m) => String(m.guild_id) === effView) : members;
+  const effView = guildView || (isSuper ? "ALL" : myGuildId !== null ? String(myGuildId) : "ALL");
+  const shownMembers = isSuper && effView === "ALL" ? members : members.filter((m) => String(m.guild_id) === effView);
   const [rosterCounts, setRosterCounts] = useState<Record<string, number>>({});
   const guildSigned = effView === "ALL" ? members.length : members.filter((m) => String(m.guild_id) === effView).length;
   const guildTotal = effView === "ALL" ? (rosterCounts["1"] ?? 0) + (rosterCounts["2"] ?? 0) : (rosterCounts[effView] ?? 0);
