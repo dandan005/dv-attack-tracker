@@ -24,7 +24,7 @@ export function ExplorationPhase({ currentDay }: { currentDay: number }) {
           <p className="text-[12px] leading-relaxed text-dv-brassLight mt-1">Search the region and prepare the raid.</p>
           <p className="text-[11px] leading-relaxed text-slate-200/75 mt-1">Cooking helps the raid phase; exploration earns materials, points, and trace chances.</p>
         </div>
-        <span className="status-chip shrink-0">DAY {currentDay}/2</span>
+        <span className="status-chip shrink-0">DAY {currentDay}/3</span>
       </div>
 
       <div className="pixel-frame border border-dv-violet/60 bg-dv-panel2 px-3 py-3 flex items-start gap-2 mb-3">
