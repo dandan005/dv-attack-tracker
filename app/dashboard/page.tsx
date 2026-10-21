@@ -509,9 +509,9 @@ export default function DashboardPage() {
               </div>
             ) : (
               <>
-                {(dayNumber < 3 || (dayNumber >= 3 && dayNumber <= 6 && settings.wyvern_element)) && (
+                {(dayNumber < 4 || (dayNumber >= 4 && dayNumber <= 6 && settings.wyvern_element)) && (
                   <div className="mt-2">
-                    {dayNumber < 3 ? (
+                    {dayNumber < 4 ? (
                       <ExplorationPhase currentDay={dayNumber} />
                     ) : (
                       <WyvernTracker
