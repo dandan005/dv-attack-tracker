@@ -8,7 +8,7 @@ import { PlayerEditor, type EditRow } from "@/components/PlayerEditor";
 type Row = { id: string; username: string | null; avatar_url: string | null; custom_avatar?: string | null; promotion_tier: number | null; level: number | null; stage: number | null; dv_map: string | null; gr_boss: number | null; guild_id: number | null };
 type Data = { me: string; members: Row[]; roles?: { is_creator: boolean; is_admin: boolean; is_super_admin: boolean } };
 
-const TABS = [{ v: "ALL", label: "GLOBAL" }, { v: "1", label: "G1" }, { v: "2", label: "G2" }];
+const TABS = [{ v: "ALL", label: "ALL" }, { v: "1", label: "G1" }, { v: "2", label: "G2" }];
 const MAPS: Record<string, string> = { wasteland: "WASTELAND", lava: "LAVA MTS", icevale: "ICEVALE", windcliff: "WINDCLIFF" };
 
 const cache: Record<string, Data> = {};
