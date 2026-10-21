@@ -44,9 +44,12 @@ export async function POST(req: NextRequest) {
   if (!id) return err("Bad request", 400);
   if (id === me.id && action === "delete") return err("You can't remove yourself", 400);
   const isRoster = id.startsWith("roster-");
-  const { data: target } = isRoster ? await db.from("roster").select("key, guild_id").eq("key", id.slice(7)).maybeSingle() : await db.from("members").select("id, guild_id").eq("id", id).maybeSingle();
+  const { data: target } = isRoster ? await db.from("roster").select("key, guild_id").eq("key", id.slice(7)).maybeSingle() : await db.from("members").select("id, guild_id, is_admin, is_super_admin, is_creator").eq("id", id).maybeSingle();
   if (!target) return err("Not found", 404);
   if (!canGuild(target.guild_id)) return err("Forbidden", 403);
+  // Only creator / super admin may touch admin, super admin or creator accounts (admins may still edit themselves).
+  const tgt = target as { id?: string; is_admin?: boolean; is_super_admin?: boolean; is_creator?: boolean };
+  if (!wide && !isRoster && tgt.id !== me.id && (tgt.is_admin || tgt.is_super_admin || tgt.is_creator)) return err("Forbidden", 403);
 
   if (action === "delete") {
     const { error } = isRoster ? await db.from("roster").delete().eq("key", id.slice(7)) : await db.from("members").delete().eq("id", id);
