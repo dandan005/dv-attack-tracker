@@ -30,7 +30,7 @@ export function GuildProgress({
 }: {
   showReadout?: boolean;
   members: MemberRow[];
-  onPingMissing: () => void;
+  onPingMissing?: () => void;
   headerExtra?: React.ReactNode;
   guildStats?: { signed: number; total: number } | null;
   onMark?: (memberId: string, day: number, done: boolean) => void;
