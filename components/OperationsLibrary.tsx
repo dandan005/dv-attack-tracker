@@ -751,7 +751,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                   }`}
                   style={filter === value ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}
                 >
-                  {label}<span className={`ml-1.5 border px-1.5 py-0.5 text-[9px] ${cookableIn(value) > 0 ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/70"}`}>{cookableIn(value)}</span>
+                  {label}<span className={`ml-1.5 rounded px-1.5 py-0.5 text-[9px] ${cookableIn(value) > 0 ? "bg-dv-brass text-black" : "bg-dv-line text-slate-300/70"}`}>{cookableIn(value)}</span>
                 </button>
               ))}
             </div>
