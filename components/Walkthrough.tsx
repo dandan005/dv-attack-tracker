@@ -8,32 +8,42 @@ const STEPS: Step[] = [
   {
     emoji: "ᚦ",
     title: "Welcome to Dragon Valley",
-    body: "This hub tracks your guild's raid cycle — 6 attack days followed by a standby day, all in sync with the game's global reset.",
+    body: "The ledger tracks your guild's raid cycle: 6 attack days, then a standby day. Each cycle resets at 10 PM Manila time on Monday.",
   },
   {
     emoji: "ᛏ",
-    title: "Log your attacks",
-    body: "On the Ledger tab, tap the attack button each day you raid. Your logged days light up so the guild can see everyone's progress.",
+    title: "Log your attack",
+    body: "On the Ledger tab, tap LOG TODAY'S ATTACK once you've raided. You can add a damage score too. Once it's logged, the day is sealed.",
   },
   {
     emoji: "ᛖ",
-    title: "Guild Progress",
-    body: "Below the log button, see every member's attack history for the current cycle. Admins can ping anyone who's falling behind.",
+    title: "Guild progress",
+    body: "Under your log, see every member's D1 to D6 checkmarks for this cycle. Admins can ping members who haven't checked in yet, and see the guild readout.",
   },
   {
     emoji: "ᚺ",
-    title: "Wyvern Tracker",
-    body: "From Day 3 onward, mark the wyvern's elemental trace so the whole guild knows what to target.",
+    title: "Exploration and wyvern",
+    body: "Days 1 to 3 are exploration. Days 4 to 6 are the wyvern phase. Set the wyvern's element once it's known so the guild knows what to cook for.",
+  },
+  {
+    emoji: "ᚱ",
+    title: "Ranking",
+    body: "Tap the trophy in the header to see the leaderboard. Switch between ALL, G1 and G2. Players are sorted by rank tier, then stage, then level.",
+  },
+  {
+    emoji: "ᛃ",
+    title: "Assign",
+    body: "Staff plan the Dragon Valley seats and Guild Request slots here. Auto-assign fills them by rank once a day. Days 4 to 6 are locked, and day 7 is closed.",
   },
   {
     emoji: "ᚨ",
-    title: "Guide, Meals & Runes",
-    body: "Check the other tabs anytime for field guides, skill builds, spirit info, cooking recipes, and rune setups.",
+    title: "Guide, Cooking, Special & Runes",
+    body: "Guide has skill builds by stage, spirits and operations. Cooking lists the campfire queue in order. Special has the full meal list with search. Runes covers rune tiers and what each is worth.",
   },
   {
     emoji: "ᛞ",
     title: "Need this again?",
-    body: "Tap the ? icon in the header anytime to replay this walkthrough.",
+    body: "Open Settings and tap Replay walkthrough to see this tour again.",
   },
 ];
 
