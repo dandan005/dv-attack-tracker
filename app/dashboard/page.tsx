@@ -141,7 +141,7 @@ export default function DashboardPage() {
       };
     });
     setMembers([...rows].sort((a, b) => (b.promotion_tier ?? 0) - (a.promotion_tier ?? 0) || (b.stage ?? -1) - (a.stage ?? -1) || (b.level ?? -1) - (a.level ?? -1)));
-    fetch("/api/ranking?guild=ALL").then((r) => (r.ok ? r.json() : null)).then((d) => {
+    const rankingReq = fetch("/api/ranking?guild=ALL").then((r) => (r.ok ? r.json() : null)).then((d) => {
       if (!d?.members) return;
       setRankMembers(d.members);
       const c: Record<string, number> = {};
@@ -174,6 +174,7 @@ export default function DashboardPage() {
       });
       if (!myRow.has_seen_walkthrough) setShowWalkthrough(true);
     }
+    await rankingReq;
     setLoading(false);
   }
 
