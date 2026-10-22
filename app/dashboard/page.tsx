@@ -25,6 +25,8 @@ type Settings = {
 
 type CurrentMember = {
   id: string;
+  is_super_admin?: boolean;
+  is_creator?: boolean;
   username: string;
   avatar_url: string | null;
   discord_id: string;
@@ -172,6 +174,8 @@ export default function DashboardPage() {
         avatar_url: myRow.avatar_url,
         discord_id: myRow.discord_id,
         is_admin: myRow.is_admin,
+        is_super_admin: !!myRow.is_super_admin,
+        is_creator: !!myRow.is_creator,
         has_seen_walkthrough: myRow.has_seen_walkthrough,
         guild_verified_at: myRow.guild_verified_at ?? null,
       });

@@ -14,6 +14,8 @@ export type SettingsMe = {
   promotion_tier: number | null;
   guild_verified_at: string | null;
   is_admin: boolean;
+  is_super_admin?: boolean;
+  is_creator?: boolean;
 };
 
 export type SettingsStats = {
@@ -158,8 +160,8 @@ export function SettingsPopup({
             )}
           </Section>
 
-          {me.is_admin && (<Section title="RAID SCHEDULE"><Row label="Day 1 start" value="Mon 14:00 UTC · Mon 10:00 PM PHT" /><Row label="Attack window" value="D1–D6 · 6 attack days" /><Row label="Day 7" value="Standby · Results · Onboarding" /><Row label="Reminder mode" value="Manual + cron-job.org" /></Section>)}
-        {me.is_admin && (<Section title="PLAYERS"><PlayerList /></Section>)}
+          {(me.is_admin || me.is_super_admin || me.is_creator) && (<Section title="RAID SCHEDULE"><Row label="Day 1 start" value="Mon 14:00 UTC · Mon 10:00 PM PHT" /><Row label="Attack window" value="D1–D6 · 6 attack days" /><Row label="Day 7" value="Standby · Results · Onboarding" /><Row label="Reminder mode" value="Manual + cron-job.org" /></Section>)}
+        {(me.is_admin || me.is_super_admin || me.is_creator) && (<Section title="PLAYERS"><PlayerList /></Section>)}
 
           <Section title="ACCOUNT">
             <Row label="Sign out" value={confirmSignOut ? "Tap again to confirm" : "You will need to sign in again"}>
