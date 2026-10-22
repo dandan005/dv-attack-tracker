@@ -13,15 +13,15 @@ export function RuneBag({ inMap = false }: { inMap?: boolean }) {
         type="button"
         onClick={() => { setOpen(true); reload(); }}
         aria-label="Open rune bag"
-        className={"pixel-frame z-30 flex flex-col items-center gap-0.5 bg-transparent px-2 py-1.5 " + (inMap ? "absolute bottom-3 right-3" : "fixed bottom-20 right-4")}
+        className={"pixel-frame z-30 flex flex-col items-center gap-0.5 bg-transparent px-1.5 py-0 " + (inMap ? "absolute bottom-2 right-3" : "fixed bottom-20 right-4")}
       >
-        <svg viewBox="0 0 16 16" className="h-7 w-7" shapeRendering="crispEdges" aria-hidden="true">
+        <svg viewBox="0 0 16 16" className="h-4 w-4" shapeRendering="crispEdges" aria-hidden="true">
           <rect x="4" y="1" width="8" height="3" fill="#6b8f3a" />
           <rect x="3" y="4" width="10" height="11" fill="#8a5a2b" />
           <rect x="5" y="7" width="6" height="4" fill="#c9a05a" />
           <rect x="3" y="14" width="10" height="1" fill="#4a2c18" />
         </svg>
-        <span className="text-[8px] uppercase tracking-[.1em] text-dv-brassLight">BAG</span>
+        <span className="text-[7px] leading-none uppercase tracking-[.1em] text-dv-brassLight">BAG</span>
       </button>
       {open && <RuneBagModal picks={picks} meId={meId} onClose={() => setOpen(false)} />}
     </>
