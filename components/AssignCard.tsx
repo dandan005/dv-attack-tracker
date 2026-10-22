@@ -5,12 +5,12 @@ import DvMapScene from "@/components/DvMapScene";
 import GuildRequestBoard from "@/components/GuildRequestBoard";
 import { getCycleInfo } from "@/lib/cycle";
 import { clientLog } from "@/lib/clientLog";
+import { GR } from "@/lib/guildRequest";
 
 type Row = { id: string; username: string | null; dv_map: string | null; gr_boss: number | null };
 const TABS = [{ v: "1", label: "G1" }, { v: "2", label: "G2" }];
 const SECS = [{ v: "dv", label: "DV MAPS" }, { v: "gr", label: "GUILD REQUEST" }];
 const MAPS: [string, string][] = [["wasteland", "WASTELAND PLATEAU"], ["lava", "LAVA MOUNTAINS"], ["icevale", "ICE VALE"], ["windcliff", "WIND CLIFF"]];
-const GR = [{ n: 1, r: "I", name: "PURIFY LAND OF HATE", slots: 4, pts: "5,000" }, { n: 2, r: "II", name: "ANCIENT RUINS", slots: 5, pts: "7,500" }, { n: 3, r: "III", name: "FROZEN WOOD", slots: 5, pts: "7,500" }, { n: 4, r: "IV", name: "RISING STRATA", slots: 5, pts: "7,500" }, { n: 5, r: "V", name: "GRAY AREA", slots: 5, pts: "7,500" }, { n: 6, r: "VI", name: "ANCIENT ALTAR", slots: 6, pts: "10,000" }];
 const DV_ORDER = ["wasteland", "lava", "icevale", "windcliff"];
 const cache: Record<string, Row[]> = {};
 let rolesCache: any = null;
