@@ -80,14 +80,10 @@ export default function AssignCard({ startup }: { startup?: { members: any[]; ro
       dv: clear || i >= 20 ? null : DV_ORDER[i % 4], // ranks 1-4 one per map, then 5+ continue in turn
       gr: clear ? null : i < 6 ? 6 : i < 11 ? 5 : i < 16 ? 4 : i < 20 ? 1 : null,
     })).filter((p) => canEdit(roles, p.m));
-    const next = rows.map((r) => ({ ...r }));
-    for (const p of plan) {
-      const idx = next.findIndex((r) => r.id === p.m.id);
-      if (!(await postAssign(p.m.id, "dv_map", p.dv))) break;
-      next[idx] = { ...next[idx], dv_map: p.dv };
-      if (!(await postAssign(p.m.id, "gr_boss", p.gr))) break;
-      next[idx] = { ...next[idx], gr_boss: p.gr };
-    }
+    // Send every save at once instead of one after another, so the whole run finishes quickly.
+    await Promise.all(plan.flatMap((p) => [postAssign(p.m.id, "dv_map", p.dv), postAssign(p.m.id, "gr_boss", p.gr)]));
+    const byId = new Map(plan.map((p) => [p.m.id, p]));
+    const next = rows.map((r) => { const p = byId.get(r.id); return p ? { ...r, dv_map: p.dv, gr_boss: p.gr } : r; });
     cache[view] = next; setRows(next);
     } finally {
       setAutoBusy(false);
