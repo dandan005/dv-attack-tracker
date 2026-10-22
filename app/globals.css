@@ -731,3 +731,12 @@ main {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
+
+/* Scrollable panels that should not show a scrollbar (still scroll by touch/wheel). */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

@@ -98,7 +98,7 @@ export function RunePicker({ day, picks, meId, onClose, onSaved }: Props) {
   }
 
   const shell = "fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4";
-  const panel = "pixel-border max-h-[88vh] w-full max-w-sm space-y-3 overflow-y-auto bg-dv-panel p-4 shadow-pixel";
+  const panel = "pixel-border max-h-[88vh] w-full max-w-sm space-y-3 overflow-y-auto no-scrollbar bg-dv-panel p-4 shadow-pixel";
 
   if (step === "offer") {
     const q = query.trim().toLowerCase();
@@ -120,7 +120,7 @@ export function RunePicker({ day, picks, meId, onClose, onSaved }: Props) {
             ))}
           </div>
           <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search runes" className="w-full border border-dv-line bg-black/30 px-3 py-2 text-xs text-slate-100 outline-none" />
-          <div className="max-h-[38vh] space-y-3 overflow-y-auto pr-1">
+          <div className="max-h-[38vh] space-y-3 overflow-y-auto no-scrollbar pr-1">
             {groups.map((t) => (
               <div key={t.name}>
                 <p className={"eyebrow mb-1 " + tierStyles[t.accent].text}>{t.name.toUpperCase()}</p>

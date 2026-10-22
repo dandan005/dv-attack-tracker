@@ -37,7 +37,7 @@ function RuneBagModal({ picks, meId, onClose }: { picks: { member_id: string; us
   });
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={onClose}>
-      <div className="pixel-border max-h-[88vh] w-full max-w-sm space-y-3 overflow-y-auto bg-dv-panel p-4 shadow-pixel" onClick={(e) => e.stopPropagation()}>
+      <div className="pixel-border max-h-[88vh] w-full max-w-sm space-y-3 overflow-y-auto no-scrollbar bg-dv-panel p-4 shadow-pixel" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between">
           <p className="eyebrow">BAG // ALL RUNES</p>
           <button type="button" onClick={onClose} aria-label="Close" className="item-slot px-2 py-1 text-[10px]">X</button>
