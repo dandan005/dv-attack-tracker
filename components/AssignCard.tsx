@@ -69,8 +69,12 @@ export default function AssignCard({ startup }: { startup?: { members: any[]; ro
   };
 
   // clear = true wipes this guild's assignments (day 7 reset); otherwise assigns by rank.
+  const [autoBusy, setAutoBusy] = useState(false);
   const runAuto = async (silent: boolean, clear = false) => {
     if (!silent && !window.confirm("Auto-assign G" + view + " by rank? This replaces its current DV map and Guild Request assignments.")) return;
+    if (autoBusy) return;
+    setAutoBusy(true);
+    try {
     const plan = rows.map((m, i) => ({
       m,
       dv: clear || i >= 20 ? null : DV_ORDER[i % 4], // ranks 1-4 one per map, then 5+ continue in turn
@@ -85,6 +89,9 @@ export default function AssignCard({ startup }: { startup?: { members: any[]; ro
       next[idx] = { ...next[idx], gr_boss: p.gr };
     }
     cache[view] = next; setRows(next);
+    } finally {
+      setAutoBusy(false);
+    }
   };
 
   // Day 1: assign by rank once per cycle. Day 7: reset assignments once per cycle.
@@ -110,7 +117,7 @@ export default function AssignCard({ startup }: { startup?: { members: any[]; ro
         <select value={view} disabled={!staff} onChange={(e) => setView(e.target.value)} className="h-8 flex-1 border border-dv-brass bg-black/40 px-2 text-[10px] text-dv-brassLight">{TABS.map((t) => (<option key={t.v} value={t.v}>{t.label}</option>))}</select>
       </div>
       {locked && <p className="eyebrow py-2">LOCKED UNTIL DAY 1 · VIEW ONLY</p>}
-      {staff && !locked && (<button type="button" onClick={() => runAuto(false)} className="item-slot mb-3 block w-full p-2 text-[10px] text-dv-brassLight">AUTO ASSIGN G{view} BY RANK</button>)}
+      {staff && !locked && (<button type="button" onClick={() => runAuto(false)} disabled={autoBusy} aria-busy={autoBusy} className="mb-3 flex w-full items-center justify-center gap-3 border border-dv-brass bg-dv-panel2 px-4 py-3 text-[10px] uppercase tracking-[.1em] text-dv-brassLight shadow-pixel-sm hover:bg-black/40 disabled:opacity-80">{autoBusy && <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-dv-brassLight border-t-transparent" />}{autoBusy ? "ASSIGNING..." : "AUTO ASSIGN G" + view + " BY RANK"}</button>)}
       {err && <p className="eyebrow py-2">COULD NOT LOAD</p>}
 
       {gfBoss != null && (
