@@ -16,20 +16,24 @@ let rolesCache: any = null;
 
 const tabCls = (on: boolean) => "h-6 flex-1 border px-2 text-[9px] " + (on ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/80");
 
-export default function AssignCard() {
+// Members for one guild view, taken from the dashboard's startup data (same rules as /api/ranking?guild=N).
+const pickStartup = (all: any[], v: string) => all.filter((m: any) => String(m.guild_id) === v || (m.guild_id == null && String(m.id).startsWith("roster-")));
+
+export default function AssignCard({ startup }: { startup?: { members: any[]; roles: any } | null } = {}) {
   const [view, setView] = useState("2");
-  const [rows, setRows] = useState<Row[]>(cache["2"] ?? []);
+  const [rows, setRows] = useState<Row[]>(() => (startup ? pickStartup(startup.members, "2") : cache["2"] ?? []));
   const [err, setErr] = useState(false);
   const [sec, setSec] = useState("dv");
-  const [roles, setRoles] = useState<any>(rolesCache);
+  const [roles, setRoles] = useState<any>(() => (startup ? startup.roles : rolesCache));
   const [picking, setPicking] = useState<Row | null>(null);
   const [seatMap, setSeatMap] = useState<string | null>(null);
   const [gfBoss, setGfBoss] = useState<number | null>(null);
   useEffect(() => {
+    if (startup) { setErr(false); setRows(pickStartup(startup.members, view)); return; }
     let live = true; setErr(false); setRows(cache[view] ?? []);
     fetch("/api/ranking?guild=" + view).then((r) => (r.ok ? r.json() : Promise.reject())).then((d) => { cache[view] = d.members; if (live) { setRows(d.members); rolesCache = { ...d.roles, me: d.me }; setRoles(rolesCache); } }).catch(() => { if (live) setErr(true); });
     return () => { live = false; };
-  }, [view]);
+  }, [view, startup]);
 
   const cyc = getCycleInfo();
   const day = cyc.dayNumber;

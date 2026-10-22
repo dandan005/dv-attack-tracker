@@ -1,7 +1,7 @@
 "use client";
 import { gameAvatar } from "@/lib/gameAvatars";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { getCycleInfo, getDay7Phase, formatCountdown } from "@/lib/cycle";
@@ -81,6 +81,8 @@ export default function DashboardPage() {
   const shownMembers = isSuper && effView === "ALL" ? members : members.filter((m) => String(m.guild_id) === effView);
   const [rosterCounts, setRosterCounts] = useState<Record<string, number>>({});
   const [rankMembers, setRankMembers] = useState<any[]>([]);
+  const [assignRoles, setAssignRoles] = useState<any>(null);
+  const assignStartup = useMemo(() => (assignRoles ? { members: rankMembers, roles: assignRoles } : null), [assignRoles, rankMembers]);
   const guildSigned = effView === "ALL" ? members.length : members.filter((m) => String(m.guild_id) === effView).length;
   const guildTotal = effView === "ALL" ? (rosterCounts["1"] ?? 0) + (rosterCounts["2"] ?? 0) : (rosterCounts[effView] ?? 0);
   const [pinging, setPinging] = useState(false);
@@ -161,6 +163,7 @@ export default function DashboardPage() {
       setMyTier(myRow.promotion_tier ?? null);
       setIsSuper(!!myRow.is_super_admin);
       setCanReadout(!!(myRow.is_creator || myRow.is_admin || myRow.is_super_admin));
+      setAssignRoles({ is_creator: !!myRow.is_creator, is_admin: !!myRow.is_admin, is_super_admin: !!myRow.is_super_admin, guild_id: myRow.guild_id ?? null, me: myRow.id });
       setMyGuildId(myRow.guild_id ?? null);
       if (myRow.is_super_admin) fetch("/api/assign-guild").then((r) => (r.ok ? r.json() : null)).then((d) => { if (d) setGuildList(d.guilds); }).catch(() => {});
       setMe({
@@ -557,7 +560,7 @@ export default function DashboardPage() {
             <Runes />
           </section>
         )}
-        {tab === "assign" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛃ ASSIGNMENT</p><div className="space-y-4"><section className="pixel-border bg-dv-panel/95 shadow-pixel p-4"><p className="eyebrow mb-2">ASSIGNMENT / ROSTER</p><h2 className="text-lg text-dv-brassLight">Set the roster.</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">Pick DV MAPS or GUILD REQUEST, then tap an empty seat or boss slot to add a player. Tap a player in a seat to change or remove them.</p></section><AssignCard /></div></section>)}
+        {tab === "assign" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛃ ASSIGNMENT</p><div className="space-y-4"><section className="pixel-border bg-dv-panel/95 shadow-pixel p-4"><p className="eyebrow mb-2">ASSIGNMENT / ROSTER</p><h2 className="text-lg text-dv-brassLight">Set the roster.</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">Pick DV MAPS or GUILD REQUEST, then tap an empty seat or boss slot to add a player. Tap a player in a seat to change or remove them.</p></section><AssignCard startup={assignStartup} /></div></section>)}
 
 
 
