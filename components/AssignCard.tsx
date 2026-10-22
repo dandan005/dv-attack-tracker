@@ -13,9 +13,6 @@ const GR = [{ n: 1, r: "I", name: "PURIFY LAND OF HATE", slots: 4, pts: "5,000" 
 const DV_ORDER = ["wasteland", "lava", "icevale", "windcliff"];
 const cache: Record<string, Row[]> = {};
 let rolesCache: any = null;
-let warmed = false;
-export function warmAssign() { if (warmed || typeof window === "undefined") return; warmed = true; for (const v of ["1", "2"]) fetch("/api/ranking?guild=" + v).then((r) => (r.ok ? r.json() : Promise.reject())).then((d) => { cache[v] = d.members; rolesCache = { ...d.roles, me: d.me }; }).catch(() => { warmed = false; }); }
-warmAssign();
 
 const tabCls = (on: boolean) => "h-6 flex-1 border px-2 text-[9px] " + (on ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/80");
 

@@ -13,7 +13,7 @@ import { ExplorationPhase } from "@/components/ExplorationPhase";
 import { Guide, MainCooking, Meals, Runes, SkillBuild, Spirits } from "@/components/OperationsLibrary";
 import { DragonCrest } from "@/components/DragonCrest";
 import { LedgerIcon, RankingIcon, GuideIcon, CookingIcon, SpecialIcon, RunesIcon, AssignIcon, SettingsIcon, ReplayIcon } from "@/components/TabIcons";
-import AssignCard, { warmAssign } from "@/components/AssignCard";
+import AssignCard from "@/components/AssignCard";
 import { Walkthrough } from "@/components/Walkthrough";
 import { rankByTier } from "@/lib/ranks";
 import { SettingsPopup } from "@/components/SettingsPopup";
@@ -60,7 +60,6 @@ const TABS: { id: Tab; label: string; icon: ((props: { className?: string }) => 
 const CYCLE_DAY_NUMBERS = [1, 2, 3, 4, 5, 6];
 
 export default function DashboardPage() {
-  useEffect(() => { warmAssign(); }, []);
   const router = useRouter();
   const supabase = createClient();
   const [loading, setLoading] = useState(true);
