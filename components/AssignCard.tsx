@@ -4,6 +4,7 @@ import { PixelPanel } from "@/components/PixelPanel";
 import DvMapScene from "@/components/DvMapScene";
 import GuildRequestBoard from "@/components/GuildRequestBoard";
 import { getCycleInfo } from "@/lib/cycle";
+import { clientLog } from "@/lib/clientLog";
 
 type Row = { id: string; username: string | null; dv_map: string | null; gr_boss: number | null };
 const TABS = [{ v: "1", label: "G1" }, { v: "2", label: "G2" }];
@@ -82,7 +83,8 @@ export default function AssignCard({ startup }: { startup?: { members: any[]; ro
     })).filter((p) => canEdit(roles, p.m));
     // Send every save at once instead of one after another, so the whole run finishes quickly.
     await Promise.all(plan.flatMap((p) => [postAssign(p.m.id, "dv_map", p.dv), postAssign(p.m.id, "gr_boss", p.gr)]));
-    const byId = new Map(plan.map((p) => [p.m.id, p]));
+    const byId = new Map<string, { dv: string | null; gr: number | null }>();
+    for (const p of plan) byId.set(p.m.id, { dv: p.dv, gr: p.gr });
     const next = rows.map((r) => { const p = byId.get(r.id); return p ? { ...r, dv_map: p.dv, gr_boss: p.gr } : r; });
     cache[view] = next; setRows(next);
     } finally {
@@ -166,6 +168,6 @@ function canEdit(roles: any, m: Row): boolean {
 
 async function postAssign(id: string, field: "dv_map" | "gr_boss", value: string | number | null): Promise<boolean> {
   const r = await fetch("/api/assign", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id, field, value }) });
-  if (!r.ok) alert("Save failed (" + r.status + ")");
+  if (!r.ok) { alert("Save failed (" + r.status + ")"); clientLog("assign", "Save failed", { status: r.status, field }); }
   return r.ok;
 }

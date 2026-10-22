@@ -35,6 +35,40 @@ type Props = {
   onAdminResetCycle?: () => void;
 };
 
+function ErrorLog() {
+  const [logs, setLogs] = useState<any[] | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+  const load = () => {
+    setErr(null);
+    fetch("/api/app-logs")
+      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+      .then((d) => setLogs(d.logs ?? []))
+      .catch((s) => setErr("Could not load log (" + s + ")"));
+  };
+  useEffect(() => { load(); }, []);
+  return (
+    <div className="space-y-2 p-3">
+      <div className="flex items-center justify-between">
+        <span className="text-[9px] text-slate-300/60">{logs ? logs.length + " ENTRIES (LATEST 200)" : "LOADING..."}</span>
+        <button onClick={load} className="rounded-md border border-dv-brassLight/60 px-2 py-1 text-[9px] tracking-[0.15em] text-dv-brassLight">REFRESH</button>
+      </div>
+      {err && <p className="text-[10px] text-dv-ember">{err}</p>}
+      <div className="max-h-72 space-y-2 overflow-y-auto">
+        {(logs ?? []).map((l) => (
+          <div key={l.id} className="border border-dv-line p-2">
+            <p className={"text-[9px] " + (l.level === "error" ? "text-dv-ember" : "text-dv-brassLight")}>
+              {new Date(l.created_at).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })} · {String(l.level).toUpperCase()} · {l.source}
+            </p>
+            <p className="mt-1 break-words text-[10px] text-slate-200/80">{l.message}</p>
+            {l.details && <p className="mt-1 break-all text-[9px] text-slate-300/50">{l.details}</p>}
+          </div>
+        ))}
+        {logs && logs.length === 0 && <p className="text-[10px] text-slate-300/60">No errors logged yet.</p>}
+      </div>
+    </div>
+  );
+}
+
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="mb-4">
@@ -150,6 +184,7 @@ export function SettingsPopup({
 
           <Section title="PLAYER STATS"><ProfileFields Row={Row} /></Section>
 
+          {me.is_creator && (<Section title="ERROR LOG"><ErrorLog /></Section>)}
           <Section title="HELP">
             {onReplayWalkthrough && (
               <Row label="Replay walkthrough" value="Shows the intro again next time">

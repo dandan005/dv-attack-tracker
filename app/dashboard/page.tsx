@@ -14,6 +14,7 @@ import { Guide, MainCooking, Meals, Runes, SkillBuild, Spirits } from "@/compone
 import { DragonCrest } from "@/components/DragonCrest";
 import { LedgerIcon, RankingIcon, GuideIcon, CookingIcon, SpecialIcon, RunesIcon, AssignIcon, SettingsIcon, ReplayIcon } from "@/components/TabIcons";
 import AssignCard from "@/components/AssignCard";
+import { clientLog } from "@/lib/clientLog";
 import { Walkthrough } from "@/components/Walkthrough";
 import { rankByTier } from "@/lib/ranks";
 import { SettingsPopup } from "@/components/SettingsPopup";
@@ -237,6 +238,15 @@ export default function DashboardPage() {
     }
 
   const markingRef = useRef<Set<string>>(new Set());
+
+  // Report uncaught errors from anywhere in the app to the creator-only error log.
+  useEffect(() => {
+    const onError = (e: ErrorEvent) => clientLog("window", e.message, { file: e.filename, line: e.lineno });
+    const onRejection = (e: PromiseRejectionEvent) => clientLog("promise", String((e.reason as any)?.message ?? e.reason));
+    window.addEventListener("error", onError);
+    window.addEventListener("unhandledrejection", onRejection);
+    return () => { window.removeEventListener("error", onError); window.removeEventListener("unhandledrejection", onRejection); };
+  }, []);
   const [savingMarks, setSavingMarks] = useState<Record<string, boolean>>({});
 
   async function markAttack(memberId: string, day: number, done: boolean) {
@@ -248,11 +258,13 @@ export default function DashboardPage() {
       const res = await fetch("/api/mark-attack", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ memberId, dayNumber: day, done }) });
       if (!res.ok) {
         const json = await res.json().catch(() => ({}));
+        clientLog("mark-attack", json.error ?? "Could not update", { status: res.status, day });
         alert(json.error ?? "Could not update");
         return;
       }
       await loadAll();
     } catch {
+      clientLog("mark-attack", "Network error", { day });
       alert("Network error, try again");
     } finally {
       markingRef.current.delete(key);

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { formatCountdown, getCycleInfo } from "@/lib/cycle";
 import { PixelPanel } from "./PixelPanel";
 import { createClient } from "@/lib/supabase/client";
+import { clientLog } from "@/lib/clientLog";
 
 function AttackGlyph({ done, urgent }: { done: boolean; urgent: boolean }) {
   if (done) {
@@ -103,6 +104,7 @@ export function LogAttackButton({
       console.error("Failed to log attack after retries:", err);
       const st = (err as any)?.status;
       const msg = String((err as any)?.message ?? "");
+      clientLog("log-attack", msg || "Log failed", { status: st });
       if (msg.includes("reauthentication")) {
         // Discord check expired (it lasts one hour). Offer a one-tap sign-in instead of a dead-end error.
         if (window.confirm("Your Discord check expired. Sign in again to log your attack?")) {
