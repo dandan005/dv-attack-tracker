@@ -20,7 +20,7 @@ async function findMissingAndPing(forceHour?: number, onlyGuildId?: number, with
     .eq("cycle_start", cycleStartISO)
     .eq("day_number", dayNumber);
 
-  const loggedIds = new Set((logs ?? []).map((l: any) => l.member_id));
+  const loggedIds = new Set<string>((logs ?? []).map((l: any) => l.member_id));
   const pingHour = forceHour ?? new Date().getUTCHours();
   const intro = pingHour === 14 ? `⚔️ **Dragon Valley — D${dayNumber} is live!**` : pingHour === 13 ? `🚨 **LAST CALL — D${dayNumber} resets in 1 hour!**` : `🐉 **D${dayNumber} check-in — still waiting on:**`;
   const outro = pingHour === 14 ? "Your attack is not logged yet. Get it in today!" : pingHour === 13 ? "Attack now or lose the day. No excuses!" : "The dragon will not slay itself. Log your attack!";
