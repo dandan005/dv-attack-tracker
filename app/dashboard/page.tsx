@@ -81,6 +81,7 @@ export default function DashboardPage() {
   const effView = guildView || (isSuper ? "ALL" : myGuildId !== null ? String(myGuildId) : "ALL");
   const shownMembers = isSuper && effView === "ALL" ? members : members.filter((m) => String(m.guild_id) === effView);
   const [rosterCounts, setRosterCounts] = useState<Record<string, number>>({});
+  const [rankMembers, setRankMembers] = useState<any[]>([]);
   const guildSigned = effView === "ALL" ? members.length : members.filter((m) => String(m.guild_id) === effView).length;
   const guildTotal = effView === "ALL" ? (rosterCounts["1"] ?? 0) + (rosterCounts["2"] ?? 0) : (rosterCounts[effView] ?? 0);
   const [pinging, setPinging] = useState(false);
@@ -143,6 +144,7 @@ export default function DashboardPage() {
     setMembers([...rows].sort((a, b) => (b.promotion_tier ?? 0) - (a.promotion_tier ?? 0) || (b.stage ?? -1) - (a.stage ?? -1) || (b.level ?? -1) - (a.level ?? -1)));
     fetch("/api/ranking?guild=ALL").then((r) => (r.ok ? r.json() : null)).then((d) => {
       if (!d?.members) return;
+      setRankMembers(d.members);
       const c: Record<string, number> = {};
       for (const m of d.members) { if (m.guild_id != null) { const k = String(m.guild_id); c[k] = (c[k] ?? 0) + 1; } }
       setRosterCounts(c);
@@ -514,7 +516,7 @@ export default function DashboardPage() {
                 {(dayNumber < 4 || (dayNumber >= 4 && dayNumber <= 6 && settings.wyvern_element)) && (
                   <div className="mt-2">
                     {dayNumber < 4 ? (
-                      <ExplorationPhase currentDay={dayNumber} guildId={myGuildId} meId={me?.id ?? null} />
+                      <ExplorationPhase currentDay={dayNumber} guildId={myGuildId} meId={me?.id ?? null} rankMembers={rankMembers} />
                     ) : (
                       <WyvernTracker
                         current={settings.wyvern_element as any}

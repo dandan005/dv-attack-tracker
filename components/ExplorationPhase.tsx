@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { PixelPanel, PixelHeader } from "./PixelPanel";
 import DvMapScene from "./DvMapScene";
 
@@ -13,21 +12,11 @@ function CompassGlyph() {
   );
 }
 
-export function ExplorationPhase({ currentDay, guildId, meId }: { currentDay: number; guildId?: number | null; meId?: string | null }) {
-  const [rows, setRows] = useState<any[]>([]);
-  const [loaded, setLoaded] = useState(false);
-  useEffect(() => {
-    if (!guildId) return;
-    let live = true;
-    fetch("/api/ranking?guild=" + guildId)
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d) => { if (live && d) setRows(d.members ?? []); })
-      .catch(() => {})
-      .finally(() => { if (live) setLoaded(true); });
-    return () => { live = false; };
-  }, [guildId]);
-
-  const mine = meId ? rows.find((m) => m.id === meId) : undefined;
+export function ExplorationPhase({ currentDay, guildId, meId, rankMembers }: { currentDay: number; guildId?: number | null; meId?: string | null; rankMembers: any[] }) {
+  // rankMembers is every member from the dashboard's startup fetch, so no extra request is needed here.
+  const loaded = rankMembers.length > 0;
+  const rows = rankMembers.filter((m) => m.guild_id === guildId);
+  const mine = meId ? rankMembers.find((m) => m.id === meId) : undefined;
   const myMap: string | null = mine?.dv_map && MAP_LABELS[mine.dv_map] ? mine.dv_map : null;
 
   return (
@@ -47,7 +36,7 @@ export function ExplorationPhase({ currentDay, guildId, meId }: { currentDay: nu
         <span className="status-chip shrink-0">DAY {currentDay}/3</span>
       </div>
 
-      {!loaded && guildId && (
+      {!loaded && (
         <p className="mb-3 text-[9px] text-slate-300/60 tracking-wider">LOADING YOUR MAP...</p>
       )}
       {myMap && (
