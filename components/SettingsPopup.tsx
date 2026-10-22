@@ -1,4 +1,5 @@
 "use client";
+import PushToggle from "@/components/PushToggle";
 import { PlayerList } from "@/components/PlayerList";
 
 import { createPortal } from "react-dom";
@@ -185,6 +186,7 @@ export function SettingsPopup({
           <Section title="PLAYER STATS"><ProfileFields Row={Row} /></Section>
 
           {me.is_creator && (<Section title="ERROR LOG"><ErrorLog /></Section>)}
+          <Section title="NOTIFICATIONS"><PushToggle /></Section>
           <Section title="HELP">
             {onReplayWalkthrough && (
               <Row label="Replay walkthrough" value="Shows the intro again next time">

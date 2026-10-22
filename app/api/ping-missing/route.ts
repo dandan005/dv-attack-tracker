@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
 import { getGuildMember } from "@/lib/auth";
 import { getCycleInfo } from "@/lib/cycle";
+import { sendDayPushes } from "@/lib/dayPush";
 
-async function findMissingAndPing(forceHour?: number, onlyGuildId?: number) {
+async function findMissingAndPing(forceHour?: number, onlyGuildId?: number, withPush = false) {
   const admin = createAdminClient();
 
   const { data: settings } = await admin.from("app_settings").select("*").eq("id", 1).single();
@@ -56,6 +57,8 @@ async function findMissingAndPing(forceHour?: number, onlyGuildId?: number) {
     results.push({ guild: g.code, missing: missing.length, sent: true });
   }
 
+  if (withPush) await sendDayPushes(admin, pingHour, dayNumber, cycleStartISO, loggedIds);
+
   if (onlyGuildId !== undefined && results[0]?.note === "no webhook") {
     return { error: "No Discord webhook configured.", status: 400 as const };
   }
@@ -98,7 +101,7 @@ export async function GET(req: NextRequest) {
 
   const p = req.nextUrl.searchParams.get("ping");
   const forceHour = p === "1" ? 14 : p === "3" ? 13 : p === "2" ? 23 : undefined;
-  const result = await findMissingAndPing(forceHour);
+  const result = await findMissingAndPing(forceHour, undefined, true);
   if ("error" in result) {
     return NextResponse.json({ error: result.error }, { status: result.status });
   }
