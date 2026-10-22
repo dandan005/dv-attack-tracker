@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { formatCountdown, getCycleInfo } from "@/lib/cycle";
 import { PixelPanel } from "./PixelPanel";
+import { createClient } from "@/lib/supabase/client";
 
 function AttackGlyph({ done, urgent }: { done: boolean; urgent: boolean }) {
   if (done) {
@@ -101,7 +102,19 @@ export function LogAttackButton({
     } catch (err) {
       console.error("Failed to log attack after retries:", err);
       const st = (err as any)?.status;
-      alert(st && st < 500 ? (err as any).message : "Couldn't log your attack after several tries — check your connection and try again.");
+      const msg = String((err as any)?.message ?? "");
+      if (msg.includes("reauthentication")) {
+        // Discord check expired (it lasts one hour). Offer a one-tap sign-in instead of a dead-end error.
+        if (window.confirm("Your Discord check expired. Sign in again to log your attack?")) {
+          const supabase = createClient();
+          await supabase.auth.signInWithOAuth({
+            provider: "discord",
+            options: { redirectTo: window.location.origin + "/auth/callback", scopes: "identify guilds.members.read" },
+          });
+        }
+      } else {
+        alert(st && st < 500 ? msg : "Couldn't log your attack after several tries — check your connection and try again.");
+      }
     } finally {
       setPending(false);
     }
