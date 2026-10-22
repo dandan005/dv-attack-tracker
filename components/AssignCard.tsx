@@ -73,7 +73,7 @@ export default function AssignCard({ startup }: { startup?: { members: any[]; ro
     if (!silent && !window.confirm("Auto-assign G" + view + " by rank? This replaces its current DV map and Guild Request assignments.")) return;
     const plan = rows.map((m, i) => ({
       m,
-      dv: clear || i >= 20 ? null : DV_ORDER[Math.floor(i / 5)],
+      dv: clear || i >= 20 ? null : DV_ORDER[i % 4], // ranks 1-4 one per map, then 5+ continue in turn
       gr: clear ? null : i < 6 ? 6 : i < 11 ? 5 : i < 16 ? 4 : i < 20 ? 1 : null,
     })).filter((p) => canEdit(roles, p.m));
     const next = rows.map((r) => ({ ...r }));
