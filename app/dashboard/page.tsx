@@ -24,6 +24,7 @@ type Settings = {
 };
 
 type CurrentMember = {
+  id: string;
   username: string;
   avatar_url: string | null;
   discord_id: string;
@@ -162,6 +163,7 @@ export default function DashboardPage() {
       setMyGuildId(myRow.guild_id ?? null);
       if (myRow.is_super_admin) fetch("/api/assign-guild").then((r) => (r.ok ? r.json() : null)).then((d) => { if (d) setGuildList(d.guilds); }).catch(() => {});
       setMe({
+        id: myRow.id,
         username: myRow.username,
         avatar_url: myRow.avatar_url,
         discord_id: myRow.discord_id,
