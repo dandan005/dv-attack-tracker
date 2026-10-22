@@ -61,6 +61,7 @@ export function ExplorationPhase({ currentDay, guildId, meId }: { currentDay: nu
         </div>
       </div>
 
+      <p className="mb-2 text-[9px] text-slate-300/70">DEBUG guild={String(guildId)} me={meId ? "yes" : "no"} rows={rows.length} found={mine ? "yes" : "no"} map={String(mine?.dv_map)}</p>
       {myMap && (
         <div className="mb-3">
           <p className="eyebrow mb-2">YOUR ASSIGNED MAP</p>
