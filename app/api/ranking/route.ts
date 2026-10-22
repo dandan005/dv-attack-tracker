@@ -9,8 +9,13 @@ export async function GET(req: NextRequest) {
   }
   const admin = createAdminClient();
   const g = req.nextUrl.searchParams.get("guild");
-  const { data: caller } = await admin.from("members").select("is_creator, is_admin, is_super_admin").eq("id", auth.member.id).maybeSingle();
-  const canSeeUnassigned = !!(caller?.is_creator || caller?.is_admin || caller?.is_super_admin) && req.nextUrl.searchParams.get("include") === "unassigned";
+  // Fetch caller, usernames and roster in parallel (was 4 sequential round trips).
+  const [{ data: me }, { data: all }, { data: ro }] = await Promise.all([
+    admin.from("members").select("id, guild_id, is_admin, is_super_admin, is_creator").eq("id", auth.member.id).maybeSingle(),
+    admin.from("members").select("username"),
+    admin.from("roster").select("*"),
+  ]);
+  const canSeeUnassigned = !!(me?.is_creator || me?.is_admin || me?.is_super_admin) && req.nextUrl.searchParams.get("include") === "unassigned";
   let q = admin
     .from("members")
     .select("id, username, avatar_url, custom_avatar, promotion_tier, level, stage, dv_map, gr_boss, guild_id");
@@ -22,14 +27,7 @@ export async function GET(req: NextRequest) {
   }
   const { data, error } = await q.order("stage", { ascending: false, nullsFirst: false });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  const { data: me } = await admin
-    .from("members")
-    .select("id, guild_id, is_admin, is_super_admin, is_creator")
-    .eq("id", auth.member.id)
-    .maybeSingle();
-  const { data: all } = await admin.from("members").select("username");
   const claimed = new Set((all ?? []).map((m: any) => (m.username || "").toLowerCase()));
-  const { data: ro } = await admin.from("roster").select("*");
   const gid2 = g && g !== "ALL" ? Number(g) : null;
   const extra = (ro ?? [])
     .filter((r: any) => !claimed.has(r.key) && (gid2 === null || r.guild_id === null || r.guild_id === gid2))
