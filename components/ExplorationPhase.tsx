@@ -45,14 +45,6 @@ export function ExplorationPhase({ currentDay, guildId, meId }: { currentDay: nu
         <span className="status-chip shrink-0">DAY {currentDay}/3</span>
       </div>
 
-      <div className="pixel-frame border border-dv-violet/60 bg-dv-panel2 px-3 py-3 flex items-start gap-2 mb-3">
-        <span className="text-dv-violet">◆</span>
-        <div>
-          <p className="text-[11px] text-dv-brassLight">WYVERN INTEL HIDDEN</p>
-          <p className="text-[11px] leading-relaxed text-slate-200/75 mt-1">Fill the exploration progress bar and watch for traces. Wyvern tracking unlocks on Day 3 when a Wyvern is recorded.</p>
-        </div>
-      </div>
-
       <div className="pixel-frame border border-dv-brass/60 bg-dv-panel2 px-3 py-3 flex items-start gap-2">
         <span className="text-dv-brass">◆</span>
         <div>
