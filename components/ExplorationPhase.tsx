@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import DvMapScene from "./DvMapScene";
 import { RunePicker } from "./RunePicker";
 import { PlayerInfoModal } from "./PlayerInfoModal";
+import { RuneBag } from "./RuneBag";
 import { useRunePicks } from "@/lib/useRunePicks";
 import { getCycleInfo } from "@/lib/cycle";
 
@@ -74,7 +75,10 @@ export function ExplorationPhase({ currentDay, guildId, meId, rankMembers }: { c
       {myMap && (
         <div className="mt-4">
           <p className="eyebrow mb-2">YOUR ASSIGNED MAP</p>
-          <DvMapScene k={myMap} label={MAP_LABELS[myMap]} members={rows.filter((m) => m.dv_map === myMap)} onPick={(m) => setSelected(m)} />
+          <div className="relative">
+            <DvMapScene k={myMap} label={MAP_LABELS[myMap]} members={rows.filter((m) => m.dv_map === myMap)} onPick={(m) => setSelected(m)} />
+            <RuneBag inMap />
+          </div>
         </div>
       )}
 
