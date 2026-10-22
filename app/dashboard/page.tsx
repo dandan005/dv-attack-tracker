@@ -351,12 +351,6 @@ export default function DashboardPage() {
             {day7.phase !== "calculation" && day7.phase !== "ranking-results" && day7.phase !== "onboarding" && (
             <div className="mb-1">
               <p className="eyebrow text-dv-emerald">ᛏ GUILD OPERATIONS / ONLINE</p>
-              <section className="pixel-border bg-dv-panel/95 shadow-pixel mt-4 p-4">
-              <div className="relative inline-block">
-                <h1 className="mt-1 text-lg text-dv-brassLight">GUILD HUB</h1>
-              </div>
-              <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/60">The live raid ledger for the current seven-day cycle. Track every attack, see who has checked in each day, and keep an eye on the Wyvern boss element locked for this raid.</p>
-              </section>
             </div>
             )}
 
