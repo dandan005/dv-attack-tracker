@@ -97,7 +97,7 @@ export default function DashboardPage() {
   const { dayNumber, cycleStartISO } = getCycleInfo();
   const day7 = getDay7Phase(now);
 
-  const visibleTabs = TABS.filter((t) => t.id !== "settings" && t.id !== "index");
+  const visibleTabs = TABS.filter((t) => t.id !== "settings" && t.id !== "index" && (t.id !== "assign" || canReadout));
 
   async function loadAll() {
     const { data: { user } } = await supabase.auth.getUser();
@@ -512,7 +512,7 @@ export default function DashboardPage() {
                 {(dayNumber < 4 || (dayNumber >= 4 && dayNumber <= 6 && settings.wyvern_element)) && (
                   <div className="mt-2">
                     {dayNumber < 4 ? (
-                      <ExplorationPhase currentDay={dayNumber} />
+                      <ExplorationPhase currentDay={dayNumber} guildId={myGuildId} meId={me?.id ?? null} />
                     ) : (
                       <WyvernTracker
                         current={settings.wyvern_element as any}

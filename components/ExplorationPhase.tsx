@@ -1,4 +1,8 @@
+import { useEffect, useState } from "react";
 import { PixelPanel, PixelHeader } from "./PixelPanel";
+import DvMapScene from "./DvMapScene";
+
+const MAP_LABELS: Record<string, string> = { wasteland: "WASTELAND PLATEAU", lava: "LAVA MOUNTAINS", icevale: "ICE VALE", windcliff: "WIND CLIFF" };
 
 function CompassGlyph() {
   return (
@@ -9,7 +13,21 @@ function CompassGlyph() {
   );
 }
 
-export function ExplorationPhase({ currentDay }: { currentDay: number }) {
+export function ExplorationPhase({ currentDay, guildId, meId }: { currentDay: number; guildId?: number | null; meId?: string | null }) {
+  const [rows, setRows] = useState<any[]>([]);
+  useEffect(() => {
+    if (!guildId) return;
+    let live = true;
+    fetch("/api/ranking?guild=" + guildId)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (live && d) setRows(d.members ?? []); })
+      .catch(() => {});
+    return () => { live = false; };
+  }, [guildId]);
+
+  const mine = meId ? rows.find((m) => m.id === meId) : undefined;
+  const myMap: string | null = mine?.dv_map && MAP_LABELS[mine.dv_map] ? mine.dv_map : null;
+
   return (
     <PixelPanel className="mb-5 animate-rise">
       <PixelHeader
@@ -42,6 +60,13 @@ export function ExplorationPhase({ currentDay }: { currentDay: number }) {
           <p className="text-[11px] leading-relaxed text-slate-200/75 mt-1">The Wyvern's region and its trace spots are shared across the whole league — every guild is searching the same map. That region holds 3 traces to find; every other region holds 1. Whoever finds one earns a flat +10,000 points.</p>
         </div>
       </div>
+
+      {myMap && (
+        <div className="mb-3">
+          <p className="eyebrow mb-2">YOUR ASSIGNED MAP</p>
+          <DvMapScene k={myMap} label={MAP_LABELS[myMap]} members={rows.filter((m) => m.dv_map === myMap)} onPick={() => {}} />
+        </div>
+      )}
 
       <p className="text-[10px] text-slate-200/60 mt-3 tracking-wide">EXPLORE • COOK SPECIAL DISHES • BUILD RAID ADVANTAGE</p>
     </PixelPanel>
