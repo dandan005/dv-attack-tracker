@@ -47,7 +47,7 @@ function ErrorLog() {
   };
   useEffect(() => { load(); }, []);
   return (
-    <div className="item-slot space-y-2 p-3">
+    <div className="space-y-2 rounded-lg border border-dv-line bg-black/20 px-3 py-3">
       <div className="flex items-center justify-between">
         <span className="text-[9px] text-slate-300/60">{logs ? logs.length + " ENTRIES (LATEST 200)" : "LOADING..."}</span>
         <button onClick={load} className="rounded-md border border-dv-brassLight/60 px-2 py-1 text-[9px] tracking-[0.15em] text-dv-brassLight">REFRESH</button>
