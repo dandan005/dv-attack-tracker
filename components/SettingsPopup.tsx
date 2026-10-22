@@ -156,6 +156,18 @@ export function SettingsPopup({
                 </button>
               </Row>
             )}
+            <Row label="Exit app" value="Close Dragon Valley">
+              <button
+                onClick={() => {
+                  if (!window.confirm("Exit Dragon Valley?")) return;
+                  window.close();
+                  setTimeout(() => alert("If the app is still open, swipe it away from recent apps."), 600);
+                }}
+                className="rounded-md border border-dv-ember/70 px-3 py-1 text-[9px] tracking-[0.15em] text-dv-ember"
+              >
+                EXIT
+              </button>
+            </Row>
           </Section>
 
           {me.is_admin && (<Section title="RAID SCHEDULE"><Row label="Day 1 start" value="Mon 14:00 UTC · Mon 10:00 PM PHT" /><Row label="Attack window" value="D1–D6 · 6 attack days" /><Row label="Day 7" value="Standby · Results · Onboarding" /><Row label="Reminder mode" value="Manual + cron-job.org" /></Section>)}
