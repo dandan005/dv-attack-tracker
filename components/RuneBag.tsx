@@ -13,7 +13,7 @@ export function RuneBag({ inMap = false }: { inMap?: boolean }) {
         type="button"
         onClick={() => { setOpen(true); reload(); }}
         aria-label="Open rune bag"
-        className={"pixel-frame z-30 flex flex-col items-center gap-0.5 bg-dv-panel/95 px-2 py-1.5 shadow-pixel " + (inMap ? "absolute bottom-3 right-3" : "fixed bottom-20 right-4")}
+        className={"pixel-frame z-30 flex flex-col items-center gap-0.5 bg-transparent px-2 py-1.5 " + (inMap ? "absolute bottom-3 right-3" : "fixed bottom-20 right-4")}
       >
         <svg viewBox="0 0 16 16" className="h-7 w-7" shapeRendering="crispEdges" aria-hidden="true">
           <rect x="4" y="1" width="8" height="3" fill="#6b8f3a" />
