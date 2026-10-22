@@ -15,13 +15,15 @@ function CompassGlyph() {
 
 export function ExplorationPhase({ currentDay, guildId, meId }: { currentDay: number; guildId?: number | null; meId?: string | null }) {
   const [rows, setRows] = useState<any[]>([]);
+  const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     if (!guildId) return;
     let live = true;
     fetch("/api/ranking?guild=" + guildId)
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => { if (live && d) setRows(d.members ?? []); })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => { if (live) setLoaded(true); });
     return () => { live = false; };
   }, [guildId]);
 
@@ -45,14 +47,9 @@ export function ExplorationPhase({ currentDay, guildId, meId }: { currentDay: nu
         <span className="status-chip shrink-0">DAY {currentDay}/3</span>
       </div>
 
-      <div className="pixel-frame border border-dv-brass/60 bg-dv-panel2 px-3 py-3 flex items-start gap-2">
-        <span className="text-dv-brass">◆</span>
-        <div>
-          <p className="text-[11px] text-dv-brassLight">TRACE BOUNTY</p>
-          <p className="text-[11px] leading-relaxed text-slate-200/75 mt-1">The Wyvern's region and its trace spots are shared across the whole league — every guild is searching the same map. That region holds 3 traces to find; every other region holds 1. Whoever finds one earns a flat +10,000 points.</p>
-        </div>
-      </div>
-
+      {!loaded && guildId && (
+        <p className="mb-3 text-[9px] text-slate-300/60 tracking-wider">LOADING YOUR MAP...</p>
+      )}
       {myMap && (
         <div className="mb-3">
           <p className="eyebrow mb-2">YOUR ASSIGNED MAP</p>
