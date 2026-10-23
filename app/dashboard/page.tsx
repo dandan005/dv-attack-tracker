@@ -526,6 +526,7 @@ export default function DashboardPage() {
               </div>
             ) : (
               <>
+                {dayNumber >= 4 && dayNumber <= 6 && settings.wyvern_element && (() => { const loc = WYVERN_LOCATION[settings.wyvern_element]; return (<section className="pixel-border bg-dv-panel/95 shadow-pixel p-4 mt-2"><p className="eyebrow mb-2">ASSIGNMENT / LOCATION</p><h2 className="text-lg text-dv-brassLight">{"Dragon Valley: " + loc}</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">A valley where dragons have lived since long ago.</p></section>); })()}
                 {(dayNumber < 4 || (dayNumber >= 4 && dayNumber <= 6 && settings.wyvern_element)) && (
                   <div className="mt-2">
                     {dayNumber < 4 ? (
@@ -570,7 +571,7 @@ export default function DashboardPage() {
             <Runes />
           </section>
         )}
-        {tab === "assign" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛃ ASSIGNMENT</p><div className="space-y-4">{(() => { const loc = settings.wyvern_element ? WYVERN_LOCATION[settings.wyvern_element] : null; return (<section className="pixel-border bg-dv-panel/95 shadow-pixel p-4"><p className="eyebrow mb-2">ASSIGNMENT / LOCATION</p><h2 className="text-lg text-dv-brassLight">{loc ? "Dragon Valley: " + loc : "No trace set."}</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">{loc ? "A valley where dragons have lived since long ago." : "Set the wyvern trace to reveal the hunting ground."}</p></section>); })()}<section className="pixel-border bg-dv-panel/95 shadow-pixel p-4"><p className="eyebrow mb-2">ASSIGNMENT / ROSTER</p><h2 className="text-lg text-dv-brassLight">Set the roster.</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">Pick DV MAPS or GUILD REQUEST, then tap an empty seat or boss slot to add a player. Tap a player in a seat to change or remove them.</p></section><AssignCard startup={assignStartup} /></div></section>)}
+        {tab === "assign" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛃ ASSIGNMENT</p><div className="space-y-4"><section className="pixel-border bg-dv-panel/95 shadow-pixel p-4"><p className="eyebrow mb-2">ASSIGNMENT / ROSTER</p><h2 className="text-lg text-dv-brassLight">Set the roster.</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">Pick DV MAPS or GUILD REQUEST, then tap an empty seat or boss slot to add a player. Tap a player in a seat to change or remove them.</p></section><AssignCard startup={assignStartup} /></div></section>)}
 
 
 
