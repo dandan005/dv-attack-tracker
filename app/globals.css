@@ -741,17 +741,3 @@ main {
   display: none;
 }
 
-/* Wyvern boss idle animation: stepped bob so it keeps the pixel feel */
-@keyframes wyvern-bob {
-  0%, 100% { transform: translate(0, 0); }
-  25% { transform: translate(0, -4px); }
-  50% { transform: translate(2px, -8px); }
-  75% { transform: translate(0, -4px); }
-}
-.boss-portrait img.wyvern-idle {
-  animation: wyvern-bob 3.6s steps(4, end) infinite;
-  will-change: transform;
-}
-@media (prefers-reduced-motion: reduce) {
-  .boss-portrait img.wyvern-idle { animation: none; }
-}
