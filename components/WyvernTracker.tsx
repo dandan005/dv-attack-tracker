@@ -13,7 +13,7 @@ const ELEMENTS: { key: Element; label: string; hint: string }[] = [
   { key: "water", label: "WATER", hint: "deep" },
 ];
 
-type BossSlot = { name: string; image: string; alt: string };
+type BossSlot = { name: string; image: string; alt: string; location: string };
 function BossPortrait({ element, boss }: { element: Element; boss: BossSlot }) {
   return (
     <div className={"boss-slot boss-slot--" + element}>
@@ -24,6 +24,10 @@ function BossPortrait({ element, boss }: { element: Element; boss: BossSlot }) {
           </span>
           <p className="boss-name">{boss.name}</p>
         </div>
+      </div>
+      <div className="mb-2 bg-black/70 px-3 py-2 text-center text-[10px] tracking-widest text-dv-brassLight">
+        DRAGON VALLEY: {boss.location}
+        <p className="mt-1 text-[9px] normal-case tracking-normal text-slate-200/70">A valley where dragons have lived since long ago.</p>
       </div>
       <div className="boss-portrait" style={{ backgroundImage: "url(/bosses/" + element + ".svg)", backgroundSize: "cover", backgroundPosition: "center" }}>
         {boss.image ? (
@@ -38,10 +42,10 @@ function BossPortrait({ element, boss }: { element: Element; boss: BossSlot }) {
 }
 
 const BOSS_SLOTS: Record<Element, BossSlot> = {
-  wind: { name: "Voltaris", image: "/bosses/water-dragon.png", alt: "Voltaris pixel dragon portrait" },
-  fire: { name: "Pyros", image: "/bosses/fire-dragon.png", alt: "Pyros pixel dragon portrait" },
-  earth: { name: "Bardoran", image: "/bosses/earth-dragon.png", alt: "Bardoran pixel dragon portrait" },
-  water: { name: "Glacion", image: "/bosses/wind-dragon.png", alt: "Glacion pixel dragon portrait" },
+  wind: { name: "Voltaris", image: "/bosses/water-dragon.png", alt: "Voltaris pixel dragon portrait", location: "WIND CLIFF" },
+  fire: { name: "Pyros", image: "/bosses/fire-dragon.png", alt: "Pyros pixel dragon portrait", location: "LAVA MOUNTAINS" },
+  earth: { name: "Bardoran", image: "/bosses/earth-dragon.png", alt: "Bardoran pixel dragon portrait", location: "WASTELAND PLATEAU" },
+  water: { name: "Glacion", image: "/bosses/wind-dragon.png", alt: "Glacion pixel dragon portrait", location: "ICE VALE" },
 };
 
 function PixelElementArt({ element }: { element: Element }) {
