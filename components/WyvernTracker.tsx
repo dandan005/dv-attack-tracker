@@ -25,10 +25,6 @@ function BossPortrait({ element, boss }: { element: Element; boss: BossSlot }) {
           <p className="boss-name">{boss.name}</p>
         </div>
       </div>
-      <div className="mb-2 bg-black/70 px-3 py-2 text-center text-[10px] tracking-widest text-dv-brassLight">
-        DRAGON VALLEY: {boss.location}
-        <p className="mt-1 text-[9px] normal-case tracking-normal text-slate-200/70">A valley where dragons have lived since long ago.</p>
-      </div>
       <div className="boss-portrait" style={{ backgroundImage: "url(/bosses/" + element + ".svg)", backgroundSize: "cover", backgroundPosition: "center" }}>
         {boss.image ? (
           <img src={boss.image} alt={boss.alt} className="block h-auto w-full object-cover" />
