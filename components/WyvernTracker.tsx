@@ -38,10 +38,10 @@ function BossPortrait({ element, boss }: { element: Element; boss: BossSlot }) {
 }
 
 const BOSS_SLOTS: Record<Element, BossSlot> = {
-  wind: { name: "Voltaris", image: "/bosses/water-dragon.png", alt: "Voltaris pixel dragon portrait", location: "WIND CLIFF" },
-  fire: { name: "Pyros", image: "/bosses/fire-dragon.png", alt: "Pyros pixel dragon portrait", location: "LAVA MOUNTAINS" },
-  earth: { name: "Bardoran", image: "/bosses/earth-dragon.png", alt: "Bardoran pixel dragon portrait", location: "WASTELAND PLATEAU" },
-  water: { name: "Glacion", image: "/bosses/wind-dragon.png", alt: "Glacion pixel dragon portrait", location: "ICE VALE" },
+  wind: { name: "Voltaris", image: "/bosses/wind-pixel.png", alt: "Voltaris pixel dragon portrait", location: "WIND CLIFF" },
+  fire: { name: "Pyros", image: "/bosses/fire-pixel.png", alt: "Pyros pixel dragon portrait", location: "LAVA MOUNTAINS" },
+  earth: { name: "Bardoran", image: "/bosses/earth-pixel.png", alt: "Bardoran pixel dragon portrait", location: "WASTELAND PLATEAU" },
+  water: { name: "Glacion", image: "/bosses/water-pixel.png", alt: "Glacion pixel dragon portrait", location: "ICE VALE" },
 };
 
 export const WYVERN_LOCATION: Record<string, string> = {
