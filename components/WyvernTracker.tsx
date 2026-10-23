@@ -48,6 +48,13 @@ const BOSS_SLOTS: Record<Element, BossSlot> = {
   water: { name: "Glacion", image: "/bosses/wind-dragon.png", alt: "Glacion pixel dragon portrait", location: "ICE VALE" },
 };
 
+export const WYVERN_LOCATION: Record<string, string> = {
+  wind: "WIND CLIFF",
+  fire: "LAVA MOUNTAINS",
+  earth: "WASTELAND PLATEAU",
+  water: "ICE VALE",
+};
+
 function PixelElementArt({ element }: { element: Element }) {
   return <img className="element-pixel-art" src={"/elements/" + element + ".png"} alt="" draggable={false} />;
 }
