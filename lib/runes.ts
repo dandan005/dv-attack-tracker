@@ -191,6 +191,14 @@ export type FlatRune = { name: string; effect: string; tier: string; accent: Run
 
 // Pixel icons assigned by what each rune does (file names in public/runes/).
 export const RUNE_ICONS: Record<string, string> = {
+  "Pile of Stones": "blades",
+  "Have You Ever Been Dumped at the Speed of Light?": "blades",
+  "Reliable Friends": "blades",
+  "Crimson Beast": "blades",
+  "Awaken Time Freeze": "blades",
+  "Awaken Wind Force": "blades",
+  "Nimble Friends": "blades",
+  "Water Friends": "blades",
   "Game Changer": "star",
   "Special Onigiri": "star",
   "Random Immortal Rune": "star",
