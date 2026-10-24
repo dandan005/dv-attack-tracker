@@ -756,14 +756,15 @@ export function Runes() {
                     )}
                     <div className="space-y-3">
                       {group.runes.map((rune) => (
-                        <div key={rune.name} className="item-slot border border-dv-line/70 p-3">
-                          <div className="flex items-center gap-3" style={{ ["--rc" as string]: tierColors[tier.accent] } as CSSProperties}>
-                            {RUNE_ICONS[rune.name] && (
-                              <span className="rune-icon shrink-0" aria-hidden="true" style={{ maskImage: `url(/runes/${RUNE_ICONS[rune.name]}.png)`, WebkitMaskImage: `url(/runes/${RUNE_ICONS[rune.name]}.png)`, width: 40, height: 40 } as CSSProperties} />
-                            )}
-                            <p className={`text-sm ${style.text}`}>{rune.name}</p>
-                          </div>
-                          <p className="mt-1.5 text-xs leading-relaxed text-slate-200/65">{rune.effect}</p>
+                        <div key={rune.name} className="rune-frame" style={{ ["--rc" as string]: tierColors[tier.accent] } as CSSProperties}>
+                          {RUNE_ICONS[rune.name] && (
+                            <span className="rune-crest" aria-hidden="true">
+                              <span className="rune-icon" style={{ maskImage: `url(/runes/${RUNE_ICONS[rune.name]}.png)`, WebkitMaskImage: `url(/runes/${RUNE_ICONS[rune.name]}.png)` } as CSSProperties} />
+                            </span>
+                          )}
+                          <p className="rune-frame__title">{rune.name}</p>
+                          <span className="rune-frame__divider" aria-hidden="true"><span /></span>
+                          <p className="rune-frame__effect">{rune.effect}</p>
                         </div>
                       ))}
                     </div>
