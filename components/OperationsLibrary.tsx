@@ -704,87 +704,77 @@ export function Runes() {
   const isSearching = query.trim().length > 0;
 
   return (
-    <div className="space-y-4 rune-desk">
-      <Card className="rune-stone p-4">
-        <p className="rune-carve" aria-hidden="true">ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ</p>
+    <div className="space-y-4">
+      <Card className="p-4">
         <SectionLabel>RUNE DESK / TIER NOTES</SectionLabel>
-        <h2 className="mt-1 text-lg text-dv-brassLight">Spend fragments with a plan.</h2>
+        <h2 className="text-lg text-dv-brassLight">Spend fragments with a plan.</h2>
         <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">
-          Full guild rune notes by tier, with sub-tier priority and rough Emblem value where it's known.
+          Full guild rune notes by tier — Immortal, Mythic, and Legendary — with sub-tier priority and rough Emblem value where it's known.
         </p>
       </Card>
 
-      <div className="rune-stone relative">
-        <div className="p-4">
-          <div className="relative">
-            <span aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-base text-dv-brassLight">ᛉ</span>
-            <input
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search runes or effects"
-              className="rune-input w-full py-3 pl-9 pr-9 text-xs text-dv-brassLight outline-none placeholder:text-slate-300/50"
-            />
-            {query ? (
-              <button type="button" aria-label="Clear search" onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-slate-300/60">×</button>
-            ) : null}
-          </div>
+      <Card>
+        <div className="border-b border-dv-line p-4">
+        <div className="relative mt-4"><svg aria-hidden="true" viewBox="0 0 16 16" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-dv-brassLight" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="7" cy="7" r="4.5" /><path d="M10.5 10.5L14 14" /></svg><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search runes or effects" className="w-full rounded-xl border border-dv-line bg-dv-panel2 pl-9 pr-9 py-3 text-xs text-dv-brassLight outline-none placeholder:text-slate-300/50 focus:border-dv-brassLight" />{query ? <button type="button" aria-label="Clear search" onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-slate-300/60">×</button> : null}</div>
         </div>
 
-        {filteredTiers.length === 0 && <p className="p-4 text-xs text-slate-300/60">No runes match that search.</p>}
+        {filteredTiers.length === 0 && (
+          <p className="p-4 text-xs text-slate-300/60">No runes match that search.</p>
+        )}
 
         {filteredTiers.map((tier) => {
           const style = tierStyles[tier.accent];
           const isOpen = isSearching || openTiers.includes(tier.name);
-          const count = tier.groups.reduce((sum, g) => sum + g.runes.length, 0);
           return (
-            <div key={tier.name} className="rune-tier" style={{ ["--rc" as string]: tierColors[tier.accent] } as CSSProperties}>
-              <button
-                type="button"
-                onClick={() => setOpenTiers((current) => (current.includes(tier.name) ? current.filter((item) => item !== tier.name) : [...current, tier.name]))}
-                className="rune-tier__head flex w-full items-center gap-3 px-4 py-4 text-left"
-              >
-                <span className="rune-ring" aria-hidden="true">
-                  <span className={`text-lg leading-none ${style.text}`}>{tier.icon}</span>
-                </span>
-                <span className="flex-1">
-                  <span className="eyebrow block">RUNE TIER · {count} RUNES</span>
-                  <span className={`mt-1 block text-sm tracking-[.14em] ${style.text}`}>{tier.name.toUpperCase()}</span>
-                </span>
-                <span className="rune-chevron" aria-hidden="true">{isOpen ? "ᛏ" : "ᛉ"}</span>
-              </button>
+          <div key={tier.name} className="border-b border-dv-line last:border-b-0">
+            <button
+              type="button"
+              onClick={() => setOpenTiers((current) => (current.includes(tier.name) ? current.filter((item) => item !== tier.name) : [...current, tier.name]))}
+              className={`flex w-full items-center gap-3 border-b border-dv-line px-4 py-4 text-left ${isOpen ? "" : "border-b-0"}`}
+            >
+              <span className={`text-lg leading-none ${style.text}`}>{tier.icon}</span>
+              <span className="flex-1">
+                <span className="eyebrow block">RUNE TIER</span>
+                <span className={`mt-1 block text-sm ${style.text}`}>{tier.name}</span>
+              </span>
+              <span className="text-dv-violet">{isOpen ? "−" : "+"}</span>
+            </button>
 
-              {isOpen && (
-                <div>
-                  {tier.groups.map((group, groupIndex) => (
-                    <div key={`${tier.name}-${group.label ?? "top"}-${groupIndex}`} className="px-4 pb-4">
-                      {group.label && (
-                        <div className="mb-3 flex items-center gap-2">
-                          <span className="rune-sub" aria-hidden="true">{group.label}</span>
-                          <span className="rune-divider-line" aria-hidden="true" />
-                          <span className="text-[9px] uppercase tracking-[.14em] text-slate-300/50">Sub-tier {group.label}</span>
-                        </div>
-                      )}
-                      <div className="space-y-3">
-                        {group.runes.map((rune) => (
-                          <div key={rune.name} className="rune-slab flex items-start gap-3 p-3">
+            {isOpen && (
+              <div className="divide-y divide-dv-line">
+                {tier.groups.map((group, groupIndex) => (
+                  <div key={`${tier.name}-${group.label ?? "top"}-${groupIndex}`} className="p-4">
+                    {group.label && (
+                      <div className="mb-3 flex items-center gap-2">
+                        <span
+                          className={`grid h-6 w-6 place-items-center border font-pixel text-[10px] ${style.chipBorder} ${style.chipBg} ${style.text}`}
+                        >
+                          {group.label}
+                        </span>
+                        <span className="text-[9px] uppercase tracking-[.1em] text-slate-300/50">Sub-tier {group.label}</span>
+                      </div>
+                    )}
+                    <div className="space-y-3">
+                      {group.runes.map((rune) => (
+                        <div key={rune.name} className="item-slot border border-dv-line/70 p-3">
+                          <div className="flex items-center gap-3" style={{ ["--rc" as string]: tierColors[tier.accent] } as CSSProperties}>
                             {RUNE_ICONS[rune.name] && (
                               <span className="rune-icon shrink-0" aria-hidden="true" style={{ maskImage: `url(/runes/${RUNE_ICONS[rune.name]}.png)`, WebkitMaskImage: `url(/runes/${RUNE_ICONS[rune.name]}.png)`, width: 40, height: 40 } as CSSProperties} />
                             )}
-                            <div className="min-w-0 flex-1">
-                              <p className={`text-sm ${style.text}`}>{rune.name}</p>
-                              <p className="mt-1.5 text-xs leading-relaxed text-slate-200/65">{rune.effect}</p>
-                            </div>
+                            <p className={`text-sm ${style.text}`}>{rune.name}</p>
                           </div>
-                        ))}
-                      </div>
+                          <p className="mt-1.5 text-xs leading-relaxed text-slate-200/65">{rune.effect}</p>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
           );
         })}
-      </div>
+      </Card>
     </div>
   );
 }
