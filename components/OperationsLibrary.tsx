@@ -1,8 +1,8 @@
 "use client";
 
-import { runeTiers, tierStyles } from "@/lib/runes";
+import { RUNE_ICONS, runeTiers, tierColors, tierStyles } from "@/lib/runes";
 import { descFor } from "./mealDescriptions";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 
 type Meal = {
   name: string;
@@ -757,7 +757,12 @@ export function Runes() {
                     <div className="space-y-3">
                       {group.runes.map((rune) => (
                         <div key={rune.name} className="item-slot border border-dv-line/70 p-3">
-                          <p className={`text-sm ${style.text}`}>{rune.name}</p>
+                          <div className="flex items-center gap-2" style={{ ["--rc" as string]: tierColors[tier.accent] } as CSSProperties}>
+                            {RUNE_ICONS[rune.name] && (
+                              <span className="rune-icon shrink-0" aria-hidden="true" style={{ maskImage: `url(/runes/${RUNE_ICONS[rune.name]}.png)`, WebkitMaskImage: `url(/runes/${RUNE_ICONS[rune.name]}.png)`, width: 22, height: 22 } as CSSProperties} />
+                            )}
+                            <p className={`text-sm ${style.text}`}>{rune.name}</p>
+                          </div>
                           <p className="mt-1.5 text-xs leading-relaxed text-slate-200/65">{rune.effect}</p>
                         </div>
                       ))}
