@@ -846,3 +846,15 @@ main {
   image-rendering: pixelated;
   filter: drop-shadow(0 0 1px #1a0f06);
 }
+
+/* Rune tile for the Runes tab: a framed square like the meal tiles, tinted to the tier colour. */
+.rune-tile {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--rc);
+  border-radius: 4px;
+  background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--rc) 30%, #1b2442), #11172b 75%);
+  box-shadow: inset 0 0 14px color-mix(in srgb, var(--rc) 30%, transparent), 0 0 10px color-mix(in srgb, var(--rc) 25%, transparent);
+}
