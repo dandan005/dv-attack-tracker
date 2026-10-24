@@ -746,3 +746,87 @@ main {
   display: none;
 }
 
+
+/* Rune card: pixel-framed parchment card with a tier gem on top (--rc is the tier colour). */
+.rune-card {
+  position: relative;
+  --rc: #ffd76a;
+  color: #f5e6c4;
+  background:
+    repeating-linear-gradient(180deg, rgba(20, 10, 4, 0.22) 0 2px, transparent 2px 6px),
+    linear-gradient(180deg, #6b4524 0%, #4a2d16 55%, #32200f 100%);
+  border: 3px solid #1a0f06;
+  box-shadow:
+    inset 0 0 0 2px var(--rc),
+    inset 0 0 0 4px #2a1708,
+    inset 0 0 0 5px rgba(255, 227, 161, 0.25),
+    0 3px 0 #0c0704;
+  image-rendering: pixelated;
+}
+.rune-card:hover:not(:disabled),
+.rune-card:focus-visible {
+  outline: none;
+  filter: brightness(1.12);
+}
+.rune-card.is-selected {
+  box-shadow:
+    inset 0 0 0 2px var(--rc),
+    inset 0 0 0 4px #2a1708,
+    0 0 0 2px var(--rc),
+    0 0 18px color-mix(in srgb, var(--rc) 55%, transparent),
+    0 3px 0 #0c0704;
+}
+/* Corner studs, like the ornate frame in the reference */
+.rune-card::before,
+.rune-card::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--rc);
+  box-shadow: 0 0 0 1px #1a0f06;
+}
+.rune-card::before { top: 4px; left: 4px; }
+.rune-card::after { top: 4px; right: 4px; }
+.rune-gem {
+  position: absolute;
+  left: 50%;
+  top: -13px;
+  width: 26px;
+  height: 26px;
+  transform: translateX(-50%);
+  background: var(--rc);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  box-shadow: 0 0 0 3px #1a0f06;
+}
+.rune-gem::after {
+  content: "";
+  position: absolute;
+  left: 25%;
+  top: 25%;
+  width: 50%;
+  height: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+.rune-title { letter-spacing: 0.06em; text-shadow: 0 1px 0 #1a0f06; }
+.rune-divider {
+  height: 6px;
+  margin: 6px 0 0;
+  background:
+    linear-gradient(90deg, transparent 0 8%, var(--rc) 8% 92%, transparent 92%) center / 100% 2px no-repeat;
+  position: relative;
+}
+.rune-badge {
+  background: var(--rc);
+  color: #1a0f06;
+  padding: 2px 5px;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+}
+.rune-badge--dim {
+  background: transparent;
+  color: #f5e6c4;
+  border: 1px solid rgba(255, 227, 161, 0.5);
+}
+@media (prefers-reduced-motion: reduce) { .rune-card { transition: none; } }

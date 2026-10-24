@@ -1,6 +1,6 @@
 "use client";
-import { useMemo, useState } from "react";
-import { RUNE_BY_NAME, runeTiers, tierStyles, type FlatRune } from "@/lib/runes";
+import { useMemo, useState, type CSSProperties } from "react";
+import { RUNE_BY_NAME, runeTiers, tierColors, tierStyles, type FlatRune } from "@/lib/runes";
 import { getCycleInfo } from "@/lib/cycle";
 import type { RunePick } from "@/lib/useRunePicks";
 
@@ -156,23 +156,28 @@ export function RunePicker({ day, picks, meId, onClose, onSaved }: Props) {
             const isTaken = takenBy.has(c.name);
             const isSel = choice === c.name;
             const st = tierStyles[c.accent];
+            const col = tierColors[c.accent];
             return (
               <button
                 key={c.name}
                 type="button"
                 disabled={isTaken}
                 onClick={() => setChoice(c.name)}
-                className={"block w-full border-2 p-3 text-left disabled:opacity-50 " + (isSel ? "border-dv-brassLight bg-dv-brass/20" : "border-dv-brass/60 bg-black/30")}
+                style={{ ["--rc" as string]: col } as CSSProperties}
+                className={"rune-card block w-full p-3 pt-5 text-left disabled:opacity-50 " + (isSel ? "is-selected" : "")}
               >
+                <span className="rune-gem" aria-hidden="true" />
                 <div className="flex items-center justify-between gap-2">
-                  <span className={"text-xs " + st.text}>{c.name}</span>
+                  <span className={"rune-title text-xs " + st.text}>{c.name}</span>
                   <span className="flex shrink-0 gap-1">
-                    {c.name === recommended && !isTaken && <span className="bg-dv-brass px-1.5 py-0.5 text-[8px] text-black">RECOMMENDED</span>}
-                    {isTaken && <span className="border border-dv-line px-1.5 py-0.5 text-[8px] text-slate-300/70">TAKEN · {takenBy.get(c.name)}</span>}
-                    {c.name === mine && <span className="border border-dv-emerald/60 px-1.5 py-0.5 text-[8px] text-dv-emerald">YOURS</span>}
+                    {c.name === recommended && !isTaken && <span className="rune-badge">RECOMMENDED</span>}
+                    {isTaken && <span className="rune-badge rune-badge--dim">TAKEN · {takenBy.get(c.name)}</span>}
+                    {c.name === mine && <span className="rune-badge rune-badge--dim">YOURS</span>}
                   </span>
                 </div>
-                <p className="mt-1.5 text-[10px] leading-relaxed text-slate-200/70">{c.effect}</p>
+                <p className="rune-divider" aria-hidden="true" />
+                <p className="mt-1 text-[10px] leading-relaxed text-amber-50/80">{c.effect}</p>
+                <p className="mt-1 text-[8px] uppercase tracking-[.14em] text-amber-100/50">{c.tier}</p>
               </button>
             );
           })}

@@ -2,13 +2,15 @@
 
 export type Rune = { name: string; effect: string };
 export type RuneGroup = { label: string | null; runes: Rune[] };
-export type RuneTier = { name: string; icon: string; accent: "brass" | "violet" | "emerald"; groups: RuneGroup[] };
+// Tier colours, highest first: gold, orange, cyan/teal, blue (blue is a placeholder for a fourth tier).
+export type RuneAccent = "gold" | "orange" | "cyan" | "blue";
+export type RuneTier = { name: string; icon: string; accent: RuneAccent; groups: RuneGroup[] };
 
 export const runeTiers: RuneTier[] = [
   {
     name: "Immortal",
     icon: "ᛟ",
-    accent: "brass",
+    accent: "gold",
     groups: [
       {
         label: null,
@@ -65,7 +67,7 @@ export const runeTiers: RuneTier[] = [
   {
     name: "Mythic",
     icon: "ᛞ",
-    accent: "violet",
+    accent: "orange",
     groups: [
       {
         label: null,
@@ -124,7 +126,7 @@ export const runeTiers: RuneTier[] = [
   {
     name: "Legendary",
     icon: "ᛗ",
-    accent: "emerald",
+    accent: "cyan",
     groups: [
       {
         label: "A",
@@ -168,15 +170,24 @@ export const runeTiers: RuneTier[] = [
   },
 ];
 
-export const tierStyles: Record<RuneTier["accent"], { border: string; text: string; chipBorder: string; chipBg: string }> = {
-  brass: { border: "border-dv-brass/50", text: "text-dv-brassLight", chipBorder: "border-dv-brass/50", chipBg: "bg-dv-brass/15" },
-  violet: { border: "border-dv-violet/50", text: "text-dv-violet", chipBorder: "border-dv-violet/50", chipBg: "bg-dv-violet/15" },
-  emerald: { border: "border-dv-emerald/50", text: "text-dv-emerald", chipBorder: "border-dv-emerald/50", chipBg: "bg-dv-emerald/15" },
+export const tierStyles: Record<RuneAccent, { border: string; text: string; chipBorder: string; chipBg: string }> = {
+  gold: { border: "border-amber-300/50", text: "text-amber-200", chipBorder: "border-amber-300/50", chipBg: "bg-amber-300/15" },
+  orange: { border: "border-orange-400/50", text: "text-orange-300", chipBorder: "border-orange-400/50", chipBg: "bg-orange-400/15" },
+  cyan: { border: "border-teal-300/50", text: "text-cyan-200", chipBorder: "border-teal-300/50", chipBg: "bg-teal-300/15" },
+  blue: { border: "border-sky-400/50", text: "text-sky-300", chipBorder: "border-sky-400/50", chipBg: "bg-sky-400/15" },
+};
+
+// Solid colour for each tier's gem and card trim (used by the rune card).
+export const tierColors: Record<RuneAccent, string> = {
+  gold: "#ffd76a",
+  orange: "#ff9a3c",
+  cyan: "#5ef0e0",
+  blue: "#5aa8ff",
 };
 
 // Flat, priority-ordered list (data order: Immortal first, then S → D within each tier).
 // A lower rank means a better rune, which the picker uses to choose the recommendation.
-export type FlatRune = { name: string; effect: string; tier: string; accent: RuneTier["accent"]; rank: number };
+export type FlatRune = { name: string; effect: string; tier: string; accent: RuneAccent; rank: number };
 export const ALL_RUNES: FlatRune[] = runeTiers.flatMap((t) =>
   t.groups.flatMap((g) => g.runes.map((r) => ({ name: r.name, effect: r.effect, tier: t.name, accent: t.accent, rank: 0 })))
 ).map((r, i) => ({ ...r, rank: i }));
