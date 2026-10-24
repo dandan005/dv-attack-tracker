@@ -168,7 +168,10 @@ export function RunePicker({ day, picks, meId, onClose, onSaved }: Props) {
               >
                 <span className="rune-gem" aria-hidden="true" />
                 <div className="flex items-center justify-between gap-2">
-                  <span className={"rune-title text-xs " + st.text}>{c.name}</span>
+                  <span className="flex min-w-0 items-center gap-2">
+                    {c.icon && <span className="rune-icon shrink-0" aria-hidden="true" style={{ maskImage: `url(/runes/${c.icon}.png)`, WebkitMaskImage: `url(/runes/${c.icon}.png)` } as CSSProperties} />}
+                    <span className={"rune-title text-xs " + st.text}>{c.name}</span>
+                  </span>
                   <span className="flex shrink-0 gap-1">
                     {c.name === recommended && !isTaken && <span className="rune-badge">RECOMMENDED</span>}
                     {isTaken && <span className="rune-badge rune-badge--dim">TAKEN · {takenBy.get(c.name)}</span>}

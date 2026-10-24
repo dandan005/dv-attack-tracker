@@ -187,8 +187,22 @@ export const tierColors: Record<RuneAccent, string> = {
 
 // Flat, priority-ordered list (data order: Immortal first, then S → D within each tier).
 // A lower rank means a better rune, which the picker uses to choose the recommendation.
-export type FlatRune = { name: string; effect: string; tier: string; accent: RuneAccent; rank: number };
+export type FlatRune = { name: string; effect: string; tier: string; accent: RuneAccent; rank: number; icon: string | null };
+
+// Pixel icons assigned by what each rune does (file names in public/runes/).
+export const RUNE_ICONS: Record<string, string> = {
+  "Game Changer": "star",
+  "Wyvern's Fury": "skull",
+  "Survival Expert": "campfire",
+  "Medal of Honor": "medal",
+  "Help Me, Ether Robot!": "robot",
+  "Opal": "bag",
+  "Breath of the Sword": "swords",
+  "My dream is to be a chef!": "chef",
+  "Scrutiny": "map",
+  "Bubbling Hot Pot Kit": "pot",
+};
 export const ALL_RUNES: FlatRune[] = runeTiers.flatMap((t) =>
-  t.groups.flatMap((g) => g.runes.map((r) => ({ name: r.name, effect: r.effect, tier: t.name, accent: t.accent, rank: 0 })))
+  t.groups.flatMap((g) => g.runes.map((r) => ({ name: r.name, effect: r.effect, tier: t.name, accent: t.accent, rank: 0, icon: RUNE_ICONS[r.name] ?? null })))
 ).map((r, i) => ({ ...r, rank: i }));
 export const RUNE_BY_NAME = new Map(ALL_RUNES.map((r) => [r.name, r]));

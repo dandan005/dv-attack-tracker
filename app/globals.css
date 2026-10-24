@@ -830,3 +830,19 @@ main {
   border: 1px solid rgba(255, 227, 161, 0.5);
 }
 @media (prefers-reduced-motion: reduce) { .rune-card { transition: none; } }
+
+/* Rune icon: white pixel art tinted to the tier colour via a mask. */
+.rune-icon {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  background: var(--rc);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 1px #1a0f06);
+}
