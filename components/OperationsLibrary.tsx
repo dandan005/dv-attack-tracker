@@ -759,9 +759,7 @@ export function Runes() {
                         <div key={rune.name} className="item-slot border border-dv-line/70 p-3">
                           <div className="flex items-center gap-3" style={{ ["--rc" as string]: tierColors[tier.accent] } as CSSProperties}>
                             {RUNE_ICONS[rune.name] && (
-                              <span className="rune-tile shrink-0" aria-hidden="true">
-                                <span className="rune-icon" style={{ maskImage: `url(/runes/${RUNE_ICONS[rune.name]}.png)`, WebkitMaskImage: `url(/runes/${RUNE_ICONS[rune.name]}.png)`, width: 30, height: 30 } as CSSProperties} />
-                              </span>
+                              <span className="rune-icon shrink-0" aria-hidden="true" style={{ maskImage: `url(/runes/${RUNE_ICONS[rune.name]}.png)`, WebkitMaskImage: `url(/runes/${RUNE_ICONS[rune.name]}.png)`, width: 40, height: 40 } as CSSProperties} />
                             )}
                             <p className={`text-sm ${style.text}`}>{rune.name}</p>
                           </div>
