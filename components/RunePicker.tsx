@@ -1,6 +1,6 @@
 "use client";
 import { useMemo, useState, type CSSProperties } from "react";
-import { RUNE_BY_NAME, runeTiers, tierColors, tierStyles, type FlatRune } from "@/lib/runes";
+import { RUNE_BY_NAME, RUNE_ICONS, runeTiers, tierColors, tierStyles, type FlatRune } from "@/lib/runes";
 import { getCycleInfo } from "@/lib/cycle";
 import type { RunePick } from "@/lib/useRunePicks";
 
@@ -129,7 +129,10 @@ export function RunePicker({ day, picks, meId, onClose, onSaved }: Props) {
                     const slot = offers.indexOf(r.name);
                     return (
                       <button key={r.name} type="button" disabled={slot !== -1} onClick={() => tapRune(r.name)} className="item-slot block w-full p-2 text-left disabled:opacity-40">
-                        <span className={"block text-[10px] " + tierStyles[t.accent].text}>{r.name}{slot !== -1 && <span className="ml-2 text-[8px] text-slate-300/60">OPTION {slot + 1}</span>}</span>
+                        <span className="flex items-center gap-2" style={{ ["--rc" as string]: tierColors[t.accent] } as CSSProperties}>
+                          {RUNE_ICONS[r.name] && <span className="rune-icon shrink-0" aria-hidden="true" style={{ maskImage: `url(/runes/${RUNE_ICONS[r.name]}.png)`, WebkitMaskImage: `url(/runes/${RUNE_ICONS[r.name]}.png)`, width: 18, height: 18 } as CSSProperties} />}
+                          <span className={"block text-[10px] " + tierStyles[t.accent].text}>{r.name}{slot !== -1 && <span className="ml-2 text-[8px] text-slate-300/60">OPTION {slot + 1}</span>}</span>
+                        </span>
                       </button>
                     );
                   })}

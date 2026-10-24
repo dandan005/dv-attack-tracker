@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import { runeTiers, tierStyles } from "@/lib/runes";
+import { useState, type CSSProperties } from "react";
+import { RUNE_ICONS, runeTiers, tierColors, tierStyles } from "@/lib/runes";
 import { useRunePicks } from "@/lib/useRunePicks";
 
 // Bag button fixed to the bottom-right, sitting above the tab bar (same corner as the game's bag).
@@ -52,7 +52,10 @@ function RuneBagModal({ picks, meId, onClose }: { picks: { member_id: string; us
                 return (
                   <div key={r.name} className="item-slot p-2">
                     <div className="flex items-start justify-between gap-2">
-                      <span className={"text-[10px] " + tierStyles[t.accent].text}>{r.name}</span>
+                      <span className="flex min-w-0 items-center gap-1.5" style={{ ["--rc" as string]: tierColors[t.accent] } as CSSProperties}>
+                        {RUNE_ICONS[r.name] && <span className="rune-icon shrink-0" aria-hidden="true" style={{ maskImage: `url(/runes/${RUNE_ICONS[r.name]}.png)`, WebkitMaskImage: `url(/runes/${RUNE_ICONS[r.name]}.png)`, width: 18, height: 18 } as CSSProperties} />}
+                        <span className={"text-[10px] " + tierStyles[t.accent].text}>{r.name}</span>
+                      </span>
                       {tk ? (
                         <span className="shrink-0 text-[8px] text-dv-emerald">{tk.join(" · ")}</span>
                       ) : (
