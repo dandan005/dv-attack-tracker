@@ -847,3 +847,79 @@ main {
   filter: drop-shadow(0 0 1px #1a0f06);
 }
 
+
+/* Runes tab: carved-stone runic style. Colours come from --rc (tier colour) where a tier is set. */
+.rune-stone {
+  background:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.08) 0 1px, transparent 1px 38px),
+    linear-gradient(180deg, #232b48 0%, #171d33 100%);
+  border: 1px solid #3b4975;
+  box-shadow: inset 0 0 0 3px #11172b, inset 0 0 0 4px rgba(139, 125, 255, 0.18), 0 3px 0 #05060f;
+}
+.rune-carve {
+  margin: 0 0 6px;
+  font-size: 14px;
+  letter-spacing: 0.5em;
+  color: rgba(139, 125, 255, 0.55);
+  text-shadow: 0 1px 0 #05060f;
+}
+.rune-input {
+  background: #0c1124;
+  border: 1px solid #3b4975;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+  border-radius: 2px;
+}
+.rune-input:focus { border-color: #ffe3a1; }
+.rune-tier { border-bottom: 1px solid #3b4975; }
+.rune-tier:last-child { border-bottom: 0; }
+.rune-tier__head {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--rc) 14%, transparent), transparent 70%);
+  border-bottom: 1px solid color-mix(in srgb, var(--rc) 40%, #3b4975);
+}
+.rune-tier__head:hover { background: linear-gradient(90deg, color-mix(in srgb, var(--rc) 22%, transparent), transparent 80%); }
+.rune-ring {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid var(--rc);
+  box-shadow: 0 0 0 3px #11172b, 0 0 0 4px color-mix(in srgb, var(--rc) 35%, transparent), 0 0 12px color-mix(in srgb, var(--rc) 35%, transparent);
+  background: radial-gradient(circle, color-mix(in srgb, var(--rc) 22%, #11172b), #11172b 75%);
+}
+.rune-chevron { color: var(--rc); font-size: 14px; }
+.rune-sub {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  font-size: 11px;
+  color: #ffe3a1;
+  background: #0c1124;
+  border: 1px solid #c98a3e;
+  border-radius: 2px;
+}
+.rune-divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, #c98a3e, transparent);
+}
+.rune-slab {
+  position: relative;
+  background: linear-gradient(180deg, #1b2442 0%, #121933 100%);
+  border: 1px solid #3b4975;
+  box-shadow: inset 0 0 0 2px #0c1124, inset 0 0 18px rgba(0, 0, 0, 0.45);
+}
+.rune-slab::before,
+.rune-slab::after {
+  content: "ᚱ";
+  position: absolute;
+  bottom: 3px;
+  font-size: 9px;
+  color: color-mix(in srgb, var(--rc, #8b7dff) 45%, transparent);
+}
+.rune-slab::before { left: 6px; }
+.rune-slab::after { right: 6px; }
+@media (prefers-reduced-motion: reduce) { .rune-tier__head { transition: none; } }
