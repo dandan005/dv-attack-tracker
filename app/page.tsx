@@ -30,7 +30,7 @@ export default function SplashPage() {
 
           <p className="eyebrow mb-3">GUILD HUB</p>
           <h1 className="text-2xl sm:text-3xl text-dv-brassLight leading-tight">DRAGON<br />VALLEY</h1>
-          <p className="text-[11px] leading-relaxed text-[#f3e4c7]/85 mt-4 max-w-xs">
+          <p className="text-[11px] leading-relaxed text-[#fdf3dc] mt-4 max-w-xs">
             Keep every attack on the board. Stay ahead of reset. Make the guild stronger one day at a time.
           </p>
 
@@ -44,7 +44,7 @@ export default function SplashPage() {
             ].map(([value, label]) => (
               <div key={label} className="item-slot p-3 text-center">
                 <div className="text-[12px] text-dv-brassLight">{value}</div>
-                <div className="text-[9px] text-[#f3e4c7]/85 mt-2">{label}</div>
+                <div className="text-[9px] text-[#fdf3dc] mt-2">{label}</div>
               </div>
             ))}
           </div>
@@ -57,12 +57,12 @@ export default function SplashPage() {
             {loading ? "CONNECTING..." : <><DiscordMark /> ENTER WITH DISCORD</>}
           </button>
 
-          <p className="text-[10px] text-[#f3e4c7]/85 mt-5 text-center tracking-wide">
+          <p className="text-[10px] text-[#fdf3dc] mt-5 text-center tracking-wide">
             PRIVATE GUILD ACCESS // DISCORD AUTHENTICATION
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 text-[10px] text-[#f3e4c7]/85">
+        <div className="grid grid-cols-2 gap-3 text-[10px] text-[#fdf3dc]">
           <div className="pixel-frame border border-dv-line bg-dv-panel/80 p-3">⚔ LOG YOUR RUNS</div>
           <div className="pixel-frame border border-dv-line bg-dv-panel/80 p-3 text-right">◈ SEE THE RAID FLOW</div>
         </div>

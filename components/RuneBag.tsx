@@ -42,7 +42,7 @@ function RuneBagModal({ picks, meId, onClose }: { picks: { member_id: string; us
           <p className="eyebrow">BAG // ALL RUNES</p>
           <button type="button" onClick={onClose} aria-label="Close" className="item-slot px-2 py-1 text-[10px]">X</button>
         </div>
-        <p className="text-[9px] uppercase tracking-[.1em] text-[#f3e4c7]/85">Status shows who took each rune this cycle, by day.</p>
+        <p className="text-[9px] uppercase tracking-[.1em] text-[#fdf3dc]">Status shows who took each rune this cycle, by day.</p>
         {runeTiers.map((t) => (
           <div key={t.name}>
             <p className={"eyebrow mb-1 " + tierStyles[t.accent].text}>{t.name.toUpperCase()}</p>
@@ -59,10 +59,10 @@ function RuneBagModal({ picks, meId, onClose }: { picks: { member_id: string; us
                       {tk ? (
                         <span className="shrink-0 text-[8px] text-dv-emerald">{tk.join(" · ")}</span>
                       ) : (
-                        <span className="shrink-0 text-[8px] text-[#f3e4c7]/85">FREE</span>
+                        <span className="shrink-0 text-[8px] text-[#fdf3dc]">FREE</span>
                       )}
                     </div>
-                    <p className="mt-1 text-[9px] leading-relaxed text-[#f3e4c7]/85">{r.effect}</p>
+                    <p className="mt-1 text-[9px] leading-relaxed text-[#fdf3dc]">{r.effect}</p>
                   </div>
                 );
               })}

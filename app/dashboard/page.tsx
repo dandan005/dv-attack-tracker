@@ -375,7 +375,7 @@ export default function DashboardPage() {
                 <span className="absolute top-2 right-3 text-dv-violet/40 text-xs" aria-hidden="true">ᛗ</span>
                 <span className="absolute top-2 left-3 text-dv-violet/40 text-xs" aria-hidden="true">ᚦ</span>
                 <p className="text-sm text-dv-brassLight">⚙️ RANKING CALCULATION IN PROGRESS</p>
-                <p className="mt-2 max-w-md text-xs leading-relaxed text-[#f3e4c7]/85">
+                <p className="mt-2 max-w-md text-xs leading-relaxed text-[#fdf3dc]">
                   Dragon Valley ranking is being calculated now. You will receive rewards based on the results after calculating is finished.
                 </p>
                 <p className="mt-2 text-xs text-dv-emerald">Until calculation complete: {day7.hoursLeft}h left</p>
@@ -388,7 +388,7 @@ export default function DashboardPage() {
                         <ul className="mt-2 space-y-1.5">
                           {perfectMembers.map((m) => (
                             <li key={m.discord_id} className="item-slot flex items-center justify-between border border-dv-line px-3 py-2">
-                              <span className="flex items-center gap-2 text-[10px] text-[#f3e4c7]/85">
+                              <span className="flex items-center gap-2 text-[10px] text-[#fdf3dc]">
                                 <img src={gameAvatar(m.username) ?? m.avatar_url ?? "/icons/icon-192.png"} alt="" className="h-5 w-5 pixel-frame border border-dv-line object-cover" />
                                 {m.username}
                               </span>
@@ -396,7 +396,7 @@ export default function DashboardPage() {
                             </li>
                           ))}
                         </ul>
-                        <p className="mt-2 text-[9px] leading-relaxed text-[#f3e4c7]/85">Perfect runs this cycle — every attack logged. Keep it up next cycle.</p>
+                        <p className="mt-2 text-[9px] leading-relaxed text-[#fdf3dc]">Perfect runs this cycle — every attack logged. Keep it up next cycle.</p>
                       </div>
                     )}
                     {zeroLoggedMembers.length > 0 && perfectMembers.length > 0 && (
@@ -413,7 +413,7 @@ export default function DashboardPage() {
                               key={m.discord_id}
                               className="item-slot flex items-center justify-between border border-dv-ember/60 bg-dv-ember/10 px-3 py-2"
                             >
-                              <span className="flex items-center gap-2 text-[10px] text-[#f3e4c7]/85">
+                              <span className="flex items-center gap-2 text-[10px] text-[#fdf3dc]">
                                 <img
                                   src={gameAvatar(m.username) ?? m.avatar_url ?? "/icons/icon-192.png"}
                                   alt=""
@@ -445,7 +445,7 @@ export default function DashboardPage() {
                               key={m.discord_id}
                               className="item-slot flex items-center justify-between border border-dv-line px-3 py-2"
                             >
-                              <span className="flex items-center gap-2 text-[10px] text-[#f3e4c7]/85">
+                              <span className="flex items-center gap-2 text-[10px] text-[#fdf3dc]">
                                 <img
                                   src={gameAvatar(m.username) ?? m.avatar_url ?? "/icons/icon-192.png"}
                                   alt=""
@@ -459,7 +459,7 @@ export default function DashboardPage() {
                             </li>
                           ))}
                         </ul>
-                        <p className="mt-2 text-[9px] leading-relaxed text-[#f3e4c7]/85">
+                        <p className="mt-2 text-[9px] leading-relaxed text-[#fdf3dc]">
                           A few attacks were missed — try to log every day next cycle.
                         </p>
                       </div>
@@ -472,7 +472,7 @@ export default function DashboardPage() {
                 <span className="absolute top-2 right-3 text-dv-brass/40 text-xs" aria-hidden="true">ᛃ</span>
                 <span className="absolute top-2 left-3 text-dv-brass/40 text-xs" aria-hidden="true">ᛉ</span>
                 <p className="text-sm text-dv-brassLight">🏆 RANKING RESULTS</p>
-                <p className="mt-2 max-w-md text-xs leading-relaxed text-[#f3e4c7]/85">
+                <p className="mt-2 max-w-md text-xs leading-relaxed text-[#fdf3dc]">
                   Ranking has been finalized. Rewards are being distributed now — check your in-game mailbox shortly.
                 </p>
                 <p className="mt-2 text-xs text-dv-emerald">Distribution ends in: {day7.minutesLeft}m</p>
@@ -482,7 +482,7 @@ export default function DashboardPage() {
                 <span className="absolute top-2 right-3 text-dv-emerald/40 text-xs" aria-hidden="true">ᚱ</span>
                 <span className="absolute top-2 left-3 text-dv-emerald/40 text-xs" aria-hidden="true">ᚨ</span>
                 <p className="text-sm text-dv-brassLight">🛸 ONBOARDING — PREPARING NEXT CYCLE</p>
-                <p className="mt-2 max-w-md text-xs leading-relaxed text-[#f3e4c7]/85">Rewards have been distributed. Rest up and regear.</p>
+                <p className="mt-2 max-w-md text-xs leading-relaxed text-[#fdf3dc]">Rewards have been distributed. Rest up and regear.</p>
                 <div className="item-slot mt-4 w-full max-w-md border border-dv-line px-3 py-4">
                   <p className="eyebrow text-center">DAY 1 OPENS IN</p>
                   <div className="mt-3 flex items-center justify-center gap-2">
@@ -499,15 +499,15 @@ export default function DashboardPage() {
                   <div className="item-slot mt-4 h-2.5 w-full overflow-hidden border border-dv-line">
                     <div className="h-full bg-dv-emerald" style={{ width: Math.max(0, Math.min(100, (1 - day7.msLeft / 50400000) * 100)) + "%" }} />
                   </div>
-                  <p className="mt-1 text-center text-[8px] text-[#f3e4c7]/85">ONBOARDING PROGRESS</p>
+                  <p className="mt-1 text-center text-[8px] text-[#fdf3dc]">ONBOARDING PROGRESS</p>
                 </div>
                 <div className="mt-5 w-full max-w-md text-left">
                   <p className="eyebrow text-dv-emerald">GET READY</p>
                   <ul className="mt-2 space-y-1.5">
                     {[["Check your assignment", "Confirm your DV map in the Assign tab."], ["Learn the cooking order", "Cooking opens on Days 1–3. Study the priority order in the Cooking tab."], ["Know what to gather", "Ingredients come in on Days 1–3. The Special tab shows what each meal needs."], ["Review the guide", "Skim the Guide tab before your first run."]].map(([ttl, d]) => (
                       <li key={ttl} className="item-slot border border-dv-line px-3 py-2">
-                        <p className="text-[10px] text-[#f3e4c7]/85">{ttl}</p>
-                        <p className="mt-0.5 text-[9px] text-[#f3e4c7]/85">{d}</p>
+                        <p className="text-[10px] text-[#fdf3dc]">{ttl}</p>
+                        <p className="mt-0.5 text-[9px] text-[#fdf3dc]">{d}</p>
                       </li>
                     ))}
                   </ul>
@@ -518,7 +518,7 @@ export default function DashboardPage() {
                     {[["D1–D6", "Attack days. Log every run."], ["D7", "Ranking calculation."], ["D7", "Rewards distributed."], ["NOW", "Onboarding. Prepare the next cycle."]].map(([a1, b1], idx) => (
                       <li key={idx} className={"item-slot flex items-center gap-3 border px-3 py-2 " + (idx === 3 ? "border-dv-emerald" : "border-dv-line opacity-60")}>
                         <span className={"w-12 shrink-0 text-[9px] " + (idx === 3 ? "text-dv-emerald" : "text-dv-brassLight")}>{a1}</span>
-                        <span className="text-[10px] text-[#f3e4c7]/85">{b1}</span>
+                        <span className="text-[10px] text-[#fdf3dc]">{b1}</span>
                       </li>
                     ))}
                   </ul>
@@ -526,7 +526,7 @@ export default function DashboardPage() {
               </div>
             ) : (
               <>
-                {dayNumber >= 4 && dayNumber <= 6 && settings.wyvern_element && (() => { const loc = WYVERN_LOCATION[settings.wyvern_element]; return (<section className="pixel-border bg-dv-panel/95 shadow-pixel p-4 mt-2"><p className="eyebrow mb-2">ASSIGNMENT / LOCATION</p><h2 className="text-lg text-dv-brassLight">{"Dragon Valley: " + loc}</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-[#f3e4c7]/85">A valley where dragons have lived since long ago.</p></section>); })()}
+                {dayNumber >= 4 && dayNumber <= 6 && settings.wyvern_element && (() => { const loc = WYVERN_LOCATION[settings.wyvern_element]; return (<section className="pixel-border bg-dv-panel/95 shadow-pixel p-4 mt-2"><p className="eyebrow mb-2">ASSIGNMENT / LOCATION</p><h2 className="text-lg text-dv-brassLight">{"Dragon Valley: " + loc}</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-[#fdf3dc]">A valley where dragons have lived since long ago.</p></section>); })()}
                 {(dayNumber < 4 || (dayNumber >= 4 && dayNumber <= 6 && settings.wyvern_element)) && (
                   <div className="mt-2">
                     {dayNumber < 4 ? (
@@ -543,13 +543,13 @@ export default function DashboardPage() {
                 )}
 
                 <div className="mt-3"><LogAttackButton loggedDays={myLoggedDays} loggedAt={myLoggedAt} element={settings.wyvern_element} checkedIn={members.filter((m) => m.logged[dayNumber - 1]).length} total={dayNumber <= 6 ? members.length : 0} tier={myTier} onNeedTier={() => { setToast("Set your rank in the ledger row next to your name"); setTimeout(() => setToast(null), 2500); }} onLog={logAttack} /></div>
-                <div className="mt-3"><GuildProgress showReadout={canReadout} headerExtra={isSuper && guildList.length > 0 && (<div className="mb-2 flex gap-2">{["ALL", ...guildList.map((g) => String(g.id))].map((v) => { const g = guildList.find((x) => String(x.id) === v); return (<button key={v} type="button" onClick={() => setGuildView(v)} className={["h-6 flex-1 border px-2 text-[9px]", v === effView ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-[#f3e4c7]/85"].join(" ")} style={v === effView ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}>{g ? g.code : "ALL"}</button>); })}</div>)} members={shownMembers} guildStats={{ signed: guildSigned, total: guildTotal }} onMark={isSuper ? markAttack : undefined} onSetTier={saveTier} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={canReadout ? pingMissing : undefined} pinging={pinging} savingMarks={savingMarks} /></div>
+                <div className="mt-3"><GuildProgress showReadout={canReadout} headerExtra={isSuper && guildList.length > 0 && (<div className="mb-2 flex gap-2">{["ALL", ...guildList.map((g) => String(g.id))].map((v) => { const g = guildList.find((x) => String(x.id) === v); return (<button key={v} type="button" onClick={() => setGuildView(v)} className={["h-6 flex-1 border px-2 text-[9px]", v === effView ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-[#fdf3dc]"].join(" ")} style={v === effView ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}>{g ? g.code : "ALL"}</button>); })}</div>)} members={shownMembers} guildStats={{ signed: guildSigned, total: guildTotal }} onMark={isSuper ? markAttack : undefined} onSetTier={saveTier} currentDay={dayNumber} currentUserId={me?.discord_id} onPingMissing={canReadout ? pingMissing : undefined} pinging={pinging} savingMarks={savingMarks} /></div>
               </>
             )}
           </div>
         )}
 
-        {tab === "index" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛒ RANKING</p><div className="space-y-4"><section className="pixel-border bg-dv-panel/95 shadow-pixel p-4"><p className="eyebrow mb-2">RANKING / LEADERBOARD</p><h2 className="text-lg text-dv-brassLight">Know the board.</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-[#f3e4c7]/85">Players are ranked by rank tier first, then stage, then level. Switch between GLOBAL, G1 and G2 to see everyone or a single guild.</p></section><RankingCard /></div></section>)}
+        {tab === "index" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛒ RANKING</p><div className="space-y-4"><section className="pixel-border bg-dv-panel/95 shadow-pixel p-4"><p className="eyebrow mb-2">RANKING / LEADERBOARD</p><h2 className="text-lg text-dv-brassLight">Know the board.</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-[#fdf3dc]">Players are ranked by rank tier first, then stage, then level. Switch between GLOBAL, G1 and G2 to see everyone or a single guild.</p></section><RankingCard /></div></section>)}
         {tab === "build" && (
           <section className="space-y-3">
             <div>
@@ -571,7 +571,7 @@ export default function DashboardPage() {
             <Runes />
           </section>
         )}
-        {tab === "assign" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛃ ASSIGNMENT</p><div className="space-y-4"><section className="pixel-border bg-dv-panel/95 shadow-pixel p-4"><p className="eyebrow mb-2">ASSIGNMENT / ROSTER</p><h2 className="text-lg text-dv-brassLight">Set the roster.</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-[#f3e4c7]/85">Pick DV MAPS or GUILD REQUEST, then tap an empty seat or boss slot to add a player. Tap a player in a seat to change or remove them.</p></section><AssignCard startup={assignStartup} /></div></section>)}
+        {tab === "assign" && (<section><p className="eyebrow mb-4 text-dv-emerald">ᛃ ASSIGNMENT</p><div className="space-y-4"><section className="pixel-border bg-dv-panel/95 shadow-pixel p-4"><p className="eyebrow mb-2">ASSIGNMENT / ROSTER</p><h2 className="text-lg text-dv-brassLight">Set the roster.</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-[#fdf3dc]">Pick DV MAPS or GUILD REQUEST, then tap an empty seat or boss slot to add a player. Tap a player in a seat to change or remove them.</p></section><AssignCard startup={assignStartup} /></div></section>)}
 
 
 
@@ -593,7 +593,7 @@ export default function DashboardPage() {
                 "relative flex flex-1 flex-col items-center gap-1 px-1 py-1.5 text-[9px] uppercase tracking-[.1em] " +
                 (tab === id
                   ? "text-dv-brassLight"
-                  : "text-[#f3e4c7]/85 [@media(hover:hover)]:hover:text-dv-brassLight")
+                  : "text-[#fdf3dc] [@media(hover:hover)]:hover:text-dv-brassLight")
               }
             >
               {tab === id && (

@@ -32,7 +32,7 @@ function OptionPicker({ title, current, options, onSelect }: { title: string; cu
       >
         <div className="flex items-center justify-between rounded-t-xl border-b border-dv-line bg-dv-panel2 px-3 py-2">
           <p className="text-[10px] tracking-widest text-dv-brassLight">{title}</p>
-          <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="border border-dv-line px-2 py-0.5 text-[10px] text-[#f3e4c7]/85">X</button>
+          <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="border border-dv-line px-2 py-0.5 text-[10px] text-[#fdf3dc]">X</button>
         </div>
         <div className="flex flex-col gap-2 p-3">
           {all.map((o) => {
@@ -42,7 +42,7 @@ function OptionPicker({ title, current, options, onSelect }: { title: string; cu
                 key={o.v || "none"}
                 type="button"
                 onClick={() => { setOpen(false); if (!selected) onSelect(o.v === "" ? null : o.v); }}
-                className={["flex w-full items-center justify-between rounded-md border px-3 py-3 text-[10px]", selected ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-black/20 text-[#f3e4c7]/85"].join(" ")}
+                className={["flex w-full items-center justify-between rounded-md border px-3 py-3 text-[10px]", selected ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-black/20 text-[#fdf3dc]"].join(" ")}
                 style={selected ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}
               >
                 <span>{o.label}</span>
@@ -59,7 +59,7 @@ function OptionPicker({ title, current, options, onSelect }: { title: string; cu
     <>
       <button type="button" onClick={() => setOpen(true)} aria-label={title} className="flex h-6 shrink-0 items-center gap-1 border border-dv-line bg-dv-panel2 px-1.5 text-[9px] text-dv-brassLight">
         {cur ? cur.label : "NOT SET"}
-        <span className="text-[7px] text-[#f3e4c7]/85">▼</span>
+        <span className="text-[7px] text-[#fdf3dc]">▼</span>
       </button>
       {open && typeof document !== "undefined" && createPortal(popup, document.body)}
     </>

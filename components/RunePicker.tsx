@@ -113,9 +113,9 @@ export function RunePicker({ day, picks, meId, onClose, onSaved }: Props) {
           <p className="text-[10px] text-dv-brassLight">Tap the 3 runes the game is offering you.</p>
           <div className="grid grid-cols-3 gap-2">
             {offers.map((o, i) => (
-              <button key={i} type="button" onClick={() => (o ? clearSlot(i) : setActive(i))} className={"item-slot flex h-16 flex-col items-center justify-center p-1 text-center text-[8px] " + (active === i ? "border-dv-brass text-dv-brassLight" : "text-[#f3e4c7]/85")}>
-                {o ? <span className="line-clamp-3 leading-tight">{o}</span> : <span className="text-[#f3e4c7]/85">OPTION {i + 1}</span>}
-                {o && <span className="mt-1 text-[7px] text-[#f3e4c7]/85">TAP TO CLEAR</span>}
+              <button key={i} type="button" onClick={() => (o ? clearSlot(i) : setActive(i))} className={"item-slot flex h-16 flex-col items-center justify-center p-1 text-center text-[8px] " + (active === i ? "border-dv-brass text-dv-brassLight" : "text-[#fdf3dc]")}>
+                {o ? <span className="line-clamp-3 leading-tight">{o}</span> : <span className="text-[#fdf3dc]">OPTION {i + 1}</span>}
+                {o && <span className="mt-1 text-[7px] text-[#fdf3dc]">TAP TO CLEAR</span>}
               </button>
             ))}
           </div>
@@ -131,7 +131,7 @@ export function RunePicker({ day, picks, meId, onClose, onSaved }: Props) {
                       <button key={r.name} type="button" disabled={slot !== -1} onClick={() => tapRune(r.name)} className="item-slot block w-full p-2 text-left disabled:opacity-40">
                         <span className="flex items-center gap-2" style={{ ["--rc" as string]: tierColors[t.accent] } as CSSProperties}>
                           {RUNE_ICONS[r.name] && <span className="rune-icon shrink-0" aria-hidden="true" style={{ maskImage: `url(/runes/${RUNE_ICONS[r.name]}.png)`, WebkitMaskImage: `url(/runes/${RUNE_ICONS[r.name]}.png)`, width: 18, height: 18 } as CSSProperties} />}
-                          <span className={"block text-[10px] " + tierStyles[t.accent].text}>{r.name}{slot !== -1 && <span className="ml-2 text-[8px] text-[#f3e4c7]/85">OPTION {slot + 1}</span>}</span>
+                          <span className={"block text-[10px] " + tierStyles[t.accent].text}>{r.name}{slot !== -1 && <span className="ml-2 text-[8px] text-[#fdf3dc]">OPTION {slot + 1}</span>}</span>
                         </span>
                       </button>
                     );
@@ -139,12 +139,12 @@ export function RunePicker({ day, picks, meId, onClose, onSaved }: Props) {
                 </div>
               </div>
             ))}
-            {groups.length === 0 && <p className="text-[10px] text-[#f3e4c7]/85">No runes match that search.</p>}
+            {groups.length === 0 && <p className="text-[10px] text-[#fdf3dc]">No runes match that search.</p>}
           </div>
           <button type="button" onClick={goChoose} disabled={!complete} className="item-slot block w-full p-2 text-[10px] disabled:opacity-40">
             {complete ? "SHOW THE 3 RUNES" : `PICK ${3 - filled.length} MORE`}
           </button>
-          <button type="button" onClick={onClose} className="block w-full text-[9px] uppercase tracking-[.1em] text-[#f3e4c7]/85">Later</button>
+          <button type="button" onClick={onClose} className="block w-full text-[9px] uppercase tracking-[.1em] text-[#fdf3dc]">Later</button>
         </div>
       </div>
     );
@@ -182,8 +182,8 @@ export function RunePicker({ day, picks, meId, onClose, onSaved }: Props) {
                   </span>
                 </div>
                 <p className="rune-divider" aria-hidden="true" />
-                <p className="mt-1 text-[10px] leading-relaxed text-amber-50/80">{c.effect}</p>
-                <p className="mt-1 text-[8px] uppercase tracking-[.14em] text-amber-100/50">{c.tier}</p>
+                <p className="mt-1 text-[10px] leading-relaxed text-amber-50">{c.effect}</p>
+                <p className="mt-1 text-[8px] uppercase tracking-[.14em] text-amber-100">{c.tier}</p>
               </button>
             );
           })}
@@ -192,7 +192,7 @@ export function RunePicker({ day, picks, meId, onClose, onSaved }: Props) {
         <button type="button" onClick={() => choice && save(choice)} disabled={!choice || busy} className="item-slot block w-full p-2 text-[10px] disabled:opacity-40">
           {busy ? "SAVING..." : "SELECT"}
         </button>
-        <div className="flex justify-between text-[9px] uppercase tracking-[.1em] text-[#f3e4c7]/85">
+        <div className="flex justify-between text-[9px] uppercase tracking-[.1em] text-[#fdf3dc]">
           <button type="button" onClick={() => setStep("offer")}>Edit options</button>
           {mine ? <button type="button" onClick={() => save(null)} disabled={busy}>Clear my pick</button> : <button type="button" onClick={onClose}>Later</button>}
         </div>

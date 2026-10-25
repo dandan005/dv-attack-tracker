@@ -95,7 +95,7 @@ export function WyvernTracker({
         <>
           <div className="mb-4">
             <p className="text-lg text-dv-brassLight">What element is the guild hunting?</p>
-            <p className="mt-2 max-w-xl text-xs leading-relaxed text-[#f3e4c7]/85">Broadcast the current trace so everyone is synced.</p>
+            <p className="mt-2 max-w-xl text-xs leading-relaxed text-[#fdf3dc]">Broadcast the current trace so everyone is synced.</p>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
@@ -122,7 +122,7 @@ export function WyvernTracker({
           </div>
 
           {changing && (
-            <button type="button" onClick={() => setChanging(false)} className="pixel-border w-full bg-dv-panel2 px-3 py-2 text-xs text-[#f3e4c7]/85">
+            <button type="button" onClick={() => setChanging(false)} className="pixel-border w-full bg-dv-panel2 px-3 py-2 text-xs text-[#fdf3dc]">
               Cancel
             </button>
           )}
@@ -146,7 +146,7 @@ export function WyvernTracker({
             onClick={() => isAdmin && setChanging(true)}
             disabled={!isAdmin}
             aria-disabled={!isAdmin}
-            className={"underline underline-offset-2 shrink-0 " + (isAdmin ? "text-dv-violet" : "text-[#f3e4c7]/85 cursor-not-allowed")}
+            className={"underline underline-offset-2 shrink-0 " + (isAdmin ? "text-dv-violet" : "text-[#fdf3dc] cursor-not-allowed")}
           >
             Change
           </button>

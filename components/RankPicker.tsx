@@ -17,7 +17,7 @@ export function RankPicker({ tier, onSelect }: { tier: number | null; onSelect: 
       >
         <div className="sticky top-0 z-10 flex items-center justify-between rounded-t-xl border-b border-dv-line bg-dv-panel2 px-3 py-2">
           <p className="text-[10px] tracking-widest text-dv-brassLight">CHOOSE YOUR RANK</p>
-          <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="border border-dv-line px-2 py-0.5 text-[10px] text-[#f3e4c7]/85">X</button>
+          <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="border border-dv-line px-2 py-0.5 text-[10px] text-[#fdf3dc]">X</button>
         </div>
         <div className="grid grid-cols-3 gap-2 p-3">
           {RANKS.map((r) => (
@@ -25,10 +25,10 @@ export function RankPicker({ tier, onSelect }: { tier: number | null; onSelect: 
               key={r.tier}
               type="button"
               onClick={() => { onSelect(r.tier); setOpen(false); }}
-              className={["relative flex flex-col items-center gap-1 rounded-md border px-1 pb-2 pt-3 text-[8px]", r.tier === tier ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-black/20 text-[#f3e4c7]/85"].join(" ")}
+              className={["relative flex flex-col items-center gap-1 rounded-md border px-1 pb-2 pt-3 text-[8px]", r.tier === tier ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-black/20 text-[#fdf3dc]"].join(" ")}
               style={r.tier === tier ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}
             >
-              <span className="absolute left-1 top-0.5 text-[7px] text-[#f3e4c7]/85">{r.tier}</span>
+              <span className="absolute left-1 top-0.5 text-[7px] text-[#fdf3dc]">{r.tier}</span>
               <img src={rankImg(r.file)} alt="" className="h-11 w-11 object-contain" style={{ imageRendering: "pixelated" }} />
               <span className="text-center leading-tight">{r.name.toUpperCase()}</span>
             </button>

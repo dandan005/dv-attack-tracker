@@ -76,7 +76,7 @@ export default function PushToggle() {
     <div className="flex items-center justify-between gap-3">
       <div className="min-w-0">
         <p className="text-[10px] tracking-[0.1em] text-dv-brassLight">Notifications</p>
-        <p className="mt-0.5 text-[9px] text-[#f3e4c7]/85">{msg[state]}</p>
+        <p className="mt-0.5 text-[9px] text-[#fdf3dc]">{msg[state]}</p>
         {err && <p className="mt-1 text-[9px] text-rose-300">{err}</p>}
       </div>
       {(state === "off" || state === "on") && (

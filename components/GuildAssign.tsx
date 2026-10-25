@@ -25,9 +25,9 @@ function GuildPicker({ name, guildId, guilds, busy, onSelect }: { name: string; 
         <div className="flex items-center justify-between rounded-t-xl border-b border-dv-line bg-dv-panel2 px-3 py-2">
           <div className="min-w-0">
             <p className="text-[10px] tracking-widest text-dv-brassLight">CHOOSE GUILD</p>
-            <p className="mt-1 truncate text-[8px] text-[#f3e4c7]/85">{name || "(NO NAME)"}</p>
+            <p className="mt-1 truncate text-[8px] text-[#fdf3dc]">{name || "(NO NAME)"}</p>
           </div>
-          <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="border border-dv-line px-2 py-0.5 text-[10px] text-[#f3e4c7]/85">X</button>
+          <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="border border-dv-line px-2 py-0.5 text-[10px] text-[#fdf3dc]">X</button>
         </div>
         <div className="flex flex-col gap-2 p-3">
           {options.map((o) => {
@@ -38,7 +38,7 @@ function GuildPicker({ name, guildId, guilds, busy, onSelect }: { name: string; 
                 type="button"
                 disabled={busy}
                 onClick={() => { setOpen(false); if (!selected) onSelect(o.id); }}
-                className={["flex w-full items-center justify-between rounded-md border px-3 py-3 text-[10px]", selected ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-black/20 text-[#f3e4c7]/85"].join(" ")}
+                className={["flex w-full items-center justify-between rounded-md border px-3 py-3 text-[10px]", selected ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-black/20 text-[#fdf3dc]"].join(" ")}
                 style={selected ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}
               >
                 <span>{o.label}</span>
@@ -61,7 +61,7 @@ function GuildPicker({ name, guildId, guilds, busy, onSelect }: { name: string; 
         className="flex h-6 shrink-0 items-center gap-1 border border-dv-line bg-dv-panel2 px-1.5 text-[9px] text-dv-brassLight"
       >
         {current ? `${current.code} · ${current.name}` : "NO GUILD"}
-        <span className="text-[7px] text-[#f3e4c7]/85">▼</span>
+        <span className="text-[7px] text-[#fdf3dc]">▼</span>
       </button>
       {open && typeof document !== "undefined" && createPortal(popup, document.body)}
     </>
@@ -84,7 +84,7 @@ export function GuildAssign() {
 
   useEffect(() => { if (data) cache = data; }, [data]);
   if (failed) return null;
-  if (!data) return (<div className="mb-4"><div className="mb-2 text-[9px] tracking-[0.25em] text-dv-brassLight/80">GUILDS</div><div className="text-[9px] text-[#f3e4c7]/85">LOADING...</div></div>);
+  if (!data) return (<div className="mb-4"><div className="mb-2 text-[9px] tracking-[0.25em] text-dv-brassLight/80">GUILDS</div><div className="text-[9px] text-[#fdf3dc]">LOADING...</div></div>);
 
   async function assign(memberId: Id, guildId: number | null) {
     setBusy(memberId);

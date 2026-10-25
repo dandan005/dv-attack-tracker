@@ -85,7 +85,7 @@ export function Walkthrough({
           <button
             type="button"
             onClick={skip}
-            className="text-[10px] uppercase tracking-[.08em] text-[#f3e4c7]/85 hover:text-dv-brassLight"
+            className="text-[10px] uppercase tracking-[.08em] text-[#fdf3dc] hover:text-dv-brassLight"
           >
             Skip
           </button>
@@ -94,7 +94,7 @@ export function Walkthrough({
         <div className="mt-4 text-center">
           <div className="text-3xl">{current.emoji}</div>
           <h2 className="mt-3 text-lg text-dv-brassLight">{current.title}</h2>
-          <p className="mt-2 text-xs leading-relaxed text-[#f3e4c7]/85">
+          <p className="mt-2 text-xs leading-relaxed text-[#fdf3dc]">
             {current.body}
           </p>
         </div>

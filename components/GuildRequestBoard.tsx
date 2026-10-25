@@ -125,7 +125,7 @@ function Detail({ g, ms, onClose, onPick, onFill }: { g: B; ms: P[]; onClose: ()
             <p className="text-[10px] text-white">{g.pts}</p>
           </div>
         </div>
-        <p className="mt-2 px-2 py-4 text-center text-[9px] leading-relaxed text-white/85" style={{ background: "#4a3c2c" }}>{open <= 0 ? "ALL SLOTS FILLED." : open + (open === 1 ? " SLOT" : " SLOTS") + " OPEN."}</p>
+        <p className="mt-2 px-2 py-4 text-center text-[9px] leading-relaxed text-white" style={{ background: "#4a3c2c" }}>{open <= 0 ? "ALL SLOTS FILLED." : open + (open === 1 ? " SLOT" : " SLOTS") + " OPEN."}</p>
         <button type="button" onClick={onClose} className="mt-2 block w-full border-2 p-2 text-[10px] text-white" style={{ background: "#555", borderColor: "#2a2a2a" }}>CLOSE</button>
       </div>
     </div>
@@ -139,7 +139,7 @@ export default function GuildRequestBoard({ bosses, rows, onPick, onFill }: { bo
   return (
     <div className="pixel-border relative overflow-hidden bg-dv-panel/95 p-2 shadow-pixel">
       <div className="border px-2 py-2 text-center text-[10px] text-dv-brassLight" style={{ background: "#2a1a12", borderColor: "#b8893a" }}>GUILD REQUEST</div>
-      <p className="my-3 px-1 text-center text-[8px] leading-relaxed text-white/85" style={shadow}>{"COMPLETE THE REQUEST TO PURIFY CORRUPTED TERRAIN AND RECEIVE A REWARD FROM THE NATIONAL ADVENTURERS' GUILD."}</p>
+      <p className="my-3 px-1 text-center text-[8px] leading-relaxed text-white" style={shadow}>{"COMPLETE THE REQUEST TO PURIFY CORRUPTED TERRAIN AND RECEIVE A REWARD FROM THE NATIONAL ADVENTURERS' GUILD."}</p>
       <div className="border border-dv-line bg-dv-bg/70 px-1 py-3">
         <div className="grid grid-cols-3 gap-x-2 gap-y-4">
           {bosses.map((g) => {
@@ -154,7 +154,7 @@ export default function GuildRequestBoard({ bosses, rows, onPick, onFill }: { bo
                     {Array.from({ length: g.slots }, (_, i) => (<span key={i} className="text-[8px] leading-none" style={{ color: i < ms.length ? "#f59e0b" : "#6b5a4a" }}>{i < ms.length ? "★" : "✕"}</span>))}
                   </div>
                 </button>
-                <p className="mt-1 w-full truncate text-center text-[8px] text-white/85" style={shadow}>{g.name}</p>
+                <p className="mt-1 w-full truncate text-center text-[8px] text-white" style={shadow}>{g.name}</p>
                 <p className="text-center text-[8px] text-dv-emerald" style={shadow}>{ms.length}/{g.slots} · {g.pts}</p>
                 <div className="mt-1 w-full space-y-0.5">
                   {ms.map((m) => (<button key={m.id} type="button" onClick={() => onPick(m)} className="block w-full truncate px-1 text-center text-[9px] text-white" style={{ background: "rgba(0,0,0,.5)" }}>{m.username}</button>))}

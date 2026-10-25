@@ -251,7 +251,7 @@ function MealThumb({ image, name, rarity }: { image?: string; name: string; rari
       {image ? (
         <img src={"/meals/" + image} alt={name} className="h-full w-full object-cover" style={{ imageRendering: "pixelated" }} />
       ) : (
-        <div className="grid h-full w-full place-items-center text-[10px] text-[#f3e4c7]/85">?</div>
+        <div className="grid h-full w-full place-items-center text-[10px] text-[#fdf3dc]">?</div>
       )}
     </div>
   );
@@ -316,7 +316,7 @@ export function Guide() {
   const [open, setOpen] = useState<string[]>([guideSections[0][0], guideSections[1][0]]);
   return (
     <div className="space-y-4">
-      <Card className="p-4"><h2 className="text-lg text-dv-brassLight">Open a briefing to get the useful part.</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-[#f3e4c7]/85">The six-day cycle, trace discovery, elemental wyverns and raid prep in one place. Tap a section to expand it, and keep the ones you need open while you plan your attacks.</p></Card>
+      <Card className="p-4"><h2 className="text-lg text-dv-brassLight">Open a briefing to get the useful part.</h2><p className="mt-2 max-w-xl text-xs leading-relaxed text-[#fdf3dc]">The six-day cycle, trace discovery, elemental wyverns and raid prep in one place. Tap a section to expand it, and keep the ones you need open while you plan your attacks.</p></Card>
       <Card>
         <div className="divide-y divide-dv-line">
           {guideSections.map(([title, kicker, body], index) => {
@@ -328,14 +328,14 @@ export function Guide() {
                   onClick={() => setOpen((current) => isOpen ? current.filter((item) => item !== title) : [...current, title])}
                   className="flex w-full items-center gap-3 px-4 py-4 text-left hover:bg-dv-panel2"
                 >
-                  <span className={`font-pixel text-[10px] ${isOpen ? "text-dv-brassLight" : "text-[#f3e4c7]/85"}`}>0{index + 1}</span>
+                  <span className={`font-pixel text-[10px] ${isOpen ? "text-dv-brassLight" : "text-[#fdf3dc]"}`}>0{index + 1}</span>
                   <span className="flex-1">
                     <span className="eyebrow block">{kicker}</span>
                     <span className="mt-1 block text-sm text-dv-brassLight">{title}</span>
                   </span>
                   <span className="text-dv-violet">{isOpen ? "−" : "+"}</span>
                 </button>
-                {isOpen && <p className="animate-rise px-4 pb-5 pl-14 text-xs leading-relaxed text-[#f3e4c7]/85">{body}</p>}
+                {isOpen && <p className="animate-rise px-4 pb-5 pl-14 text-xs leading-relaxed text-[#fdf3dc]">{body}</p>}
               </div>
             );
           })}
@@ -361,7 +361,7 @@ export function MainCooking() {
       <Card className="p-4">
         <SectionLabel>MAIN COOKING / CAMPFIRE QUEUE</SectionLabel>
         <h2 className="text-lg text-dv-brassLight">Cook in order.</h2>
-        <p className="mt-2 max-w-xl text-xs leading-relaxed text-[#f3e4c7]/85">
+        <p className="mt-2 max-w-xl text-xs leading-relaxed text-[#fdf3dc]">
           Gold numbers are the fixed priority: 1 through 5, cooked first. Violet <span className="text-dv-violet">E</span> tags
           are elemental dishes — hold those until the trace confirms which wyvern shows up, then cook to match it.
         </p>
@@ -404,7 +404,7 @@ export function MainCooking() {
           >
             <p className="font-bold uppercase leading-snug tracking-wider text-[11px] text-dv-brassLight">{open.effect}</p>
             {open.ingredients && (
-              <div className="mt-2 space-y-1 text-[#f3e4c7]/85">
+              <div className="mt-2 space-y-1 text-[#fdf3dc]">
                 {Object.entries(open.ingredients).map(([key, amount]) => (
                   <p key={key} className="uppercase tracking-wider">
                     {key} <span className="text-dv-brassLight">{amount}</span>
@@ -445,7 +445,7 @@ function SkillThumb({ image, name }: { image?: string; name: string }) {
             style={{ imageRendering: "pixelated", filter: rarityGlow[rarity] || undefined }}
           />
         ) : (
-          <div className="grid h-full w-full place-items-center text-[10px] text-[#f3e4c7]/85">?</div>
+          <div className="grid h-full w-full place-items-center text-[10px] text-[#fdf3dc]">?</div>
         )}
       </div>
       {frame && (
@@ -469,7 +469,7 @@ export function SkillBuild() {
     <div className="space-y-3">
       <Card className="p-4">
         <h2 className="text-lg text-dv-brassLight">Build a different skill set for each stage.</h2>
-        <p className="mt-2 max-w-xl text-xs leading-relaxed text-[#f3e4c7]/85">
+        <p className="mt-2 max-w-xl text-xs leading-relaxed text-[#fdf3dc]">
           Early, mid, and late game each get their own set. Swap as the fight gets harder.
         </p>
       </Card>
@@ -483,7 +483,7 @@ export function SkillBuild() {
               key={item}
               onClick={() => setStage(item)}
               className={`h-6 flex-1 border px-2 text-[9px] uppercase ${
-                stage === item ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-[#f3e4c7]/85"
+                stage === item ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-[#fdf3dc]"
               }`}
               style={stage === item ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}
             >
@@ -559,7 +559,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
       <Card className="p-4">
         <SectionLabel>PROVISIONS / SEASON 5</SectionLabel>
         <h2 className="text-lg text-dv-brassLight">Cook with what you have.</h2>
-        <p className="mt-2 max-w-xl text-xs leading-relaxed text-[#f3e4c7]/85">
+        <p className="mt-2 max-w-xl text-xs leading-relaxed text-[#fdf3dc]">
           Enter what you have in your inventory and the tabs show how many meals you can cook right now.
         </p>
       </Card>
@@ -567,7 +567,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
       <div className="grid gap-4 lg:grid-cols-[1fr_280px]">
         <Card>
           <div className="border-b border-dv-line p-4">
-            <div className="relative"><svg aria-hidden="true" viewBox="0 0 16 16" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-dv-brassLight" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="7" cy="7" r="4.5" /><path d="M10.5 10.5L14 14" /></svg><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search meals by name" className="w-full rounded-xl border border-dv-line bg-dv-panel2 pl-9 pr-9 py-3 text-xs text-dv-brassLight outline-none placeholder:text-[#f3e4c7]/85 focus:border-dv-brassLight" />{query ? <button type="button" aria-label="Clear search" onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-[#f3e4c7]/85">×</button> : null}</div>
+            <div className="relative"><svg aria-hidden="true" viewBox="0 0 16 16" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-dv-brassLight" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="7" cy="7" r="4.5" /><path d="M10.5 10.5L14 14" /></svg><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search meals by name" className="w-full rounded-xl border border-dv-line bg-dv-panel2 pl-9 pr-9 py-3 text-xs text-dv-brassLight outline-none placeholder:text-[#fdf3dc] focus:border-dv-brassLight" />{query ? <button type="button" aria-label="Clear search" onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-[#fdf3dc]">×</button> : null}</div>
             <div className="mt-3 grid grid-cols-3 gap-2">
               {filterTabs.map(({ value, label }) => (
                 <button
@@ -575,11 +575,11 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                   key={value}
                   onClick={() => setFilter(value)}
                   className={`h-6 border px-2 text-center text-[9px] uppercase ${
-                    filter === value ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-[#f3e4c7]/85"
+                    filter === value ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-[#fdf3dc]"
                   }`}
                   style={filter === value ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}
                 >
-                  {label}<span className={`ml-1.5 rounded px-1.5 py-0.5 text-[9px] ${cookableIn(value) > 0 ? "bg-dv-brass text-black" : "bg-dv-line text-[#f3e4c7]/85"}`}>{cookableIn(value)}</span>
+                  {label}<span className={`ml-1.5 rounded px-1.5 py-0.5 text-[9px] ${cookableIn(value) > 0 ? "bg-dv-brass text-black" : "bg-dv-line text-[#fdf3dc]"}`}>{cookableIn(value)}</span>
                 </button>
               ))}
             </div>
@@ -608,7 +608,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                         <p className="mt-2 text-xs text-dv-emerald">{meal.effect}</p>
                       </div>
                     </div>
-                  <div className={"w-[76px] shrink-0 rounded-lg border px-1 py-2 text-center text-[8px] uppercase leading-tight " + (ready ? "border-dv-emerald bg-dv-emerald/10 text-dv-emerald" : "border-red-400/50 bg-red-500/10 text-red-300/80")}>
+                  <div className={"w-[76px] shrink-0 rounded-lg border px-1 py-2 text-center text-[8px] uppercase leading-tight " + (ready ? "border-dv-emerald bg-dv-emerald/10 text-dv-emerald" : "border-red-400/50 bg-red-500/10 text-red-200")}>
                       {ready ? "Can Be Cooked" : "Missing Ingredients"}
                     </div>
                   </div>
@@ -622,7 +622,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                       return (
                         <span
                           key={item}
-                          className={"flex items-center gap-1 rounded-lg px-1 py-0.5 text-[8px] " + (ok ? "border border-dv-brass bg-dv-brass/15 text-dv-brassLight" : "border border-dv-line bg-dv-panel2 text-[#f3e4c7]/85")}
+                          className={"flex items-center gap-1 rounded-lg px-1 py-0.5 text-[8px] " + (ok ? "border border-dv-brass bg-dv-brass/15 text-dv-brassLight" : "border border-dv-line bg-dv-panel2 text-[#fdf3dc]")}
                         >
                           {img ? <img src={"/ingredients/" + img} alt="" className="h-4 w-4 object-cover" style={{ imageRendering: "pixelated" }} /> : null}
                           <span>{item}</span>
@@ -708,18 +708,18 @@ export function Runes() {
       <Card className="p-4">
         <SectionLabel>RUNE DESK / TIER NOTES</SectionLabel>
         <h2 className="text-lg text-dv-brassLight">Spend fragments with a plan.</h2>
-        <p className="mt-2 max-w-xl text-xs leading-relaxed text-[#f3e4c7]/85">
+        <p className="mt-2 max-w-xl text-xs leading-relaxed text-[#fdf3dc]">
           Full guild rune notes by tier — Immortal, Mythic, and Legendary — with sub-tier priority and rough Emblem value where it's known.
         </p>
       </Card>
 
       <Card>
         <div className="border-b border-dv-line p-4">
-        <div className="relative mt-4"><svg aria-hidden="true" viewBox="0 0 16 16" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-dv-brassLight" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="7" cy="7" r="4.5" /><path d="M10.5 10.5L14 14" /></svg><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search runes or effects" className="w-full rounded-xl border border-dv-line bg-dv-panel2 pl-9 pr-9 py-3 text-xs text-dv-brassLight outline-none placeholder:text-[#f3e4c7]/85 focus:border-dv-brassLight" />{query ? <button type="button" aria-label="Clear search" onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-[#f3e4c7]/85">×</button> : null}</div>
+        <div className="relative mt-4"><svg aria-hidden="true" viewBox="0 0 16 16" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-dv-brassLight" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="7" cy="7" r="4.5" /><path d="M10.5 10.5L14 14" /></svg><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search runes or effects" className="w-full rounded-xl border border-dv-line bg-dv-panel2 pl-9 pr-9 py-3 text-xs text-dv-brassLight outline-none placeholder:text-[#fdf3dc] focus:border-dv-brassLight" />{query ? <button type="button" aria-label="Clear search" onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-[#fdf3dc]">×</button> : null}</div>
         </div>
 
         {filteredTiers.length === 0 && (
-          <p className="p-4 text-xs text-[#f3e4c7]/85">No runes match that search.</p>
+          <p className="p-4 text-xs text-[#fdf3dc]">No runes match that search.</p>
         )}
 
         {filteredTiers.map((tier) => {
@@ -751,7 +751,7 @@ export function Runes() {
                         >
                           {group.label}
                         </span>
-                        <span className="text-[9px] uppercase tracking-[.1em] text-[#f3e4c7]/85">Sub-tier {group.label}</span>
+                        <span className="text-[9px] uppercase tracking-[.1em] text-[#fdf3dc]">Sub-tier {group.label}</span>
                       </div>
                     )}
                     <div className="space-y-3">
@@ -763,7 +763,7 @@ export function Runes() {
                             )}
                             <p className={`text-sm ${style.text}`}>{rune.name}</p>
                           </div>
-                          <p className="mt-1.5 text-xs leading-relaxed text-[#f3e4c7]/85">{rune.effect}</p>
+                          <p className="mt-1.5 text-xs leading-relaxed text-[#fdf3dc]">{rune.effect}</p>
                         </div>
                       ))}
                     </div>

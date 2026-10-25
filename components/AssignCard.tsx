@@ -15,7 +15,7 @@ const DV_ORDER = ["wasteland", "lava", "icevale", "windcliff"];
 const cache: Record<string, Row[]> = {};
 let rolesCache: any = null;
 
-const tabCls = (on: boolean) => "h-6 flex-1 border px-2 text-[9px] " + (on ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-[#f3e4c7]/85");
+const tabCls = (on: boolean) => "h-6 flex-1 border px-2 text-[9px] " + (on ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-[#fdf3dc]");
 
 // Members for one guild view, taken from the dashboard's startup data (same rules as /api/ranking?guild=N).
 const pickStartup = (all: any[], v: string) => all.filter((m: any) => String(m.guild_id) === v || (m.guild_id == null && String(m.id).startsWith("roster-")));
@@ -104,7 +104,7 @@ export default function AssignCard({ startup }: { startup?: { members: any[]; ro
   if (closed) return (
     <PixelPanel className="animate-rise">
       <p className="eyebrow py-2">ASSIGN CLOSED</p>
-      <p className="text-[11px] leading-relaxed text-[#f3e4c7]/85">Assignments reopen on Day 1 of the next cycle.</p>
+      <p className="text-[11px] leading-relaxed text-[#fdf3dc]">Assignments reopen on Day 1 of the next cycle.</p>
     </PixelPanel>
   );
 
@@ -122,7 +122,7 @@ export default function AssignCard({ startup }: { startup?: { members: any[]; ro
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => setGfBoss(null)}><div className="pixel-border bg-dv-panel max-h-[80vh] w-full max-w-sm space-y-2 overflow-y-auto p-4 shadow-pixel" onClick={(e) => e.stopPropagation()}>
           <p className="eyebrow py-2">ASSIGN TO BOSS {GR.find((g) => g.n === gfBoss)?.r}</p>
           {rows.filter((m) => m.gr_boss == null && canEdit(roles, m)).map((m) => (<button key={m.id} type="button" onClick={() => fillBoss(m)} className="item-slot block w-full p-2 text-left text-[10px]">{m.username}</button>))}
-          {rows.filter((m) => m.gr_boss == null && canEdit(roles, m)).length === 0 && <p className="text-[10px] text-[#f3e4c7]/85">NO UNASSIGNED PLAYERS</p>}
+          {rows.filter((m) => m.gr_boss == null && canEdit(roles, m)).length === 0 && <p className="text-[10px] text-[#fdf3dc]">NO UNASSIGNED PLAYERS</p>}
           <button type="button" onClick={() => setGfBoss(null)} className="item-slot block w-full p-2 text-[10px]">CANCEL</button>
         </div></div>
       )}
@@ -131,7 +131,7 @@ export default function AssignCard({ startup }: { startup?: { members: any[]; ro
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => setSeatMap(null)}><div className="pixel-border bg-dv-panel max-h-[80vh] w-full max-w-sm space-y-2 overflow-y-auto p-4 shadow-pixel" onClick={(e) => e.stopPropagation()}>
           <p className="eyebrow py-2">ADD TO {MAPS.find(([k]) => k === seatMap)?.[1]}</p>
           {unassigned.filter((m) => canEdit(roles, m)).map((m) => (<button key={m.id} type="button" onClick={() => fillSeat(m)} className="item-slot block w-full p-2 text-left text-[10px]">{m.username}</button>))}
-          {unassigned.filter((m) => canEdit(roles, m)).length === 0 && <p className="text-[10px] text-[#f3e4c7]/85">NO UNASSIGNED PLAYERS</p>}
+          {unassigned.filter((m) => canEdit(roles, m)).length === 0 && <p className="text-[10px] text-[#fdf3dc]">NO UNASSIGNED PLAYERS</p>}
           <button type="button" onClick={() => setSeatMap(null)} className="item-slot block w-full p-2 text-[10px]">CANCEL</button>
         </div></div>
       )}
