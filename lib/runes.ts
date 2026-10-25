@@ -171,9 +171,9 @@ export const runeTiers: RuneTier[] = [
 ];
 
 export const tierStyles: Record<RuneAccent, { border: string; text: string; chipBorder: string; chipBg: string }> = {
-  gold: { border: "border-amber-300/50", text: "text-amber-200", chipBorder: "border-amber-300/50", chipBg: "bg-amber-300/15" },
-  orange: { border: "border-orange-400/50", text: "text-orange-300", chipBorder: "border-orange-400/50", chipBg: "bg-orange-400/15" },
-  cyan: { border: "border-teal-300/50", text: "text-cyan-200", chipBorder: "border-teal-300/50", chipBg: "bg-teal-300/15" },
+  gold: { border: "border-amber-300/50", text: "text-[#f2c46d]", chipBorder: "border-amber-300/50", chipBg: "bg-amber-300/15" },
+  orange: { border: "border-orange-400/50", text: "text-[#f0a060]", chipBorder: "border-orange-400/50", chipBg: "bg-orange-400/15" },
+  cyan: { border: "border-teal-300/50", text: "text-[#9fe6d8]", chipBorder: "border-teal-300/50", chipBg: "bg-teal-300/15" },
   blue: { border: "border-sky-400/50", text: "text-sky-300", chipBorder: "border-sky-400/50", chipBg: "bg-sky-400/15" },
 };
 
