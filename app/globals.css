@@ -13,13 +13,13 @@ body {
   height: 100%;
   overflow: hidden;
   overscroll-behavior: none;
-  background-color: #1a110a;
+  background-color: #0c0704;
 }
 
 body {
   color: #eef2ff;
   line-height: 1.45;
-  background-image: linear-gradient(180deg, rgba(26, 17, 10, 0.54), rgba(26, 17, 10, 0.94)), url("/dragon-gate-bg.png");
+  background-image: linear-gradient(180deg, rgba(12, 7, 4, 0.54), rgba(12, 7, 4, 0.94)), url("/dragon-gate-bg.png");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -72,7 +72,7 @@ input {
   place-items: center;
   width: 42px;
   height: 42px;
-  color: #1a110a;
+  color: #0c0704;
   background: linear-gradient(135deg, #f6e3b4, #c9953f);
   border: 2px solid #fff0c5;
   box-shadow: 3px 3px 0 #0f0804;
@@ -109,7 +109,7 @@ input {
   overflow: hidden;
   border: 1px solid #5a4228;
   border-radius: 999px;
-  background: #1a110a;
+  background: #0c0704;
 }
 
 .progress-fill {
@@ -244,7 +244,7 @@ input {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  color: #1a110a;
+  color: #0c0704;
   border: 0;
   background: linear-gradient(110deg, #c9953f, #f6e3b4 48%, #c9953f);
   background-size: 220% 100%;
@@ -321,7 +321,7 @@ input {
   height: 34px;
   border: 1px solid currentColor;
   border-radius: 4px;
-  background: rgba(26, 17, 10, 0.22);
+  background: rgba(12, 7, 4, 0.22);
   image-rendering: pixelated;
 }
 

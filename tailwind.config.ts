@@ -6,7 +6,7 @@ const config: Config = {
     extend: {
       colors: {
         dv: {
-          bg: "#1a110a",
+          bg: "#0c0704",
           panel: "#2a1d13",
           panel2: "#4a3826",
           brass: "#c9953f",
