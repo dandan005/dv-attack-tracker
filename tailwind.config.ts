@@ -8,7 +8,7 @@ const config: Config = {
         dv: {
           bg: "#0c0704",
           panel: "#2a1d13",
-          panel2: "#4a3826",
+          panel2: "#36261a",
           brass: "#c9953f",
           brassLight: "#f6e3b4",
           ember: "#ff6d6d",
