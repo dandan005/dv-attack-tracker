@@ -20,7 +20,7 @@ export function DragonCrest({ size = 38 }: { size?: number }) {
         aria-hidden="true"
       >
         <circle className="magic-circle-outer" cx="50" cy="50" r="46" fill="none" stroke="#c4623a" strokeWidth="0.6" strokeDasharray="2 3" style={{ transformOrigin: "50px 50px" }} />
-        <circle className="magic-circle-inner" cx="50" cy="50" r="38" fill="none" stroke="#f6e3b4" strokeWidth="0.5" strokeDasharray="1 2" style={{ transformOrigin: "50px 50px" }} />
+        <circle className="magic-circle-inner" cx="50" cy="50" r="38" fill="none" stroke="#c9953f" strokeWidth="0.5" strokeDasharray="1 2" style={{ transformOrigin: "50px 50px" }} />
         <g className="magic-circle-outer" style={{ transformOrigin: "50px 50px" }}>
           <polygon points="50,12 85,70 15,70" fill="none" stroke="#c4623a" strokeWidth="0.5" opacity="0.7" />
           <polygon points="50,88 15,30 85,30" fill="none" stroke="#c4623a" strokeWidth="0.5" opacity="0.4" />
@@ -87,14 +87,14 @@ export function DragonCrest({ size = 38 }: { size?: number }) {
           </defs>
 
           <g filter={`url(#${softId})`} className="crest-glow-pulse-wide">
-            <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#f6e3b4" />
+            <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#c9953f" />
           </g>
           <g filter={`url(#${tightId})`} className="crest-glow-pulse-tight">
-            <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#fff4d6" />
+            <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#f2c46d" />
           </g>
 
           <g shapeRendering="crispEdges" style={{ imageRendering: "pixelated" }}>
-            <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#0c0f22" />
+            <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="#1a0f07" />
             <path d="M6 5h20v13l-2 5-8 5-8-5-2-5V5Z" fill="none" stroke="#c4623a" strokeWidth="1" opacity="1" />
             <path d="M8 7h16v10l-2 4-6 4-6-4-2-4V7Z" fill="none" stroke="#f6e3b4" strokeWidth="0.8" opacity="0.9" />
             <rect x="5.5" y="9" width="1.5" height="3" fill="#c4623a" />
