@@ -1,14 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/server";
 import { getGuildMember } from "@/lib/auth";
 
 const clip = (v: unknown, n: number) => String(v ?? "").slice(0, n);
 const LEVELS = ["error", "warn", "info"];
 
-// Any signed-in user can report an error. Only the creator can read the log.
+// Simple per-IP limit so a broken page or a bot can't flood the log (30 reports a minute).
+const hits = new Map<string, { count: number; start: number }>();
+function overLimit(ip: string) {
+  const now = Date.now();
+  const hit = hits.get(ip);
+  if (!hit || now - hit.start > 60_000) {
+    hits.set(ip, { count: 1, start: now });
+    return false;
+  }
+  hit.count += 1;
+  return hit.count > 30;
+}
+
+// Anyone (signed in or not) can report an error. Only the creator can read the log.
 export async function POST(req: NextRequest) {
-  const { data: { user } } = await createClient().auth.getUser();
-  if (!user) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || "unknown";
+  if (overLimit(ip)) return NextResponse.json({ error: "Too many reports" }, { status: 429 });
 
   const body = await req.json().catch(() => null);
   if (!body || typeof body !== "object") return NextResponse.json({ error: "Bad request" }, { status: 400 });

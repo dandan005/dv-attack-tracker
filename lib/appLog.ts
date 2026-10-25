@@ -12,7 +12,8 @@ export async function serverLog(level: "error" | "warn" | "info", source: string
       details: details == null ? null : clip(JSON.stringify(details), 2000),
       member_id: memberId ?? null,
     });
-  } catch {
-    // ignore: a failed log must not fail the request
+  } catch (e) {
+    // A failed log must not fail the request, but leave a trace in the server console.
+    console.error("serverLog failed", e);
   }
 }

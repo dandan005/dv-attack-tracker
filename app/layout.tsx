@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { ErrorReporter } from "@/components/ErrorReporter";
 
 export const metadata: Metadata = {
   title: "Dragon Valley // Attack Ledger",
@@ -25,7 +26,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="font-pixel scanlines h-full overflow-hidden bg-dv-bg">{children}</body>
+      <body className="font-pixel scanlines h-full overflow-hidden bg-dv-bg">
+        <ErrorReporter />
+        {children}
+      </body>
     </html>
   );
 }

@@ -239,14 +239,6 @@ export default function DashboardPage() {
 
   const markingRef = useRef<Set<string>>(new Set());
 
-  // Report uncaught errors from anywhere in the app to the creator-only error log.
-  useEffect(() => {
-    const onError = (e: ErrorEvent) => clientLog("window", e.message, { file: e.filename, line: e.lineno });
-    const onRejection = (e: PromiseRejectionEvent) => clientLog("promise", String((e.reason as any)?.message ?? e.reason));
-    window.addEventListener("error", onError);
-    window.addEventListener("unhandledrejection", onRejection);
-    return () => { window.removeEventListener("error", onError); window.removeEventListener("unhandledrejection", onRejection); };
-  }, []);
   const [savingMarks, setSavingMarks] = useState<Record<string, boolean>>({});
 
   async function markAttack(memberId: string, day: number, done: boolean) {
