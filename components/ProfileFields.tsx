@@ -42,7 +42,7 @@ function OptionPicker({ title, current, options, onSelect }: { title: string; cu
                 key={o.v || "none"}
                 type="button"
                 onClick={() => { setOpen(false); if (!selected) onSelect(o.v === "" ? null : o.v); }}
-                className={["flex w-full items-center justify-between rounded-md border px-3 py-3 text-[10px]", selected ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-black/20 text-[#fdf3dc]"].join(" ")}
+                className={["flex w-full items-center justify-between rounded-md border px-3 py-3 text-[10px]", selected ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-[#1f140b] text-[#fdf3dc]"].join(" ")}
                 style={selected ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}
               >
                 <span>{o.label}</span>

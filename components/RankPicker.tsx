@@ -25,7 +25,7 @@ export function RankPicker({ tier, onSelect }: { tier: number | null; onSelect: 
               key={r.tier}
               type="button"
               onClick={() => { onSelect(r.tier); setOpen(false); }}
-              className={["relative flex flex-col items-center gap-1 rounded-md border px-1 pb-2 pt-3 text-[8px]", r.tier === tier ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-black/20 text-[#fdf3dc]"].join(" ")}
+              className={["relative flex flex-col items-center gap-1 rounded-md border px-1 pb-2 pt-3 text-[8px]", r.tier === tier ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-[#1f140b] text-[#fdf3dc]"].join(" ")}
               style={r.tier === tier ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}
             >
               <span className="absolute left-1 top-0.5 text-[7px] text-[#fdf3dc]">{r.tier}</span>

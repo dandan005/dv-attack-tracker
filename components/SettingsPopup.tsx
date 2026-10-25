@@ -48,7 +48,7 @@ function ErrorLog() {
   };
   useEffect(() => { load(); }, []);
   return (
-    <div className="space-y-2 rounded-lg border border-dv-line bg-black/20 px-3 py-3">
+    <div className="space-y-2 rounded-lg border border-dv-line bg-[#1f140b] px-3 py-3">
       <div className="flex items-center justify-between">
         <span className="text-[9px] text-[#fdf3dc]">{logs ? logs.length + " ENTRIES (LATEST 200)" : "LOADING..."}</span>
         <button onClick={load} className="rounded-md border border-dv-brassLight/60 px-2 py-1 text-[9px] tracking-[0.15em] text-dv-brassLight">REFRESH</button>
@@ -81,7 +81,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 function Row({ label, value, children }: { label: string; value?: string; children?: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-lg border border-dv-line bg-black/20 px-3 py-2">
+    <div className="flex items-center justify-between gap-3 rounded-lg border border-dv-line bg-[#1f140b] px-3 py-2">
       <div className="min-w-0">
         <div className="text-[10px] tracking-[0.15em] text-[#fdf3dc]">{label}</div>
         {value && <div className="text-[9px] text-[#fdf3dc] break-words">{value}</div>}
@@ -93,7 +93,7 @@ function Row({ label, value, children }: { label: string; value?: string; childr
 
 function StatTile({ label, value, tone }: { label: string; value: string; tone: string }) {
   return (
-    <div className="rounded-lg border border-dv-line bg-black/20 px-2 py-2 text-center">
+    <div className="rounded-lg border border-dv-line bg-[#1f140b] px-2 py-2 text-center">
       <div className={`text-base ${tone}`}>{value}</div>
       <div className="mt-1 text-[8px] tracking-[0.15em] text-[#fdf3dc]">{label}</div>
     </div>
