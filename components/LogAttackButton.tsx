@@ -11,8 +11,8 @@ function AttackGlyph({ done, urgent }: { done: boolean; urgent: boolean }) {
     return (
       <svg className="attack-pixel-art" viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true">
         <path d="M8 1 13 3v4c0 4-2.2 6.4-5 8-2.8-1.6-5-4-5-8V3l5-2Z" fill="currentColor" />
-        <rect x="4" y="7" width="2" height="2" fill="#11172b" /><rect x="6" y="9" width="2" height="2" fill="#11172b" />
-        <rect x="8" y="7" width="2" height="2" fill="#11172b" /><rect x="10" y="5" width="2" height="2" fill="#11172b" />
+        <rect x="4" y="7" width="2" height="2" fill="#2a1d13" /><rect x="6" y="9" width="2" height="2" fill="#2a1d13" />
+        <rect x="8" y="7" width="2" height="2" fill="#2a1d13" /><rect x="10" y="5" width="2" height="2" fill="#2a1d13" />
       </svg>
     );
   }
@@ -21,7 +21,7 @@ function AttackGlyph({ done, urgent }: { done: boolean; urgent: boolean }) {
     return (
       <svg className="attack-pixel-art" viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true">
         <path d="M8 1 15 14H1L8 1Z" fill="currentColor" />
-        <rect x="7" y="5" width="2" height="5" fill="#11172b" /><rect x="7" y="11" width="2" height="2" fill="#11172b" />
+        <rect x="7" y="5" width="2" height="5" fill="#2a1d13" /><rect x="7" y="11" width="2" height="2" fill="#2a1d13" />
       </svg>
     );
   }

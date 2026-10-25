@@ -6,24 +6,24 @@ const config: Config = {
     extend: {
       colors: {
         dv: {
-          bg: "#080a18",
-          panel: "#11172b",
-          panel2: "#1b2442",
-          brass: "#c98a3e",
-          brassLight: "#ffe3a1",
+          bg: "#1a110a",
+          panel: "#2a1d13",
+          panel2: "#4a3826",
+          brass: "#c9953f",
+          brassLight: "#f6e3b4",
           ember: "#ff6d6d",
           emerald: "#78e8c7",
           emeraldDark: "#12675d",
-          violet: "#8b7dff",
-          line: "#3b4975",
+          violet: "#c4623a",
+          line: "#7a5c3a",
         },
       },
       fontFamily: {
         pixel: ["var(--font-pixel)", "sans-serif"],
       },
       boxShadow: {
-        pixel: "0 3px 0 0 rgba(5,6,17,0.95), 0 10px 26px rgba(2,4,14,0.28)",
-        "pixel-sm": "0 2px 0 0 rgba(5,6,17,0.95)",
+        pixel: "0 3px 0 0 rgba(15, 8, 4,0.95), 0 10px 26px rgba(10, 6, 3,0.28)",
+        "pixel-sm": "0 2px 0 0 rgba(15, 8, 4,0.95)",
       },
       keyframes: {
         blink: { "0%,100%": { opacity: "1" }, "50%": { opacity: "0.45" } },
