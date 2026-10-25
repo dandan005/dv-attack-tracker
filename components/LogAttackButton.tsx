@@ -127,12 +127,12 @@ export function LogAttackButton({
       <div className="px-4 pt-3 pb-3">
         <div className="flex items-baseline justify-between gap-3">
           <p className="eyebrow">YOUR RAID LOG</p>
-          <p className="text-[9px] text-slate-300/55">{done ? "NEXT ATTACK IN" : "RESET IN"}</p>
+          <p className="text-[9px] text-[#f3e4c7]/85">{done ? "NEXT ATTACK IN" : "RESET IN"}</p>
         </div>
         <div className="flex items-end justify-between gap-3 mt-2">
           <div>
             <h2 className="text-sm text-dv-brassLight">DAY {dayNumber} ATTACK</h2>
-            <p className="text-[9px] text-slate-300/70 mt-1">{phaseLabel}</p>
+            <p className="text-[9px] text-[#f3e4c7]/85 mt-1">{phaseLabel}</p>
           </div>
           <p className={urgent ? "text-sm text-dv-ember animate-blink" : "text-sm text-dv-emerald"}>{formatCountdown(ms)}</p>
         </div>
@@ -144,7 +144,7 @@ export function LogAttackButton({
             return (
               <div key={day} className="flex flex-col items-center gap-1">
                 <div className={["h-1.5 w-full rounded-full", logged ? "bg-dv-emerald" : missed ? "bg-dv-ember/50" : today ? "bg-dv-brass" : "bg-dv-panel2"].join(" ")} />
-                <span className={["flex items-center gap-0.5 text-[9px] px-1 border", today ? "border-dv-brass text-dv-brassLight" : "border-transparent", !today && logged ? "text-dv-emerald" : "", !today && missed ? "text-dv-ember/70" : "", !today && !logged && !missed ? "text-slate-300/50" : ""].join(" ")}>
+                <span className={["flex items-center gap-0.5 text-[9px] px-1 border", today ? "border-dv-brass text-dv-brassLight" : "border-transparent", !today && logged ? "text-dv-emerald" : "", !today && missed ? "text-dv-ember/70" : "", !today && !logged && !missed ? "text-[#f3e4c7]/85" : ""].join(" ")}>
                   {logged && <svg viewBox="0 0 8 8" className="h-2 w-2" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M1 4l2 2 4-4" /></svg>}
                   D{day}
                 </span>
@@ -152,13 +152,13 @@ export function LogAttackButton({
             );
           })}
         </div>
-        <div className="flex flex-col items-center gap-1 mt-3 text-center text-[10px] text-slate-300/80">
+        <div className="flex flex-col items-center gap-1 mt-3 text-center text-[10px] text-[#f3e4c7]/85">
           <span>{loggedDays.length}/6 RECORDED{sealed ? " · SEALED " + sealed : ""}</span>
           {total > 0 && <span>{checkedIn} OF {total} CHECKED IN TODAY</span>}
         </div>
       </div>
 
-      {!done && (<div className="flex justify-center px-4 pb-3"><input value={damage} onChange={(e) => setDamage(e.target.value.replace(/[^0-9]/g, ""))} inputMode="numeric" size={22} placeholder="DAMAGE SCORE (OPTIONAL)" aria-label="Damage score" className="rounded-lg border border-dv-line bg-transparent px-3 py-2 text-center text-xs text-dv-brassLight/80 outline-none placeholder:text-slate-300/50 focus:border-dv-brassLight/50" /></div>)}
+      {!done && (<div className="flex justify-center px-4 pb-3"><input value={damage} onChange={(e) => setDamage(e.target.value.replace(/[^0-9]/g, ""))} inputMode="numeric" size={22} placeholder="DAMAGE SCORE (OPTIONAL)" aria-label="Damage score" className="rounded-lg border border-dv-line bg-transparent px-3 py-2 text-center text-xs text-dv-brassLight/80 outline-none placeholder:text-[#f3e4c7]/85 focus:border-dv-brassLight/50" /></div>)}
       <button onClick={handleClick} style={{ borderRadius: 8 }} disabled={done || pending} aria-label={done ? "Attack logged" : "Log today's attack"} className={["attack-action", done ? "is-done" : urgent ? "is-urgent" : "", pending ? "is-pending" : ""].join(" ")}>
         <span className="attack-sigil">{pending ? <span className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-current border-t-transparent" /> : <AttackGlyph done={done} urgent={urgent} />}</span>
         <span className="attack-copy">{done ? "ATTACK SEALED" : pending ? "LOGGING..." : "LOG TODAY'S ATTACK"}<small>{done ? "RAID ENTRY CONFIRMED" : urgent ? "RESET WINDOW CLOSING" : "ADD YOUR RUN TO THE GUILD LEDGER"}</small></span>

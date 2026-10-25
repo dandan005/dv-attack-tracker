@@ -14,7 +14,7 @@ const config: Config = {
           ember: "#ff6d6d",
           emerald: "#78e8c7",
           emeraldDark: "#12675d",
-          violet: "#c4623a",
+          violet: "#e8844a",
           line: "#7a5c3a",
         },
       },

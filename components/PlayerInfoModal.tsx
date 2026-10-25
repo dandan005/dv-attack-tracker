@@ -37,17 +37,17 @@ export function PlayerInfoModal({ member, picks, onClose }: { member: any; picks
             {tiles.map((t) => (
               <div key={t.label} className="item-slot flex flex-col items-center p-2 text-center">
                 <span className="text-lg leading-none text-dv-brassLight">{t.glyph}</span>
-                <span className="mt-1 text-[8px] text-slate-300/60">{t.label}</span>
+                <span className="mt-1 text-[8px] text-[#f3e4c7]/85">{t.label}</span>
                 <span className="text-[9px] text-white">{t.value}</span>
               </div>
             ))}
           </div>
-          <div className="item-slot space-y-1.5 p-3 text-[9px] text-slate-200/80">
-            <p><span className="text-slate-300/50">MAP</span> · {map}</p>
-            <p><span className="text-slate-300/50">GUILD REQUEST</span> · {gr ? `${gr.r} ${gr.name} (${gr.slots} slots, ${gr.pts})` : "NOT ASSIGNED"}</p>
+          <div className="item-slot space-y-1.5 p-3 text-[9px] text-[#f3e4c7]/85">
+            <p><span className="text-[#f3e4c7]/85">MAP</span> · {map}</p>
+            <p><span className="text-[#f3e4c7]/85">GUILD REQUEST</span> · {gr ? `${gr.r} ${gr.name} (${gr.slots} slots, ${gr.pts})` : "NOT ASSIGNED"}</p>
             {[1, 2, 3].map((d) => {
               const p = picks.find((x) => x.day_number === d);
-              return <p key={d}><span className="text-slate-300/50">DAY {d}</span> · {p ? p.rune_name : "—"}</p>;
+              return <p key={d}><span className="text-[#f3e4c7]/85">DAY {d}</span> · {p ? p.rune_name : "—"}</p>;
             })}
           </div>
         </div>

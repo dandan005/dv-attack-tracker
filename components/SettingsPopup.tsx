@@ -50,7 +50,7 @@ function ErrorLog() {
   return (
     <div className="space-y-2 rounded-lg border border-dv-line bg-black/20 px-3 py-3">
       <div className="flex items-center justify-between">
-        <span className="text-[9px] text-slate-300/60">{logs ? logs.length + " ENTRIES (LATEST 200)" : "LOADING..."}</span>
+        <span className="text-[9px] text-[#f3e4c7]/85">{logs ? logs.length + " ENTRIES (LATEST 200)" : "LOADING..."}</span>
         <button onClick={load} className="rounded-md border border-dv-brassLight/60 px-2 py-1 text-[9px] tracking-[0.15em] text-dv-brassLight">REFRESH</button>
       </div>
       {err && <p className="text-[10px] text-dv-ember">{err}</p>}
@@ -60,11 +60,11 @@ function ErrorLog() {
             <p className={"text-[9px] " + (l.level === "error" ? "text-dv-ember" : "text-dv-brassLight")}>
               {new Date(l.created_at).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })} · {String(l.level).toUpperCase()} · {l.source}
             </p>
-            <p className="mt-1 break-words text-[10px] text-slate-200/80">{l.message}</p>
-            {l.details && <p className="mt-1 break-all text-[9px] text-slate-300/50">{l.details}</p>}
+            <p className="mt-1 break-words text-[10px] text-[#f3e4c7]/85">{l.message}</p>
+            {l.details && <p className="mt-1 break-all text-[9px] text-[#f3e4c7]/85">{l.details}</p>}
           </div>
         ))}
-        {logs && logs.length === 0 && <p className="text-[10px] text-slate-300/60">No errors logged yet.</p>}
+        {logs && logs.length === 0 && <p className="text-[10px] text-[#f3e4c7]/85">No errors logged yet.</p>}
       </div>
     </div>
   );
@@ -83,8 +83,8 @@ function Row({ label, value, children }: { label: string; value?: string; childr
   return (
     <div className="flex items-center justify-between gap-3 rounded-lg border border-dv-line bg-black/20 px-3 py-2">
       <div className="min-w-0">
-        <div className="text-[10px] tracking-[0.15em] text-slate-200/80">{label}</div>
-        {value && <div className="text-[9px] text-slate-300/50 break-words">{value}</div>}
+        <div className="text-[10px] tracking-[0.15em] text-[#f3e4c7]/85">{label}</div>
+        {value && <div className="text-[9px] text-[#f3e4c7]/85 break-words">{value}</div>}
       </div>
       {children}
     </div>
@@ -95,7 +95,7 @@ function StatTile({ label, value, tone }: { label: string; value: string; tone: 
   return (
     <div className="rounded-lg border border-dv-line bg-black/20 px-2 py-2 text-center">
       <div className={`text-base ${tone}`}>{value}</div>
-      <div className="mt-1 text-[8px] tracking-[0.15em] text-slate-300/60">{label}</div>
+      <div className="mt-1 text-[8px] tracking-[0.15em] text-[#f3e4c7]/85">{label}</div>
     </div>
   );
 }
@@ -139,7 +139,7 @@ export function SettingsPopup({
       >
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-dv-line bg-dv-panel2 px-4 py-3">
           <span className="text-[11px] tracking-[0.25em] text-dv-brassLight">SETTINGS</span>
-          <button onClick={onClose} aria-label="Close settings" className="px-2 text-sm text-slate-200/80">
+          <button onClick={onClose} aria-label="Close settings" className="px-2 text-sm text-[#f3e4c7]/85">
             ✕
           </button>
         </div>
@@ -153,13 +153,13 @@ export function SettingsPopup({
             />
             <div className="min-w-0">
               <div className="truncate text-sm tracking-[0.1em] text-dv-brassLight">{me.username}</div>
-              <div className="text-[9px] tracking-[0.15em] text-slate-300/50">ID {me.discord_id}</div>
+              <div className="text-[9px] tracking-[0.15em] text-[#f3e4c7]/85">ID {me.discord_id}</div>
               {me.guild_verified_at ? (
                 <div className="mt-1 inline-block rounded-full border border-dv-emerald px-2 py-0.5 text-[8px] tracking-[0.15em] text-dv-emerald">
                   GUILD VERIFIED
                 </div>
               ) : (
-                <div className="mt-1 inline-block rounded-full border border-slate-400/40 px-2 py-0.5 text-[8px] tracking-[0.15em] text-slate-300/60">
+                <div className="mt-1 inline-block rounded-full border border-slate-400/40 px-2 py-0.5 text-[8px] tracking-[0.15em] text-[#f3e4c7]/85">
                   NOT VERIFIED
                 </div>
               )}

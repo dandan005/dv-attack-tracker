@@ -53,14 +53,14 @@ export function PlayerEditor({ row, defaultGuild, onClose, onDone }: { row: Edit
         <p className="eyebrow mb-1 mt-3">GUILD</p>
         <div className="flex gap-2">
           {([null, 1, 2] as (number | null)[]).map((g) => (
-            <button key={String(g)} type="button" onClick={() => setGuild(g)} className={["h-7 flex-1 border text-[9px]", g === guild ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/80"].join(" ")}>{g === null ? "NO GUILD" : "G" + g}</button>
+            <button key={String(g)} type="button" onClick={() => setGuild(g)} className={["h-7 flex-1 border text-[9px]", g === guild ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-[#f3e4c7]/85"].join(" ")}>{g === null ? "NO GUILD" : "G" + g}</button>
           ))}
         </div>
         <p className="eyebrow mb-1 mt-3">RANK</p>
         <RankPicker tier={tier} onSelect={setTier} />
         <p className="eyebrow mb-1 mt-3">AVATAR</p>
         <div className="grid max-h-36 grid-cols-6 gap-1 overflow-y-auto">
-          <button type="button" onClick={() => setAvatar(null)} className={["h-10 border text-[8px]", avatar === null ? "border-dv-brass text-dv-brassLight" : "border-dv-line text-slate-300/80"].join(" ")}>AUTO</button>
+          <button type="button" onClick={() => setAvatar(null)} className={["h-10 border text-[8px]", avatar === null ? "border-dv-brass text-dv-brassLight" : "border-dv-line text-[#f3e4c7]/85"].join(" ")}>AUTO</button>
           {AVATARS.map((a) => (
             <button key={a} type="button" onClick={() => setAvatar(a)} className={["border p-0.5", a === avatar ? "border-dv-brass" : "border-dv-line"].join(" ")}><img src={"/avatars/" + a + ".png"} alt={a} className="h-9 w-full object-contain" /></button>
           ))}
@@ -68,7 +68,7 @@ export function PlayerEditor({ row, defaultGuild, onClose, onDone }: { row: Edit
         {msg && <p className="mt-2 text-[10px] text-red-400">{msg}</p>}
         <div className="mt-4 flex gap-2">
           <button type="button" disabled={busy || (!row && !name.trim())} onClick={() => send(row ? "edit" : "add")} className="h-8 flex-1 border border-dv-brass bg-black/40 text-[10px] text-dv-brassLight disabled:opacity-40">SAVE</button>
-          <button type="button" onClick={onClose} className="h-8 flex-1 border border-dv-line bg-dv-panel2 text-[10px] text-slate-300/80">CANCEL</button>
+          <button type="button" onClick={onClose} className="h-8 flex-1 border border-dv-line bg-dv-panel2 text-[10px] text-[#f3e4c7]/85">CANCEL</button>
         </div>
         {row && (
           <button type="button" disabled={busy} onClick={() => (sure ? send("delete") : setSure(true))} className="mt-2 h-7 w-full border border-red-500/60 bg-red-950/40 text-[9px] text-red-300">

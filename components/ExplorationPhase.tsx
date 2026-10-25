@@ -50,7 +50,7 @@ export function ExplorationPhase({ currentDay, guildId, meId, rankMembers }: { c
         <div>
           <p className="eyebrow">EXPLORATION // TRACE HUNT</p>
           <h2 className="mt-2 text-lg text-dv-brassLight">Search the region.</h2>
-          <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-200/65">
+          <p className="mt-2 max-w-xl text-xs leading-relaxed text-[#f3e4c7]/85">
             Cooking helps the raid phase. Exploration earns materials, points and trace chances. Days 1 to 3, 3 entries a day.
           </p>
         </div>
@@ -61,7 +61,7 @@ export function ExplorationPhase({ currentDay, guildId, meId, rankMembers }: { c
         <div className="item-slot mt-4 flex items-center justify-between gap-3 p-3">
           <div className="min-w-0">
             <p className="eyebrow">DAY {currentDay} RUNE</p>
-            <p className="mt-1 truncate text-[10px] text-slate-200/80">{myPick ?? "Not picked yet"}</p>
+            <p className="mt-1 truncate text-[10px] text-[#f3e4c7]/85">{myPick ?? "Not picked yet"}</p>
           </div>
           <button type="button" onClick={() => setPickerOpen(true)} className="item-slot shrink-0 px-3 py-2 text-[9px]">
             {myPick ? "CHANGE" : "PICK RUNE"}
@@ -70,7 +70,7 @@ export function ExplorationPhase({ currentDay, guildId, meId, rankMembers }: { c
       )}
 
       {!loaded && (
-        <p className="mt-4 text-[9px] uppercase tracking-[.1em] text-slate-300/50 animate-blink">Loading your map...</p>
+        <p className="mt-4 text-[9px] uppercase tracking-[.1em] text-[#f3e4c7]/85 animate-blink">Loading your map...</p>
       )}
       {myMap && (
         <div className="mt-4">
@@ -82,7 +82,7 @@ export function ExplorationPhase({ currentDay, guildId, meId, rankMembers }: { c
         </div>
       )}
 
-      <p className="mt-4 text-[10px] uppercase tracking-[.1em] text-slate-300/50">Explore · Cook special dishes · Build raid advantage</p>
+      <p className="mt-4 text-[10px] uppercase tracking-[.1em] text-[#f3e4c7]/85">Explore · Cook special dishes · Build raid advantage</p>
 
       {pickerOpen && currentDay <= 3 && (
         <RunePicker day={currentDay} picks={picks} meId={myId} onClose={closePicker} onSaved={reload} />

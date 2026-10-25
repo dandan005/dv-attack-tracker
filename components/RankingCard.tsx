@@ -43,7 +43,7 @@ export function RankingCard() {
     <PixelPanel className="animate-rise">
       <div className="mb-3 flex gap-2">
         {TABS.map((t) => (
-          <button key={t.v} type="button" onClick={() => setView(t.v)} className={["h-6 flex-1 border px-2 text-[9px]", t.v === view ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-slate-300/80"].join(" ")} style={t.v === view ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}>{t.label}</button>
+          <button key={t.v} type="button" onClick={() => setView(t.v)} className={["h-6 flex-1 border px-2 text-[9px]", t.v === view ? "border-dv-brass bg-black/40 text-dv-brassLight" : "border-dv-line bg-dv-panel2 text-[#f3e4c7]/85"].join(" ")} style={t.v === view ? { boxShadow: "0 0 10px rgba(212,175,90,0.5)" } : undefined}>{t.label}</button>
         ))}
       </div>
       {err && <p className="eyebrow py-2">COULD NOT LOAD</p>}
@@ -54,7 +54,7 @@ export function RankingCard() {
           const r = rankByTier(m.promotion_tier);
           const isMe = m.id === data?.me;
           const stats: [string, string, string][] = [
-            ["LEVEL", m.level != null ? String(m.level) : "-", "text-slate-200/80"],
+            ["LEVEL", m.level != null ? String(m.level) : "-", "text-[#f3e4c7]/85"],
             ["STAGE", m.stage != null ? String(m.stage) : "-", "text-dv-emerald"],
           ];
           return (
@@ -62,10 +62,10 @@ export function RankingCard() {
               <div className="flex items-center gap-2 min-w-0 mb-2">
                 <span className="relative w-8 h-8 shrink-0 flex items-center justify-center"><img src={"/ranks/" + (m.stage == null ? "pos-default" : i === 0 ? "pos-gold" : i === 1 ? "pos-silver" : i === 2 ? "pos-bronze" : "pos-default") + ".png"} alt="" className="absolute inset-0 w-full h-full object-contain" /><span className="relative text-[10px] font-bold text-white" style={{ textShadow: "0 0 3px #000, 0 0 3px #000" }}>{m.stage != null ? i + 1 : "-"}</span></span>
                 <img src={(m.custom_avatar ? "/avatars/" + m.custom_avatar + ".png" : null) || gameAvatar(m.username) || m.avatar_url || "/icons/icon-192.png"} onError={(e) => { if (!e.currentTarget.src.endsWith("/icons/icon-192.png")) e.currentTarget.src = "/icons/icon-192.png"; }} alt="" className="w-7 h-7 pixel-frame border border-dv-line shrink-0 object-cover" />
-                <span className="block text-[11px] text-slate-200/80 break-words leading-tight">{m.username || "-"}</span>
+                <span className="block text-[11px] text-[#f3e4c7]/85 break-words leading-tight">{m.username || "-"}</span>
                 {isMe && <span className="text-[8px] text-dv-emerald shrink-0">(YOU)</span>}
                 <span className="flex-1" />
-                {r && <span className="flex items-center gap-1 text-[9px] text-slate-200/80 shrink-0"><img src={rankImg(r.file)} alt="" className="h-4 w-4" />{r.name}</span>}
+                {r && <span className="flex items-center gap-1 text-[9px] text-[#f3e4c7]/85 shrink-0"><img src={rankImg(r.file)} alt="" className="h-4 w-4" />{r.name}</span>}
               </div>
               <div className="grid grid-cols-2 gap-1">
                 {stats.map(([l, v, c]) => (
@@ -77,7 +77,7 @@ export function RankingCard() {
         })}
       </div>
       {list.length > 10 && (
-        <button type="button" onClick={() => setAll(!all)} className="mt-3 h-6 w-full border border-dv-line bg-dv-panel2 text-[9px] text-slate-300/80">{all ? "SHOW LESS" : "SHOW ALL (" + list.length + ")"}</button>
+        <button type="button" onClick={() => setAll(!all)} className="mt-3 h-6 w-full border border-dv-line bg-dv-panel2 text-[9px] text-[#f3e4c7]/85">{all ? "SHOW LESS" : "SHOW ALL (" + list.length + ")"}</button>
       )}
     {edit && <PlayerEditor row={edit === "new" ? null : edit} defaultGuild={view === "ALL" ? null : Number(view)} onClose={() => setEdit(null)} onDone={refresh} />}
     </PixelPanel>

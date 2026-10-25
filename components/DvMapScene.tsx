@@ -176,7 +176,7 @@ function ExploreModal({ k, label, onClose }: { k: string; label: string; onClose
   const c = getCycleInfo();
   const d = c.dayNumber;
   const head = d <= 3 ? "EXPLORATION ENDS IN " + formatCountdown(c.msUntilReset + (3 - d) * 86400000) : d <= 6 ? "EXPLORATION ENDED. RAID DAYS." : "EXPLORATION OPENS AT DAY 1";
-  const chip = "item-slot border border-dv-line px-2 py-1 text-[9px] text-slate-200/80";
+  const chip = "item-slot border border-dv-line px-2 py-1 text-[9px] text-[#f3e4c7]/85";
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={onClose}>
       <div className="pixel-border bg-dv-panel max-h-[80vh] w-full max-w-sm space-y-3 overflow-y-auto p-4 shadow-pixel" onClick={(e) => e.stopPropagation()}>
@@ -185,8 +185,8 @@ function ExploreModal({ k, label, onClose }: { k: string; label: string; onClose
         <div>
           <p className="eyebrow mb-1">PLACES</p>
           {info.places ? (
-            <div className="space-y-1">{info.places.map(([p, g]) => (<div key={p} className="item-slot flex items-center gap-2 p-2"><span className="flex-1 text-[10px] text-slate-200/80">{p}</span><Ing n={g} cls="text-[9px] text-dv-emerald" /></div>))}</div>
-          ) : (<p className="text-[9px] text-slate-200/50">NOT RECORDED YET</p>)}
+            <div className="space-y-1">{info.places.map(([p, g]) => (<div key={p} className="item-slot flex items-center gap-2 p-2"><span className="flex-1 text-[10px] text-[#f3e4c7]/85">{p}</span><Ing n={g} cls="text-[9px] text-dv-emerald" /></div>))}</div>
+          ) : (<p className="text-[9px] text-[#f3e4c7]/85">NOT RECORDED YET</p>)}
         </div>
         <div><p className="eyebrow mb-1">EVERY MAP</p><div className="flex flex-wrap gap-1">{GENERAL.map((g) => (<span key={g} className={chip}><Ing n={g} /></span>))}</div></div>
         <div><p className="eyebrow mb-1">MAP RARE</p><div className="flex flex-wrap gap-1"><span className={chip}><Ing n={info.rare} /></span></div></div>
