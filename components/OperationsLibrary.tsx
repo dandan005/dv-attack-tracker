@@ -88,7 +88,7 @@ const ingredientDefaults = [
   ["Tuna", "Ice Vale", false, "tuna.jpg"], ["Basil", "Wind Cliff", false, "basil.jpg"], ["Cacao", "Wasteland Plateau", false, "cacao.jpg"],
   ["Caviar", "All regions", false, "caviar.jpg"], ["Truffle", "All regions", false, "truffle.jpg"], ["Honeycomb", "All regions", false, "honeycomb.jpg"],
 ] as const;
-const rarityPalette = { gray: ["#9ca3af", "#4b5563"], green: ["#4ade80", "#166534"], purple: ["#c084fc", "#581c87"], red: ["#f87171", "#7f1d1d"], blue: ["#60a5fa", "#1e3a8a"], gold: ["#fbbf24", "#92400e"] } as const;
+const rarityPalette = { gray: ["#9ca3af", "#4b5563"], green: ["#4ade80", "#166534"], purple: ["#f0a57a", "#7a3218"], red: ["#f87171", "#7f1d1d"], blue: ["#9fd6cc", "#2f5e58"], gold: ["#fbbf24", "#92400e"] } as const;
 const rarityOf: Record<string, keyof typeof rarityPalette> = { Wheat: "gray", Meat: "gray", Lettuce: "gray", Milk: "gray", Egg: "green", Potato: "purple", Tomato: "purple", Shrimp: "purple", Rice: "purple", Peanut: "purple", Corn: "purple", Strawberry: "purple", Sugarcane: "purple", Cheese: "red", Chili: "blue", Tuna: "blue", Basil: "blue", Cacao: "blue", Caviar: "gold", Truffle: "gold", Honeycomb: "gold" };
 const ingredientInfo: Record<string, [string, string]> = { Wheat: ["Wheat, which can be obtained through Exploration. It looks good to use as a dough ingredient.", "[Exploration] [Rune]"], Meat: ["Meat obtained through exploration. It seems it can provide great strength.", "[Exploration] [Rune]"], Lettuce: ["Lettuce, which can be obtained through Exploration. It looks like it could add a crisp texture.", "[Exploration] [Rune]"], Milk: ["Milk, which can be obtained through Exploration. It can be used to create a smooth taste.", "[Exploration] [Rune]"], Egg: ["A wyvern egg rumored to be valuable. It might break, so be careful.", "[Exploration] [Rune]"], Potato: ["Potatoes that can be found through Exploration. They must fill you up.", "[Arwen] [Rune]"], Tomato: ["Tomatoes, which can be obtained through Ingredient Exchange. They look like they could add a tangy taste.", "[Arwen] [Rune]"], Shrimp: ["Shrimp, which can be obtained through Ingredient Exchange. They look like they could add a springy texture.", "[Gene] [Rune]"], Rice: ["Rice, which can be obtained through Ingredient Exchange. Cooked up, it looks quite hearty.", "[Gene] [Rune]"], Peanut: ["Peanuts, which can be obtained through Ingredient Exchange. They look like they could add a nutty taste.", "[Rosa] [Rune]"], Corn: ["Corn, which can be obtained through Ingredient Exchange. It looks like it could add a satisfying pop.", "[Rosa] [Rune]"], Strawberry: ["Strawberries, which can be obtained through Ingredient Exchange. They look like they could add a sweet and tangy taste.", "[Cedric] [Rune]"], Sugarcane: ["Sugarcane obtained through exploration. Tricky to use, but it could be a good substitute for honeyberries.", "[Cedric] [Rune]"], Cheese: ["Cheese aged over a long time. It has a deep, savory richness.", "[Exploration] [Rune]"], Chili: ["A chili pepper ripened flame-red. One bite looks like it would set your mouth on fire.", "[Lava Mountains] [Rune]"], Tuna: ["A tuna raised roaming the cold seas. The flesh looks thick and rich.", "[Ice Vale] [Rune]"], Basil: ["Basil with a fresh, green fragrance. Added to a dish, it looks like it would bring the flavor to life.", "[Wind Cliff] [Rune]"], Cacao: ["Cacao with a deep aroma. Prepared well, it looks like it could give a bittersweet taste.", "[Wasteland Plateau] [Rune]"], Caviar: ["Caviar, known to be valuable. Even a tiny amount would make the taste special.", "[Rune]"], Truffle: ["A truffle, known to be valuable. It looks like it could add a distinctive, deep aroma.", "[Rune]"], Honeycomb: ["A honeycomb, known to be valuable. It looks like it could give a rich, sweet taste.", "[Rune]"] };
 
@@ -222,10 +222,10 @@ const mealChipPalette: Record<string, [string, string, string]> = {
   common: ["#1f2430", "#d1d5db", "#3b414a"],
   great: ["#0f2a1c", "#86efac", "#1f6b3f"],
   rare: ["#2e1a08", "#fdba74", "#9a4a12"],
-  epic: ["#2a1750", "#d8b4fe", "#5b2a8c"],
+  epic: ["#2e1a0c", "#f0c48a", "#7a4a20"],
   legendary: ["#3b0f0b", "#fca5a5", "#7a1f12"],
   immortal: ["#3a2d06", "#fde68a", "#5a4a12"],
-  mythic: ["#0b1a4a", "#a5b4fc", "#1e3a8a"],
+  mythic: ["#0f2a2a", "#a8e6dc", "#2f6e66"],
 };
 function mealChipStyle(rarity?: string): React.CSSProperties | undefined {
   const p = mealChipPalette[(rarity || "").split(" ")[0].toLowerCase()];
@@ -235,10 +235,10 @@ const mealRarityPalette: Record<string, [string, string, string]> = {
   common: ["#0e1014", "#3b414a", "#9ca3af"],
   great: ["#04140c", "#1f6b3f", "#4ade80"],
   rare: ["#140a03", "#9a4a12", "#f97316"],
-  epic: ["#0d0a1a", "#5b2a8c", "#a855f7"],
+  epic: ["#140a06", "#7a4a20", "#c9953f"],
   legendary: ["#0f0404", "#7a1f12", "#ef4444"],
   immortal: ["#17140a", "#5a4a12", "#fbbf24"],
-  mythic: ["#050a1e", "#0b2a6b", "#4a6cff"],
+  mythic: ["#0a1a18", "#2f6e66", "#5ec2b0"],
 };
 function MealThumb({ image, name, rarity }: { image?: string; name: string; rarity?: string }) {
   const palette = mealRarityPalette[(rarity || "").split(" ")[0].toLowerCase()];
