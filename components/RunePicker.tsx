@@ -178,7 +178,12 @@ export function RunePicker({ day, picks, meId, onClose, onSaved }: Props) {
                 </span>
                 <span className="rune-title flex h-[42px] items-center justify-center">{c.name}</span>
                 <span className="rune-divider mt-2 block" aria-hidden="true" />
-                <span className="mt-2 block h-[76px] overflow-hidden text-[9px] leading-snug text-[#fff3dc]">{c.effect}</span>
+                <span
+                  className="mt-2 block h-[76px] overflow-hidden rounded-sm border bg-black/30 px-2 py-1.5 text-[9px] leading-snug text-[#fdf3dc]"
+                  style={{ borderColor: "color-mix(in srgb, var(--frame-out) 60%, transparent)" }}
+                >
+                  {c.effect}
+                </span>
                 <span className="mt-auto flex h-[18px] items-center justify-center gap-1">
                   {c.name === recommended && !isTaken && <span className="rune-badge">RECOMMENDED</span>}
                   {isTaken && <span className="rune-badge rune-badge--dim">TAKEN</span>}
