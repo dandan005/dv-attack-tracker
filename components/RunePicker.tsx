@@ -184,6 +184,7 @@ export function RunePicker({ day, picks, meId, onClose, onSaved }: Props) {
                   {isTaken && <span className="rune-badge rune-badge--dim">TAKEN</span>}
                   {c.name === mine && <span className="rune-badge rune-badge--dim">YOURS</span>}
                 </span>
+                <span className="rune-foot" aria-hidden="true" />
               </button>
             );
           })}
