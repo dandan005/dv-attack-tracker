@@ -14,7 +14,7 @@ export function PlayerInfoModal({ member, picks, onClose }: { member: any; picks
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4" onClick={onClose}>
-      <div className="pixel-border relative w-full max-w-sm overflow-hidden bg-dv-panel shadow-pixel" onClick={(e) => e.stopPropagation()}>
+      <div className="pixel-border relative w-full max-w-xs overflow-hidden bg-dv-panel shadow-pixel" onClick={(e) => e.stopPropagation()}>
         {/* Faint scanlines over the whole card */}
         <div
           aria-hidden="true"
