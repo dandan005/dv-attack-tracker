@@ -4,7 +4,8 @@ import { RUNE_ICONS, runeTiers, tierColors, tierStyles } from "@/lib/runes";
 import { useRunePicks } from "@/lib/useRunePicks";
 
 // Bag button fixed to the bottom-right, sitting above the tab bar (same corner as the game's bag).
-export function RuneBag({ inMap = false }: { inMap?: boolean }) {
+// mapMemberIds: members on the viewer's map. Tags only show picks from them (null = whole guild).
+export function RuneBag({ inMap = false, mapMemberIds = null }: { inMap?: boolean; mapMemberIds?: string[] | null }) {
   const [open, setOpen] = useState(false);
   const { picks, meId, reload } = useRunePicks();
   return (
@@ -23,15 +24,17 @@ export function RuneBag({ inMap = false }: { inMap?: boolean }) {
         </svg>
         <span className="text-[7px] leading-none uppercase tracking-[.1em] text-dv-brassLight">BAG</span>
       </button>
-      {open && <RuneBagModal picks={picks} meId={meId} onClose={() => setOpen(false)} />}
+      {open && <RuneBagModal picks={picks} meId={meId} mapMemberIds={mapMemberIds} onClose={() => setOpen(false)} />}
     </>
   );
 }
 
-function RuneBagModal({ picks, meId, onClose }: { picks: { member_id: string; username: string; day_number: number; rune_name: string }[]; meId: string | null; onClose: () => void }) {
-  // For each rune, who took it this cycle (guild only).
+function RuneBagModal({ picks, meId, mapMemberIds, onClose }: { picks: { member_id: string; username: string; day_number: number; rune_name: string }[]; meId: string | null; mapMemberIds: string[] | null; onClose: () => void }) {
+  // For each rune, who took it this cycle (same map only when a map is set).
+  const scope = mapMemberIds ? new Set(mapMemberIds) : null;
   const takers = new Map<string, string[]>();
   picks.forEach((p) => {
+    if (scope && !scope.has(p.member_id)) return;
     const who = p.member_id === meId ? "YOU" : p.username;
     takers.set(p.rune_name, [...(takers.get(p.rune_name) ?? []), `D${p.day_number} ${who}`]);
   });
@@ -42,7 +45,7 @@ function RuneBagModal({ picks, meId, onClose }: { picks: { member_id: string; us
           <p className="eyebrow">BAG // ALL RUNES</p>
           <button type="button" onClick={onClose} aria-label="Close" className="item-slot px-2 py-1 text-[10px]">X</button>
         </div>
-        <p className="text-[9px] uppercase tracking-[.1em] text-[#fdf3dc]">Status shows who took each rune this cycle, by day.</p>
+        <p className="text-[9px] uppercase tracking-[.1em] text-[#fdf3dc]">Status shows who on {scope ? "your map" : "your guild"} took each rune this cycle, by day.</p>
         {runeTiers.map((t) => (
           <div key={t.name}>
             <p className={"eyebrow mb-1 " + tierStyles[t.accent].text}>{t.name.toUpperCase()}</p>

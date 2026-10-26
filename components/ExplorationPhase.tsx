@@ -79,7 +79,7 @@ export function ExplorationPhase({ currentDay, guildId, meId, rankMembers }: { c
           <p className="eyebrow mb-2">YOUR ASSIGNED MAP</p>
           <div className="relative">
             <DvMapScene k={myMap} label={MAP_LABELS[myMap]} members={rows.filter((m) => m.dv_map === myMap)} onPick={(m) => setSelected(m)} />
-            <RuneBag inMap />
+            <RuneBag inMap mapMemberIds={mapMemberIds} />
           </div>
         </div>
       )}
