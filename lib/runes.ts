@@ -73,7 +73,7 @@ export const runeTiers: RuneTier[] = [
   {
     name: "Mythic",
     icon: "ᛞ",
-    accent: "orange",
+    accent: "cyan",
     groups: [
       {
         label: null,
@@ -145,7 +145,7 @@ export const runeTiers: RuneTier[] = [
   {
     name: "Legendary",
     icon: "ᛗ",
-    accent: "cyan",
+    accent: "orange",
     groups: [
       {
         label: "A",
