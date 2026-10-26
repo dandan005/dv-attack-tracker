@@ -63,7 +63,7 @@ export const TERMS: LegalSection[] = [
   },
   {
     title: "9. Contact",
-    body: ["Questions about these terms: [CONTACT - add a Discord handle or email here]."],
+    body: ["Questions about these terms: canetedaniel05@gmail.com."],
   },
 ];
 
@@ -135,7 +135,7 @@ export const PRIVACY: LegalSection[] = [
     title: "9. Changes and contact",
     body: [
       "If this policy changes, the version number changes and you will be asked to agree again.",
-      "Contact: [CONTACT - add a Discord handle or email here].",
+      "Contact: canetedaniel05@gmail.com.",
     ],
   },
 ];
