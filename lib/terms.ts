@@ -71,8 +71,8 @@ export const PRIVACY: LegalSection[] = [
   {
     title: "1. What we collect",
     body: [
-      "From Discord sign-in: your Discord ID, display name and avatar. The app also checks whether you are in the guild. It does not read your other servers, messages or friends.',
-      'Sign-in is handled by Supabase Auth, which keeps a sign-in record for your account. That record can include an email address linked to your Discord login. Members cannot see it in the app, and the app does not display it.",
+      "From Discord sign-in: your Discord ID, display name and avatar. The app also checks whether you are in the guild. It does not read your other servers, messages or friends.",
+      "Sign-in is handled by Supabase Auth, which keeps a sign-in record for your account. That record can include an email address linked to your Discord login. Members cannot see it in the app, and the app does not display it.",
       "From you: in-game level, stage, guild, custom avatar, promotion tier, daily attack logs, damage scores you enter, rune picks and settings.",
       "If you turn on notifications: a browser push subscription, so the app can send you reminders.",
       "In your browser only: small preferences such as ingredient counts and which prompts you have dismissed. These stay on that device.",
