@@ -26,7 +26,6 @@ export async function GET(request: NextRequest) {
         identityData.full_name ||
         userMetadata.name ||
         identityData.name ||
-        data.user.email ||
         "Slayer";
       const avatarUrl = identityData.avatar_url || userMetadata.avatar_url || null;
 

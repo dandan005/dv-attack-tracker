@@ -16,6 +16,8 @@ import { LedgerIcon, RankingIcon, GuideIcon, CookingIcon, SpecialIcon, RunesIcon
 import AssignCard from "@/components/AssignCard";
 import { clientLog } from "@/lib/clientLog";
 import { Walkthrough } from "@/components/Walkthrough";
+import { TermsAgreement } from "@/components/TermsAgreement";
+import { TERMS_VERSION } from "@/lib/terms";
 import { rankByTier } from "@/lib/ranks";
 import { SettingsPopup } from "@/components/SettingsPopup";
 
@@ -33,6 +35,7 @@ type CurrentMember = {
   discord_id: string;
   is_admin: boolean;
   has_seen_walkthrough: boolean;
+  terms_version: string | null;
   guild_verified_at: string | null;
 };
 
@@ -93,6 +96,8 @@ export default function DashboardPage() {
   const [me, setMe] = useState<CurrentMember | null>(null);
   const [now, setNow] = useState<Date>(() => new Date());
   const [showWalkthrough, setShowWalkthrough] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
+  const [termsMode, setTermsMode] = useState<"accept" | "read">("accept");
   const [syncing, setSyncing] = useState(false);
 
   useEffect(() => {
@@ -121,7 +126,7 @@ export default function DashboardPage() {
     setSettings(currentSettings);
     const cycle = getCycleInfo();
 
-    const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, avatar_url, is_admin, has_seen_walkthrough, promotion_tier, guild_verified_at, guild_id, is_super_admin, is_creator, level, stage");
+    const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, avatar_url, is_admin, has_seen_walkthrough, terms_version, promotion_tier, guild_verified_at, guild_id, is_super_admin, is_creator, level, stage");
     const { data: logsData } = await supabase.from("attack_logs").select("member_id, day_number, logged_at").eq("cycle_start", cycle.cycleStartISO);
     const logs: AttackLog[] = logsData ?? [];
 
@@ -178,9 +183,15 @@ export default function DashboardPage() {
         is_super_admin: !!myRow.is_super_admin,
         is_creator: !!myRow.is_creator,
         has_seen_walkthrough: myRow.has_seen_walkthrough,
+        terms_version: myRow.terms_version ?? null,
         guild_verified_at: myRow.guild_verified_at ?? null,
       });
-      if (!myRow.has_seen_walkthrough) setShowWalkthrough(true);
+      if (myRow.terms_version !== TERMS_VERSION) {
+        setTermsMode("accept");
+        setShowTerms(true);
+      } else if (!myRow.has_seen_walkthrough) {
+        setShowWalkthrough(true);
+      }
     }
     await rankingReq;
     setLoading(false);
@@ -295,6 +306,14 @@ export default function DashboardPage() {
   }
 
 
+  async function acceptTerms() {
+    const res = await fetch("/api/accept-terms", { method: "POST" });
+    if (!res.ok) throw new Error("save failed");
+    setMe((m) => (m ? { ...m, terms_version: TERMS_VERSION } : m));
+    setShowTerms(false);
+    if (me && !me.has_seen_walkthrough) setShowWalkthrough(true);
+  }
+
   async function closeWalkthrough() {
     setShowWalkthrough(false);
     if (me && !me.has_seen_walkthrough) {
@@ -335,7 +354,7 @@ export default function DashboardPage() {
                 <span className="text-[9px] text-dv-emerald">SYNCING</span>
               </div>
             )}
-          {me && <SettingsPopup open={showSettings} onClose={() => setShowSettings(false)} me={{ ...me, promotion_tier: myTier, guild_verified_at: me.guild_verified_at ?? null }} stats={{ loggedThisCycle: myLoggedDays.length, cleanRuns: myCleanRuns, cycleRate: members.length === 0 ? 0 : Math.round((members.reduce((s, m) => s + m.logged.filter(Boolean).length, 0) / (members.length * Math.max(dayNumber, 1))) * 100) }} onReplayWalkthrough={() => { setShowSettings(false); setShowWalkthrough(true); }} onSetTier={(t) => saveTier(String(t))} onSignOut={async () => { await supabase.auth.signOut(); window.location.href = "/"; }} />}
+          {me && <SettingsPopup open={showSettings} onClose={() => setShowSettings(false)} onReadTerms={() => { setTermsMode("read"); setShowTerms(true); }} me={{ ...me, promotion_tier: myTier, guild_verified_at: me.guild_verified_at ?? null }} stats={{ loggedThisCycle: myLoggedDays.length, cleanRuns: myCleanRuns, cycleRate: members.length === 0 ? 0 : Math.round((members.reduce((s, m) => s + m.logged.filter(Boolean).length, 0) / (members.length * Math.max(dayNumber, 1))) * 100) }} onReplayWalkthrough={() => { setShowSettings(false); setShowWalkthrough(true); }} onSetTier={(t) => saveTier(String(t))} onSignOut={async () => { await supabase.auth.signOut(); window.location.href = "/"; }} />}
             <button type="button" onClick={() => setTab("index")} aria-label="Open Ranking" title="Ranking" className={"pixel-frame item-slot flex h-8 w-8 shrink-0 items-center justify-center " + (tab === "index" ? "text-white" : "text-dv-brassLight")} aria-current={tab === "index" ? "page" : undefined}>
               <RankingIcon className="h-4 w-4" />
             </button>
@@ -615,6 +634,7 @@ export default function DashboardPage() {
       </nav>
 
       <Walkthrough open={showWalkthrough} onClose={closeWalkthrough} />
+      <TermsAgreement open={showTerms} mode={termsMode} onAccept={acceptTerms} onClose={() => setShowTerms(false)} />
     </div>
   );
 }

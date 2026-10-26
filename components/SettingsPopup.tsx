@@ -32,6 +32,7 @@ type Props = {
   stats: SettingsStats;
   onSetTier: (tier: number) => void;
   onReplayWalkthrough?: () => void;
+  onReadTerms?: () => void;
   onSignOut: () => void;
   onAdminResetCycle?: () => void;
 };
@@ -107,6 +108,7 @@ export function SettingsPopup({
   stats,
   onSetTier,
   onReplayWalkthrough,
+  onReadTerms,
   onSignOut,
   onAdminResetCycle,
 }: Props) {
@@ -188,6 +190,13 @@ export function SettingsPopup({
           {me.is_creator && (<Section title="ERROR LOG"><ErrorLog /></Section>)}
           <Section title="NOTIFICATIONS"><PushToggle /></Section>
           <Section title="HELP">
+            {onReadTerms && (
+              <Row label="Terms & privacy" value="Read the terms and how your data is used">
+                <button onClick={onReadTerms} className="rounded-md border border-dv-brassLight/60 px-3 py-1 text-[9px] tracking-[0.15em] text-dv-brassLight">
+                  Read
+                </button>
+              </Row>
+            )}
             {onReplayWalkthrough && (
               <Row label="Replay walkthrough" value="Shows the intro again next time">
                 <button onClick={onReplayWalkthrough} className="rounded-md border border-dv-brassLight/60 px-3 py-1 text-[9px] tracking-[0.15em] text-dv-brassLight">
