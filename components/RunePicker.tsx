@@ -17,7 +17,8 @@ function runeCategory(r: { name: string; effect: string }): keyof typeof CATEGOR
   return "other";
 }
 
-type Props = { day: number; picks: RunePick[]; meId: string | null; onClose: () => void; onSaved: () => void };
+// mapMemberIds: members on the viewer's map. Taken runes only count picks from them (null = whole guild).
+type Props = { day: number; picks: RunePick[]; meId: string | null; mapMemberIds?: string[] | null; onClose: () => void; onSaved: () => void };
 
 // Options the game offered are remembered per browser for this cycle and day, so reopening skips step 1.
 function loadOffers(key: string): (string | null)[] {
@@ -30,7 +31,7 @@ function loadOffers(key: string): (string | null)[] {
   return [null, null, null];
 }
 
-export function RunePicker({ day, picks, meId, onClose, onSaved }: Props) {
+export function RunePicker({ day, picks, meId, mapMemberIds, onClose, onSaved }: Props) {
   const cycle = getCycleInfo().cycleStartISO;
   const storageKey = `dv-rune-offer:${cycle}:${day}`;
   const [offers, setOffers] = useState<(string | null)[]>(() => loadOffers(storageKey));
@@ -45,9 +46,10 @@ export function RunePicker({ day, picks, meId, onClose, onSaved }: Props) {
   // Runes already claimed by someone else in the guild for this day.
   const takenBy = useMemo(() => {
     const m = new Map<string, string>();
-    picks.forEach((p) => { if (p.day_number === day && p.member_id !== meId) m.set(p.rune_name, p.username); });
+    const scope = mapMemberIds ? new Set(mapMemberIds) : null;
+    picks.forEach((p) => { if (p.day_number === day && p.member_id !== meId && (!scope || scope.has(p.member_id))) m.set(p.rune_name, p.username); });
     return m;
-  }, [picks, day, meId]);
+  }, [picks, day, meId, mapMemberIds]);
 
   const filled = offers.filter(Boolean) as string[];
   const complete = filled.length === 3;

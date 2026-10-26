@@ -19,6 +19,8 @@ export function ExplorationPhase({ currentDay, guildId, meId, rankMembers }: { c
   const rows = rankMembers.filter((m) => m.guild_id === guildId);
   const mine = meId ? rankMembers.find((m) => m.id === meId) : undefined;
   const myMap: string | null = mine?.dv_map && MAP_LABELS[mine.dv_map] ? mine.dv_map : null;
+  // Rune "taken" checks only look at guild members on the same map.
+  const mapMemberIds = myMap ? rows.filter((m) => m.dv_map === myMap).map((m) => m.id) : null;
 
   const { meId: apiMeId, picks, loaded: picksLoaded, reload } = useRunePicks();
   const myId = meId ?? apiMeId;
@@ -85,7 +87,7 @@ export function ExplorationPhase({ currentDay, guildId, meId, rankMembers }: { c
       <p className="mt-4 text-[10px] uppercase tracking-[.1em] text-[#fdf3dc]">Explore · Cook special dishes · Build raid advantage</p>
 
       {pickerOpen && currentDay <= 3 && (
-        <RunePicker day={currentDay} picks={picks} meId={myId} onClose={closePicker} onSaved={reload} />
+        <RunePicker day={currentDay} picks={picks} meId={myId} mapMemberIds={mapMemberIds} onClose={closePicker} onSaved={reload} />
       )}
       {selected && (
         <PlayerInfoModal member={selected} picks={picks.filter((p) => p.member_id === selected.id)} onClose={() => setSelected(null)} />
