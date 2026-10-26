@@ -4,6 +4,9 @@ import { RUNE_BY_NAME, RUNE_ICONS, runeTiers, tierColors, tierStyles, type FlatR
 import { getCycleInfo } from "@/lib/cycle";
 import type { RunePick } from "@/lib/useRunePicks";
 
+// Card skin per rune tier (matches the in-game frames: Mythic blue, Immortal gold, Legendary orange).
+const SKINS: Record<string, string> = { Mythic: "mythic", Immortal: "immortal", Legendary: "legendary" };
+
 type Props = { day: number; picks: RunePick[]; meId: string | null; onClose: () => void; onSaved: () => void };
 
 // Options the game offered are remembered per browser for this cycle and day, so reopening skips step 1.
@@ -152,13 +155,12 @@ export function RunePicker({ day, picks, meId, onClose, onSaved }: Props) {
 
   return (
     <div className={shell} onClick={onClose}>
-      <div className={panel} onClick={(e) => e.stopPropagation()}>
+      <div className={panel.replace("max-w-sm", "max-w-md")} onClick={(e) => e.stopPropagation()}>
         <p className="eyebrow text-center">SELECT RUNE // DAY {day}</p>
-        <div className="space-y-2">
+        <div className="grid grid-cols-3 gap-2 pt-3">
           {cards.map((c) => {
             const isTaken = takenBy.has(c.name);
             const isSel = choice === c.name;
-            const st = tierStyles[c.accent];
             const col = tierColors[c.accent];
             return (
               <button
@@ -166,24 +168,22 @@ export function RunePicker({ day, picks, meId, onClose, onSaved }: Props) {
                 type="button"
                 disabled={isTaken}
                 onClick={() => setChoice(c.name)}
+                data-skin={SKINS[c.tier] ?? "legendary"}
                 style={{ ["--rc" as string]: col } as CSSProperties}
-                className={"rune-card block w-full p-3 pt-5 text-left disabled:opacity-50 " + (isSel ? "is-selected" : "")}
+                className={"rune-slab block text-center " + (isSel ? "is-selected" : "")}
               >
                 <span className="rune-gem" aria-hidden="true" />
-                <div className="flex items-center justify-between gap-2">
-                  <span className="flex min-w-0 items-center gap-2">
-                    {c.icon && <span className="rune-icon shrink-0" aria-hidden="true" style={{ maskImage: `url(/runes/${c.icon}.png)`, WebkitMaskImage: `url(/runes/${c.icon}.png)` } as CSSProperties} />}
-                    <span className={"rune-title text-xs " + st.text}>{c.name}</span>
-                  </span>
-                  <span className="flex shrink-0 gap-1">
-                    {c.name === recommended && !isTaken && <span className="rune-badge">RECOMMENDED</span>}
-                    {isTaken && <span className="rune-badge rune-badge--dim">TAKEN · {takenBy.get(c.name)}</span>}
-                    {c.name === mine && <span className="rune-badge rune-badge--dim">YOURS</span>}
-                  </span>
-                </div>
-                <p className="rune-divider" aria-hidden="true" />
-                <p className="mt-1 text-[10px] leading-relaxed text-amber-50">{c.effect}</p>
-                <p className="mt-1 text-[8px] uppercase tracking-[.14em] text-amber-100">{c.tier}</p>
+                <span className="flex flex-1 items-center justify-center">
+                  {c.icon && <span className="rune-icon" aria-hidden="true" style={{ maskImage: `url(/runes/${c.icon}.png)`, WebkitMaskImage: `url(/runes/${c.icon}.png)` } as CSSProperties} />}
+                </span>
+                <span className="rune-title block">{c.name}</span>
+                <span className="rune-divider mt-2 block" aria-hidden="true" />
+                <span className="mt-2 block text-[9px] leading-snug text-[#fff3dc]">{c.effect}</span>
+                <span className="mt-auto flex min-h-[14px] flex-wrap justify-center gap-1 pt-1">
+                  {c.name === recommended && !isTaken && <span className="rune-badge">RECOMMENDED</span>}
+                  {isTaken && <span className="rune-badge rune-badge--dim">TAKEN</span>}
+                  {c.name === mine && <span className="rune-badge rune-badge--dim">YOURS</span>}
+                </span>
               </button>
             );
           })}

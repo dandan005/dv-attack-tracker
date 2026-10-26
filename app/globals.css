@@ -829,7 +829,68 @@ main {
   color: #f5e6c4;
   border: 1px solid rgba(255, 227, 161, 0.5);
 }
-@media (prefers-reduced-motion: reduce) { .rune-card { transition: none; } }
+/* Tall rune slabs for the picker, skinned per tier (Mythic blue, Immortal gold, Legendary orange). */
+.rune-slab {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  height: 300px;
+  padding: 24px 8px 8px;
+  color: #f5e6c4;
+  background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bot) 100%);
+  border: 3px solid var(--frame-out);
+  box-shadow:
+    inset 0 0 0 2px var(--frame-in),
+    inset 0 0 0 4px var(--bg-bot),
+    0 0 12px var(--glow),
+    0 3px 0 #0c0704;
+  transition: transform 0.12s ease, filter 0.12s ease;
+}
+.rune-slab:hover:not(:disabled),
+.rune-slab:focus-visible {
+  outline: none;
+  filter: brightness(1.1);
+}
+.rune-slab:disabled { opacity: 0.45; filter: grayscale(0.5); }
+.rune-slab.is-selected {
+  transform: translateY(-4px);
+  box-shadow:
+    inset 0 0 0 2px var(--frame-in),
+    inset 0 0 0 4px var(--bg-bot),
+    0 0 0 2px var(--frame-in),
+    0 0 22px var(--glow),
+    0 3px 0 #0c0704;
+}
+.rune-slab[data-skin="mythic"] {
+  --bg-top: #2d5282;
+  --bg-bot: #13223a;
+  --frame-out: #b07a3c;
+  --frame-in: #e9bd72;
+  --glow: rgba(120, 190, 255, 0.45);
+  --rc: #d9efff;
+}
+.rune-slab[data-skin="immortal"] {
+  --bg-top: #dcae4c;
+  --bg-bot: #6b4113;
+  --frame-out: #f7d27a;
+  --frame-in: #fff0b0;
+  --glow: rgba(255, 210, 110, 0.5);
+  --rc: #fff6d6;
+}
+.rune-slab[data-skin="legendary"] {
+  --bg-top: #b8561e;
+  --bg-bot: #4a1f0a;
+  --frame-out: #ffa35a;
+  --frame-in: #ffd9a6;
+  --glow: rgba(255, 140, 60, 0.5);
+  --rc: #ffe2bd;
+}
+.rune-slab .rune-title { color: #fff8ea; font-size: 11px; line-height: 1.25; text-align: center; }
+.rune-slab .rune-icon { width: 46px; height: 46px; }
+.rune-slab .rune-divider { width: 100%; }
+@media (prefers-reduced-motion: reduce) { .rune-card, .rune-slab { transition: none; } }
 
 /* Rune icon: white pixel art tinted to the tier colour via a mask. */
 .rune-icon {
