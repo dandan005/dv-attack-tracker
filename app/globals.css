@@ -880,12 +880,12 @@ main {
   --rc: #fff6d6;
 }
 .rune-slab[data-skin="legendary"] {
-  --bg-top: #b8561e;
-  --bg-bot: #4a1f0a;
-  --frame-out: #ffa35a;
-  --frame-in: #ffd9a6;
-  --glow: rgba(255, 140, 60, 0.5);
-  --rc: #ffe2bd;
+  --bg-top: #4a2411;
+  --bg-bot: #1f0f07;
+  --frame-out: #d9782f;
+  --frame-in: #f0a05a;
+  --glow: rgba(255, 130, 50, 0.22);
+  --rc: #f7b27a;
 }
 .rune-slab .rune-title { color: #fff8ea; font-size: 11px; line-height: 1.25; text-align: center; }
 .rune-slab .rune-icon { width: 46px; height: 46px; }

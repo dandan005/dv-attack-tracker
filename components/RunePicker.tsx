@@ -173,13 +173,13 @@ export function RunePicker({ day, picks, meId, onClose, onSaved }: Props) {
                 className={"rune-slab block text-center " + (isSel ? "is-selected" : "")}
               >
                 <span className="rune-gem" aria-hidden="true" />
-                <span className="flex flex-1 items-center justify-center">
+                <span className="flex h-[56px] items-center justify-center">
                   {c.icon && <span className="rune-icon" aria-hidden="true" style={{ maskImage: `url(/runes/${c.icon}.png)`, WebkitMaskImage: `url(/runes/${c.icon}.png)` } as CSSProperties} />}
                 </span>
-                <span className="rune-title block">{c.name}</span>
+                <span className="rune-title flex h-[42px] items-center justify-center">{c.name}</span>
                 <span className="rune-divider mt-2 block" aria-hidden="true" />
-                <span className="mt-2 block text-[9px] leading-snug text-[#fff3dc]">{c.effect}</span>
-                <span className="mt-auto flex min-h-[14px] flex-wrap justify-center gap-1 pt-1">
+                <span className="mt-2 block h-[76px] overflow-hidden text-[9px] leading-snug text-[#fff3dc]">{c.effect}</span>
+                <span className="mt-auto flex h-[18px] items-center justify-center gap-1">
                   {c.name === recommended && !isTaken && <span className="rune-badge">RECOMMENDED</span>}
                   {isTaken && <span className="rune-badge rune-badge--dim">TAKEN</span>}
                   {c.name === mine && <span className="rune-badge rune-badge--dim">YOURS</span>}
