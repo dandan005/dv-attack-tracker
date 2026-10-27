@@ -43,6 +43,7 @@ type AttackLog = {
   member_id: string;
   day_number: number;
   logged_at?: string;
+  logged_by?: string | null;
 };
 
 type Tab = "ledger" | "index" | "build" | "cooking" | "special" | "runes" | "assign" | "settings";
@@ -127,7 +128,7 @@ export default function DashboardPage() {
     const cycle = getCycleInfo();
 
     const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, game_name, avatar_url, custom_avatar, custom_avatar_url, is_admin, has_seen_walkthrough, terms_version, promotion_tier, guild_verified_at, guild_id, is_super_admin, is_creator, level, stage");
-    const { data: logsData } = await supabase.from("attack_logs").select("member_id, day_number, logged_at").eq("cycle_start", cycle.cycleStartISO);
+    const { data: logsData } = await supabase.from("attack_logs").select("member_id, day_number, logged_at, logged_by").eq("cycle_start", cycle.cycleStartISO);
     const logs: AttackLog[] = logsData ?? [];
 
     const logsByMember = new Map<string, Map<number, AttackLog>>();
@@ -146,6 +147,7 @@ export default function DashboardPage() {
         custom_avatar: member.custom_avatar ?? null,
         custom_avatar_url: member.custom_avatar_url ?? null,
         logged: CYCLE_DAY_NUMBERS.map((day) => memberLogs.has(day)),
+        byAdmin: CYCLE_DAY_NUMBERS.map((day) => !!memberLogs.get(day)?.logged_by),
         promotion_tier: member.promotion_tier ?? null,
         guild_id: member.guild_id ?? null,
         stage: member.stage ?? null,

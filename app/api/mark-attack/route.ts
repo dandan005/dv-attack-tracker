@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
 import { getGuildMember } from "@/lib/auth";
 import { getCycleInfo } from "@/lib/cycle";
+import { sendPush, type PushSub } from "@/lib/webpush";
 
 export async function POST(req: NextRequest) {
   const auth = await getGuildMember();
@@ -33,10 +34,16 @@ export async function POST(req: NextRequest) {
 
   if (done) {
     const { error } = await db.from("attack_logs").upsert(
-      { member_id: memberId, day_number: dayNumber, cycle_start: cycleStartISO, logged_at: new Date().toISOString(), promotion_tier: null, damage_score: null },
+      { member_id: memberId, day_number: dayNumber, cycle_start: cycleStartISO, logged_at: new Date().toISOString(), promotion_tier: null, damage_score: null, logged_by: memberId === me.id ? null : me.id },
       { onConflict: "member_id,day_number,cycle_start" }
     );
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (memberId !== me.id) {
+      const { data: who } = await db.from("members").select("username, game_name").eq("id", me.id).maybeSingle();
+      const { data: subs } = await db.from("push_subscriptions").select("endpoint, p256dh, auth").eq("member_id", memberId);
+      const name = who?.game_name || who?.username || "An admin";
+      await Promise.all((subs ?? []).map(async (s: PushSub) => { const r = await sendPush(s, { title: "Attack logged", body: `${name} logged your Day ${dayNumber} attack.`, tag: "admin-logged", url: "/" }); if (r === "gone") await db.from("push_subscriptions").delete().eq("endpoint", s.endpoint); }));
+    }
   } else {
     const { error } = await db.from("attack_logs").delete().eq("member_id", memberId).eq("day_number", dayNumber).eq("cycle_start", cycleStartISO);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });

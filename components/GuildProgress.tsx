@@ -12,6 +12,7 @@ export type MemberRow = {
   custom_avatar?: string | null;
   custom_avatar_url?: string | null;
   logged: boolean[];
+  byAdmin?: boolean[];
   guild_id?: number | null;
   promotion_tier?: number | null;
   stage?: number | null;
@@ -89,7 +90,7 @@ export function GuildProgress({
                     return (
                       <div key={index} onClick={onMark && member.id && dayNum <= currentDay ? () => onMark(member.id!, dayNum, !done) : undefined} className={"flex flex-col items-center gap-0.5" + (onMark && member.id && dayNum <= currentDay ? " cursor-pointer" : "")}>
                         <span className={["text-[8px]", isToday ? "text-dv-emerald" : "text-dv-brassLight/60"].join(" ")}>D{dayNum}</span>
-                        <div className={["h-5 w-full pixel-frame flex items-center justify-center text-[9px] leading-none font-bold", done ? "bg-dv-emerald text-dv-bg" : isFuture ? "bg-dv-panel2 text-[#fdf3dc]" : isToday ? "bg-dv-panel2 border border-dv-brass text-dv-brassLight" : "bg-dv-ember/80 text-dv-bg"].join(" ")}>{savingMarks?.[(member.id ?? "") + ":" + dayNum] ? <span className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-dv-brassLight border-t-transparent" /> : (done ? "✓" : isFuture ? "·" : isToday ? "–" : "✕")}</div>
+                        <div className={["h-5 w-full pixel-frame flex items-center justify-center text-[9px] leading-none font-bold", done ? "bg-dv-emerald text-dv-bg" : isFuture ? "bg-dv-panel2 text-[#fdf3dc]" : isToday ? "bg-dv-panel2 border border-dv-brass text-dv-brassLight" : "bg-dv-ember/80 text-dv-bg"].join(" ")}>{savingMarks?.[(member.id ?? "") + ":" + dayNum] ? <span className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-dv-brassLight border-t-transparent" /> : (done ? (member.byAdmin?.[index] ? <>✓<sup className="text-[6px]">A</sup></> : "✓") : isFuture ? "·" : isToday ? "–" : "✕")}</div>
                       </div>
                     );
                   })}
