@@ -62,14 +62,16 @@ export function PlayerList() {
         <button type="button" onClick={() => setEdit("new")} className="h-8 px-3 border border-dv-line bg-dv-panel2 text-[10px] text-[#fdf3dc]">+ ADD</button>
       </div>
       {merging && (
-        <div className="item-slot space-y-2 p-2">
-          <p className="eyebrow">MERGE {(merging.username ?? "").toUpperCase()} INTO</p>
-          <p className="text-[9px] text-[#fdf3dc]">Pick the player who signed in with Discord.</p>
-          {candidates.length === 0 && <p className="text-[9px] text-[#fdf3dc]">No signed-in players in this guild yet.</p>}
-          {candidates.map((c) => (
-            <button key={c.id} type="button" disabled={busy} onClick={() => merge(c)} className="item-slot block w-full p-2 text-left text-[10px] text-[#fdf3dc] disabled:opacity-40">{c.username}</button>
-          ))}
-          <button type="button" onClick={() => setMerging(null)} className="block w-full text-[9px] text-[#fdf3dc]">CANCEL</button>
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4" onClick={() => !busy && setMerging(null)}>
+          <div className="pixel-border w-full max-w-xs max-h-[80vh] space-y-2 overflow-y-auto no-scrollbar bg-dv-panel p-4 shadow-pixel" onClick={(e) => e.stopPropagation()}>
+            <p className="eyebrow">MERGE {(merging.username ?? "").toUpperCase()} INTO</p>
+            <p className="text-[9px] text-[#fdf3dc]">Pick the player who signed in with Discord.</p>
+            {candidates.length === 0 && <p className="text-[9px] text-[#fdf3dc]">No signed-in players in this guild yet.</p>}
+            {candidates.map((c) => (
+              <button key={c.id} type="button" disabled={busy} onClick={() => merge(c)} className="item-slot block w-full p-2 text-left text-[10px] text-[#fdf3dc] disabled:opacity-40">{c.username}</button>
+            ))}
+            <button type="button" onClick={() => setMerging(null)} className="block w-full pt-2 text-[9px] uppercase tracking-[.1em] text-[#fdf3dc]">Cancel</button>
+          </div>
         </div>
       )}
       <p className="eyebrow">{rows.length} PLAYERS / TAP TO EDIT OR DELETE</p>
