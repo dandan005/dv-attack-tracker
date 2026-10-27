@@ -12,13 +12,13 @@ export async function GET(req: NextRequest) {
   // Fetch caller, usernames and roster in parallel (was 4 sequential round trips).
   const [{ data: me }, { data: all }, { data: ro }] = await Promise.all([
     admin.from("members").select("id, guild_id, is_admin, is_super_admin, is_creator").eq("id", auth.member.id).maybeSingle(),
-    admin.from("members").select("username"),
+    admin.from("members").select("username, game_name"),
     admin.from("roster").select("*"),
   ]);
   const canSeeUnassigned = !!(me?.is_creator || me?.is_admin || me?.is_super_admin) && req.nextUrl.searchParams.get("include") === "unassigned";
   let q = admin
     .from("members")
-    .select("id, discord_id, username, avatar_url, custom_avatar, promotion_tier, level, stage, dv_map, gr_boss, guild_id");
+    .select("id, discord_id, username, game_name, avatar_url, custom_avatar, promotion_tier, level, stage, dv_map, gr_boss, guild_id");
   if (!canSeeUnassigned) q = q.not("guild_id", "is", null);
   if (g && g !== "ALL") {
     const gid = Number(g);
@@ -27,13 +27,14 @@ export async function GET(req: NextRequest) {
   }
   const { data, error } = await q.order("stage", { ascending: false, nullsFirst: false });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  const claimed = new Set((all ?? []).map((m: any) => (m.username || "").toLowerCase()));
+  // A roster entry is hidden once a signed-in member matches it by Discord or in-game name.
+  const claimed = new Set((all ?? []).flatMap((m: any) => [(m.username || "").toLowerCase(), (m.game_name || "").toLowerCase()]));
   const gid2 = g && g !== "ALL" ? Number(g) : null;
   const extra = (ro ?? [])
     .filter((r: any) => !claimed.has(r.key) && (gid2 === null || r.guild_id === null || r.guild_id === gid2))
     .map((r: any) => ({ id: "roster-" + r.key, username: r.name, avatar_url: null, custom_avatar: r.custom_avatar ?? null, promotion_tier: r.promotion_tier, level: r.level, stage: r.stage, dv_map: r.dv_map, gr_boss: r.gr_boss, guild_id: r.guild_id }));
   // Roster-only players (placeholder members) are flagged; their Discord ID is not sent to the client.
-  const members = [...(data ?? []).map(({ discord_id, ...m }: any) => ({ ...m, placeholder: String(discord_id).startsWith("roster:") })), ...extra].sort((a: any, b: any) => (b.promotion_tier ?? 0) - (a.promotion_tier ?? 0) || (b.stage ?? 0) - (a.stage ?? 0) || (b.level ?? 0) - (a.level ?? 0));
+  const members = [...(data ?? []).map(({ discord_id, game_name, ...m }: any) => ({ ...m, username: game_name || m.username, placeholder: String(discord_id).startsWith("roster:") })), ...extra].sort((a: any, b: any) => (b.promotion_tier ?? 0) - (a.promotion_tier ?? 0) || (b.stage ?? 0) - (a.stage ?? 0) || (b.level ?? 0) - (a.level ?? 0));
   return NextResponse.json({
     me: auth.member.id,
     roles: { guild_id: me?.guild_id ?? null, is_creator: !!me?.is_creator, is_admin: !!me?.is_admin, is_super_admin: !!me?.is_super_admin },

@@ -59,7 +59,12 @@ export async function POST(req: NextRequest) {
 
   const nm = typeof body.name === "string" ? body.name.trim().slice(0, 40) : "";
   const patch: Record<string, unknown> = { level, stage, guild_id: g };
-  if (nm) patch[isRoster ? "name" : "username"] = nm;
+  // Roster rows keep their name. Signed-in members get an in-game name that login never overwrites.
+  if (isRoster) {
+    if (nm) patch.name = nm;
+  } else {
+    patch.game_name = nm || null;
+  }
   if (typeof body.avatar === "string") patch.custom_avatar = /^[a-z0-9]{1,30}$/.test(body.avatar) ? body.avatar : null;
   const t = body.tier;
   if (t === null || (typeof t === "number" && Number.isInteger(t) && t >= 1 && t <= 26)) patch.promotion_tier = t;
