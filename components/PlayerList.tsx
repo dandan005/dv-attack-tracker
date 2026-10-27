@@ -47,8 +47,8 @@ export function PlayerList() {
     .filter((m) => (g === "ALL" || String(m.guild_id) === g) && (m.username ?? "").toLowerCase().includes(q.toLowerCase()))
     .sort((a, b) => (b.promotion_tier ?? 0) - (a.promotion_tier ?? 0) || (b.stage ?? -1) - (a.stage ?? -1) || (b.level ?? -1) - (a.level ?? -1));
   const list = all || q ? rows : rows.slice(0, 10);
-  // While merging, only signed-in players from the same guild can be the target.
-  const candidates = merging ? data.members.filter((m) => !m.placeholder && m.guild_id === merging.guild_id) : [];
+  // While merging, signed-in players from the same guild (or with no guild yet) can be the target.
+  const candidates = merging ? data.members.filter((m) => !m.placeholder && (m.guild_id === merging.guild_id || m.guild_id == null)) : [];
 
   return (
     <div className="space-y-3">

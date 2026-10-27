@@ -22,7 +22,8 @@ export async function POST(req: NextRequest) {
   const tg = (rows ?? []).find((r: any) => r.id === targetId);
   if (!ph || !tg) return NextResponse.json({ error: "Player not found" }, { status: 404 });
   if (!String(ph.discord_id).startsWith("roster:")) return NextResponse.json({ error: "That player already has a Discord login" }, { status: 400 });
-  if (!me.is_super_admin && (ph.guild_id !== me.guild_id || tg.guild_id !== me.guild_id)) {
+  // The placeholder must be in your guild. The target may have no guild yet (it takes the placeholder's guild).
+  if (!me.is_super_admin && (ph.guild_id !== me.guild_id || (tg.guild_id !== null && tg.guild_id !== me.guild_id))) {
     return NextResponse.json({ error: "Both players must be in your guild" }, { status: 403 });
   }
 
