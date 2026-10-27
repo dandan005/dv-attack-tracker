@@ -126,7 +126,7 @@ export default function DashboardPage() {
     setSettings(currentSettings);
     const cycle = getCycleInfo();
 
-    const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, game_name, avatar_url,is_admin, has_seen_walkthrough, terms_version, promotion_tier, guild_verified_at, guild_id, is_super_admin, is_creator, level, stage");
+    const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, game_name, avatar_url, custom_avatar, is_admin, has_seen_walkthrough, terms_version, promotion_tier, guild_verified_at, guild_id, is_super_admin, is_creator, level, stage");
     const { data: logsData } = await supabase.from("attack_logs").select("member_id, day_number, logged_at").eq("cycle_start", cycle.cycleStartISO);
     const logs: AttackLog[] = logsData ?? [];
 
