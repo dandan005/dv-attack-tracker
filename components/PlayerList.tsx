@@ -4,7 +4,7 @@ import { rankByTier, rankImg } from "@/lib/ranks";
 import { gameAvatar } from "@/lib/gameAvatars";
 import { PlayerEditor, type EditRow } from "@/components/PlayerEditor";
 
-type Row = { id: string; username: string | null; avatar_url: string | null; custom_avatar?: string | null; promotion_tier: number | null; level: number | null; stage: number | null; guild_id: number | null };
+type Row = { id: string; username: string | null; avatar_url: string | null; custom_avatar?: string | null; promotion_tier: number | null; level: number | null; stage: number | null; guild_id: number | null; placeholder?: boolean };
 type Data = { me: string; members: Row[]; roles?: { is_creator: boolean; is_admin: boolean; is_super_admin: boolean } };
 
 const glow = { border: "1px solid #d4af5a", background: "rgba(0,0,0,0.5)", boxShadow: "0 0 8px rgba(212,175,90,0.5)" };
@@ -16,9 +16,27 @@ export function PlayerList() {
   const [g, setG] = useState("ALL");
   const [all, setAll] = useState(false);
   const [edit, setEdit] = useState<EditRow | "new" | null>(null);
+  const [merging, setMerging] = useState<Row | null>(null);
+  const [busy, setBusy] = useState(false);
 
   const load = () => fetch("/api/ranking?guild=ALL&include=unassigned").then((r) => (r.ok ? r.json() : Promise.reject())).then((d: Data) => { setData(d); setErr(false); }).catch(() => setErr(true));
   useEffect(() => { load(); }, []);
+
+  // Folds a roster-only player into the signed-in player they are, after the admin picks them.
+  const merge = async (target: Row) => {
+    if (!merging) return;
+    if (!window.confirm(`Merge ${merging.username} into ${target.username}? Their logs move over and the roster entry is removed.`)) return;
+    setBusy(true);
+    const res = await fetch("/api/merge-member", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ placeholderId: merging.id, targetId: target.id }) });
+    setBusy(false);
+    if (!res.ok) {
+      const j = await res.json().catch(() => ({}));
+      alert(j.error ?? "Could not merge");
+      return;
+    }
+    setMerging(null);
+    load();
+  };
 
   const staff = !!(data?.roles && (data.roles.is_creator || data.roles.is_admin || data.roles.is_super_admin));
   if (err) return <p className="text-[10px] text-[#fdf3dc]">Could not load players.</p>;
@@ -29,6 +47,8 @@ export function PlayerList() {
     .filter((m) => (g === "ALL" || String(m.guild_id) === g) && (m.username ?? "").toLowerCase().includes(q.toLowerCase()))
     .sort((a, b) => (b.promotion_tier ?? 0) - (a.promotion_tier ?? 0) || (b.stage ?? -1) - (a.stage ?? -1) || (b.level ?? -1) - (a.level ?? -1));
   const list = all || q ? rows : rows.slice(0, 10);
+  // While merging, only signed-in players from the same guild can be the target.
+  const candidates = merging ? data.members.filter((m) => !m.placeholder && m.guild_id === merging.guild_id) : [];
 
   return (
     <div className="space-y-3">
@@ -41,6 +61,17 @@ export function PlayerList() {
         <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="SEARCH NAME" className="flex-1 min-w-0 h-8 px-2 border border-dv-line bg-dv-panel2 text-[10px] text-[#fdf3dc] outline-none" />
         <button type="button" onClick={() => setEdit("new")} className="h-8 px-3 border border-dv-line bg-dv-panel2 text-[10px] text-[#fdf3dc]">+ ADD</button>
       </div>
+      {merging && (
+        <div className="item-slot space-y-2 p-2">
+          <p className="eyebrow">MERGE {(merging.username ?? "").toUpperCase()} INTO</p>
+          <p className="text-[9px] text-[#fdf3dc]">Pick the player who signed in with Discord.</p>
+          {candidates.length === 0 && <p className="text-[9px] text-[#fdf3dc]">No signed-in players in this guild yet.</p>}
+          {candidates.map((c) => (
+            <button key={c.id} type="button" disabled={busy} onClick={() => merge(c)} className="item-slot block w-full p-2 text-left text-[10px] text-[#fdf3dc] disabled:opacity-40">{c.username}</button>
+          ))}
+          <button type="button" onClick={() => setMerging(null)} className="block w-full text-[9px] text-[#fdf3dc]">CANCEL</button>
+        </div>
+      )}
       <p className="eyebrow">{rows.length} PLAYERS / TAP TO EDIT OR DELETE</p>
       <div className="space-y-2">
         {list.map((m) => {
@@ -55,6 +86,7 @@ export function PlayerList() {
                 <img src={(m.custom_avatar ? "/avatars/" + m.custom_avatar + ".png" : null) || gameAvatar(m.username) || m.avatar_url || "/icons/icon-192.png"} onError={(e) => { if (!e.currentTarget.src.endsWith("/icons/icon-192.png")) e.currentTarget.src = "/icons/icon-192.png"; }} alt="" className="w-7 h-7 pixel-frame border border-dv-line shrink-0 object-cover" />
                 <span className="block text-[11px] text-[#fdf3dc] break-words leading-tight">{m.username || "-"}</span>
                 <span className="flex-1" />
+                {m.placeholder && <span className="text-[8px] text-dv-ember shrink-0">NO DISCORD</span>}
                 {m.guild_id ? <span className="text-[9px] text-dv-emerald shrink-0">G{m.guild_id}</span> : null}
                 {r && <span className="flex items-center gap-1 text-[9px] text-[#fdf3dc] shrink-0"><img src={rankImg(r.file)} alt="" className="h-4 w-4" />{r.name}</span>}
               </div>
@@ -63,6 +95,9 @@ export function PlayerList() {
                   <div key={l} className="min-w-0"><p className="eyebrow">{l}</p><p className={"truncate text-[10px] mt-1 " + c}>{v}</p></div>
                 ))}
               </div>
+              {m.placeholder && (
+                <button type="button" onClick={(e) => { e.stopPropagation(); setMerging(m); }} className="mt-2 h-7 w-full border border-dv-line bg-dv-panel2 text-[9px] text-[#fdf3dc]">MERGE INTO A DISCORD LOGIN</button>
+              )}
             </div>
           );
         })}

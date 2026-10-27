@@ -10,8 +10,9 @@ export async function POST(req: NextRequest) {
   }
 
   const db = createAdminClient();
-  const { data: me } = await db.from("members").select("is_super_admin").eq("id", auth.member.id).maybeSingle();
-  if (!me?.is_super_admin) return NextResponse.json({ error: "Super admin only" }, { status: 403 });
+  const { data: me } = await db.from("members").select("id, guild_id, is_super_admin, is_admin, is_creator").eq("id", auth.member.id).maybeSingle();
+  const staff = !!(me && (me.is_super_admin || me.is_admin || me.is_creator));
+  if (!me || !staff) return NextResponse.json({ error: "Staff only" }, { status: 403 });
 
   const body = await req.json().catch(() => null);
   const memberId = typeof body?.memberId === "string" ? body.memberId : "";
@@ -19,6 +20,12 @@ export async function POST(req: NextRequest) {
   const done = body?.done === true;
   if (!memberId || !Number.isInteger(dayNumber) || dayNumber < 1 || dayNumber > 6) {
     return NextResponse.json({ error: "Bad request" }, { status: 400 });
+  }
+
+  // Admins and the creator can only log for members of their own guild.
+  if (!me.is_super_admin) {
+    const { data: target } = await db.from("members").select("guild_id").eq("id", memberId).maybeSingle();
+    if (!target || target.guild_id !== me.guild_id) return NextResponse.json({ error: "Not in your guild" }, { status: 403 });
   }
 
   const { cycleStartISO, dayNumber: today } = getCycleInfo();

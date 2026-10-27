@@ -30,7 +30,8 @@ async function findMissingAndPing(forceHour?: number, onlyGuildId?: number, with
 
   for (const g of guilds as any[]) {
     const webhookUrl = g.discord_webhook_url || (g.code === "G2" ? settings?.discord_webhook_url || process.env.DISCORD_WEBHOOK_URL : null);
-    const missing = (members ?? []).filter((m: any) => m.guild_id === g.id && !loggedIds.has(m.id));
+    // Roster-only players have no Discord account to ping, so they are skipped.
+    const missing = (members ?? []).filter((m: any) => m.guild_id === g.id && !loggedIds.has(m.id) && !String(m.discord_id).startsWith("roster:"));
 
     if (missing.length === 0) {
       results.push({ guild: g.code, missing: 0, sent: false });

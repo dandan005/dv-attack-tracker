@@ -75,6 +75,7 @@ export function GuildProgress({
                   <img src={member.avatar_url || "/icons/icon-192.png"} onError={(e) => { if (!e.currentTarget.src.endsWith("/icons/icon-192.png")) e.currentTarget.src = "/icons/icon-192.png"; }} alt="" className="w-7 h-7 pixel-frame border border-dv-line shrink-0 object-cover" />
                   <span className="block text-[11px] text-[#fdf3dc] break-words leading-tight">{member.username}</span>
                   {member.discord_id === currentUserId && <span className="text-[8px] text-dv-emerald shrink-0">(YOU)</span>}
+                  {String(member.discord_id).startsWith("roster:") && <span className="text-[8px] text-dv-ember shrink-0">NO DISCORD</span>}
                   <span className="flex-1" />{rankByTier(member.promotion_tier) && <span className="flex items-center gap-1 text-[8px] text-dv-brassLight shrink-0"><img src={rankImg(rankByTier(member.promotion_tier)!.file)} alt="" className="h-4 w-4" />{rankByTier(member.promotion_tier)!.name}</span>}
                 </div>
                 <div className="grid grid-cols-6 gap-1">
