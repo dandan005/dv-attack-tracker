@@ -143,6 +143,7 @@ export default function DashboardPage() {
         discord_id: member.discord_id,
         username: member.game_name || member.username,
         avatar_url: member.avatar_url,
+        custom_avatar: member.custom_avatar ?? null,
         logged: CYCLE_DAY_NUMBERS.map((day) => memberLogs.has(day)),
         promotion_tier: member.promotion_tier ?? null,
         guild_id: member.guild_id ?? null,

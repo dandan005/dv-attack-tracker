@@ -2,12 +2,14 @@
 
 import { PixelPanel } from "./PixelPanel";
 import { rankByTier, rankImg } from "@/lib/ranks";
+import { gameAvatar } from "@/lib/gameAvatars";
 
 export type MemberRow = {
   id?: string;
   discord_id: string;
   username: string;
   avatar_url: string | null;
+  custom_avatar?: string | null;
   logged: boolean[];
   guild_id?: number | null;
   promotion_tier?: number | null;
@@ -72,7 +74,7 @@ export function GuildProgress({
             {members.map((member) => (
               <div key={member.discord_id} className="item-slot p-2">
                 <div className="flex items-center gap-2 min-w-0 mb-2">
-                  <img src={member.avatar_url || "/icons/icon-192.png"} onError={(e) => { if (!e.currentTarget.src.endsWith("/icons/icon-192.png")) e.currentTarget.src = "/icons/icon-192.png"; }} alt="" className="w-7 h-7 pixel-frame border border-dv-line shrink-0 object-cover" />
+                  <img src={(member.custom_avatar ? "/avatars/" + member.custom_avatar + ".png" : null) || gameAvatar(member.username) || member.avatar_url || "/icons/icon-192.png"} onError={(e) => { if (!e.currentTarget.src.endsWith("/icons/icon-192.png")) e.currentTarget.src = "/icons/icon-192.png"; }} alt="" className="w-7 h-7 pixel-frame border border-dv-line shrink-0 object-cover" />
                   <span className="block text-[11px] text-[#fdf3dc] break-words leading-tight">{member.username}</span>
                   {member.discord_id === currentUserId && <span className="text-[8px] text-dv-emerald shrink-0">(YOU)</span>}
                   {String(member.discord_id).startsWith("roster:") && <span className="text-[8px] text-dv-ember shrink-0">NO DISCORD</span>}
