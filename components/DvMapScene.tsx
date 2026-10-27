@@ -1,6 +1,6 @@
 "use client";
 import { useState, type CSSProperties } from "react";
-import { gameAvatar } from "@/lib/gameAvatars";
+import { avatarSrc } from "@/lib/avatarSrc";
 import { getCycleInfo, formatCountdown } from "@/lib/cycle";
 
 type P = { id: string; username: string | null; avatar_url?: string | null };
@@ -154,7 +154,7 @@ function Seat({ m, accent, pos, onPick, onEmpty }: { m: P | null; accent: string
   );
   return (
     <button type="button" onClick={() => onPick(m)} className="absolute flex flex-col items-center" style={wrap}>
-      <img src={gameAvatar(m.username) || m.avatar_url || FB} onError={(e) => { if (!e.currentTarget.src.endsWith(FB)) e.currentTarget.src = FB; }} alt="" className="relative z-10 h-12 w-12 border object-cover pixel-frame" style={{ borderColor: accent }} />
+      <img src={avatarSrc(m)} onError={(e) => { if (!e.currentTarget.src.endsWith(FB)) e.currentTarget.src = FB; }} alt="" className="relative z-10 h-12 w-12 border object-cover pixel-frame" style={{ borderColor: accent }} />
       {log}
       <span className="mt-0.5 max-w-[88px] truncate px-1 text-[9px] text-white" style={{ background: "rgba(0,0,0,.55)" }}>{m.username}</span>
     </button>

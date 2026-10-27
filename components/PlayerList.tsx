@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { rankByTier, rankImg } from "@/lib/ranks";
-import { gameAvatar } from "@/lib/gameAvatars";
+import { avatarSrc } from "@/lib/avatarSrc";
 import { PlayerEditor, type EditRow } from "@/components/PlayerEditor";
 
-type Row = { id: string; username: string | null; avatar_url: string | null; custom_avatar?: string | null; promotion_tier: number | null; level: number | null; stage: number | null; guild_id: number | null; placeholder?: boolean };
+type Row = { id: string; username: string | null; avatar_url: string | null; custom_avatar?: string | null; custom_avatar_url?: string | null; promotion_tier: number | null; level: number | null; stage: number | null; guild_id: number | null; placeholder?: boolean };
 type Data = { me: string; members: Row[]; roles?: { is_creator: boolean; is_admin: boolean; is_super_admin: boolean } };
 
 const glow = { border: "1px solid #d4af5a", background: "rgba(0,0,0,0.5)", boxShadow: "0 0 8px rgba(212,175,90,0.5)" };
@@ -83,9 +83,9 @@ export function PlayerList() {
             ["STAGE", m.stage != null ? String(m.stage) : "-", "text-dv-emerald"],
           ];
           return (
-            <div key={m.id} onClick={() => setEdit({ id: m.id, username: m.username, level: m.level, stage: m.stage, guild_id: m.guild_id, custom_avatar: m.custom_avatar, promotion_tier: m.promotion_tier })} className="item-slot p-2 cursor-pointer">
+            <div key={m.id} onClick={() => setEdit({ id: m.id, username: m.username, level: m.level, stage: m.stage, guild_id: m.guild_id, custom_avatar: m.custom_avatar, custom_avatar_url: m.custom_avatar_url, promotion_tier: m.promotion_tier })} className="item-slot p-2 cursor-pointer">
               <div className="flex items-center gap-2 min-w-0 mb-2">
-                <img src={(m.custom_avatar ? "/avatars/" + m.custom_avatar + ".png" : null) || gameAvatar(m.username) || m.avatar_url || "/icons/icon-192.png"} onError={(e) => { if (!e.currentTarget.src.endsWith("/icons/icon-192.png")) e.currentTarget.src = "/icons/icon-192.png"; }} alt="" className="w-7 h-7 pixel-frame border border-dv-line shrink-0 object-cover" />
+                <img src={avatarSrc(m)} onError={(e) => { if (!e.currentTarget.src.endsWith("/icons/icon-192.png")) e.currentTarget.src = "/icons/icon-192.png"; }} alt="" className="w-7 h-7 pixel-frame border border-dv-line shrink-0 object-cover" />
                 <span className="block text-[11px] text-[#fdf3dc] break-words leading-tight">{m.username || "-"}</span>
                 <span className="flex-1" />
                 {m.placeholder && <span className="text-[8px] text-dv-ember shrink-0">NO DISCORD</span>}

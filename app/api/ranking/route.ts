@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
   const canSeeUnassigned = !!(me?.is_creator || me?.is_admin || me?.is_super_admin) && req.nextUrl.searchParams.get("include") === "unassigned";
   let q = admin
     .from("members")
-    .select("id, discord_id, username, game_name, avatar_url, custom_avatar, promotion_tier, level, stage, dv_map, gr_boss, guild_id");
+    .select("id, discord_id, username, game_name, avatar_url, custom_avatar, custom_avatar_url, promotion_tier, level, stage, dv_map, gr_boss, guild_id");
   if (!canSeeUnassigned) q = q.not("guild_id", "is", null);
   if (g && g !== "ALL") {
     const gid = Number(g);
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
   const gid2 = g && g !== "ALL" ? Number(g) : null;
   const extra = (ro ?? [])
     .filter((r: any) => !claimed.has(r.key) && (gid2 === null || r.guild_id === null || r.guild_id === gid2))
-    .map((r: any) => ({ id: "roster-" + r.key, username: r.name, avatar_url: null, custom_avatar: r.custom_avatar ?? null, promotion_tier: r.promotion_tier, level: r.level, stage: r.stage, dv_map: r.dv_map, gr_boss: r.gr_boss, guild_id: r.guild_id }));
+    .map((r: any) => ({ id: "roster-" + r.key, username: r.name, avatar_url: null, custom_avatar: r.custom_avatar ?? null, custom_avatar_url: r.custom_avatar_url ?? null, promotion_tier: r.promotion_tier, level: r.level, stage: r.stage, dv_map: r.dv_map, gr_boss: r.gr_boss, guild_id: r.guild_id }));
   // Roster-only players (placeholder members) are flagged; their Discord ID is not sent to the client.
   const members = [...(data ?? []).map(({ discord_id, game_name, ...m }: any) => ({ ...m, username: game_name || m.username, placeholder: String(discord_id).startsWith("roster:") })), ...extra].sort((a: any, b: any) => (b.promotion_tier ?? 0) - (a.promotion_tier ?? 0) || (b.stage ?? 0) - (a.stage ?? 0) || (b.level ?? 0) - (a.level ?? 0));
   return NextResponse.json({

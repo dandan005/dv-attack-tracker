@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { gameAvatar } from "@/lib/gameAvatars";
+import { avatarSrc } from "@/lib/avatarSrc";
 
 type P = { id: string; username: string | null; avatar_url?: string | null; gr_boss: number | null };
 type B = { n: number; r: string; name: string; slots: number; pts: string };
@@ -115,7 +115,7 @@ function Detail({ g, ms, onClose, onPick, onFill }: { g: B; ms: P[]; onClose: ()
               if (!m) return (<button key={i} type="button" disabled={!onFill} onClick={() => { onClose(); onFill?.(); }} className="block h-9 w-9 rounded-full border-2 p-1 disabled:opacity-100" style={{ background: "#6a5a48", borderColor: "#c9b48a" }}><Silhouette /></button>);
               return (
                 <button key={m.id} type="button" onClick={() => { onClose(); onPick(m); }} className="block h-9 w-9 overflow-hidden rounded-full border-2" style={{ borderColor: "#c9b48a" }}>
-                  <img src={gameAvatar(m.username) || m.avatar_url || FB} onError={(e) => { if (!e.currentTarget.src.endsWith(FB)) e.currentTarget.src = FB; }} alt={m.username ?? ""} className="h-full w-full object-cover" />
+                  <img src={avatarSrc(m)} onError={(e) => { if (!e.currentTarget.src.endsWith(FB)) e.currentTarget.src = FB; }} alt={m.username ?? ""} className="h-full w-full object-cover" />
                 </button>
               );
             })}

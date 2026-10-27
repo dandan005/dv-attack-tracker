@@ -1,5 +1,5 @@
 "use client";
-import { gameAvatar } from "@/lib/gameAvatars";
+import { avatarSrc } from "@/lib/avatarSrc";
 import { GR } from "@/lib/guildRequest";
 import type { RunePick } from "@/lib/useRunePicks";
 
@@ -32,7 +32,7 @@ export function PlayerInfoModal({ member, picks, onClose }: { member: any; picks
           <div className="flex items-center gap-4">
             <div className="relative shrink-0 pb-2">
               <img
-                src={(member.custom_avatar ? "/avatars/" + member.custom_avatar + ".png" : null) || gameAvatar(member.username) || member.avatar_url || FB}
+                src={avatarSrc(member)}
                 onError={(e) => { if (!e.currentTarget.src.endsWith(FB)) e.currentTarget.src = FB; }}
                 alt=""
                 className="pixel-frame h-24 w-24 border-2 border-dv-brass object-cover shadow-[0_0_14px_rgba(242,196,109,0.25)]"

@@ -1,5 +1,5 @@
 "use client";
-import { gameAvatar } from "@/lib/gameAvatars";
+import { avatarSrc } from "@/lib/avatarSrc";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -126,7 +126,7 @@ export default function DashboardPage() {
     setSettings(currentSettings);
     const cycle = getCycleInfo();
 
-    const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, game_name, avatar_url, custom_avatar, is_admin, has_seen_walkthrough, terms_version, promotion_tier, guild_verified_at, guild_id, is_super_admin, is_creator, level, stage");
+    const { data: allMembers } = await supabase.from("members").select("id, auth_user_id, discord_id, username, game_name, avatar_url, custom_avatar, custom_avatar_url, is_admin, has_seen_walkthrough, terms_version, promotion_tier, guild_verified_at, guild_id, is_super_admin, is_creator, level, stage");
     const { data: logsData } = await supabase.from("attack_logs").select("member_id, day_number, logged_at").eq("cycle_start", cycle.cycleStartISO);
     const logs: AttackLog[] = logsData ?? [];
 
@@ -144,6 +144,7 @@ export default function DashboardPage() {
         username: member.game_name || member.username,
         avatar_url: member.avatar_url,
         custom_avatar: member.custom_avatar ?? null,
+        custom_avatar_url: member.custom_avatar_url ?? null,
         logged: CYCLE_DAY_NUMBERS.map((day) => memberLogs.has(day)),
         promotion_tier: member.promotion_tier ?? null,
         guild_id: member.guild_id ?? null,
@@ -401,7 +402,7 @@ export default function DashboardPage() {
                           {perfectMembers.map((m) => (
                             <li key={m.discord_id} className="item-slot flex items-center justify-between border border-dv-line px-3 py-2">
                               <span className="flex items-center gap-2 text-[10px] text-[#fdf3dc]">
-                                <img src={gameAvatar(m.username) ?? m.avatar_url ?? "/icons/icon-192.png"} alt="" className="h-5 w-5 pixel-frame border border-dv-line object-cover" />
+                                <img src={avatarSrc(m)} alt="" className="h-5 w-5 pixel-frame border border-dv-line object-cover" />
                                 {m.username}
                               </span>
                               <span className="text-[10px] text-dv-emerald">6/6 logged</span>
@@ -427,7 +428,7 @@ export default function DashboardPage() {
                             >
                               <span className="flex items-center gap-2 text-[10px] text-[#fdf3dc]">
                                 <img
-                                  src={gameAvatar(m.username) ?? m.avatar_url ?? "/icons/icon-192.png"}
+                                  src={avatarSrc(m)}
                                   alt=""
                                   className="h-5 w-5 pixel-frame border border-dv-line object-cover"
                                 />
@@ -459,7 +460,7 @@ export default function DashboardPage() {
                             >
                               <span className="flex items-center gap-2 text-[10px] text-[#fdf3dc]">
                                 <img
-                                  src={gameAvatar(m.username) ?? m.avatar_url ?? "/icons/icon-192.png"}
+                                  src={avatarSrc(m)}
                                   alt=""
                                   className="h-5 w-5 pixel-frame border border-dv-line object-cover"
                                 />

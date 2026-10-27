@@ -52,6 +52,12 @@ export async function POST(req: NextRequest) {
   if (!wide && !isRoster && tgt.id !== me.id && (tgt.is_admin || tgt.is_super_admin || tgt.is_creator)) return err("Forbidden", 403);
 
   if (action === "delete") {
+    // Remove the uploaded picture from storage along with the player.
+    const { data: pic } = isRoster ? await db.from("roster").select("custom_avatar_url").eq("key", id.slice(7)).maybeSingle() : await db.from("members").select("custom_avatar_url").eq("id", id).maybeSingle();
+    const marker = "/object/public/avatars/";
+    const url: string | null = (pic as { custom_avatar_url?: string | null } | null)?.custom_avatar_url ?? null;
+    const at = url ? url.indexOf(marker) : -1;
+    if (url && at >= 0) await db.storage.from("avatars").remove([decodeURIComponent(url.slice(at + marker.length).split("?")[0])]);
     const { error } = isRoster ? await db.from("roster").delete().eq("key", id.slice(7)) : await db.from("members").delete().eq("id", id);
     if (error) return err("Delete failed", 500);
     return NextResponse.json({ ok: true });
