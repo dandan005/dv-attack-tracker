@@ -643,9 +643,18 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
               <SectionLabel>YOUR INVENTORY</SectionLabel>
               <p className="text-sm text-dv-brassLight">Ingredient ownership</p>
             </div>
-            <span className="text-[10px] text-dv-emerald">
-              {ingredients.filter((item) => item.owned).length}/{ingredients.length}
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="text-[10px] text-dv-emerald">
+                {ingredients.filter((item) => item.owned).length}/{ingredients.length}
+              </span>
+              <button
+                type="button"
+                onClick={() => setQty({})}
+                className="border border-dv-line px-2 py-1 text-[9px] tracking-[.12em] text-dv-brassLight"
+              >
+                CLEAR ALL
+              </button>
+            </div>
           </div>
           <div className="grid grid-cols-5 gap-2">
           {selected && (
