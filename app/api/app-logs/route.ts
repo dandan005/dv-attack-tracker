@@ -33,13 +33,21 @@ export async function POST(req: NextRequest) {
   const { data: { user } } = await createClient().auth.getUser();
   const signedIn = !!user;
 
+  const admin = createAdminClient();
+  // Tie signed-in reports to their member so the log shows who hit the error.
+  let memberId: string | null = null;
+  if (signedIn) {
+    const { data: m } = await admin.from("members").select("id").eq("auth_user_id", user.id).maybeSingle();
+    memberId = m?.id ?? null;
+  }
+
   const source = clip(body.source, 60);
-  const { error } = await createAdminClient().from("app_logs").insert({
+  const { error } = await admin.from("app_logs").insert({
     level: LEVELS.includes(body.level) ? body.level : "error",
     source: signedIn ? scrubLog(source) : scrubLog("anon:" + source).slice(0, 60),
     message: scrubLog(clip(body.message, 300)),
     details: signedIn && body.details != null ? scrubLog(clip(JSON.stringify(body.details), 1000)) : null,
-    member_id: null,
+    member_id: memberId,
   });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true });
@@ -58,9 +66,15 @@ export async function GET() {
 
   const { data, error } = await admin
     .from("app_logs")
-    .select("id, created_at, level, source, message, details")
+    .select("id, created_at, level, source, message, details, member:members(username, game_name)")
     .order("created_at", { ascending: false })
     .limit(200);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ logs: data ?? [] });
+
+  // Show the in-game name when set, otherwise the Discord name.
+  const logs = (data ?? []).map(({ member, ...l }) => {
+    const m = Array.isArray(member) ? member[0] : member;
+    return { ...l, who: m ? m.game_name || m.username || null : null };
+  });
+  return NextResponse.json({ logs });
 }

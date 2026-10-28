@@ -61,6 +61,7 @@ function ErrorLog() {
             <p className={"text-[9px] " + (l.level === "error" ? "text-dv-ember" : "text-dv-brassLight")}>
               {new Date(l.created_at).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })} · {String(l.level).toUpperCase()} · {l.source}
             </p>
+            <p className="mt-0.5 text-[9px] text-dv-brassLight">BY {l.who ?? "ANONYMOUS"}</p>
             <p className="mt-1 break-words text-[10px] text-[#fdf3dc]">{l.message}</p>
             {l.details && <p className="mt-1 break-all text-[9px] text-[#fdf3dc]">{l.details}</p>}
           </div>
