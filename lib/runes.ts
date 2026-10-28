@@ -343,3 +343,10 @@ export const ALL_RUNES: FlatRune[] = runeTiers.flatMap((t) =>
   t.groups.flatMap((g) => g.runes.map((r) => ({ name: r.name, effect: r.effect, tier: t.name, accent: t.accent, rank: 0, icon: RUNE_ICONS[r.name] ?? null })))
 ).map((r, i) => ({ ...r, rank: i }));
 export const RUNE_BY_NAME = new Map(ALL_RUNES.map((r) => [r.name, r]));
+// Which map each explorer terrain belongs to (keys match members.dv_map).
+export const TERRAIN_MAP: Record<string, string> = {
+  "Arid Wasteland": "wasteland", "Rock Cave": "wasteland", "Eroded Highlands": "wasteland", "Sky Terrace": "wasteland",
+  "Burning Summit": "lava", "Red Ridge": "lava", "Laval Fields": "lava", "Ashen Grasslands": "lava",
+  "Cliff's Edge": "windcliff", "Triangular Pass": "windcliff", "Echoing Grave": "windcliff", "Labyrinth of Gusts": "windcliff",
+  "Frozen Hill": "icevale", "Frost Valley": "icevale", "White Peak": "icevale", "Drift Ice Region": "icevale",
+};

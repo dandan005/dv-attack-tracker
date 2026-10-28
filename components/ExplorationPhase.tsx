@@ -87,7 +87,7 @@ export function ExplorationPhase({ currentDay, guildId, meId, rankMembers }: { c
       <p className="mt-4 text-[10px] uppercase tracking-[.1em] text-[#fdf3dc]">Explore · Cook special dishes · Build raid advantage</p>
 
       {pickerOpen && currentDay <= 3 && (
-        <RunePicker day={currentDay} picks={picks} meId={myId} mapMemberIds={mapMemberIds} onClose={closePicker} onSaved={reload} />
+        <RunePicker day={currentDay} picks={picks} meId={myId} mapMemberIds={mapMemberIds} myMap={myMap} onClose={closePicker} onSaved={reload} />
       )}
       {selected && (
         <PlayerInfoModal member={selected} picks={picks.filter((p) => p.member_id === selected.id)} onClose={() => setSelected(null)} />

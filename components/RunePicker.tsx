@@ -1,6 +1,6 @@
 "use client";
 import { useMemo, useState, type CSSProperties } from "react";
-import { RUNE_BY_NAME, RUNE_ICONS, runeTiers, tierColors, tierStyles, type FlatRune } from "@/lib/runes";
+import { RUNE_BY_NAME, RUNE_ICONS, TERRAIN_MAP, runeTiers, tierColors, tierStyles, type FlatRune } from "@/lib/runes";
 import { getCycleInfo } from "@/lib/cycle";
 import type { RunePick } from "@/lib/useRunePicks";
 
@@ -18,7 +18,7 @@ function runeCategory(r: { name: string; effect: string }): keyof typeof CATEGOR
 }
 
 // mapMemberIds: members on the viewer's map. Taken runes only count picks from them (null = whole guild).
-type Props = { day: number; picks: RunePick[]; meId: string | null; mapMemberIds?: string[] | null; onClose: () => void; onSaved: () => void };
+type Props = { day: number; picks: RunePick[]; meId: string | null; mapMemberIds?: string[] | null; myMap?: string | null; onClose: () => void; onSaved: () => void };
 
 // Options the game offered are remembered per browser for this cycle and day, so reopening skips step 1.
 function loadOffers(key: string): (string | null)[] {
@@ -31,7 +31,7 @@ function loadOffers(key: string): (string | null)[] {
   return [null, null, null];
 }
 
-export function RunePicker({ day, picks, meId, mapMemberIds, onClose, onSaved }: Props) {
+export function RunePicker({ day, picks, meId, mapMemberIds, myMap = null, onClose, onSaved }: Props) {
   const cycle = getCycleInfo().cycleStartISO;
   const storageKey = `dv-rune-offer:${cycle}:${day}`;
   const [offers, setOffers] = useState<(string | null)[]>(() => loadOffers(storageKey));
@@ -76,11 +76,19 @@ export function RunePicker({ day, picks, meId, mapMemberIds, onClose, onSaved }:
     setActive(i);
   }
 
-  // Recommendation: the best unclaimed rune, by category first (attack, exploration, cooking, other), then tier order.
+  // Recommendation: best unclaimed rune by category (attack, exploration, cooking, other), then explorer runes on the viewer's own map.
+  // Runes that tie on both are all recommended.
   const cards = offers.map((n) => (n ? RUNE_BY_NAME.get(n) ?? null : null)).filter(Boolean) as FlatRune[];
   const available = cards.filter((c) => !takenBy.has(c.name));
-  const score = (r: FlatRune) => CATEGORY_PRIORITY[runeCategory(r)] * 1000 + r.rank;
-  const recommended = available.length ? available.reduce((a, b) => (score(b) < score(a) ? b : a)).name : null;
+  const offMap = (r: FlatRune) => {
+    const m = r.name.match(/^(.+) Explorer$/);
+    if (!m || !myMap) return 0;
+    const terrainMap = TERRAIN_MAP[m[1]];
+    return terrainMap && terrainMap !== myMap ? 1 : 0;
+  };
+  const key = (r: FlatRune) => CATEGORY_PRIORITY[runeCategory(r)] * 10 + offMap(r);
+  const bestKey = available.length ? Math.min(...available.map(key)) : null;
+  const recommended = new Set(available.filter((c) => key(c) === bestKey).map((c) => c.name));
 
   function goChoose() {
     if (!complete) return;
@@ -198,7 +206,7 @@ export function RunePicker({ day, picks, meId, mapMemberIds, onClose, onSaved }:
                   {c.effect}
                 </span>
                 <span className="mt-auto flex h-[18px] items-center justify-center gap-1">
-                  {c.name === recommended && !isTaken && <span className="rune-badge">RECOMMENDED</span>}
+                  {recommended.has(c.name) && !isTaken && <span className="rune-badge">RECOMMENDED</span>}
                   {isTaken && <span className="rune-badge rune-badge--dim">TAKEN</span>}
                   {c.name === mine && <span className="rune-badge rune-badge--dim">YOURS</span>}
                 </span>
