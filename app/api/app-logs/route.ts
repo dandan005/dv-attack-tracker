@@ -72,7 +72,8 @@ export async function GET() {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   // Show the in-game name when set, otherwise the Discord name.
-  const logs = (data ?? []).map(({ member, ...l }) => {
+  const logs = (data ?? []).map((row: any) => {
+    const { member, ...l } = row;
     const m = Array.isArray(member) ? member[0] : member;
     return { ...l, who: m ? m.game_name || m.username || null : null };
   });
