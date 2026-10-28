@@ -1,6 +1,6 @@
 "use client";
 
-import { RUNE_ICONS, runeTiers, tierColors } from "@/lib/runes";
+import { RUNE_ICONS, runeTiers, tierColors, tierStyles } from "@/lib/runes";
 import { descFor } from "./mealDescriptions";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 
@@ -705,30 +705,12 @@ export function Runes() {
 
   return (
     <div className="space-y-4">
-      <Card className="relative overflow-hidden p-4">
-        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#ffd76a] via-[#ff9a3c] to-[#5ef0e0] opacity-80" />
+      <Card className="p-4">
         <SectionLabel>RUNE DESK / TIER NOTES</SectionLabel>
         <h2 className="text-lg text-dv-brassLight">Spend fragments with a plan.</h2>
         <p className="mt-2 max-w-xl text-xs leading-relaxed text-[#fdf3dc]">
           Full guild rune notes by tier — Immortal, Mythic, and Legendary — with sub-tier priority and rough Emblem value where it's known.
         </p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {runeTiers.map((tier) => {
-            const color = tierColors[tier.accent];
-            const count = tier.groups.reduce((n, g) => n + g.runes.length, 0);
-            return (
-              <span
-                key={tier.name}
-                className="flex items-center gap-2 border px-2.5 py-1.5 text-[10px] tracking-[.12em]"
-                style={{ borderColor: `${color}77`, color, background: `${color}12` }}
-              >
-                <span aria-hidden="true">{tier.icon}</span>
-                {tier.name.toUpperCase()}
-                <span className="text-[#fdf3dc]">{count}</span>
-              </span>
-            );
-          })}
-        </div>
       </Card>
 
       <Card>
@@ -741,65 +723,47 @@ export function Runes() {
         )}
 
         {filteredTiers.map((tier) => {
-          const color = tierColors[tier.accent];
+          const style = tierStyles[tier.accent];
           const isOpen = isSearching || openTiers.includes(tier.name);
-          const count = tier.groups.reduce((n, g) => n + g.runes.length, 0);
           return (
           <div key={tier.name} className="border-b border-dv-line last:border-b-0">
             <button
               type="button"
               onClick={() => setOpenTiers((current) => (current.includes(tier.name) ? current.filter((item) => item !== tier.name) : [...current, tier.name]))}
-              className="flex w-full items-center gap-3 px-4 py-4 text-left"
-              style={{ background: `linear-gradient(90deg, ${color}1f, transparent 70%)` }}
+              className={`flex w-full items-center gap-3 border-b border-dv-line px-4 py-4 text-left ${isOpen ? "" : "border-b-0"}`}
             >
-              <span
-                className="grid h-10 w-10 shrink-0 place-items-center border text-lg leading-none"
-                style={{ borderColor: color, color, boxShadow: `0 0 10px ${color}55` }}
-              >
-                {tier.icon}
-              </span>
+              <span className={`text-lg leading-none ${style.text}`}>{tier.icon}</span>
               <span className="flex-1">
-                <span className="eyebrow block">RUNE TIER · {count} RUNES</span>
-                <span className="mt-1 block text-sm" style={{ color }}>{tier.name}</span>
+                <span className="eyebrow block">RUNE TIER</span>
+                <span className={`mt-1 block text-sm ${style.text}`}>{tier.name}</span>
               </span>
-              <span className="text-sm leading-none" style={{ color, transform: isOpen ? "rotate(180deg)" : undefined }}>▾</span>
+              <span className="text-dv-violet">{isOpen ? "−" : "+"}</span>
             </button>
 
             {isOpen && (
-              <div className="space-y-5 px-4 pb-5">
+              <div className="divide-y divide-dv-line">
                 {tier.groups.map((group, groupIndex) => (
-                  <div key={`${tier.name}-${group.label ?? "top"}-${groupIndex}`}>
+                  <div key={`${tier.name}-${group.label ?? "top"}-${groupIndex}`} className="p-4">
                     {group.label && (
                       <div className="mb-3 flex items-center gap-2">
                         <span
-                          className="grid h-6 w-6 place-items-center border font-pixel text-[10px]"
-                          style={{ borderColor: color, color, background: `${color}22` }}
+                          className={`grid h-6 w-6 place-items-center border font-pixel text-[10px] ${style.chipBorder} ${style.chipBg} ${style.text}`}
                         >
                           {group.label}
                         </span>
-                        <span className="text-[9px] uppercase tracking-[.14em] text-[#fdf3dc]">Sub-tier {group.label}</span>
-                        <span className="h-px flex-1" style={{ background: `${color}55` }} aria-hidden="true" />
+                        <span className="text-[9px] uppercase tracking-[.1em] text-[#fdf3dc]">Sub-tier {group.label}</span>
                       </div>
                     )}
-                    <div className="space-y-2.5">
+                    <div className="space-y-3">
                       {group.runes.map((rune) => (
-                        <div
-                          key={rune.name}
-                          className="flex items-start gap-3 border-l-2 bg-dv-panel2/60 p-3"
-                          style={{ borderColor: color, boxShadow: `inset 0 0 18px ${color}10`, ["--rc" as string]: color } as CSSProperties}
-                        >
-                          <span
-                            className="grid h-11 w-11 shrink-0 place-items-center border"
-                            style={{ borderColor: `${color}88`, background: `${color}14` }}
-                          >
+                        <div key={rune.name} className="item-slot border border-dv-line/70 p-3">
+                          <div className="flex items-center gap-3" style={{ ["--rc" as string]: tierColors[tier.accent] } as CSSProperties}>
                             {RUNE_ICONS[rune.name] && (
-                              <span className="rune-icon" aria-hidden="true" style={{ maskImage: `url(/runes/${RUNE_ICONS[rune.name]}.png)`, WebkitMaskImage: `url(/runes/${RUNE_ICONS[rune.name]}.png)`, width: 30, height: 30 } as CSSProperties} />
+                              <span className="rune-icon shrink-0" aria-hidden="true" style={{ maskImage: `url(/runes/${RUNE_ICONS[rune.name]}.png)`, WebkitMaskImage: `url(/runes/${RUNE_ICONS[rune.name]}.png)`, width: 40, height: 40 } as CSSProperties} />
                             )}
-                          </span>
-                          <div className="min-w-0">
-                            <p className="text-sm" style={{ color }}>{rune.name}</p>
-                            <p className="mt-1 text-xs leading-relaxed text-[#fdf3dc]">{rune.effect}</p>
+                            <p className={`text-sm ${style.text}`}>{rune.name}</p>
                           </div>
+                          <p className="mt-1.5 text-xs leading-relaxed text-[#fdf3dc]">{rune.effect}</p>
                         </div>
                       ))}
                     </div>
