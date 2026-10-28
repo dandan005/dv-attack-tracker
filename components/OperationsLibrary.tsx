@@ -649,7 +649,7 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
               </span>
               <button
                 type="button"
-                onClick={() => setQty({})}
+                onClick={() => setQty(Object.fromEntries(ingredients.map((i) => [i.name, "0"])))}
                 className="border border-dv-line px-2 py-1 text-[9px] tracking-[.12em] text-dv-brassLight"
               >
                 CLEAR ALL
