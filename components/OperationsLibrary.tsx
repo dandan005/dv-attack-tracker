@@ -1,6 +1,6 @@
 "use client";
 
-import { RUNE_ICONS, runeTiers, tierColors, tierStyles } from "@/lib/runes";
+import { CATEGORY_PRIORITY, RUNE_ICONS, runeCategory, runeTiers, tierColors, tierStyles } from "@/lib/runes";
 import { descFor } from "./mealDescriptions";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 
@@ -693,20 +693,18 @@ export function Runes() {
   const [query, setQuery] = useState("");
   const [openTiers, setOpenTiers] = useState<string[]>(["Immortal"]);
 
+  // One list per tier, ordered by recommendation (attack, exploration, cooking, other); sub-tier dividers are dropped.
   const filteredTiers = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return runeTiers;
     return runeTiers
-      .map((tier) => ({
-        ...tier,
-        groups: tier.groups
-          .map((group) => ({
-            ...group,
-            runes: group.runes.filter((rune) => `${rune.name} ${rune.effect}`.toLowerCase().includes(q)),
-          }))
-          .filter((group) => group.runes.length > 0),
-      }))
-      .filter((tier) => tier.groups.length > 0);
+      .map((tier) => {
+        const runes = tier.groups
+          .flatMap((group) => group.runes)
+          .filter((rune) => !q || `${rune.name} ${rune.effect}`.toLowerCase().includes(q))
+          .sort((a, b) => CATEGORY_PRIORITY[runeCategory(a)] - CATEGORY_PRIORITY[runeCategory(b)]);
+        return { ...tier, groups: [{ label: null, runes }] };
+      })
+      .filter((tier) => tier.groups[0].runes.length > 0);
   }, [query]);
 
   // While searching, force every matching tier open so results aren't hidden behind a collapsed accordion.

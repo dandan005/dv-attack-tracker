@@ -341,6 +341,16 @@ export const ALL_RUNES: FlatRune[] = runeTiers.flatMap((t) =>
   t.groups.flatMap((g) => g.runes.map((r) => ({ name: r.name, effect: r.effect, tier: t.name, accent: t.accent, rank: 0, icon: RUNE_ICONS[r.name] ?? null })))
 ).map((r, i) => ({ ...r, rank: i }));
 export const RUNE_BY_NAME = new Map(ALL_RUNES.map((r) => [r.name, r]));
+
+// Recommendation order: attack first, then exploration, then cooking, then everything else.
+export const CATEGORY_PRIORITY = { attack: 0, exploration: 1, cooking: 2, other: 3 } as const;
+export function runeCategory(r: { name: string; effect: string }): keyof typeof CATEGORY_PRIORITY {
+  const t = `${r.name} ${r.effect}`;
+  if (/dmg|damage|atk|onigiri|skill|subjugation/i.test(t)) return "attack";
+  if (/explor|trace|terrain|campfire|region/i.test(t)) return "exploration";
+  if (/dish|cook|ingredient|chef|resource|recipe|materials|shrimp|rice|meat|lettuce|honey|caviar|truffle|basil|cheese|potato|tomato|peanut|corn|strawberry|sugar|tuna|cacao|chili|wheat|egg|milk|bean|stick/i.test(t)) return "cooking";
+  return "other";
+}
 // Which map each explorer terrain belongs to (keys match members.dv_map).
 export const TERRAIN_MAP: Record<string, string> = {
   "Arid Wasteland": "wasteland", "Rock Cave": "wasteland", "Eroded Highlands": "wasteland", "Sky Terrace": "wasteland",

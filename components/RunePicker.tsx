@@ -1,21 +1,12 @@
 "use client";
 import { useMemo, useState, type CSSProperties } from "react";
-import { RUNE_BY_NAME, RUNE_ICONS, TERRAIN_MAP, runeTiers, tierColors, tierStyles, type FlatRune } from "@/lib/runes";
+import { CATEGORY_PRIORITY, RUNE_BY_NAME, RUNE_ICONS, TERRAIN_MAP, runeCategory, runeTiers, tierColors, tierStyles, type FlatRune } from "@/lib/runes";
 import { getCycleInfo } from "@/lib/cycle";
 import type { RunePick } from "@/lib/useRunePicks";
 
 // Card skin per rune tier (matches the in-game frames: Mythic blue, Immortal gold, Legendary orange).
 const SKINS: Record<string, string> = { Mythic: "mythic", Immortal: "immortal", Legendary: "legendary" };
 
-// Recommendation order: attack first, then exploration, then cooking, then everything else.
-const CATEGORY_PRIORITY = { attack: 0, exploration: 1, cooking: 2, other: 3 } as const;
-function runeCategory(r: { name: string; effect: string }): keyof typeof CATEGORY_PRIORITY {
-  const t = `${r.name} ${r.effect}`;
-  if (/dmg|damage|atk|onigiri|skill|subjugation/i.test(t)) return "attack";
-  if (/explor|trace|terrain|campfire|region/i.test(t)) return "exploration";
-  if (/dish|cook|ingredient|chef|resource|recipe|materials|shrimp|rice|meat|lettuce|honey|caviar|truffle|basil|cheese|potato|tomato|peanut|corn|strawberry|sugar|tuna|cacao|chili|wheat|egg|milk|bean|stick/i.test(t)) return "cooking";
-  return "other";
-}
 
 // mapMemberIds: members on the viewer's map. Taken runes only count picks from them (null = whole guild).
 type Props = { day: number; picks: RunePick[]; meId: string | null; mapMemberIds?: string[] | null; myMap?: string | null; onClose: () => void; onSaved: () => void };
