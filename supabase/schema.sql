@@ -1,6 +1,3 @@
--- Dragon Valley Attack Tracker — Supabase schema
--- Run this in the Supabase SQL editor after creating the project.
-
 create table if not exists members (
   id uuid primary key default gen_random_uuid(),
   auth_user_id uuid unique references auth.users(id) on delete cascade,
@@ -40,8 +37,6 @@ alter table members enable row level security;
 alter table attack_logs enable row level security;
 alter table app_settings enable row level security;
 
--- This function is the database-side membership gate. It is SECURITY DEFINER
--- so RLS can use it without recursively querying the members policy.
 create or replace function public.is_guild_member()
 returns boolean
 language sql
