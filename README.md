@@ -58,3 +58,6 @@ The cron in `vercel.json` fires at 20:00 UTC by default — change it if your gu
 - Cycle math assumes a six-day loop that just keeps repeating from the anchor date forever.
 - I'm not hardcoding any of Slayer Legend's actual boss formulas or ripping their assets — damage numbers are typed in from what the game shows, so this doesn't break every time they rebalance something.
 - `app_settings` is one shared row per deployment — this is built for a single guild, not multi-tenant.
+
+
+Outdated README.md
