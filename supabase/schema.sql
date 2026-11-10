@@ -93,7 +93,3 @@ create policy "members can update their own attacks"
     public.is_guild_member()
     and member_id in (select id from members where auth_user_id = auth.uid())
   );
-
--- app_settings has intentionally no authenticated-user policies. Its webhook
--- URL stays server-only; /api/settings exposes only safe fields after the
--- server verifies current Discord guild membership.
