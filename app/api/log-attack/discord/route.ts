@@ -8,7 +8,7 @@ import { createAdminClient } from "@/lib/supabase/server";
 import { getCycleInfo } from "@/lib/cycle";
 import { serverLog } from "@/lib/appLog";
 
-const DISCORD_PUBLIC_KEY = process.env.DISCORD_PUBLIC_KEY || "";
+const DISCORD_APP_BOT_PUBLIC_KEY = process.env.DISCORD_APP_BOT_PUBLIC_KEY || "";
 
 export async function POST(req: NextRequest) {
   const signature = req.headers.get("x-signature-ed25519");
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     rawBody,
     signature,
     timestamp,
-    DISCORD_PUBLIC_KEY,
+    DISCORD_APP_BOT_PUBLIC_KEY,
   );
 
   if (!isValidRequest) {
