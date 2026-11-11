@@ -103,11 +103,18 @@ async function findMissingAndPing(
           type: 1, // Action Row
           components: [
             {
-              type: 2, // Button Component
+              type: 2, // Standard Interactive Button
               style: 1, // Primary (Blurple)
               custom_id: `log_attack_guild_${g.code}`, // Encodes target guild code (e.g., log_attack_guild_G1)
               label: "Log Today's Attack",
               emoji: { name: "⚔️" },
+            },
+            {
+              type: 2, // Button Component
+              style: 5, // Style 5 = Link Button (opens external URL)
+              url: "https://dv-attack-tracker.vercel.app/dashboard",
+              label: "Open DV Tracker",
+              emoji: { name: "🌐" },
             },
           ],
         },
