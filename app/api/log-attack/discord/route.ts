@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
     const customId = data?.custom_id;
 
     // Check if button custom_id starts with our prefix
-    if (customId.startsWith("log_attack_guild_")) {
+    if (customId?.startsWith("log_attack_guild_")) {
       const discordUserId = discordMember?.user?.id;
       const discordUsername = discordMember?.user?.username || "Warrior";
 
