@@ -106,7 +106,7 @@ async function findMissingAndPing(
               type: 2, // Button Component
               style: 1, // Primary (Blurple)
               custom_id: `log_attack_guild_${g.code}`, // Encodes target guild code (e.g., log_attack_guild_G1)
-              label: `Log Attack (${g.code})`,
+              label: "Log Today's Attack",
               emoji: { name: "⚔️" },
             },
           ],
