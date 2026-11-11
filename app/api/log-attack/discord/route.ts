@@ -126,7 +126,7 @@ export async function POST(req: NextRequest) {
       }
 
       // Log the attack into attack_logs table
-      const { error: logError } = await supabase.from("attack_logs").upsert(
+      const { data: inserted, error: logError } = await supabase.from("attack_logs").upsert(
         {
           member_id: memberData.id,
           day_number: today,
@@ -139,7 +139,7 @@ export async function POST(req: NextRequest) {
           onConflict: "member_id,day_number,cycle_start",
           ignoreDuplicates: true,
         },
-      );
+      ).select("member_id");
 
       if (logError) {
         await serverLog(
@@ -162,7 +162,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: `⚔️ **${memberData.game_name}** successfully logged today's attack for **Day ${today}**!`,
+          content: inserted?.length === 0 ? `ℹ️ **${memberData.game_name}**, you already logged Day ${today}.` : `⚔️ **${memberData.game_name}** successfully logged today's attack for **Day ${today}**!`,
           flags: 64, // Uncomment if you only want the response visible to the clicker
         },
       });
