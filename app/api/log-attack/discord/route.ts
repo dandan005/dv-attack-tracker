@@ -54,7 +54,8 @@ export async function POST(req: NextRequest) {
   if (type === InteractionType.MESSAGE_COMPONENT) {
     const customId = data?.custom_id;
 
-    if (customId === "log_attack_button") {
+    // Check if button custom_id starts with our prefix
+    if (customId.startsWith("log_attack_guild_")) {
       const discordUserId = discordMember?.user?.id;
       const discordUsername = discordMember?.user?.username || "Warrior";
 
@@ -68,13 +69,17 @@ export async function POST(req: NextRequest) {
         });
       }
 
+      // Extract the target guild identifier from custom_id (e.g., "1" or "2")
+      const targetGuildNumber = customId.replace("log_attack_guild_", "");
+
       const supabase = createAdminClient();
 
-      // Verify member exists in database via discord_id
+      // Verify member exists in database via discord_id and the guild_id
       const { data: memberData, error: memberError } = await supabase
         .from("members")
         .select("id, guild_id, game_name")
         .eq("discord_id", discordUserId)
+        .eq("guild_id", targetGuildNumber)
         .maybeSingle();
 
       if (memberError || !memberData) {
@@ -134,6 +139,7 @@ export async function POST(req: NextRequest) {
           { day: today },
           memberData.id,
         );
+
         return NextResponse.json({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
