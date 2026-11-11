@@ -70,16 +70,26 @@ export async function POST(req: NextRequest) {
       }
 
       // Extract the target guild identifier from custom_id (e.g., "1" or "2")
-      const targetGuildNumber = customId.replace("log_attack_guild_", "");
+      const targetGuildCode = customId.replace("log_attack_guild_", "");
 
       const supabase = createAdminClient();
 
       // Verify member exists in database via discord_id and the guild_id
       const { data: memberData, error: memberError } = await supabase
         .from("members")
-        .select("id, guild_id, game_name")
+        .select(
+          `
+            id,
+            guild_id,
+            game_name,
+            guilds!inner (
+              id,
+              code
+            )
+          `,
+        )
         .eq("discord_id", discordUserId)
-        .eq("guild_id", targetGuildNumber)
+        .eq("guilds.code", targetGuildCode)
         .maybeSingle();
 
       if (memberError || !memberData) {
