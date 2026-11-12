@@ -53,7 +53,7 @@ async function findMissingAndPing(forceHour?: number, onlyGuildId?: number, with
       body: JSON.stringify({
         content,
         allowed_mentions: { parse: ["users"] },
-        ...(useBot ? { components: [{ type: 1, components: [{ type: 2, style: 1, label: "Log attack", custom_id: `log_attack_guild_${g.code}` }] }] } : {}),
+        ...(useBot ? { components: [{ type: 1, components: [{ type: 2, style: 1, label: "Log Today’s Attack", emoji: { name: "⚔️" }, custom_id: `log_attack_guild_${g.code}` }, { type: 2, style: 5, label: "Open Dashboard", emoji: { name: "🌐" }, url: "https://dv-attack-tracker.vercel.app/dashboard" }] }] } : {}),
       }),
     });
 
