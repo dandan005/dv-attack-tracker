@@ -8,7 +8,7 @@ async function findMissingAndPing(forceHour?: number, onlyGuildId?: number, with
   const admin = createAdminClient();
 
   const { data: settings } = await admin.from("app_settings").select("*").eq("id", 1).single();
-  const { data: allGuilds } = await admin.from("guilds").select("id, code, name, discord_webhook_url").order("id");
+  const { data: allGuilds } = await admin.from("guilds").select("id, code, name, discord_webhook_url, discord_channel_id").order("id");
   const guilds = (allGuilds ?? []).filter((g: any) => onlyGuildId === undefined || g.id === onlyGuildId);
 
   const { dayNumber, cycleStartISO } = getCycleInfo();
@@ -37,7 +37,7 @@ async function findMissingAndPing(forceHour?: number, onlyGuildId?: number, with
       results.push({ guild: g.code, missing: 0, sent: false });
       continue;
     }
-    if (!webhookUrl) {
+    if (!webhookUrl && !(process.env.DISCORD_BOT_TOKEN && g.discord_channel_id)) {
       results.push({ guild: g.code, missing: missing.length, sent: false, note: "no webhook" });
       continue;
     }
@@ -45,12 +45,15 @@ async function findMissingAndPing(forceHour?: number, onlyGuildId?: number, with
     const mentions = missing.map((m: any) => `<@${m.discord_id}>`).join(" ");
     const content = `${intro}\n${mentions}\n${outro}`;
 
-    await fetch(webhookUrl, {
+    const botToken = process.env.DISCORD_BOT_TOKEN;
+    const useBot = !!(botToken && g.discord_channel_id);
+    await fetch(useBot ? `https://discord.com/api/v10/channels/${g.discord_channel_id}/messages` : webhookUrl, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: useBot ? { "Content-Type": "application/json", Authorization: `Bot ${botToken}` } : { "Content-Type": "application/json" },
       body: JSON.stringify({
         content,
         allowed_mentions: { parse: ["users"] },
+        ...(useBot ? { components: [{ type: 1, components: [{ type: 2, style: 1, label: "Log attack", custom_id: `log_attack_guild_${g.code}` }] }] } : {}),
       }),
     });
 
