@@ -27,18 +27,9 @@ export function buildPingEmbed(o: { kind: PingKind; day: number; total: number; 
     o.kind === "live" ? `D${o.day} is live: ${left} still to log`
     : o.kind === "last" ? `LAST CALL: D${o.day} resets in 1 hour (${left} left)`
     : `D${o.day} check-in: still waiting on ${left}`;
-  const outro =
-    o.kind === "live" ? "Your attack is not logged yet. Get it in today!"
-    : o.kind === "last" ? "Attack now or lose the day. No excuses!"
-    : "The dragon will not slay itself. Log your attack!";
   return {
     color: COLORS[o.kind],
     title,
-    description: `${bar}\n**${o.logged} of ${o.total} logged** · ${pct}%\n${outro}`,
-    fields: [
-      { name: "Day", value: `${o.day} of 6`, inline: true },
-      { name: "Resets", value: `<t:${nextResetUnix()}:R>`, inline: true },
-    ],
-    footer: { text: `Dragon Valley · Guild ${o.guildCode}` },
+    description: `${bar} **${o.logged}/${o.total}** · ${pct}%\nDay ${o.day}/6 · resets <t:${nextResetUnix()}:R>`,
   };
 }
