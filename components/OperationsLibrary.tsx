@@ -595,16 +595,21 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                 </button>
               ))}
             </div>
-            <button
-              type="button"
-              role="switch"
-              aria-checked={cookOnly}
-              onClick={() => setCookOnly((v) => !v)}
-              className={`mt-3 flex h-6 w-full items-center justify-between border px-2 text-[9px] uppercase ${cookOnly ? "border-dv-emerald bg-dv-emerald/10 text-dv-emerald" : "border-dv-line bg-dv-panel2 text-[#fdf3dc]"}`}
-            >
-              <span>Can cook only</span>
-              <span>{cookOnly ? "ON" : "OFF"}</span>
-            </button>
+            <div className="mt-3 flex justify-end">
+              <button
+                type="button"
+                role="switch"
+                aria-checked={cookOnly}
+                onClick={() => setCookOnly((v) => !v)}
+                className={`inline-flex h-7 items-center gap-2 rounded-full border px-3 text-[9px] uppercase ${cookOnly ? "border-dv-emerald bg-dv-emerald/15 text-dv-emerald" : "border-dv-brass bg-black/40 text-dv-brassLight"}`}
+                style={cookOnly ? { boxShadow: "0 0 10px rgba(110,231,183,0.45)" } : undefined}
+              >
+                <span>Can cook only</span>
+                <span className={`relative h-3 w-6 rounded-full ${cookOnly ? "bg-dv-emerald" : "bg-dv-line"}`}>
+                  <span className={`absolute top-0.5 h-2 w-2 rounded-full bg-black transition-all ${cookOnly ? "left-3.5" : "left-0.5"}`} />
+                </span>
+              </button>
+            </div>
           </div>
 
           <div className="divide-y divide-dv-line">
