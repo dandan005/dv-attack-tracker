@@ -141,6 +141,40 @@ export async function POST(req: NextRequest) {
         },
       ).select("member_id");
 
+      if (!logError) {
+        try {
+          const botToken = process.env.DISCORD_BOT_TOKEN;
+          const msg = body.message;
+          const channelId = body.channel_id;
+          if (botToken && channelId && msg?.id && typeof msg.content === "string" && msg.content.includes("<@")) {
+            const [{ data: gMembers }, { data: gLogs }] = await Promise.all([
+              supabase.from("members").select("id, discord_id").eq("guild_id", memberData.guild_id),
+              supabase.from("attack_logs").select("member_id").eq("cycle_start", cycleStartISO).eq("day_number", today),
+            ]);
+            const loggedSet = new Set((gLogs ?? []).map((l: any) => l.member_id));
+            const stillMissing = new Set((gMembers ?? []).filter((m: any) => !loggedSet.has(m.id)).map((m: any) => String(m.discord_id)));
+            const kept = msg.content
+              .replace(/<@!?(\d+)>/g, (full: string, id: string) => (stillMissing.has(id) ? full : ""))
+              .replace(/ {2,}/g, " ")
+              .replace(/[ \t]+\n/g, "\n");
+            const stillHasMentions = kept.includes("<@");
+            if (kept !== msg.content) {
+              await fetch(`https://discord.com/api/v10/channels/${channelId}/messages/${msg.id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json", Authorization: `Bot ${botToken}` },
+                body: JSON.stringify(
+                  stillHasMentions
+                    ? { content: kept, allowed_mentions: { parse: [] } }
+                    : { content: `🎉 Everyone in this guild has logged D${today}!`, components: [], allowed_mentions: { parse: [] } },
+                ),
+                signal: AbortSignal.timeout(1500),
+              });
+            }
+          }
+        } catch {
+          // Editing the ping is best effort and must never block the reply.
+        }
+      }
       if (logError) {
         await serverLog(
           "error",
