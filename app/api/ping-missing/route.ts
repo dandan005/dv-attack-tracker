@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/server";
 import { getGuildMember } from "@/lib/auth";
 import { getCycleInfo } from "@/lib/cycle";
 import { sendDayPushes } from "@/lib/dayPush";
+import { buildPingEmbed, kindFromHour } from "@/lib/pingEmbed";
 
 async function findMissingAndPing(forceHour?: number, onlyGuildId?: number, withPush = false) {
   const admin = createAdminClient();
@@ -43,7 +44,9 @@ async function findMissingAndPing(forceHour?: number, onlyGuildId?: number, with
     }
 
     const mentions = missing.map((m: any) => `<@${m.discord_id}>`).join(" ");
-    const content = `${intro}\n${mentions}\n${outro}`;
+    const content = mentions;
+    const pingable = (members ?? []).filter((m: any) => m.guild_id === g.id && !String(m.discord_id).startsWith("roster:")).length;
+    const embed = buildPingEmbed({ kind: kindFromHour(pingHour), day: dayNumber, total: pingable, logged: pingable - missing.length, guildCode: g.code });
 
     const botToken = process.env.DISCORD_BOT_TOKEN;
     const useBot = !!(botToken && g.discord_channel_id);
@@ -53,6 +56,7 @@ async function findMissingAndPing(forceHour?: number, onlyGuildId?: number, with
       body: JSON.stringify({
         content,
         allowed_mentions: { parse: ["users"] },
+        embeds: [embed],
         ...(useBot ? { components: [{ type: 1, components: [{ type: 2, style: 1, label: "Log Attack", emoji: { name: "⚔️" }, custom_id: `log_attack_guild_${g.code}` }, { type: 2, style: 5, label: "Dashboard", emoji: { name: "🌐" }, url: "https://dv-attack-tracker.vercel.app/dashboard" }] }] } : {}),
       }),
     });

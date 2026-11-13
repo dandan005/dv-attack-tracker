@@ -8,6 +8,7 @@ import {
 import { createAdminClient } from "@/lib/supabase/server";
 import { getCycleInfo } from "@/lib/cycle";
 import { serverLog } from "@/lib/appLog";
+import { buildPingEmbed, kindFromColor } from "@/lib/pingEmbed";
 
 const DISCORD_PUBLIC_KEY = process.env.DISCORD_PUBLIC_KEY || "";
 
@@ -160,14 +161,17 @@ export async function POST(req: NextRequest) {
               .replace(/ {2,}/g, " ")
               .replace(/[ \t]+\n/g, "\n");
             const stillHasMentions = kept.includes("<@");
+            const pingable = (gMembers ?? []).filter((m: any) => !String(m.discord_id).startsWith("roster:"));
+            const left = pingable.filter((m: any) => !loggedSet.has(m.id)).length;
+            const embed = buildPingEmbed({ kind: kindFromColor(msg.embeds?.[0]?.color), day: today, total: pingable.length, logged: pingable.length - left, guildCode: targetGuildCode });
             if (kept !== msg.content) {
               await fetch(`https://discord.com/api/v10/channels/${channelId}/messages/${msg.id}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json", Authorization: `Bot ${botToken}` },
                 body: JSON.stringify(
                   stillHasMentions
-                    ? { content: kept, allowed_mentions: { parse: [] } }
-                    : { content: `🎉 Everyone in this guild has logged D${today}!`, components: [], allowed_mentions: { parse: [] } },
+                    ? { content: kept, embeds: [embed], allowed_mentions: { parse: [] } }
+                    : { content: `🎉 Everyone in this guild has logged D${today}!`, components: [], embeds: [], allowed_mentions: { parse: [] } },
                 ),
                 signal: AbortSignal.timeout(1500),
               });
