@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { waitUntil } from "@vercel/functions";
 import {
   verifyKey,
   InteractionType,
@@ -142,6 +143,7 @@ export async function POST(req: NextRequest) {
       ).select("member_id");
 
       if (!logError) {
+        waitUntil((async () => {
         try {
           const botToken = process.env.DISCORD_BOT_TOKEN;
           const msg = body.message;
@@ -174,6 +176,7 @@ export async function POST(req: NextRequest) {
         } catch {
           // Editing the ping is best effort and must never block the reply.
         }
+        })());
       }
       if (logError) {
         await serverLog(
