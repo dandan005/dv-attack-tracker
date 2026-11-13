@@ -47,7 +47,7 @@ async function findMissingAndPing(forceHour?: number, onlyGuildId?: number, with
 
     const botToken = process.env.DISCORD_BOT_TOKEN;
     const useBot = !!(botToken && g.discord_channel_id);
-    await fetch(useBot ? `https://discord.com/api/v10/channels/${g.discord_channel_id}/messages` : webhookUrl, {
+    const pingRes = await fetch(useBot ? `https://discord.com/api/v10/channels/${g.discord_channel_id}/messages` : webhookUrl, {
       method: "POST",
       headers: useBot ? { "Content-Type": "application/json", Authorization: `Bot ${botToken}` } : { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -56,6 +56,21 @@ async function findMissingAndPing(forceHour?: number, onlyGuildId?: number, with
         ...(useBot ? { components: [{ type: 1, components: [{ type: 2, style: 1, label: "Log Attack", emoji: { name: "⚔️" }, custom_id: `log_attack_guild_${g.code}` }, { type: 2, style: 5, label: "Dashboard", emoji: { name: "🌐" }, url: "https://dv-attack-tracker.vercel.app/dashboard" }] }] } : {}),
       }),
     });
+
+    if (useBot) {
+      try {
+        const cutoff = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+        const { data: oldPings } = await admin.from("ping_messages").select("id, message_id").eq("channel_id", g.discord_channel_id).lt("created_at", cutoff);
+        for (const o of oldPings ?? []) {
+          await fetch(`https://discord.com/api/v10/channels/${g.discord_channel_id}/messages/${o.message_id}`, { method: "DELETE", headers: { Authorization: `Bot ${botToken}` } });
+        }
+        if (oldPings?.length) await admin.from("ping_messages").delete().in("id", oldPings.map((o: any) => o.id));
+        const posted = await pingRes.json().catch(() => null);
+        if (posted?.id) await admin.from("ping_messages").insert({ channel_id: g.discord_channel_id, message_id: posted.id });
+      } catch {
+        // Cleanup is best effort and must never break the ping.
+      }
+    }
 
     total += missing.length;
     results.push({ guild: g.code, missing: missing.length, sent: true });
