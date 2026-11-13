@@ -20,10 +20,10 @@ function nextResetUnix(): number {
 
 export function buildPingEmbed(o: { kind: PingKind; day: number; total: number; logged: number; guildCode: string }) {
   const left = Math.max(o.total - o.logged, 0);
-  let filled = o.total ? Math.round((o.logged / o.total) * 12) : 0;
-  if (left > 0) filled = Math.min(filled, 11);
-  const bar = SQUARE[o.kind].repeat(filled) + "⬜".repeat(12 - filled);
-  const days = [1, 2, 3, 4, 5, 6].map((d) => `D${d}${d < o.day ? "✅" : d === o.day ? "🔥" : "▫️"}`).join(" ");
+  let filled = o.total ? Math.round((o.logged / o.total) * 16) : 0;
+  if (left > 0) filled = Math.min(filled, 15);
+  const bar = SQUARE[o.kind].repeat(filled) + "⬜".repeat(16 - filled);
+  const days = [1, 2, 3, 4, 5, 6].map((d) => `D${d}${d < o.day ? "✅" : d === o.day ? "🔥" : "▫️"}`).join("\u2003");
   const title =
     o.kind === "live" ? `D${o.day} is live · ${left} still to log`
     : o.kind === "last" ? `LAST CALL · D${o.day} resets in 1 hour · ${left} left`
