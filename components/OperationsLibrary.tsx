@@ -535,17 +535,29 @@ export function Meals() {
   const [qty, setQty] = useState<Record<string, string>>(() => { try { return JSON.parse(localStorage.getItem("dv-command-quantities") || "{}"); } catch { return {}; } }); useEffect(() => { localStorage.setItem("dv-command-quantities", JSON.stringify(qty)); }, [qty]);
 const [selected, setSelected] = useState<{ name: string; x: number; y: number } | null>(null);
   const ingredients = ingredientDefaults.map(([name, source, defaultOwned, image]) => ({ name, source, image, owned: qty[name] !== undefined ? Number(qty[name]) > 0 : (owned[name] ?? defaultOwned) }));
-  const visible = useMemo(
-    () =>
-      meals
-        .map((meal, index) => ({ meal, index }))
-        .filter(
-          ({ meal }) =>
-            `${meal.name} ${meal.effect} ${meal.ingredients.join(" ")}`.toLowerCase().includes(query.toLowerCase()) &&
-            (filter === "all" || meal.category === filter)
-        ),
-    [filter, query]
-  );
+  const [cookOnly, setCookOnly] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    try { return localStorage.getItem("dv-command-cookonly") !== "0"; } catch { return true; }
+  });
+  useEffect(() => { try { localStorage.setItem("dv-command-cookonly", cookOnly ? "1" : "0"); } catch {} }, [cookOnly]);
+  const canCook = (m: { ingredients: string[] }) => {
+    const need: Record<string, number> = {};
+    m.ingredients.forEach((n) => { need[n] = (need[n] ?? 0) + 1; });
+    const have = (n: string) => {
+      const q = qty[n];
+      if (q !== undefined && q !== "") return Number(q) || 0;
+      return ingredients.find((i) => i.name === n)?.owned ? need[n] : 0;
+    };
+    return m.ingredients.length > 0 && Object.keys(need).every((n) => have(n) >= need[n]);
+  };
+  const visible = meals
+    .map((meal, index) => ({ meal, index }))
+    .filter(
+      ({ meal }) =>
+        `${meal.name} ${meal.effect} ${meal.ingredients.join(" ")}`.toLowerCase().includes(query.toLowerCase()) &&
+        (filter === "all" || meal.category === filter) &&
+        (!cookOnly || canCook(meal))
+    );
 
   const cookableIn = (cat: string) => meals.filter((m) => { if (m.category !== cat) return false; const need: Record<string, number> = {}; m.ingredients.forEach((n) => { need[n] = (need[n] ?? 0) + 1; }); const have = (n: string) => { const q = qty[n]; if (q !== undefined && q !== "") return Number(q) || 0; return ingredients.find((i) => i.name === n)?.owned ? need[n] : 0; }; return m.ingredients.length > 0 && Object.keys(need).every((n) => have(n) >= need[n]); }).length;
   const filterTabs: { value: "all" | "Appetizer" | "Main dish" | "Dessert"; label: string }[] = [
@@ -583,9 +595,24 @@ const [selected, setSelected] = useState<{ name: string; x: number; y: number } 
                 </button>
               ))}
             </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={cookOnly}
+              onClick={() => setCookOnly((v) => !v)}
+              className={`mt-3 flex h-6 w-full items-center justify-between border px-2 text-[9px] uppercase ${cookOnly ? "border-dv-emerald bg-dv-emerald/10 text-dv-emerald" : "border-dv-line bg-dv-panel2 text-[#fdf3dc]"}`}
+            >
+              <span>Can cook only</span>
+              <span>{cookOnly ? "ON" : "OFF"}</span>
+            </button>
           </div>
 
           <div className="divide-y divide-dv-line">
+            {visible.length === 0 ? (
+              <p className="p-4 text-center text-xs text-[#fdf3dc]">
+                {cookOnly ? "Nothing cookable here yet. Add more ingredients to your inventory, or turn off Can cook only." : "No meals match your search."}
+              </p>
+            ) : null}
             {visible.map(({ meal, index }) => {
               const need: Record<string, number> = {};
               meal.ingredients.forEach((n) => { need[n] = (need[n] ?? 0) + 1; });
