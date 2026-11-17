@@ -91,7 +91,7 @@ async function findMissingAndPing(forceHour?: number, onlyGuildId?: number, with
 
 export async function POST(req: NextRequest) {
   // Manual ping is available only to a currently verified guild member, and pings only their own guild.
-  const auth = await getGuildMember();
+  const auth = await getGuildMember(req);
   if (auth.error || !auth.user || !auth.member) {
     return NextResponse.json({ error: auth.error }, { status: auth.error === "Not authenticated" ? 401 : 403 });
   }
