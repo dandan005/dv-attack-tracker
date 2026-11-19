@@ -5,7 +5,7 @@ import { getCycleInfo } from "@/lib/cycle";
 import { sendPush, type PushSub } from "@/lib/webpush";
 
 export async function POST(req: NextRequest) {
-  const auth = await getGuildMember();
+  const auth = await getGuildMember(req);
   if (auth.error || !auth.member) {
     return NextResponse.json({ error: auth.error }, { status: auth.error === "Not authenticated" ? 401 : 403 });
   }
